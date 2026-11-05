@@ -9,15 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --dark: #030712;
-      --primary: #f59e0b;
-      --green: #22c55e;
-      --blue: #3b82f6;
-      --bg: #090d16;
-      --card-bg: #111827;
-      --border: #1f2937;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
+      --dark: #0f172a;
+      --primary: #d97706;
+      --green: #16a34a;
+      --blue: #2563eb;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --text-muted: #64748b;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,9 +29,9 @@
       line-height: 1.4;
     }
 
-    /* TOP BAR DARK */
+    /* TOP BAR CLEAN & PROFESSIONAL */
     .topbar {
-      background: var(--dark);
+      background: #0f172a;
       color: #ffffff;
       padding: 12px 20px;
       display: flex;
@@ -40,7 +40,7 @@
       flex-wrap: wrap;
       gap: 12px;
       border-bottom: 3px solid var(--primary);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     .topbar h1 {
@@ -58,9 +58,9 @@
     }
 
     .btn-top {
-      background: #1f2937;
+      background: rgba(255, 255, 255, 0.1);
       color: #ffffff;
-      border: 1px solid #374151;
+      border: 1px solid rgba(255, 255, 255, 0.2);
       padding: 7px 14px;
       border-radius: 8px;
       font-size: 13px;
@@ -72,7 +72,7 @@
       transition: background 0.2s;
     }
 
-    .btn-top:hover { background: #374151; }
+    .btn-top:hover { background: rgba(255, 255, 255, 0.2); }
 
     .switch-label {
       display: flex;
@@ -90,7 +90,7 @@
       padding: 0 16px;
     }
 
-    /* STATS BAR DARK */
+    /* STATS BAR CLEAN */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -99,25 +99,25 @@
     }
 
     .stat-card {
-      background: var(--card-bg);
+      background: #ffffff;
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
     }
 
     .stat-card strong {
       font-size: 24px;
       font-weight: 800;
-      color: #ffffff;
+      color: var(--dark);
     }
 
     .stat-card span {
       font-size: 12px;
-      color: #94a3b8;
+      color: var(--text-muted);
       text-transform: uppercase;
       font-weight: 700;
     }
@@ -393,7 +393,7 @@
   <!-- TOP BAR -->
   <div class="topbar">
     <div style="display: flex; align-items: center; gap: 12px;">
-      <img src="/assets/logo.png" alt="O Mordidaço" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #f59e0b; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);" onerror="this.style.display='none'">
+      <img src="assets/logo.png" alt="O Mordidaço" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #f59e0b; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);">
       <div>
         <h1 style="margin: 0; font-size: 19px;">O MORDIDAÇO | Painel da Cozinha</h1>
         <a href="https://instagram.com/omordidaco.lanches" target="_blank" style="color: #fbbf24; text-decoration: none; font-size: 11.5px; font-weight: 700;">📸 @omordidaco.lanches</a>
@@ -684,14 +684,11 @@
           </div>
 
           <div class="card-body">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;">
-              <div>
-                <span class="order-num-large">#${p.numero}</span>
-                <div class="order-time-large">⏰ ${p.dataHora}</div>
-              </div>
-              <div style="text-align: right;">
-                <span style="font-size: 19px; font-weight: 900; color: #15803d;">R$ ${p.total.toFixed(2).replace('.', ',')}</span>
-              </div>
+            <!-- CABEÇALHO DO PEDIDO 100% CENTRALIZADO -->
+            <div style="text-align: center; padding: 6px 0 12px 0; border-bottom: 2px solid #e2e8f0; margin-bottom: 12px;">
+              <span class="order-num-large" style="display: block; font-size: 36px; font-weight: 900; color: #0f172a; letter-spacing: -1px; line-height: 1.1;">#${p.numero}</span>
+              <div class="order-time-large" style="font-size: 13px; font-weight: 700; color: #64748b; margin-top: 4px;">⏰ ${p.dataHora}</div>
+              <div style="font-size: 20px; font-weight: 900; color: #15803d; margin-top: 4px;">R$ ${p.total.toFixed(2).replace('.', ',')}</div>
             </div>
 
             <div class="client-info" style="border-left: 4px solid #0f172a; padding: 10px 12px; margin-bottom: 12px;">

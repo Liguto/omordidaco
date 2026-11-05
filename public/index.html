@@ -9,18 +9,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #f59e0b;
-      --primary-dark: #d97706;
+      --primary: #d97706;
+      --primary-dark: #b45309;
       --accent: #ea580c;
-      --bg: #090d16;
-      --card-bg: #111827;
-      --card-border: #1f2937;
-      --card-border-hover: #374151;
-      --text: #f9fafb;
-      --text-muted: #9ca3af;
-      --green: #22c55e;
-      --green-dark: #16a34a;
-      --dark: #030712;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --card-border-hover: #cbd5e1;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --dark: #0f172a;
+      --green: #16a34a;
+      --green-dark: #15803d;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,31 +33,31 @@
       padding-bottom: 96px;
     }
 
-    /* HEADER DARK LUXURY */
+    /* HEADER CLEAN & VIBRANT */
     header {
-      background: radial-gradient(circle at top, #1e293b 0%, #0b0f19 100%);
+      background: #0f172a;
       color: #ffffff;
-      padding: 24px 16px 20px 16px;
+      padding: 26px 16px 22px 16px;
       text-align: center;
-      border-bottom: 3px solid var(--primary);
+      border-bottom: 4px solid var(--primary);
       position: relative;
     }
 
     .brand-logo-img {
-      width: 100px;
-      height: 100px;
+      width: 105px;
+      height: 105px;
       border-radius: 50%;
       object-fit: cover;
-      margin: 0 auto 10px auto;
+      margin: 0 auto 12px auto;
       display: block;
-      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.35);
-      border: 3px solid var(--primary);
-      background: #111827;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+      border: 3px solid #f59e0b;
+      background: #ffffff;
     }
 
     .brand-badge {
       display: inline-block;
-      background: rgba(245, 158, 11, 0.15);
+      background: rgba(245, 158, 11, 0.18);
       color: #fbbf24;
       border: 1px solid rgba(245, 158, 11, 0.4);
       padding: 4px 14px;
@@ -71,7 +71,7 @@
 
     header h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 28px;
+      font-size: 29px;
       font-weight: 900;
       color: #ffffff;
       letter-spacing: -0.5px;
@@ -80,8 +80,8 @@
 
     header p.slogan {
       font-size: 13.5px;
-      color: #94a3b8;
-      margin-bottom: 14px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
     }
 
     /* INSTAGRAM BADGE */
@@ -91,19 +91,19 @@
       gap: 6px;
       background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
       color: #ffffff;
-      padding: 6px 14px;
+      padding: 6px 16px;
       border-radius: 20px;
       font-size: 12px;
       font-weight: 700;
       text-decoration: none;
       margin-bottom: 14px;
-      box-shadow: 0 2px 10px rgba(220, 39, 67, 0.3);
+      box-shadow: 0 2px 10px rgba(220, 39, 67, 0.25);
       transition: transform 0.2s, box-shadow 0.2s;
     }
 
     .instagram-btn:hover {
-      transform: scale(1.04);
-      box-shadow: 0 4px 15px rgba(220, 39, 67, 0.5);
+      transform: scale(1.03);
+      box-shadow: 0 4px 15px rgba(220, 39, 67, 0.4);
     }
 
     .info-bar {
@@ -116,9 +116,9 @@
     }
 
     .info-pill {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 5px 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 4px 12px;
       border-radius: 12px;
       display: flex;
       align-items: center;
@@ -127,15 +127,14 @@
 
     .info-pill.status-open {
       color: #4ade80;
-      border-color: rgba(74, 222, 128, 0.3);
-      font-weight: 700;
+      font-weight: 800;
     }
 
-    /* CATEGORY NAV DARK */
+    /* CATEGORY NAV CLEAN */
     .cat-nav {
       position: sticky;
       top: 0;
-      background: #0d1322;
+      background: #ffffff;
       display: flex;
       gap: 8px;
       padding: 12px 16px;
@@ -144,14 +143,15 @@
       z-index: 20;
       white-space: nowrap;
       -webkit-overflow-scrolling: touch;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     }
 
     .cat-nav::-webkit-scrollbar { display: none; }
 
     .cat-btn {
-      background: #1e293b;
-      color: #94a3b8;
-      border: 1px solid #334155;
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid transparent;
       padding: 8px 16px;
       border-radius: 20px;
       font-size: 13px;
@@ -161,10 +161,9 @@
     }
 
     .cat-btn.active, .cat-btn:hover {
-      background: var(--primary);
-      color: #000000;
-      border-color: var(--primary);
-      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+      background: var(--dark);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
     }
 
     /* CONTAINER */
@@ -175,39 +174,39 @@
     }
 
     .section-title {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 800;
-      color: #f8fafc;
-      margin: 24px 0 12px 0;
+      color: var(--dark);
+      margin: 22px 0 12px 0;
       display: flex;
       align-items: center;
       gap: 8px;
-      border-bottom: 1px solid #1f2937;
-      padding-bottom: 8px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 6px;
     }
 
-    /* ITEM CARD DARK */
+    /* ITEM CARD CLEAN & POLISHED */
     .item-card {
-      background: var(--card-bg);
+      background: #ffffff;
       border: 1px solid var(--card-border);
       border-radius: 14px;
       padding: 16px;
       margin-bottom: 14px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
       display: flex;
       flex-direction: column;
       gap: 8px;
-      transition: transform 0.15s, border-color 0.15s;
+      transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
     }
 
     .item-card:hover {
-      border-color: var(--card-border-hover);
+      border-color: #cbd5e1;
       transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.06);
     }
 
     .item-card.destaque {
       border-left: 5px solid var(--primary);
-      background: linear-gradient(145deg, #162035 0%, #111827 100%);
     }
 
     .item-header {
@@ -220,13 +219,13 @@
     .item-title {
       font-size: 16px;
       font-weight: 800;
-      color: #ffffff;
+      color: var(--dark);
     }
 
     .item-badge {
-      background: rgba(245, 158, 11, 0.2);
-      color: #fbbf24;
-      border: 1px solid rgba(245, 158, 11, 0.4);
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
       font-size: 10px;
       font-weight: 800;
       padding: 3px 8px;
@@ -236,7 +235,7 @@
     }
 
     .item-desc {
-      font-size: 13px;
+      font-size: 13.5px;
       color: var(--text-muted);
       line-height: 1.45;
     }
@@ -247,18 +246,18 @@
       align-items: center;
       margin-top: 8px;
       padding-top: 8px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 1px solid #f1f5f9;
     }
 
     .item-price {
       font-size: 18px;
       font-weight: 900;
-      color: #fbbf24;
+      color: var(--primary-dark);
     }
 
     .btn-add {
       background: var(--primary);
-      color: #000000;
+      color: #ffffff;
       border: none;
       padding: 9px 18px;
       border-radius: 8px;
@@ -272,25 +271,24 @@
     }
 
     .btn-add:hover {
-      background: #fbb724;
-      transform: scale(1.03);
+      background: var(--primary-dark);
+      transform: scale(1.02);
     }
 
-    /* FLOATING BOTTOM CART BAR */
+    /* FLOATING BOTTOM CART BAR CLEAN */
     .cart-bar {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background: rgba(13, 19, 34, 0.95);
-      backdrop-filter: blur(10px);
+      background: #ffffff;
       padding: 14px 18px;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
       display: flex;
       justify-content: space-between;
       align-items: center;
       z-index: 50;
-      border-top: 1px solid #1f2937;
+      border-top: 1px solid #e2e8f0;
     }
 
     .cart-bar-inner {
@@ -317,7 +315,7 @@
     .cart-total-val {
       font-size: 20px;
       font-weight: 900;
-      color: #fbbf24;
+      color: var(--dark);
     }
 
     .btn-view-cart {
@@ -333,7 +331,7 @@
       align-items: center;
       gap: 6px;
       transition: background 0.2s, transform 0.15s;
-      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.35);
+      box-shadow: 0 3px 10px rgba(22, 163, 74, 0.25);
     }
 
     .btn-view-cart:hover {
@@ -341,12 +339,12 @@
       transform: scale(1.02);
     }
 
-    /* MODAL DARK */
+    /* MODAL CLEAN */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(3, 7, 18, 0.85);
-      backdrop-filter: blur(4px);
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(3px);
       display: none;
       justify-content: center;
       align-items: flex-end;
@@ -354,8 +352,8 @@
     }
 
     .modal-box {
-      background: #111827;
-      color: #f8fafc;
+      background: #ffffff;
+      color: var(--text);
       width: 100%;
       max-width: 580px;
       border-radius: 20px 20px 0 0;
@@ -363,7 +361,7 @@
       max-height: 88vh;
       overflow-y: auto;
       animation: slideUp 0.25s ease-out;
-      border-top: 1px solid #374151;
+      box-shadow: 0 -10px 30px rgba(0,0,0,0.15);
     }
 
     @keyframes slideUp {
@@ -377,17 +375,17 @@
       align-items: center;
       margin-bottom: 16px;
       padding-bottom: 12px;
-      border-bottom: 1px solid #1f2937;
+      border-bottom: 1px solid #e2e8f0;
     }
 
     .modal-title {
       font-size: 18px;
       font-weight: 800;
-      color: #ffffff;
+      color: var(--dark);
     }
 
     .btn-close {
-      background: #1f2937;
+      background: #f1f5f9;
       border: none;
       font-size: 18px;
       width: 32px;
@@ -397,10 +395,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #9ca3af;
+      color: #64748b;
     }
 
-    /* FORM STYLES DARK */
+    /* FORM STYLES CLEAN */
     .form-group {
       margin-bottom: 14px;
     }
@@ -409,25 +407,26 @@
       display: block;
       font-size: 13px;
       font-weight: 700;
-      color: #cbd5e1;
+      color: var(--dark);
       margin-bottom: 6px;
     }
 
     .form-control {
       width: 100%;
       padding: 11px 14px;
-      background: #0f172a;
-      border: 1px solid #334155;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
       border-radius: 8px;
       font-size: 14px;
       font-family: inherit;
-      color: #f8fafc;
+      color: var(--text);
     }
 
     .form-control:focus {
       outline: none;
+      background: #ffffff;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+      box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
     }
 
     .check-option {
@@ -435,21 +434,21 @@
       align-items: center;
       gap: 10px;
       padding: 10px 12px;
-      background: #0f172a;
-      border: 1px solid #1f2937;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
       border-radius: 8px;
       margin-bottom: 8px;
       cursor: pointer;
       font-size: 13.5px;
-      color: #e2e8f0;
+      color: var(--text);
     }
 
-    .check-option:hover { background: #162035; border-color: #374151; }
+    .check-option:hover { background: #f1f5f9; border-color: #cbd5e1; }
 
     .payment-badge {
       display: block;
-      background: #0f172a;
-      border: 1px solid #1f2937;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
       border-radius: 10px;
       padding: 12px 14px;
       margin-bottom: 10px;
@@ -459,20 +458,20 @@
     }
 
     .payment-badge.selected {
-      background: rgba(245, 158, 11, 0.12);
+      background: #fffbeb;
       border-color: var(--primary);
       box-shadow: 0 0 0 2px var(--primary);
     }
 
     .payment-badge strong {
       display: block;
-      color: #ffffff;
+      color: var(--dark);
       margin-bottom: 2px;
     }
 
     .payment-badge span {
       font-size: 12px;
-      color: #94a3b8;
+      color: var(--text-muted);
     }
 
     /* CART ITEM IN MODAL */
@@ -481,13 +480,13 @@
       justify-content: space-between;
       align-items: center;
       padding: 12px 0;
-      border-bottom: 1px solid #1f2937;
+      border-bottom: 1px solid #e2e8f0;
     }
 
     .cart-row-title {
       font-size: 14.5px;
       font-weight: 800;
-      color: #ffffff;
+      color: var(--dark);
     }
 
     .cart-row-sub {
@@ -502,9 +501,9 @@
     }
 
     .btn-qty {
-      background: #1e293b;
-      color: #f8fafc;
-      border: 1px solid #334155;
+      background: #f1f5f9;
+      color: var(--text);
+      border: 1px solid #cbd5e1;
       width: 30px;
       height: 30px;
       border-radius: 6px;
@@ -526,7 +525,7 @@
     .btn-whatsapp-send {
       display: block;
       width: 100%;
-      background: #22c55e;
+      background: #16a34a;
       color: #ffffff;
       text-align: center;
       padding: 14px;
@@ -535,7 +534,7 @@
       font-weight: 800;
       text-decoration: none;
       margin-top: 14px;
-      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.35);
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25);
     }
   </style>
 </head>
@@ -544,16 +543,18 @@
   <!-- HEADER -->
   <header>
     <!-- LOGO OFICIAL DE O MORDIDAÇO -->
-    <img src="/assets/logo.png" alt="O Mordidaço" class="brand-logo-img" onerror="this.style.display='none'">
+    <img src="assets/logo.png" alt="O Mordidaço" class="brand-logo-img">
     
     <div class="brand-badge">Hot-Dogueria Artesanal • Campinas/SP</div>
     <h1>O MORDIDAÇO</h1>
     <p class="slogan">A mordida mais caprichada do Jardim Tamoio!</p>
     
     <!-- BOTÃO OFICIAL DO INSTAGRAM -->
-    <a href="https://instagram.com/omordidaco.lanches" target="_blank" class="instagram-btn">
-      📸 Siga nosso Instagram: @omordidaco.lanches
-    </a>
+    <div>
+      <a href="https://instagram.com/omordidaco.lanches" target="_blank" class="instagram-btn">
+        📸 Siga nosso Instagram: @omordidaco.lanches
+      </a>
+    </div>
 
     <div class="info-bar">
       <div class="info-pill status-open">● Aberto Agora</div>
@@ -639,23 +640,23 @@
       <div id="carrinhoItensList" style="margin-bottom: 14px;"></div>
 
       <!-- TOTAIS -->
-      <div style="background: #0f172a; border: 1px solid var(--card-border); padding: 12px 14px; border-radius: 10px; margin-bottom: 16px;">
-        <div style="display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 5px; color: #94a3b8;">
+      <div style="background: #f8fafc; border: 1px solid var(--card-border); padding: 12px 14px; border-radius: 10px; margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 5px; color: var(--text-muted);">
           <span>Subtotal:</span>
-          <strong id="resumoSubtotal" style="color: #f8fafc;">R$ 0,00</strong>
+          <strong id="resumoSubtotal" style="color: var(--dark);">R$ 0,00</strong>
         </div>
-        <div style="display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 5px; color: #94a3b8;">
+        <div style="display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 5px; color: var(--text-muted);">
           <span>Taxa de Entrega:</span>
-          <strong id="resumoTaxa" style="color: #f8fafc;">R$ 5,00</strong>
+          <strong id="resumoTaxa" style="color: var(--dark);">R$ 5,00</strong>
         </div>
-        <div style="display: flex; justify-content: space-between; font-size: 17px; font-weight: 900; border-top: 1px dashed #334155; padding-top: 8px; margin-top: 4px;">
+        <div style="display: flex; justify-content: space-between; font-size: 17px; font-weight: 900; border-top: 1px dashed #cbd5e1; padding-top: 8px; margin-top: 4px;">
           <span>TOTAL:</span>
-          <strong style="color: #fbbf24;" id="resumoTotal">R$ 0,00</strong>
+          <strong style="color: var(--primary-dark);" id="resumoTotal">R$ 0,00</strong>
         </div>
       </div>
 
       <!-- DADOS DO CLIENTE E ENTREGA -->
-      <h4 style="font-size: 15px; font-weight: 800; margin-bottom: 12px; color: #ffffff;">📍 Dados para Entrega</h4>
+      <h4 style="font-size: 15px; font-weight: 800; margin-bottom: 12px; color: var(--dark);">📍 Dados para Entrega</h4>
       
       <div class="form-group">
         <label class="form-label">Seu Nome:*</label>
@@ -683,7 +684,7 @@
       </div>
 
       <!-- FORMA DE PAGAMENTO (NA ENTREGA) -->
-      <h4 style="font-size: 15px; font-weight: 800; margin-top: 18px; margin-bottom: 8px; color: #ffffff;">💵 Pagamento na Entrega (com o Motoboy)</h4>
+      <h4 style="font-size: 15px; font-weight: 800; margin-top: 18px; margin-bottom: 8px; color: var(--dark);">💵 Pagamento na Entrega (com o Motoboy)</h4>
       <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Não cobramos nada online. O pagamento é feito diretamente ao entregador na sua porta.</p>
 
       <div class="payment-badge selected" onclick="selecionarPagamento('pix', this)">
@@ -705,8 +706,8 @@
       </div>
 
       <!-- CAMPO DE TROCO (EXIBIDO SE DINHEIRO FOR SELECIONADO) -->
-      <div class="form-group" id="trocoContainer" style="display: none; background: rgba(245, 158, 11, 0.12); border: 1px solid var(--primary); padding: 12px; border-radius: 8px;">
-        <label class="form-label" style="color: #fbbf24;">Precisa de troco para quanto?</label>
+      <div class="form-group" id="trocoContainer" style="display: none; background: #fffbeb; border: 1px solid #fde68a; padding: 12px; border-radius: 8px;">
+        <label class="form-label" style="color: #92400e;">Precisa de troco para quanto?</label>
         <input type="text" class="form-control" id="trocoValor" placeholder="Ex: Troco para R$ 50,00 ou Não preciso de troco">
       </div>
 
@@ -721,16 +722,16 @@
     <div class="modal-box">
       <div class="success-box">
         <div class="success-icon">🎉</div>
-        <h3 style="font-size: 21px; font-weight: 800; color: #ffffff; margin-bottom: 6px;">Pedido Confirmado & Já em Produção!</h3>
-        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 14px;">Seu pedido <strong id="sucessoNumeroPedido" style="color: #fbbf24;">#101</strong> já caiu na tela da nossa cozinha, o alarme já tocou e o preparo já começou!</p>
+        <h3 style="font-size: 21px; font-weight: 800; color: var(--dark); margin-bottom: 6px;">Pedido Confirmado & Já em Produção!</h3>
+        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 14px;">Seu pedido <strong id="sucessoNumeroPedido" style="color: var(--primary-dark);">#101</strong> já caiu na tela da nossa cozinha, o alarme já tocou e o preparo já começou!</p>
         
-        <div style="background: rgba(34, 197, 94, 0.12); border: 1px solid var(--green); padding: 14px; border-radius: 10px; font-size: 13.5px; text-align: left; margin-bottom: 16px; color: #e2e8f0;">
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 14px; border-radius: 10px; font-size: 13.5px; text-align: left; margin-bottom: 16px; color: #166534;">
           <strong>Previsão de Entrega:</strong> 35 a 50 minutos.<br>
           <strong>Forma de Pagamento:</strong> <span id="sucessoPagto">Pix na Entrega</span>.<br>
-          <strong>Total a Pagar ao Motoboy:</strong> <strong id="sucessoTotal" style="color: #fbbf24; font-size: 15px;">R$ 0,00</strong>.
+          <strong>Total a Pagar ao Motoboy:</strong> <strong id="sucessoTotal" style="color: #15803d; font-size: 15px;">R$ 0,00</strong>.
         </div>
 
-        <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid var(--primary); padding: 14px; border-radius: 10px; font-size: 13.5px; color: #fde68a; margin-bottom: 16px; text-align: left;">
+        <div style="background: #fffbeb; border: 1px solid #fde68a; padding: 14px; border-radius: 10px; font-size: 13.5px; color: #92400e; margin-bottom: 16px; text-align: left;">
           🔔 <strong>Quer saber quando seu pedido sair para entrega?</strong><br>
           Clique no botão verde abaixo para abrir nossa conversa no WhatsApp. Assim enviamos uma mensagem no seu celular no exato minuto em que o motoboy sair com o seu dogão quentinho! 🔥
         </div>
@@ -884,7 +885,7 @@
             ${item.observacoes ? `<div class="cart-row-sub">Obs: ${item.observacoes}</div>` : ''}
           </div>
           <div class="cart-row-actions">
-            <strong style="color: #fbbf24; font-size: 15px;">R$ ${item.preco.toFixed(2).replace('.', ',')}</strong>
+            <strong style="color: var(--primary-dark); font-size: 15px;">R$ ${item.preco.toFixed(2).replace('.', ',')}</strong>
             <button class="btn-qty" onclick="removerItemCarrinho(${index})">✕</button>
           </div>
         `;
