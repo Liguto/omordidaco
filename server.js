@@ -1,14 +1,20 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const DB_FILE = path.join(__dirname, 'pedidos.json');
-const CLIENTES_FILE = path.join(__dirname, 'clientes.json');
+
+// No Vercel (Serverless), o sistema de arquivos em __dirname é somente leitura.
+// Usamos a pasta temporária do sistema operacional (os.tmpdir()) com fallback para memória.
+const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+const DB_FILE = isServerless ? path.join(os.tmpdir(), 'pedidos.json') : path.join(__dirname, 'pedidos.json');
+const CLIENTES_FILE = isServerless ? path.join(os.tmpdir(), 'clientes.json') : path.join(__dirname, 'clientes.json');
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/assets', express.static(path.join(__dirname, 'public', 'assets')));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 // Inicializar banco de dados JSON de Pedidos
@@ -22,7 +28,11 @@ if (fs.existsSync(DB_FILE)) {
 }
 
 function salvarPedidos() {
-  fs.writeFileSync(DB_FILE, JSON.stringify(pedidos, null, 2), 'utf8');
+  try {
+    fs.writeFileSync(DB_FILE, JSON.stringify(pedidos, null, 2), 'utf8');
+  } catch (err) {
+    console.warn('Aviso: Gravação em disco ignorada em ambiente Serverless (dados preservados em memória):', err.message);
+  }
 }
 
 // Inicializar banco de dados JSON de Clientes VIP (invisível aos clientes)
@@ -36,7 +46,11 @@ if (fs.existsSync(CLIENTES_FILE)) {
 }
 
 function salvarClientes() {
-  fs.writeFileSync(CLIENTES_FILE, JSON.stringify(clientes, null, 2), 'utf8');
+  try {
+    fs.writeFileSync(CLIENTES_FILE, JSON.stringify(clientes, null, 2), 'utf8');
+  } catch (err) {
+    console.warn('Aviso: Gravação de clientes em disco ignorada em ambiente Serverless:', err.message);
+  }
 }
 
 function registrarOuAtualizarCliente(clienteData, entregaData, valorPedido) {
@@ -74,7 +88,11 @@ let sseClients = [];
 
 function notificarCozinha(novoPedido) {
   sseClients.forEach(client => {
-    client.res.write(`data: ${JSON.stringify(novoPedido)}\n\n`);
+    try {
+      client.res.write(`data: ${JSON.stringify(novoPedido)}\n\n`);
+    } catch (e) {
+      // Ignora clientes desconectados
+    }
   });
 }
 
@@ -236,39 +254,44 @@ app.get('/api/pedidos', (req, res) => {
 
 // Receber Novo Pedido
 app.post('/api/pedidos', (req, res) => {
-  const { cliente, itens, entrega, pagamento, observacoes, subtotal, taxaEntrega, total } = req.body;
+  try {
+    const { cliente, itens, entrega, pagamento, observacoes, subtotal, taxaEntrega, total } = req.body;
 
-  if (!cliente || !cliente.nome || !cliente.telefone || !itens || itens.length === 0) {
-    return res.status(400).json({ error: 'Dados incompletos do pedido.' });
+    if (!cliente || !cliente.nome || !cliente.telefone || !itens || itens.length === 0) {
+      return res.status(400).json({ error: 'Dados incompletos do pedido.' });
+    }
+
+    const proximoNumero = pedidos.length > 0 ? (pedidos[0].numero || 100) + 1 : 101;
+
+    const novoPedido = {
+      id: 'PED-' + Date.now(),
+      numero: proximoNumero,
+      dataHora: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
+      status: 'Pendente',
+      cliente,
+      itens,
+      entrega,
+      pagamento,
+      observacoes: observacoes || '',
+      subtotal: Number(subtotal),
+      taxaEntrega: Number(taxaEntrega),
+      total: Number(total)
+    };
+
+    pedidos.unshift(novoPedido);
+    salvarPedidos();
+
+    // Salva ou atualiza cliente na lista VIP de forma invisível
+    registrarOuAtualizarCliente(cliente, entrega, total);
+
+    // Avisa a tela da cozinha em tempo real
+    notificarCozinha(novoPedido);
+
+    res.status(201).json(novoPedido);
+  } catch (err) {
+    console.error('Erro ao processar pedido:', err);
+    res.status(500).json({ error: 'Erro interno ao processar pedido: ' + err.message });
   }
-
-  const proximoNumero = pedidos.length > 0 ? (pedidos[0].numero || 100) + 1 : 101;
-
-  const novoPedido = {
-    id: 'PED-' + Date.now(),
-    numero: proximoNumero,
-    dataHora: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
-    status: 'Pendente', // Pendente -> Em Preparo -> Saiu p/ Entrega -> Entregue
-    cliente,
-    itens,
-    entrega,
-    pagamento,
-    observacoes: observacoes || '',
-    subtotal: Number(subtotal),
-    taxaEntrega: Number(taxaEntrega),
-    total: Number(total)
-  };
-
-  pedidos.unshift(novoPedido);
-  salvarPedidos();
-
-  // Salva ou atualiza cliente na lista VIP de forma invisível
-  registrarOuAtualizarCliente(cliente, entrega, total);
-
-  // Avisa a tela da cozinha em tempo real (apita e atualiza)
-  notificarCozinha(novoPedido);
-
-  res.status(201).json(novoPedido);
 });
 
 // Listar Clientes VIP (invisível aos clientes, exclusivo para o painel administrativo)
@@ -295,10 +318,16 @@ app.patch('/api/pedidos/:id/status', (req, res) => {
   res.json(pedido);
 });
 
-app.listen(PORT, () => {
-  console.log(`=================================================`);
-  console.log(`🌭 O MORDIDAÇO - Sistema de Pedidos & Cozinha`);
-  console.log(`📱 Cardápio do Cliente: http://localhost:${PORT}`);
-  console.log(`👨‍🍳 Painel da Cozinha / Impressão: http://localhost:${PORT}/cozinha.html`);
-  console.log(`=================================================`);
-});
+// Exporta o app para o Vercel Serverless
+module.exports = app;
+
+// Se for executado diretamente no terminal (iniciar_sistema.bat / node server.js)
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`=================================================`);
+    console.log(`🌭 O MORDIDAÇO - Sistema de Pedidos & Cozinha`);
+    console.log(`📱 Cardápio do Cliente: http://localhost:${PORT}`);
+    console.log(`👨‍🍳 Painel da Cozinha / Impressão: http://localhost:${PORT}/cozinha.html`);
+    console.log(`=================================================`);
+  });
+}
