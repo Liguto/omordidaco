@@ -118,7 +118,7 @@ const CARDAPIO = {
   restaurante: {
     nome: "O Mordidaço",
     segmento: "Hot-Dogueria Artesanal",
-    slogan: "A mordida mais caprichada do Jardim Tamoio!",
+    slogan: "A mordida mais caprichada de Campinas !",
     endereco: "Jardim Tamoio, Campinas - SP",
     tempoEntrega: "35 a 50 min",
     taxaEntregaPadrao: 5.00,

@@ -1,5 +1,6 @@
 # 🌭 O Mordidaço | Hot-Dogueria Artesanal
-### Sistema de Cardápio Digital Mobile, Pedidos & Painel da Cozinha KDS
+### *"A mordida mais caprichada de Campinas !"*
+**Sistema de Cardápio Digital Mobile, Pedidos & Painel da Cozinha KDS**
 
 Plataforma oficial de pedidos diretos de **O Mordidaço** (Jardim Tamoio, Campinas - SP).
 
