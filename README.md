@@ -29,11 +29,13 @@ npm start
 
 ---
 
-## ☁️ Deploy no Render (Instruções)
-1. Crie um novo **Web Service** no [render.com](https://render.com).
-2. Conecte com o repositório GitHub `Liguto/omordidaco`.
-3. Configurações automáticas:
-   - **Environment:** Node
-   - **Build Command:** `npm install`
-   - **Start Command:** `node server.js`
-4. Deploy concluído! Seu link público estará ativo gratuitamente em segundos.
+## ☁️ Deploy na Nuvem (Vercel & Render)
+
+### A. Deploy na Vercel (Recomendado - Ultra Rápido)
+1. Conecte o repositório `Liguto/omordidaco` no [vercel.com](https://vercel.com).
+2. O arquivo `vercel.json` já está configurado para rotear as APIs e o painel KDS.
+3. O deploy ocorre automaticamente a cada push na branch `main`!
+
+### B. Deploy no Render (Alternativa)
+1. Crie um **Web Service** no [render.com](https://render.com) com o repositório `Liguto/omordidaco`.
+2. Environment: Node | Build: `npm install` | Start: `node server.js`.
