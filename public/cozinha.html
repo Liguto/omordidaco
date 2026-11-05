@@ -605,11 +605,27 @@
       alert('Som do alarme acionado com sucesso!');
     }
 
-    // Carregar pedidos do backend
+    let ultimoIdPedidoConhecido = null;
+
+    // Carregar pedidos do backend (com detecção de novos pedidos para o Vercel)
     async function carregarPedidos() {
       try {
         const res = await fetch('/api/pedidos');
-        pedidosLocais = await res.json();
+        const lista = await res.json();
+
+        // Se chegou um pedido novo que ainda não tínhamos visto
+        if (lista.length > 0) {
+          const maisRecente = lista[0];
+          if (ultimoIdPedidoConhecido && maisRecente.id !== ultimoIdPedidoConhecido && maisRecente.status === 'Pendente') {
+            tocarAlarmeSonoro();
+            if (document.getElementById('chkAutoPrint').checked) {
+              setTimeout(() => imprimirComanda(maisRecente.id), 600);
+            }
+          }
+          ultimoIdPedidoConhecido = maisRecente.id;
+        }
+
+        pedidosLocais = lista;
         renderizarPedidos();
         atualizarEstatisticas();
       } catch (err) {
