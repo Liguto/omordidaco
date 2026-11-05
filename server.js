@@ -41,6 +41,20 @@ function salvarPedidos() {
   }
 }
 
+function recarregarPedidosDoDisco() {
+  if (fs.existsSync(DB_FILE)) {
+    try {
+      pedidos = JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+    } catch (e) {
+      console.warn('Aviso: Erro ao reler DB_FILE:', e.message);
+    }
+  } else if (isServerless && fs.existsSync(path.join(__dirname, 'pedidos.json'))) {
+    try {
+      pedidos = JSON.parse(fs.readFileSync(path.join(__dirname, 'pedidos.json'), 'utf8'));
+    } catch (e) {}
+  }
+}
+
 // Inicializar banco de dados JSON de Clientes VIP (invisível aos clientes)
 let clientes = [];
 if (fs.existsSync(CLIENTES_FILE)) {
@@ -62,6 +76,20 @@ function salvarClientes() {
     fs.writeFileSync(CLIENTES_FILE, JSON.stringify(clientes, null, 2), 'utf8');
   } catch (err) {
     console.warn('Aviso: Gravação de clientes em disco ignorada em ambiente Serverless:', err.message);
+  }
+}
+
+function recarregarClientesDoDisco() {
+  if (fs.existsSync(CLIENTES_FILE)) {
+    try {
+      clientes = JSON.parse(fs.readFileSync(CLIENTES_FILE, 'utf8'));
+    } catch (e) {
+      console.warn('Aviso: Erro ao reler CLIENTES_FILE:', e.message);
+    }
+  } else if (isServerless && fs.existsSync(path.join(__dirname, 'clientes.json'))) {
+    try {
+      clientes = JSON.parse(fs.readFileSync(path.join(__dirname, 'clientes.json'), 'utf8'));
+    } catch (e) {}
   }
 }
 
@@ -318,11 +346,16 @@ app.get(['/api/cardapio', '/cardapio'], (req, res) => {
 
 // Listar Pedidos (para a Cozinha)
 app.get(['/api/pedidos', '/pedidos'], (req, res) => {
+  recarregarPedidosDoDisco();
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   res.json(pedidos);
 });
 
 // Receber Novo Pedido
 app.post(['/api/pedidos', '/pedidos'], (req, res) => {
+  recarregarPedidosDoDisco();
   try {
     const { cliente, itens, entrega, pagamento, observacoes, subtotal, taxaEntrega, total } = req.body;
 
@@ -365,12 +398,17 @@ app.post(['/api/pedidos', '/pedidos'], (req, res) => {
 
 // Listar Clientes VIP (invisível aos clientes, exclusivo para o painel administrativo)
 app.get(['/api/clientes', '/clientes'], (req, res) => {
+  recarregarClientesDoDisco();
   sincronizarClientesComPedidos();
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   res.json(clientes);
 });
 
 // Atualizar Status do Pedido (Ex: Em Preparo, Saiu para Entrega)
 app.patch(['/api/pedidos/:id/status', '/pedidos/:id/status'], (req, res) => {
+  recarregarPedidosDoDisco();
   const { id } = req.params;
   const { status } = req.body;
 

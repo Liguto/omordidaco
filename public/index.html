@@ -657,8 +657,14 @@
       </div>
 
       <!-- DADOS DO CLIENTE E ENTREGA -->
-      <h4 style="font-size: 15px; font-weight: 800; margin-bottom: 12px; color: var(--dark);">📍 Dados para Entrega</h4>
+      <h4 style="font-size: 15px; font-weight: 800; margin-bottom: 10px; color: var(--dark);">📍 Dados para Entrega</h4>
       
+      <!-- AVISO DE DADOS PREENCHIDOS DO ÚLTIMO PEDIDO -->
+      <div id="avisoDadosSalvos" style="display: none; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px 12px; border-radius: 8px; margin-bottom: 12px; font-size: 12.5px; color: #166534; justify-content: space-between; align-items: center;">
+        <span>⚡ <strong>Preenchido com dados do seu último pedido!</strong></span>
+        <button type="button" onclick="limparDadosSalvos()" style="background: none; border: none; color: #dc2626; font-size: 11.5px; font-weight: 700; text-decoration: underline; cursor: pointer;">Limpar</button>
+      </div>
+
       <div class="form-group">
         <label class="form-label">Seu Nome:*</label>
         <input type="text" class="form-control" id="clienteNome" placeholder="Seu nome completo" required>
@@ -676,7 +682,7 @@
 
       <div class="form-group">
         <label class="form-label">Bairro (Campinas):*</label>
-        <input type="text" class="form-control" id="clienteBairro" value="Jardim Tamoio" required>
+        <input type="text" class="form-control" id="clienteBairro" value="" placeholder="Ex: Jardim Tamoio, Taquaral, Swift..." required>
       </div>
 
       <div class="form-group">
@@ -802,7 +808,7 @@
             ${item.descricao ? `<p class="item-desc">${item.descricao}</p>` : ''}
             <div class="item-footer">
               <span class="item-price">R$ ${item.preco.toFixed(2).replace('.', ',')}</span>
-              <button class="btn-add" onclick="abrirModalPersonalizacao('${item.id}')">+ Adicionar</button>
+              <button class="btn-add" onclick="tratarAdicionarItem('${cat.id}', '${item.id}')">+ Adicionar</button>
             </div>
           `;
           sec.appendChild(card);
@@ -812,7 +818,24 @@
       });
     }
 
-    function abrirModalPersonalizacao(itemId) {
+    function mostrarToast(msg) {
+      let toast = document.getElementById('toastNotification');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toastNotification';
+        toast.style.cssText = 'position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#15803d; color:#ffffff; padding:10px 20px; border-radius:30px; font-weight:800; font-size:14px; z-index:9999; box-shadow:0 4px 15px rgba(0,0,0,0.3); transition:all 0.3s; display:flex; align-items:center; gap:8px;';
+        document.body.appendChild(toast);
+      }
+      toast.innerText = msg;
+      toast.style.display = 'flex';
+      toast.style.opacity = '1';
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.style.display = 'none', 300);
+      }, 2000);
+    }
+
+    function tratarAdicionarItem(catId, itemId) {
       let item = null;
       for (const cat of cardapioGlobal.categorias) {
         const achou = cat.itens.find(i => i.id === itemId);
@@ -820,6 +843,25 @@
       }
       if (!item) return;
 
+      // Bebidas e Adicionais: Adiciona DIRETO à sacola sem perguntar de vinagrete!
+      if (catId === 'bebidas' || catId === 'adicionais') {
+        carrinho.push({
+          id: item.id,
+          nome: item.nome,
+          formato: '',
+          preco: item.preco,
+          observacoes: ''
+        });
+        atualizarBarraCarrinho();
+        mostrarToast(`✓ ${item.nome} adicionado!`);
+        return;
+      }
+
+      // Hot Dogs e Combos abrem a personalização
+      abrirModalPersonalizacao(item);
+    }
+
+    function abrirModalPersonalizacao(item) {
       itemSelecionadoTemp = item;
       document.getElementById('modalItemTitle').innerText = item.nome;
       document.getElementById('modalItemDesc').innerText = item.descricao || '';
@@ -908,7 +950,40 @@
       document.getElementById('resumoTaxa').innerText = 'R$ ' + taxa.toFixed(2).replace('.', ',');
       document.getElementById('resumoTotal').innerText = 'R$ ' + total.toFixed(2).replace('.', ',');
 
+      // Auto-preencher dados do cliente recorrente
+      try {
+        const dadosSalvos = localStorage.getItem('mordidaco_cliente');
+        if (dadosSalvos) {
+          const d = JSON.parse(dadosSalvos);
+          const elNome = document.getElementById('clienteNome');
+          const elTel = document.getElementById('clienteTelefone');
+          const elEnd = document.getElementById('clienteEndereco');
+          const elBairro = document.getElementById('clienteBairro');
+          const elRef = document.getElementById('clienteRef');
+          if (!elNome.value && d.nome) elNome.value = d.nome;
+          if (!elTel.value && d.telefone) elTel.value = d.telefone;
+          if (!elEnd.value && d.endereco) elEnd.value = d.endereco;
+          if (!elBairro.value && d.bairro) elBairro.value = d.bairro;
+          if (!elRef.value && d.referencia) elRef.value = d.referencia;
+          const aviso = document.getElementById('avisoDadosSalvos');
+          if (aviso) aviso.style.display = 'flex';
+        }
+      } catch (e) {}
+
       abrirModal('checkoutModal');
+    }
+
+    function limparDadosSalvos() {
+      try {
+        localStorage.removeItem('mordidaco_cliente');
+        document.getElementById('clienteNome').value = '';
+        document.getElementById('clienteTelefone').value = '';
+        document.getElementById('clienteEndereco').value = '';
+        document.getElementById('clienteBairro').value = '';
+        document.getElementById('clienteRef').value = '';
+        const aviso = document.getElementById('avisoDadosSalvos');
+        if (aviso) aviso.style.display = 'none';
+      } catch (e) {}
     }
 
     function removerItemCarrinho(index) {

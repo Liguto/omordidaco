@@ -404,6 +404,10 @@
       </div>
     </div>
     <div class="topbar-actions">
+      <div id="statusSincronizacao" style="display: flex; align-items: center; gap: 6px; background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); color: #4ade80; padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 700;">
+        <span style="display: inline-block; width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 6px #22c55e;"></span>
+        <span>Auto-Sync 3s</span>
+      </div>
       <button class="btn-top" style="background: #2563eb;" onclick="abrirModalClientes()">👥 Clientes VIP (<span id="totalClientesBadge">0</span>)</button>
       <label class="switch-label">
         <input type="checkbox" id="chkAutoPrint">
@@ -525,7 +529,7 @@
 
     async function carregarClientes() {
       try {
-        const res = await fetch('/api/clientes');
+        const res = await fetch('/api/clientes?_t=' + Date.now(), { cache: 'no-store' });
         clientesLocais = await res.json();
         document.getElementById('totalClientesBadge').innerText = clientesLocais.length;
         renderizarTabelaClientes();
@@ -626,7 +630,7 @@
     // Carregar pedidos do backend (com detecção de novos pedidos para o Vercel)
     async function carregarPedidos() {
       try {
-        const res = await fetch('/api/pedidos');
+        const res = await fetch('/api/pedidos?_t=' + Date.now(), { cache: 'no-store' });
         const lista = await res.json();
 
         // Se chegou um pedido novo que ainda não tínhamos visto
@@ -891,11 +895,11 @@
     carregarPedidos();
     carregarClientes();
     conectarTempoReal();
-    // Backup periódico para manter pedidos e clientes sincronizados na nuvem
+    // Auto-sync a cada 3 segundos na nuvem sem precisar de F5 manual
     setInterval(() => {
       carregarPedidos();
       carregarClientes();
-    }, 5000);
+    }, 3000);
   </script>
 </body>
 </html>
