@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>O Mordidaço | Cachorro Quente Artesanal - Cardápio & Pedidos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #f59e0b;
+      --primary-dark: #d97706;
+      --accent: #ea580c;
+      --bg: #090d16;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --card-border-hover: #374151;
+      --text: #f9fafb;
+      --text-muted: #9ca3af;
+      --green: #22c55e;
+      --green-dark: #16a34a;
+      --dark: #030712;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: 96px;
+    }
+
+    /* HEADER DARK LUXURY */
+    header {
+      background: radial-gradient(circle at top, #1e293b 0%, #0b0f19 100%);
+      color: #ffffff;
+      padding: 24px 16px 20px 16px;
+      text-align: center;
+      border-bottom: 3px solid var(--primary);
+      position: relative;
+    }
+
+    .brand-logo-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 10px auto;
+      display: block;
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.35);
+      border: 3px solid var(--primary);
+      background: #111827;
+    }
+
+    .brand-badge {
+      display: inline-block;
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 8px;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+    }
+
+    header p.slogan {
+      font-size: 13.5px;
+      color: #94a3b8;
+      margin-bottom: 14px;
+    }
+
+    /* INSTAGRAM BADGE */
+    .instagram-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      color: #ffffff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 10px rgba(220, 39, 67, 0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .instagram-btn:hover {
+      transform: scale(1.04);
+      box-shadow: 0 4px 15px rgba(220, 39, 67, 0.5);
+    }
+
+    .info-bar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      font-size: 12px;
+      color: #cbd5e1;
+      flex-wrap: wrap;
+    }
+
+    .info-pill {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 5px 12px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .info-pill.status-open {
+      color: #4ade80;
+      border-color: rgba(74, 222, 128, 0.3);
+      font-weight: 700;
+    }
+
+    /* CATEGORY NAV DARK */
+    .cat-nav {
+      position: sticky;
+      top: 0;
+      background: #0d1322;
+      display: flex;
+      gap: 8px;
+      padding: 12px 16px;
+      overflow-x: auto;
+      border-bottom: 1px solid var(--card-border);
+      z-index: 20;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .cat-nav::-webkit-scrollbar { display: none; }
+
+    .cat-btn {
+      background: #1e293b;
+      color: #94a3b8;
+      border: 1px solid #334155;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .cat-btn.active, .cat-btn:hover {
+      background: var(--primary);
+      color: #000000;
+      border-color: var(--primary);
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #f8fafc;
+      margin: 24px 0 12px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #1f2937;
+      padding-bottom: 8px;
+    }
+
+    /* ITEM CARD DARK */
+    .item-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+
+    .item-card:hover {
+      border-color: var(--card-border-hover);
+      transform: translateY(-2px);
+    }
+
+    .item-card.destaque {
+      border-left: 5px solid var(--primary);
+      background: linear-gradient(145deg, #162035 0%, #111827 100%);
+    }
+
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .item-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .item-badge {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 8px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .item-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .item-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .item-price {
+      font-size: 18px;
+      font-weight: 900;
+      color: #fbbf24;
+    }
+
+    .btn-add {
+      background: var(--primary);
+      color: #000000;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-add:hover {
+      background: #fbb724;
+      transform: scale(1.03);
+    }
+
+    /* FLOATING BOTTOM CART BAR */
+    .cart-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(13, 19, 34, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 14px 18px;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 50;
+      border-top: 1px solid #1f2937;
+    }
+
+    .cart-bar-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-items-count {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .cart-total-val {
+      font-size: 20px;
+      font-weight: 900;
+      color: #fbbf24;
+    }
+
+    .btn-view-cart {
+      background: var(--green);
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 14.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.35);
+    }
+
+    .btn-view-cart:hover {
+      background: var(--green-dark);
+      transform: scale(1.02);
+    }
+
+    /* MODAL DARK */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(3, 7, 18, 0.85);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: center;
+      align-items: flex-end;
+      z-index: 100;
+    }
+
+    .modal-box {
+      background: #111827;
+      color: #f8fafc;
+      width: 100%;
+      max-width: 580px;
+      border-radius: 20px 20px 0 0;
+      padding: 22px 20px 28px 20px;
+      max-height: 88vh;
+      overflow-y: auto;
+      animation: slideUp 0.25s ease-out;
+      border-top: 1px solid #374151;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #1f2937;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .btn-close {
+      background: #1f2937;
+      border: none;
+      font-size: 18px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9ca3af;
+    }
+
+    /* FORM STYLES DARK */
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 11px 14px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      color: #f8fafc;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    }
+
+    .check-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: #0f172a;
+      border: 1px solid #1f2937;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      font-size: 13.5px;
+      color: #e2e8f0;
+    }
+
+    .check-option:hover { background: #162035; border-color: #374151; }
+
+    .payment-badge {
+      display: block;
+      background: #0f172a;
+      border: 1px solid #1f2937;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      font-size: 13.5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .payment-badge.selected {
+      background: rgba(245, 158, 11, 0.12);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px var(--primary);
+    }
+
+    .payment-badge strong {
+      display: block;
+      color: #ffffff;
+      margin-bottom: 2px;
+    }
+
+    .payment-badge span {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    /* CART ITEM IN MODAL */
+    .cart-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #1f2937;
+    }
+
+    .cart-row-title {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .cart-row-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .cart-row-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-qty {
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1px solid #334155;
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    /* SUCCESS MODAL */
+    .success-box {
+      text-align: center;
+      padding: 24px 16px;
+    }
+
+    .success-icon {
+      font-size: 52px;
+      margin-bottom: 12px;
+    }
+
+    .btn-whatsapp-send {
+      display: block;
+      width: 100%;
+      background: #22c55e;
+      color: #ffffff;
+      text-align: center;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 800;
+      text-decoration: none;
+      margin-top: 14px;
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.35);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <!-- LOGO OFICIAL DE O MORDIDAÇO -->
+    <img src="/assets/logo.png" alt="O Mordidaço" class="brand-logo-img" onerror="this.style.display='none'">
+    
+    <div class="brand-badge">Hot-Dogueria Artesanal • Campinas/SP</div>
+    <h1>O MORDIDAÇO</h1>
+    <p class="slogan">A mordida mais caprichada do Jardim Tamoio!</p>
+    
+    <!-- BOTÃO OFICIAL DO INSTAGRAM -->
+    <a href="https://instagram.com/omordidaco.lanches" target="_blank" class="instagram-btn">
+      📸 Siga nosso Instagram: @omordidaco.lanches
+    </a>
+
+    <div class="info-bar">
+      <div class="info-pill status-open">● Aberto Agora</div>
+      <div class="info-pill">📍 Jardim Tamoio</div>
+      <div class="info-pill">🛵 35 - 50 min</div>
+      <div class="info-pill">💳 Pagto na Entrega</div>
+    </div>
+  </header>
+
+  <!-- CATEGORY NAV -->
+  <nav class="cat-nav" id="catNav">
+    <!-- Inserido dinamicamente -->
+  </nav>
+
+  <!-- MAIN MENU CONTAINER -->
+  <div class="container" id="menuContainer">
+    <p style="text-align:center; padding: 40px; color: #94a3b8;">Carregando cardápio de hot dogs artesanais...</p>
+  </div>
+
+  <!-- FLOATING CART BAR (BOTTOM) -->
+  <div class="cart-bar" id="cartBar" style="display: none;">
+    <div class="cart-bar-inner">
+      <div class="cart-info">
+        <span class="cart-items-count" id="cartCount">0 itens adicionados</span>
+        <span class="cart-total-val" id="cartTotalBar">R$ 0,00</span>
+      </div>
+      <button class="btn-view-cart" onclick="abrirCarrinho()">
+        <span>Ver Sacola</span> ➔
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: DETALHES DO ITEM (PERSONALIZAÇÃO) -->
+  <div class="modal-overlay" id="itemModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalItemTitle">Personalizar Hot Dog</h3>
+        <button class="btn-close" onclick="fecharModal('itemModal')">✕</button>
+      </div>
+      <p id="modalItemDesc" style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 14px;"></p>
+      
+      <!-- Escolha do Formato (se aplicável ao item) -->
+      <div class="form-group" id="formatoGroup" style="display: none;">
+        <label class="form-label">Escolha o Formato:</label>
+        <label class="check-option">
+          <input type="radio" name="itemFormato" value="Tradicional no Pão" checked>
+          <span><strong>Tradicional de Rua (No Pão)</strong> - Aberto farto c/ queijo parmesão ralado na hora</span>
+        </label>
+        <label class="check-option">
+          <input type="radio" name="itemFormato" value="No Prato (Sem Pão)">
+          <span><strong>No Prato (Marmitinha 500ml - Sem Pão)</strong> - +40g de purê artesanal e garfo</span>
+        </label>
+      </div>
+
+      <!-- Observações / Retirar ingredientes -->
+      <div class="form-group">
+        <label class="form-label">Deseja retirar algum ingrediente?</label>
+        <label class="check-option"><input type="checkbox" id="semVinagrete"> <span>Sem vinagrete</span></label>
+        <label class="check-option"><input type="checkbox" id="semMilho"> <span>Sem milho</span></label>
+        <label class="check-option"><input type="checkbox" id="semBatataPalha"> <span>Sem batata palha</span></label>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Observações especiais para a cozinha:</label>
+        <input type="text" class="form-control" id="itemObs" placeholder="Ex: Caprichar no purê, maionese verde à parte...">
+      </div>
+
+      <button class="btn-add" style="width: 100%; justify-content: center; padding: 13px; font-size: 15px;" onclick="confirmarAdicaoItem()">
+        Adicionar ao Pedido • <span id="modalItemPrice">R$ 0,00</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: SACOLA / CHECKOUT -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Sua Sacola do Mordidaço</h3>
+        <button class="btn-close" onclick="fecharModal('checkoutModal')">✕</button>
+      </div>
+
+      <!-- ITENS DO CARRINHO -->
+      <div id="carrinhoItensList" style="margin-bottom: 14px;"></div>
+
+      <!-- TOTAIS -->
+      <div style="background: #0f172a; border: 1px solid var(--card-border); padding: 12px 14px; border-radius: 10px; margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 5px; color: #94a3b8;">
+          <span>Subtotal:</span>
+          <strong id="resumoSubtotal" style="color: #f8fafc;">R$ 0,00</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 5px; color: #94a3b8;">
+          <span>Taxa de Entrega:</span>
+          <strong id="resumoTaxa" style="color: #f8fafc;">R$ 5,00</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 17px; font-weight: 900; border-top: 1px dashed #334155; padding-top: 8px; margin-top: 4px;">
+          <span>TOTAL:</span>
+          <strong style="color: #fbbf24;" id="resumoTotal">R$ 0,00</strong>
+        </div>
+      </div>
+
+      <!-- DADOS DO CLIENTE E ENTREGA -->
+      <h4 style="font-size: 15px; font-weight: 800; margin-bottom: 12px; color: #ffffff;">📍 Dados para Entrega</h4>
+      
+      <div class="form-group">
+        <label class="form-label">Seu Nome:*</label>
+        <input type="text" class="form-control" id="clienteNome" placeholder="Seu nome completo" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">WhatsApp com DDD:*</label>
+        <input type="tel" class="form-control" id="clienteTelefone" placeholder="(19) 9XXXX-XXXX" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Rua e Número:*</label>
+        <input type="text" class="form-control" id="clienteEndereco" placeholder="Ex: Rua Ernani Pereira Lopes, 123" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Bairro (Campinas):*</label>
+        <input type="text" class="form-control" id="clienteBairro" value="Jardim Tamoio" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Complemento / Ponto de Referência:</label>
+        <input type="text" class="form-control" id="clienteRef" placeholder="Ex: Casa com portão preto, próximo à praça...">
+      </div>
+
+      <!-- FORMA DE PAGAMENTO (NA ENTREGA) -->
+      <h4 style="font-size: 15px; font-weight: 800; margin-top: 18px; margin-bottom: 8px; color: #ffffff;">💵 Pagamento na Entrega (com o Motoboy)</h4>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Não cobramos nada online. O pagamento é feito diretamente ao entregador na sua porta.</p>
+
+      <div class="payment-badge selected" onclick="selecionarPagamento('pix', this)">
+        <input type="radio" name="formaPagto" value="Pix na Entrega" checked style="display:none;">
+        <strong>📱 Pix na Entrega</strong>
+        <span>O motoboy gera o QR Code Pix na maquininha na hora da entrega.</span>
+      </div>
+
+      <div class="payment-badge" onclick="selecionarPagamento('cartao', this)">
+        <input type="radio" name="formaPagto" value="Cartão Débito/Crédito na Entrega" style="display:none;">
+        <strong>💳 Cartão de Débito ou Crédito</strong>
+        <span>O motoboy leva a maquininha para você passar seu cartão.</span>
+      </div>
+
+      <div class="payment-badge" onclick="selecionarPagamento('dinheiro', this)">
+        <input type="radio" name="formaPagto" value="Dinheiro na Entrega" style="display:none;">
+        <strong>💵 Dinheiro na Entrega</strong>
+        <span>Pagamento em notas na hora em que o pedido chegar.</span>
+      </div>
+
+      <!-- CAMPO DE TROCO (EXIBIDO SE DINHEIRO FOR SELECIONADO) -->
+      <div class="form-group" id="trocoContainer" style="display: none; background: rgba(245, 158, 11, 0.12); border: 1px solid var(--primary); padding: 12px; border-radius: 8px;">
+        <label class="form-label" style="color: #fbbf24;">Precisa de troco para quanto?</label>
+        <input type="text" class="form-control" id="trocoValor" placeholder="Ex: Troco para R$ 50,00 ou Não preciso de troco">
+      </div>
+
+      <button class="btn-add" style="width: 100%; justify-content: center; padding: 15px; font-size: 16px; margin-top: 16px; background: var(--green); color: #ffffff;" onclick="finalizarPedido()">
+        ✓ Confirmar & Enviar Pedido
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: SUCESSO -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal-box">
+      <div class="success-box">
+        <div class="success-icon">🎉</div>
+        <h3 style="font-size: 21px; font-weight: 800; color: #ffffff; margin-bottom: 6px;">Pedido Confirmado & Já em Produção!</h3>
+        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 14px;">Seu pedido <strong id="sucessoNumeroPedido" style="color: #fbbf24;">#101</strong> já caiu na tela da nossa cozinha, o alarme já tocou e o preparo já começou!</p>
+        
+        <div style="background: rgba(34, 197, 94, 0.12); border: 1px solid var(--green); padding: 14px; border-radius: 10px; font-size: 13.5px; text-align: left; margin-bottom: 16px; color: #e2e8f0;">
+          <strong>Previsão de Entrega:</strong> 35 a 50 minutos.<br>
+          <strong>Forma de Pagamento:</strong> <span id="sucessoPagto">Pix na Entrega</span>.<br>
+          <strong>Total a Pagar ao Motoboy:</strong> <strong id="sucessoTotal" style="color: #fbbf24; font-size: 15px;">R$ 0,00</strong>.
+        </div>
+
+        <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid var(--primary); padding: 14px; border-radius: 10px; font-size: 13.5px; color: #fde68a; margin-bottom: 16px; text-align: left;">
+          🔔 <strong>Quer saber quando seu pedido sair para entrega?</strong><br>
+          Clique no botão verde abaixo para abrir nossa conversa no WhatsApp. Assim enviamos uma mensagem no seu celular no exato minuto em que o motoboy sair com o seu dogão quentinho! 🔥
+        </div>
+
+        <a href="#" target="_blank" class="btn-whatsapp-send" id="btnWhatsappShare">
+          📲 Acompanhar Saída do Motoboy no WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let cardapioGlobal = null;
+    let carrinho = [];
+    let itemSelecionadoTemp = null;
+    let formaPagtoSelecionada = 'Pix na Entrega';
+
+    // Carregar Cardápio do Backend
+    async function carregarCardapio() {
+      try {
+        const res = await fetch('/api/cardapio');
+        cardapioGlobal = await res.json();
+        renderizarCardapio();
+      } catch (err) {
+        document.getElementById('menuContainer').innerHTML = '<p style="color:red; text-align:center;">Erro ao carregar cardápio. Verifique se o servidor está rodando.</p>';
+      }
+    }
+
+    function renderizarCardapio() {
+      const nav = document.getElementById('catNav');
+      const container = document.getElementById('menuContainer');
+      nav.innerHTML = '';
+      container.innerHTML = '';
+
+      cardapioGlobal.categorias.forEach((cat, index) => {
+        // Nav button
+        const btn = document.createElement('button');
+        btn.className = `cat-btn ${index === 0 ? 'active' : ''}`;
+        btn.innerText = cat.nome.split(' ')[1] || cat.nome;
+        btn.onclick = () => {
+          document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          document.getElementById(cat.id).scrollIntoView({ behavior: 'smooth' });
+        };
+        nav.appendChild(btn);
+
+        // Section
+        const sec = document.createElement('div');
+        sec.id = cat.id;
+        sec.innerHTML = `<h2 class="section-title">${cat.nome}</h2>`;
+
+        cat.itens.forEach(item => {
+          const card = document.createElement('div');
+          card.className = `item-card ${item.destaque ? 'destaque' : ''}`;
+          card.innerHTML = `
+            <div class="item-header">
+              <span class="item-title">${item.nome}</span>
+              ${item.destaque ? '<span class="item-badge">Mais Pedido</span>' : ''}
+            </div>
+            ${item.descricao ? `<p class="item-desc">${item.descricao}</p>` : ''}
+            <div class="item-footer">
+              <span class="item-price">R$ ${item.preco.toFixed(2).replace('.', ',')}</span>
+              <button class="btn-add" onclick="abrirModalPersonalizacao('${item.id}')">+ Adicionar</button>
+            </div>
+          `;
+          sec.appendChild(card);
+        });
+
+        container.appendChild(sec);
+      });
+    }
+
+    function abrirModalPersonalizacao(itemId) {
+      let item = null;
+      for (const cat of cardapioGlobal.categorias) {
+        const achou = cat.itens.find(i => i.id === itemId);
+        if (achou) { item = achou; break; }
+      }
+      if (!item) return;
+
+      itemSelecionadoTemp = item;
+      document.getElementById('modalItemTitle').innerText = item.nome;
+      document.getElementById('modalItemDesc').innerText = item.descricao || '';
+      document.getElementById('modalItemPrice').innerText = 'R$ ' + item.preco.toFixed(2).replace('.', ',');
+      document.getElementById('itemObs').value = '';
+      document.getElementById('semVinagrete').checked = false;
+      document.getElementById('semMilho').checked = false;
+      document.getElementById('semBatataPalha').checked = false;
+
+      // Exibe formato apenas se for combo ou se tiver opções
+      const formatoGroup = document.getElementById('formatoGroup');
+      if (item.permiteFormato) {
+        formatoGroup.style.display = 'block';
+      } else {
+        formatoGroup.style.display = 'none';
+      }
+
+      abrirModal('itemModal');
+    }
+
+    function confirmarAdicaoItem() {
+      let observacoes = [];
+      if (document.getElementById('semVinagrete').checked) observacoes.push('Sem vinagrete');
+      if (document.getElementById('semMilho').checked) observacoes.push('Sem milho');
+      if (document.getElementById('semBatataPalha').checked) observacoes.push('Sem batata palha');
+      const obsTexto = document.getElementById('itemObs').value.trim();
+      if (obsTexto) observacoes.push(obsTexto);
+
+      let formato = itemSelecionadoTemp.formato || '';
+      if (itemSelecionadoTemp.permiteFormato) {
+        const radio = document.querySelector('input[name="itemFormato"]:checked');
+        if (radio) formato = radio.value;
+      }
+
+      carrinho.push({
+        id: itemSelecionadoTemp.id,
+        nome: itemSelecionadoTemp.nome,
+        formato: formato,
+        preco: itemSelecionadoTemp.preco,
+        observacoes: observacoes.join(', ')
+      });
+
+      fecharModal('itemModal');
+      atualizarBarraCarrinho();
+    }
+
+    function atualizarBarraCarrinho() {
+      const bar = document.getElementById('cartBar');
+      if (carrinho.length === 0) {
+        bar.style.display = 'none';
+        return;
+      }
+
+      bar.style.display = 'flex';
+      const total = carrinho.reduce((acc, item) => acc + item.preco, 0);
+      document.getElementById('cartCount').innerText = `${carrinho.length} ${carrinho.length === 1 ? 'item' : 'itens'}`;
+      document.getElementById('cartTotalBar').innerText = 'R$ ' + total.toFixed(2).replace('.', ',');
+    }
+
+    function abrirCarrinho() {
+      const container = document.getElementById('carrinhoItensList');
+      container.innerHTML = '';
+
+      carrinho.forEach((item, index) => {
+        const row = document.createElement('div');
+        row.className = 'cart-row';
+        row.innerHTML = `
+          <div>
+            <div class="cart-row-title">${item.nome}</div>
+            ${item.formato ? `<div class="cart-row-sub">Formato: ${item.formato}</div>` : ''}
+            ${item.observacoes ? `<div class="cart-row-sub">Obs: ${item.observacoes}</div>` : ''}
+          </div>
+          <div class="cart-row-actions">
+            <strong style="color: #fbbf24; font-size: 15px;">R$ ${item.preco.toFixed(2).replace('.', ',')}</strong>
+            <button class="btn-qty" onclick="removerItemCarrinho(${index})">✕</button>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+
+      const subtotal = carrinho.reduce((acc, item) => acc + item.preco, 0);
+      const taxa = cardapioGlobal ? cardapioGlobal.restaurante.taxaEntregaPadrao : 5.00;
+      const total = subtotal + taxa;
+
+      document.getElementById('resumoSubtotal').innerText = 'R$ ' + subtotal.toFixed(2).replace('.', ',');
+      document.getElementById('resumoTaxa').innerText = 'R$ ' + taxa.toFixed(2).replace('.', ',');
+      document.getElementById('resumoTotal').innerText = 'R$ ' + total.toFixed(2).replace('.', ',');
+
+      abrirModal('checkoutModal');
+    }
+
+    function removerItemCarrinho(index) {
+      carrinho.splice(index, 1);
+      atualizarBarraCarrinho();
+      if (carrinho.length === 0) {
+        fecharModal('checkoutModal');
+      } else {
+        abrirCarrinho();
+      }
+    }
+
+    function selecionarPagamento(tipo, elemento) {
+      document.querySelectorAll('.payment-badge').forEach(b => b.classList.remove('selected'));
+      elemento.classList.add('selected');
+      const radio = elemento.querySelector('input[type="radio"]');
+      radio.checked = true;
+      formaPagtoSelecionada = radio.value;
+
+      const trocoBox = document.getElementById('trocoContainer');
+      if (tipo === 'dinheiro') {
+        trocoBox.style.display = 'block';
+      } else {
+        trocoBox.style.display = 'none';
+      }
+    }
+
+    async function finalizarPedido() {
+      const nome = document.getElementById('clienteNome').value.trim();
+      const telefone = document.getElementById('clienteTelefone').value.trim();
+      const endereco = document.getElementById('clienteEndereco').value.trim();
+      const bairro = document.getElementById('clienteBairro').value.trim();
+      const ref = document.getElementById('clienteRef').value.trim();
+
+      if (!nome || !telefone || !endereco || !bairro) {
+        alert('Por favor, preencha todos os campos obrigatórios de entrega (Nome, Telefone, Endereço e Bairro).');
+        return;
+      }
+
+      const subtotal = carrinho.reduce((acc, item) => acc + item.preco, 0);
+      const taxa = cardapioGlobal ? cardapioGlobal.restaurante.taxaEntregaPadrao : 5.00;
+      const total = subtotal + taxa;
+
+      let pagtoDetalhe = formaPagtoSelecionada;
+      if (formaPagtoSelecionada.includes('Dinheiro')) {
+        const troco = document.getElementById('trocoValor').value.trim();
+        if (troco) pagtoDetalhe += ` (${troco})`;
+      }
+
+      const pedidoPayload = {
+        cliente: { nome, telefone },
+        entrega: { endereco, bairro, referencia: ref },
+        itens: carrinho,
+        pagamento: pagtoDetalhe,
+        subtotal,
+        taxaEntrega: taxa,
+        total
+      };
+
+      try {
+        const res = await fetch('/api/pedidos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(pedidoPayload)
+        });
+
+        if (!res.ok) throw new Error('Falha ao enviar pedido');
+        const pedidoCriado = await res.json();
+
+        // Limpa carrinho
+        carrinho = [];
+        atualizarBarraCarrinho();
+        fecharModal('checkoutModal');
+
+        // Abre tela de sucesso
+        document.getElementById('sucessoNumeroPedido').innerText = '#' + pedidoCriado.numero;
+        document.getElementById('sucessoPagto').innerText = pedidoCriado.pagamento;
+        document.getElementById('sucessoTotal').innerText = 'R$ ' + pedidoCriado.total.toFixed(2).replace('.', ',');
+
+        // Monta mensagem do WhatsApp
+        let msgWhats = `*NOVO PEDIDO - O MORDIDAÇO (#${pedidoCriado.numero})*\n\n`;
+        msgWhats += `*Cliente:* ${nome}\n`;
+        msgWhats += `*WhatsApp:* ${telefone}\n`;
+        msgWhats += `*Endereço:* ${endereco} - ${bairro}\n`;
+        if (ref) msgWhats += `*Ref:* ${ref}\n`;
+        msgWhats += `\n*ITENS DO PEDIDO:*\n`;
+        pedidoPayload.itens.forEach(i => {
+          msgWhats += `• 1x ${i.nome} (R$ ${i.preco.toFixed(2)})\n`;
+          if (i.formato) msgWhats += `  Formato: ${i.formato}\n`;
+          if (i.observacoes) msgWhats += `  Obs: ${i.observacoes}\n`;
+        });
+        msgWhats += `\n*Subtotal:* R$ ${subtotal.toFixed(2)}\n`;
+        msgWhats += `*Taxa Entrega:* R$ ${taxa.toFixed(2)}\n`;
+        msgWhats += `*TOTAL A PAGAR AO MOTOBOY:* R$ ${total.toFixed(2)}\n`;
+        msgWhats += `*Forma de Pagamento:* ${pagtoDetalhe}\n\n`;
+        msgWhats += `Quero acompanhar a saída do meu pedido! 🌭🔥`;
+
+        const zapUrl = `https://wa.me/${cardapioGlobal.restaurante.whatsapp}?text=${encodeURIComponent(msgWhats)}`;
+        document.getElementById('btnWhatsappShare').href = zapUrl;
+
+        abrirModal('successModal');
+      } catch (err) {
+        alert('Erro ao enviar pedido para o restaurante. Verifique sua conexão.');
+      }
+    }
+
+    function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function fecharModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    // Iniciar
+    carregarCardapio();
+  </script>
+</body>
+</html>

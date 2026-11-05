@@ -1,0 +1,21 @@
+{
+  "name": "omordidaco",
+  "version": "1.0.0",
+  "description": "O Mordidaço - Sistema de Pedidos & Painel da Cozinha",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"No test specified\" && exit 0"
+  },
+  "keywords": [
+    "delivery",
+    "hotdog",
+    "omordidaco",
+    "campinas"
+  ],
+  "author": "Luiz Duarte",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}

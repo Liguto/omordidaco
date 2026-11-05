@@ -1,0 +1,60 @@
+[
+  {
+    "id": "PED-1793903889661",
+    "numero": 102,
+    "dataHora": "05/11/2026, 15:38:09",
+    "status": "Pendente",
+    "cliente": {
+      "nome": "Monique",
+      "telefone": "10101001010101"
+    },
+    "itens": [
+      {
+        "id": "dog-duplo-pao",
+        "nome": "Hot Dog Duplo Especial (No Pão)",
+        "formato": "Tradicional no Pão",
+        "preco": 20,
+        "observacoes": "Sem vinagrete, Sem batata palha, Caprichar no pure"
+      }
+    ],
+    "entrega": {
+      "endereco": "testestes212",
+      "bairro": "testestes",
+      "referencia": ""
+    },
+    "pagamento": "Dinheiro na Entrega (100)",
+    "observacoes": "",
+    "subtotal": 20,
+    "taxaEntrega": 5,
+    "total": 25
+  },
+  {
+    "id": "PED-1793903211585",
+    "numero": 101,
+    "dataHora": "05/11/2026, 15:26:51",
+    "status": "Entregue",
+    "cliente": {
+      "nome": "Luiz Augusto de Freitas Duarte",
+      "telefone": "19997981104"
+    },
+    "itens": [
+      {
+        "id": "combo-casal",
+        "nome": "Combo Casal do Mordidaço",
+        "formato": "Tradicional no Pão",
+        "preco": 49.9,
+        "observacoes": ""
+      }
+    ],
+    "entrega": {
+      "endereco": "Rua ernani pereira lopes, 100",
+      "bairro": "jardim flamboyant",
+      "referencia": "ap22"
+    },
+    "pagamento": "Cartão Débito/Crédito na Entrega",
+    "observacoes": "",
+    "subtotal": 49.9,
+    "taxaEntrega": 5,
+    "total": 54.9
+  }
+]

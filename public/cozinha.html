@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel da Cozinha & Impressão Térmica | O Mordidaço</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dark: #030712;
+      --primary: #f59e0b;
+      --green: #22c55e;
+      --blue: #3b82f6;
+      --bg: #090d16;
+      --card-bg: #111827;
+      --border: #1f2937;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    /* TOP BAR DARK */
+    .topbar {
+      background: var(--dark);
+      color: #ffffff;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 3px solid var(--primary);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    .topbar h1 {
+      font-size: 18px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-top {
+      background: #1f2937;
+      color: #ffffff;
+      border: 1px solid #374151;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+
+    .btn-top:hover { background: #374151; }
+
+    .switch-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #cbd5e1;
+      cursor: pointer;
+    }
+
+    /* MAIN CONTAINER */
+    .dashboard {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 16px;
+    }
+
+    /* STATS BAR DARK */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    }
+
+    .stat-card strong {
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .stat-card span {
+      font-size: 12px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    /* ORDERS GRID */
+    .orders-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 18px;
+    }
+
+    .order-card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    /* BORDAS E FUNDOS VIBRANTES DE ALTO CONTRASTE */
+    .order-card.status-Pendente {
+      border: 4px solid #ea580c;
+      background: #fffcf5;
+      animation: pulseAlert 2.5s infinite;
+    }
+
+    .order-card.status-EmPreparo {
+      border: 4px solid #2563eb;
+      background: #f8fbff;
+    }
+
+    .order-card.status-SaiupEntrega {
+      border: 4px solid #7c3aed;
+      background: #faf8ff;
+    }
+
+    .order-card.status-Entregue {
+      border: 4px solid #16a34a;
+      background: #f0fdf4;
+      opacity: 0.88;
+    }
+
+    @keyframes pulseAlert {
+      0%, 100% { box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.4); }
+      50% { box-shadow: 0 0 0 8px rgba(234, 88, 12, 0.12); }
+    }
+
+    /* FAIXA SUPERIOR DE STATUS EM CORES SÓLIDAS */
+    .card-top-ribbon {
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 13.5px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .ribbon-pendente { background: #ea580c; }
+    .ribbon-preparo { background: #1d4ed8; }
+    .ribbon-entrega { background: #6d28d9; }
+    .ribbon-entregue { background: #15803d; }
+
+    .card-body {
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .order-num-large {
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--dark);
+      letter-spacing: -0.5px;
+    }
+
+    .order-time-large {
+      font-size: 13px;
+      font-weight: 700;
+      color: #475569;
+    }
+
+    /* FILTROS RÁPIDOS */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 2px solid transparent;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #e2e8f0;
+      color: #334155;
+      transition: all 0.2s;
+    }
+
+    .filter-btn.active {
+      color: #ffffff;
+    }
+    .filter-btn[data-filter="todos"].active { background: #0f172a; }
+    .filter-btn[data-filter="Pendente"].active { background: #ea580c; border-color: #c2410c; }
+    .filter-btn[data-filter="Em Preparo"].active { background: #2563eb; border-color: #1d4ed8; }
+    .filter-btn[data-filter="Saiu p/ Entrega"].active { background: #7c3aed; border-color: #6d28d9; }
+    .filter-btn[data-filter="Entregue"].active { background: #16a34a; border-color: #15803d; }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .order-num {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--dark);
+    }
+
+    .order-time {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .order-status-badge {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .badge-pendente { background: #fef3c7; color: #b45309; }
+    .badge-preparo { background: #dbeafe; color: #1d4ed8; }
+    .badge-entrega { background: #e0e7ff; color: #4338ca; }
+    .badge-entregue { background: #dcfce7; color: #15803d; }
+
+    .client-info {
+      background: #f8fafc;
+      padding: 8px 10px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      font-size: 12.5px;
+    }
+
+    .client-info strong { color: var(--dark); }
+
+    .order-items {
+      list-style: none;
+      margin-bottom: 12px;
+      flex-grow: 1;
+    }
+
+    .order-item-row {
+      padding: 6px 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 13.5px;
+    }
+
+    .item-name-bold {
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .item-obs-pill {
+      display: block;
+      font-size: 11.5px;
+      color: #dc2626;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .order-payment-box {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 6px;
+      padding: 8px 10px;
+      margin-bottom: 14px;
+      font-size: 12px;
+    }
+
+    .order-payment-box strong { color: #92400e; }
+
+    .order-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-action {
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: opacity 0.2s;
+    }
+
+    .btn-action:hover { opacity: 0.9; }
+
+    .btn-print {
+      background: var(--dark);
+      color: #ffffff;
+      grid-column: span 2;
+      font-size: 14px;
+      padding: 10px;
+    }
+
+    .btn-status-preparo { background: var(--blue); color: #ffffff; }
+    .btn-status-saiu { background: #6366f1; color: #ffffff; }
+    .btn-status-entregue { background: var(--green); color: #ffffff; }
+
+    /* ==================================================== */
+    /* ESTILOS DE IMPRESSÃO TÉRMICA (58mm / 80mm)           */
+    /* ==================================================== */
+    #printReceipt {
+      display: none;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printReceipt, #printReceipt * {
+        visibility: visible;
+      }
+      #printReceipt {
+        display: block !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 58mm; /* Padrão bobina térmica compacta */
+        padding: 2mm 3mm;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10pt;
+        line-height: 1.25;
+        color: #000000;
+        background: #ffffff;
+      }
+
+      .ticket-center { text-align: center; }
+      .ticket-divider { border-bottom: 1px dashed #000000; margin: 4px 0; }
+      .ticket-double-divider { border-bottom: 2px solid #000000; margin: 6px 0; }
+      .ticket-bold { font-weight: bold; }
+      .ticket-large { font-size: 14pt; }
+      .ticket-item { margin-bottom: 4px; }
+      .ticket-right { text-align: right; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <img src="/assets/logo.png" alt="O Mordidaço" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #f59e0b; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);" onerror="this.style.display='none'">
+      <div>
+        <h1 style="margin: 0; font-size: 19px;">O MORDIDAÇO | Painel da Cozinha</h1>
+        <a href="https://instagram.com/omordidaco.lanches" target="_blank" style="color: #fbbf24; text-decoration: none; font-size: 11.5px; font-weight: 700;">📸 @omordidaco.lanches</a>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn-top" style="background: #2563eb;" onclick="abrirModalClientes()">👥 Clientes VIP (<span id="totalClientesBadge">0</span>)</button>
+      <label class="switch-label">
+        <input type="checkbox" id="chkAutoPrint">
+        <span>🖨️ Auto-imprimir ao receber</span>
+      </label>
+      <button class="btn-top" onclick="testarAlarme()">🔔 Testar Som</button>
+      <button class="btn-top" onclick="carregarPedidos()">🔄 Atualizar</button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="dashboard">
+    
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div><span>Pendentes</span><strong id="statPendentes" style="color: #d97706;">0</strong></div>
+        <div style="font-size: 24px;">⏳</div>
+      </div>
+      <div class="stat-card">
+        <div><span>Em Preparo</span><strong id="statPreparo" style="color: #2563eb;">0</strong></div>
+        <div style="font-size: 24px;">🔥</div>
+      </div>
+      <div class="stat-card">
+        <div><span>Total de Pedidos Hoje</span><strong id="statTotal" style="color: var(--dark);">0</strong></div>
+        <div style="font-size: 24px;">🌭</div>
+      </div>
+      <div class="stat-card">
+        <div><span>Faturamento das Vendas</span><strong id="statFaturamento" style="color: #16a34a;">R$ 0,00</strong></div>
+        <div style="font-size: 24px;">💵</div>
+      </div>
+    </div>
+
+    <!-- ORDERS LIST & FILTERS -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+      <h2 style="font-size: 18px; font-weight: 800; color: var(--dark);">
+        Comandas Ativas na Cozinha
+      </h2>
+    </div>
+
+    <!-- BARRA DE FILTROS RÁPIDOS DE ALTO CONTRASTE -->
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-btn active" data-filter="todos" onclick="filtrarStatus('todos', this)">
+        📋 TODOS (<span id="countFiltroTodos">0</span>)
+      </button>
+      <button class="filter-btn" data-filter="Pendente" onclick="filtrarStatus('Pendente', this)" style="border-color: #ea580c; color: #ea580c;">
+        ⏳ A FAZER / PENDENTES (<span id="countFiltroPendentes">0</span>)
+      </button>
+      <button class="filter-btn" data-filter="Em Preparo" onclick="filtrarStatus('Em Preparo', this)" style="border-color: #2563eb; color: #2563eb;">
+        🔥 NA BANCADA / EM PREPARO (<span id="countFiltroPreparo">0</span>)
+      </button>
+      <button class="filter-btn" data-filter="Saiu p/ Entrega" onclick="filtrarStatus('Saiu p/ Entrega', this)" style="border-color: #7c3aed; color: #7c3aed;">
+        🛵 COM MOTOBOY (<span id="countFiltroSaiu">0</span>)
+      </button>
+      <button class="filter-btn" data-filter="Entregue" onclick="filtrarStatus('Entregue', this)" style="border-color: #16a34a; color: #16a34a;">
+        ✅ ENTREGUES (<span id="countFiltroEntregues">0</span>)
+      </button>
+    </div>
+
+    <div class="orders-grid" id="ordersGrid">
+      <p style="color: #94a3b8;">Aguardando novos pedidos...</p>
+    </div>
+
+  </div>
+
+  <!-- CONTAINER DE IMPRESSÃO TÉRMICA (ESCONDIDO NA TELA, VISÍVEL NO PRINT) -->
+  <div id="printReceipt"></div>
+
+  <!-- MODAL: CLIENTES VIP (INVISÍVEL AOS CLIENTES) -->
+  <div id="modalClientes" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.7); z-index: 100; justify-content: center; align-items: center; padding: 16px;">
+    <div style="background: #ffffff; width: 100%; max-width: 800px; border-radius: 14px; padding: 20px; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 16px;">
+        <h3 style="font-size: 18px; font-weight: 800; color: var(--dark);">👥 Lista de Clientes VIP (WhatsApp CRM)</h3>
+        <button onclick="fecharModalClientes()" style="background:#f1f5f9; border:none; width:32px; height:32px; border-radius:50%; font-size:16px; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+        <span style="font-size: 13px; color: #64748b;">Números salvos automaticamente dos pedidos do site.</span>
+        <button onclick="copiarTelefonesVIP()" style="background: #16a34a; color: #ffffff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer;">
+          📋 Copiar Telefones para Transmissão VIP
+        </button>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 12.5px; text-align: left;">
+          <thead>
+            <tr style="background: #f8fafc; border-bottom: 2px solid var(--border);">
+              <th style="padding: 8px 10px;">Nome</th>
+              <th style="padding: 8px 10px;">WhatsApp</th>
+              <th style="padding: 8px 10px;">Bairro</th>
+              <th style="padding: 8px 10px; text-align: center;">Pedidos</th>
+              <th style="padding: 8px 10px;">Total Gasto</th>
+              <th style="padding: 8px 10px;">Ação</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaClientesBody">
+            <tr><td colspan="6" style="padding: 20px; text-align: center; color: #94a3b8;">Carregando clientes...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let pedidosLocais = [];
+    let clientesLocais = [];
+
+    async function carregarClientes() {
+      try {
+        const res = await fetch('/api/clientes');
+        clientesLocais = await res.json();
+        document.getElementById('totalClientesBadge').innerText = clientesLocais.length;
+        renderizarTabelaClientes();
+      } catch (e) {
+        console.error('Erro ao carregar clientes:', e);
+      }
+    }
+
+    function renderizarTabelaClientes() {
+      const tbody = document.getElementById('tabelaClientesBody');
+      if (clientesLocais.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="padding: 20px; text-align: center; color: #94a3b8;">Nenhum cliente cadastrado ainda.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = '';
+      clientesLocais.forEach(c => {
+        const telLimpo = c.telefone.replace(/\D/g, '');
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid #f1f5f9';
+        tr.innerHTML = `
+          <td style="padding: 8px 10px; font-weight: 700; color: var(--dark);">${c.nome}</td>
+          <td style="padding: 8px 10px;">${c.telefone}</td>
+          <td style="padding: 8px 10px;">${c.bairro || 'Jardim Tamoio'}</td>
+          <td style="padding: 8px 10px; text-align: center; font-weight: 700; color: #2563eb;">${c.totalPedidos}</td>
+          <td style="padding: 8px 10px; font-weight: 700; color: #16a34a;">R$ ${c.totalGasto.toFixed(2).replace('.', ',')}</td>
+          <td style="padding: 8px 10px;">
+            <a href="https://wa.me/55${telLimpo}?text=Ol%C3%A1%20${encodeURIComponent(c.nome)}!%20Aqui%20%C3%A9%20do%20O%20Mordida%C3%A7o%20%F0%9F%8C%AD" target="_blank" style="background:#25d366; color:#ffffff; padding:4px 8px; border-radius:6px; text-decoration:none; font-size:11px; font-weight:700;">
+              💬 WhatsApp
+            </a>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function abrirModalClientes() {
+      carregarClientes();
+      document.getElementById('modalClientes').style.display = 'flex';
+    }
+
+    function fecharModalClientes() {
+      document.getElementById('modalClientes').style.display = 'none';
+    }
+
+    function copiarTelefonesVIP() {
+      if (clientesLocais.length === 0) {
+        alert('Nenhum cliente para copiar.');
+        return;
+      }
+      const lista = clientesLocais.map(c => `${c.nome}: ${c.telefone}`).join('\n');
+      navigator.clipboard.writeText(lista);
+      alert('Lista de telefones copiada para a área de transferência! Você pode colar no WhatsApp para criar sua Lista de Transmissão VIP.');
+    }
+
+    // Tocar Som do Alarme usando Web Audio API (Não precisa de arquivo mp3 externo!)
+    function tocarAlarmeSonoro() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // Tom 1 (Chime)
+        const osc1 = audioCtx.createOscillator();
+        const gain1 = audioCtx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+        gain1.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain1.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc1.connect(gain1);
+        gain1.connect(audioCtx.destination);
+        osc1.start();
+        osc1.stop(audioCtx.currentTime + 0.3);
+
+        // Tom 2 (Acorde alto)
+        setTimeout(() => {
+          const osc2 = audioCtx.createOscillator();
+          const gain2 = audioCtx.createGain();
+          osc2.type = 'triangle';
+          osc2.frequency.setValueAtTime(880.00, audioCtx.currentTime); // A5
+          gain2.gain.setValueAtTime(0.4, audioCtx.currentTime);
+          gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+          osc2.connect(gain2);
+          gain2.connect(audioCtx.destination);
+          osc2.start();
+          osc2.stop(audioCtx.currentTime + 0.5);
+        }, 150);
+      } catch (e) {
+        console.warn('Áudio bloqueado pelo navegador até o primeiro clique:', e);
+      }
+    }
+
+    function testarAlarme() {
+      tocarAlarmeSonoro();
+      alert('Som do alarme acionado com sucesso!');
+    }
+
+    // Carregar pedidos do backend
+    async function carregarPedidos() {
+      try {
+        const res = await fetch('/api/pedidos');
+        pedidosLocais = await res.json();
+        renderizarPedidos();
+        atualizarEstatisticas();
+      } catch (err) {
+        console.error('Erro ao buscar pedidos:', err);
+      }
+    }
+
+    let filtroAtual = 'todos';
+
+    function filtrarStatus(filtro, elementoBtn) {
+      filtroAtual = filtro;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      elementoBtn.classList.add('active');
+      renderizarPedidos();
+    }
+
+    function renderizarPedidos() {
+      const grid = document.getElementById('ordersGrid');
+      
+      const pedidosFiltrados = pedidosLocais.filter(p => {
+        if (filtroAtual === 'todos') return true;
+        return p.status === filtroAtual;
+      });
+
+      if (pedidosFiltrados.length === 0) {
+        grid.innerHTML = `<div style="grid-column: 1/-1; background:#ffffff; padding:40px; text-align:center; border-radius:12px; border:2px dashed var(--border); color:#64748b; font-size:16px; font-weight:700;">Nenhum pedido com status '${filtroAtual}' no momento.</div>`;
+        return;
+      }
+
+      grid.innerHTML = '';
+
+      pedidosFiltrados.forEach(p => {
+        let ribbonClass = 'ribbon-pendente';
+        let ribbonText = '⏳ A FAZER • PENDENTE';
+        let cardStatusClass = 'status-Pendente';
+
+        if (p.status === 'Em Preparo') {
+          ribbonClass = 'ribbon-preparo';
+          ribbonText = '🔥 NA BANCADA • EM PREPARO';
+          cardStatusClass = 'status-EmPreparo';
+        } else if (p.status === 'Saiu p/ Entrega') {
+          ribbonClass = 'ribbon-entrega';
+          ribbonText = '🛵 COM MOTOBOY • NA RUA';
+          cardStatusClass = 'status-SaiupEntrega';
+        } else if (p.status === 'Entregue') {
+          ribbonClass = 'ribbon-entregue';
+          ribbonText = '✅ CONCLUÍDO • ENTREGUE';
+          cardStatusClass = 'status-Entregue';
+        }
+
+        let itensHtml = '';
+        p.itens.forEach(i => {
+          itensHtml += `
+            <li class="order-item-row" style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;">
+              <div style="font-size: 15px; font-weight: 800; color: #0f172a;">
+                <span style="background: #0f172a; color: #ffffff; padding: 2px 7px; border-radius: 6px; font-size: 13px; margin-right: 4px;">1x</span>
+                ${i.nome}
+              </div>
+              ${i.formato ? `<div style="font-size: 12.5px; font-weight: 700; color: #2563eb; margin: 2px 0 0 28px;">👉 ${i.formato}</div>` : ''}
+              ${i.observacoes ? `<div style="background: #fee2e2; border-left: 4px solid #ef4444; padding: 4px 8px; border-radius: 4px; margin: 4px 0 0 28px; color: #991b1b; font-size: 12.5px; font-weight: 800;">⚠️ OBS: ${i.observacoes}</div>` : ''}
+            </li>
+          `;
+        });
+
+        const card = document.createElement('div');
+        card.className = `order-card ${cardStatusClass}`;
+        card.innerHTML = `
+          <!-- FAIXA SUPERIOR COLORIDA E VIBRANTE (VISÍVEL DE LONGE) -->
+          <div class="card-top-ribbon ${ribbonClass}">
+            <span>${ribbonText}</span>
+            <span style="background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 6px; font-size: 14px;">#${p.numero}</span>
+          </div>
+
+          <div class="card-body">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;">
+              <div>
+                <span class="order-num-large">#${p.numero}</span>
+                <div class="order-time-large">⏰ ${p.dataHora}</div>
+              </div>
+              <div style="text-align: right;">
+                <span style="font-size: 19px; font-weight: 900; color: #15803d;">R$ ${p.total.toFixed(2).replace('.', ',')}</span>
+              </div>
+            </div>
+
+            <div class="client-info" style="border-left: 4px solid #0f172a; padding: 10px 12px; margin-bottom: 12px;">
+              <div style="font-size: 15px; font-weight: 800; color: #0f172a;">👤 ${p.cliente.nome}</div>
+              <div style="font-size: 13.5px; font-weight: 700; color: #1e293b; margin-top: 3px;">📍 ${p.entrega.endereco} - ${p.entrega.bairro}</div>
+              ${p.entrega.referencia ? `<div style="font-size: 12px; color: #64748b; margin-top: 2px;"><em>Ref: ${p.entrega.referencia}</em></div>` : ''}
+              <div style="font-size: 13px; color: #2563eb; font-weight: 700; margin-top: 3px;">📞 ${p.cliente.telefone}</div>
+            </div>
+
+            <ul class="order-items" style="list-style: none; margin-bottom: 14px;">
+              ${itensHtml}
+            </ul>
+
+            <div class="order-payment-box" style="font-size: 13px; padding: 10px 12px; margin-bottom: 12px;">
+              <strong style="color: #92400e;">💵 FORMA DE PAGTO:</strong> <span style="font-weight: 800; color: #b45309;">${p.pagamento}</span><br>
+              <strong>TOTAL A COBRAR:</strong> <span style="font-size: 16px; font-weight: 900; color: #0f172a;">R$ ${p.total.toFixed(2).replace('.', ',')}</span>
+            </div>
+
+            <!-- SELETOR DE STATUS REVERSÍVEL (EVITA MISS-CLICK) -->
+            <div style="background: #f8fafc; border: 2px solid #cbd5e1; padding: 10px 12px; border-radius: 8px; margin-bottom: 12px;">
+              <label style="font-size: 11px; font-weight: 900; color: #334155; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">
+                🔄 STATUS DO PEDIDO (ALTERE LIVREMENTE):
+              </label>
+              <select onchange="alterarStatus('${p.id}', this.value)" style="width: 100%; padding: 8px 12px; border-radius: 6px; font-size: 14px; font-weight: 800; border: 2px solid #0f172a; background: #ffffff; cursor: pointer; color: #0f172a;">
+                <option value="Pendente" ${p.status === 'Pendente' ? 'selected' : ''}>⏳ A FAZER / PENDENTE</option>
+                <option value="Em Preparo" ${p.status === 'Em Preparo' ? 'selected' : ''}>🔥 NA BANCADA / EM PREPARO</option>
+                <option value="Saiu p/ Entrega" ${p.status === 'Saiu p/ Entrega' ? 'selected' : ''}>🛵 COM MOTOBOY / NA RUA</option>
+                <option value="Entregue" ${p.status === 'Entregue' ? 'selected' : ''}>✅ ENTREGUE / CONCLUÍDO</option>
+              </select>
+            </div>
+
+            <div class="order-actions">
+              <button class="btn-action btn-print" onclick="imprimirComanda('${p.id}')">
+                🖨️ IMPRIMIR COMANDA TÉRMICA
+              </button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function atualizarEstatisticas() {
+      const pendentes = pedidosLocais.filter(p => p.status === 'Pendente').length;
+      const preparo = pedidosLocais.filter(p => p.status === 'Em Preparo').length;
+      const saiu = pedidosLocais.filter(p => p.status === 'Saiu p/ Entrega').length;
+      const entregues = pedidosLocais.filter(p => p.status === 'Entregue').length;
+      const faturamento = pedidosLocais.reduce((acc, p) => acc + p.total, 0);
+
+      document.getElementById('statPendentes').innerText = pendentes;
+      document.getElementById('statPreparo').innerText = preparo;
+      document.getElementById('statTotal').innerText = pedidosLocais.length;
+      document.getElementById('statFaturamento').innerText = 'R$ ' + faturamento.toFixed(2).replace('.', ',');
+
+      // Atualiza contadores na barra de filtros
+      document.getElementById('countFiltroTodos').innerText = pedidosLocais.length;
+      document.getElementById('countFiltroPendentes').innerText = pendentes;
+      document.getElementById('countFiltroPreparo').innerText = preparo;
+      document.getElementById('countFiltroSaiu').innerText = saiu;
+      document.getElementById('countFiltroEntregues').innerText = entregues;
+    }
+
+    async function alterarStatus(id, novoStatus) {
+      try {
+        await fetch(`/api/pedidos/${id}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: novoStatus })
+        });
+        carregarPedidos();
+      } catch (err) {
+        alert('Erro ao atualizar status do pedido.');
+      }
+    }
+
+    // Gerar Comanda e Mandar para Impressora Térmica
+    function imprimirComanda(id) {
+      const p = pedidosLocais.find(item => item.id === id);
+      if (!p) return;
+
+      const printArea = document.getElementById('printReceipt');
+      
+      let html = `
+        <div class="ticket-center ticket-large ticket-bold">O MORDIDAÇO</div>
+        <div class="ticket-center">Hot-Dogueria Artesanal</div>
+        <div class="ticket-center">Jardim Tamoio - Campinas/SP</div>
+        <div class="ticket-divider"></div>
+        <div class="ticket-center ticket-large ticket-bold">PEDIDO #${p.numero}</div>
+        <div class="ticket-center">${p.dataHora}</div>
+        <div class="ticket-divider"></div>
+        
+        <div><span class="ticket-bold">CLIENTE:</span> ${p.cliente.nome}</div>
+        <div><span class="ticket-bold">TEL/ZAP:</span> ${p.cliente.telefone}</div>
+        <div><span class="ticket-bold">ENDEREÇO:</span> ${p.entrega.endereco}</div>
+        <div><span class="ticket-bold">BAIRRO:</span> ${p.entrega.bairro}</div>
+        ${p.entrega.referencia ? `<div><span class="ticket-bold">REF:</span> ${p.entrega.referencia}</div>` : ''}
+        
+        <div class="ticket-double-divider"></div>
+        <div class="ticket-bold">ITENS DO PEDIDO:</div>
+        <div class="ticket-divider"></div>
+      `;
+
+      p.itens.forEach(i => {
+        html += `
+          <div class="ticket-item">
+            <div class="ticket-bold">• 1x ${i.nome}</div>
+            ${i.formato ? `<div>  [${i.formato}]</div>` : ''}
+            ${i.observacoes ? `<div class="ticket-bold">  *Obs: ${i.observacoes}*</div>` : ''}
+            <div class="ticket-right">R$ ${i.preco.toFixed(2).replace('.', ',')}</div>
+          </div>
+        `;
+      });
+
+      html += `
+        <div class="ticket-divider"></div>
+        <div>Subtotal: R$ ${p.subtotal.toFixed(2).replace('.', ',')}</div>
+        <div>Taxa Entrega: R$ ${p.taxaEntrega.toFixed(2).replace('.', ',')}</div>
+        <div class="ticket-large ticket-bold ticket-right" style="margin-top: 4px;">
+          TOTAL: R$ ${p.total.toFixed(2).replace('.', ',')}
+        </div>
+        <div class="ticket-double-divider"></div>
+        
+        <div class="ticket-bold">PAGAMENTO NA ENTREGA:</div>
+        <div class="ticket-bold" style="font-size: 11pt;">${p.pagamento}</div>
+        
+        <div class="ticket-divider"></div>
+        <div class="ticket-center" style="font-size: 8pt; margin-top: 6px;">
+          Feito com amor de nossa família para a sua!<br>
+          Instagram: @omordidaco.lanches
+        </div>
+        <br><br>
+      `;
+
+      printArea.innerHTML = html;
+      window.print();
+    }
+
+    // CONEXÃO EM TEMPO REAL VIA SSE (SERVER-SENT EVENTS)
+    function conectarTempoReal() {
+      const eventSource = new EventSource('/api/pedidos/stream');
+
+      eventSource.onmessage = (event) => {
+        if (!event.data) return;
+        const data = JSON.parse(event.data);
+
+        // Se for um novo pedido
+        if (data.id && data.numero) {
+          tocarAlarmeSonoro();
+          carregarPedidos();
+
+          // Auto-imprimir se checkbox estiver ativo
+          if (document.getElementById('chkAutoPrint').checked) {
+            setTimeout(() => {
+              imprimirComanda(data.id);
+            }, 600);
+          }
+        } else if (data.tipo === 'status_atualizado') {
+          carregarPedidos();
+        }
+      };
+
+      eventSource.onerror = () => {
+        console.warn('SSE desconectado, tentando reconectar...');
+      };
+    }
+
+    // Inicialização
+    carregarPedidos();
+    conectarTempoReal();
+  </script>
+</body>
+</html>
