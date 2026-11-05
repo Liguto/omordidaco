@@ -242,6 +242,11 @@ const CARDAPIO = {
   ]
 };
 
+// Rota amigável para o Painel da Cozinha
+app.get('/cozinha', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'cozinha.html'));
+});
+
 // Obter Cardápio
 app.get('/api/cardapio', (req, res) => {
   res.json(CARDAPIO);
