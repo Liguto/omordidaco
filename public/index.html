@@ -719,13 +719,16 @@
   </div>
 
   <!-- MODAL: SUCESSO -->
-  <div class="modal-overlay" id="successModal">
+  <div class="modal-overlay" id="successModal" onclick="if(event.target === this) fecharModal('successModal')">
     <div class="modal-box">
-      <div class="success-box">
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 4px;">
+        <button class="btn-close" onclick="fecharModal('successModal')" title="Fechar">✕</button>
+      </div>
+      <div class="success-box" style="padding-top: 0;">
         <div class="success-icon">🎉</div>
         <h3 style="font-size: 21px; font-weight: 800; color: var(--dark); margin-bottom: 6px;">Pedido Confirmado & Já em Produção!</h3>
         <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 14px;">Seu pedido <strong id="sucessoNumeroPedido" style="color: var(--primary-dark);">#101</strong> já caiu na tela da nossa cozinha, o alarme já tocou e o preparo já começou!</p>
-        
+
         <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 14px; border-radius: 10px; font-size: 13.5px; text-align: left; margin-bottom: 16px; color: #166534;">
           <strong>Previsão de Entrega:</strong> 35 a 50 minutos.<br>
           <strong>Forma de Pagamento:</strong> <span id="sucessoPagto">Pix na Entrega</span>.<br>
@@ -740,6 +743,10 @@
         <a href="#" target="_blank" class="btn-whatsapp-send" id="btnWhatsappShare">
           📲 Acompanhar Saída do Motoboy no WhatsApp
         </a>
+
+        <button onclick="fecharModal('successModal')" style="display: block; width: 100%; background: #f1f5f9; color: var(--dark); border: 1px solid #cbd5e1; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 700; margin-top: 10px; cursor: pointer;">
+          ✕ Fechar e Voltar ao Cardápio
+        </button>
       </div>
     </div>
   </div>
