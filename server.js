@@ -97,7 +97,7 @@ function notificarCozinha(novoPedido) {
 }
 
 // SSE: Conexão em tempo real do painel da cozinha
-app.get('/api/pedidos/stream', (req, res) => {
+app.get(['/api/pedidos/stream', '/pedidos/stream'], (req, res) => {
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
     'Cache-Control': 'no-cache',
@@ -248,17 +248,17 @@ app.get('/cozinha', (req, res) => {
 });
 
 // Obter Cardápio
-app.get('/api/cardapio', (req, res) => {
+app.get(['/api/cardapio', '/cardapio'], (req, res) => {
   res.json(CARDAPIO);
 });
 
 // Listar Pedidos (para a Cozinha)
-app.get('/api/pedidos', (req, res) => {
+app.get(['/api/pedidos', '/pedidos'], (req, res) => {
   res.json(pedidos);
 });
 
 // Receber Novo Pedido
-app.post('/api/pedidos', (req, res) => {
+app.post(['/api/pedidos', '/pedidos'], (req, res) => {
   try {
     const { cliente, itens, entrega, pagamento, observacoes, subtotal, taxaEntrega, total } = req.body;
 
@@ -300,12 +300,12 @@ app.post('/api/pedidos', (req, res) => {
 });
 
 // Listar Clientes VIP (invisível aos clientes, exclusivo para o painel administrativo)
-app.get('/api/clientes', (req, res) => {
+app.get(['/api/clientes', '/clientes'], (req, res) => {
   res.json(clientes);
 });
 
 // Atualizar Status do Pedido (Ex: Em Preparo, Saiu para Entrega)
-app.patch('/api/pedidos/:id/status', (req, res) => {
+app.patch(['/api/pedidos/:id/status', '/pedidos/:id/status'], (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
 
