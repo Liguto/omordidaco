@@ -25,6 +25,12 @@ if (fs.existsSync(DB_FILE)) {
   } catch (e) {
     pedidos = [];
   }
+} else if (isServerless && fs.existsSync(path.join(__dirname, 'pedidos.json'))) {
+  try {
+    pedidos = JSON.parse(fs.readFileSync(path.join(__dirname, 'pedidos.json'), 'utf8'));
+  } catch (e) {
+    pedidos = [];
+  }
 }
 
 function salvarPedidos() {
@@ -43,6 +49,12 @@ if (fs.existsSync(CLIENTES_FILE)) {
   } catch (e) {
     clientes = [];
   }
+} else if (isServerless && fs.existsSync(path.join(__dirname, 'clientes.json'))) {
+  try {
+    clientes = JSON.parse(fs.readFileSync(path.join(__dirname, 'clientes.json'), 'utf8'));
+  } catch (e) {
+    clientes = [];
+  }
 }
 
 function salvarClientes() {
@@ -53,35 +65,87 @@ function salvarClientes() {
   }
 }
 
-function registrarOuAtualizarCliente(clienteData, entregaData, valorPedido) {
-  const telLimpo = (clienteData.telefone || '').replace(/\D/g, '');
-  if (!telLimpo) return;
+function encontrarClienteExistente(clienteData) {
+  if (!clienteData) return null;
+  const telOriginal = (clienteData.telefone || '').trim();
+  const telLimpo = telOriginal.replace(/\D/g, '');
+  const nomeOriginal = (clienteData.nome || '').trim();
 
-  const agora = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-  let clienteExistente = clientes.find(c => c.telefone.replace(/\D/g, '') === telLimpo);
+  return clientes.find(c => {
+    const cTelLimpo = (c.telefone || '').replace(/\D/g, '');
+    if (telLimpo.length >= 4 && cTelLimpo.length >= 4) {
+      return cTelLimpo === telLimpo;
+    }
+    if (telOriginal && c.telefone) {
+      return c.telefone.trim().toLowerCase() === telOriginal.toLowerCase();
+    }
+    if (nomeOriginal && c.nome) {
+      return c.nome.trim().toLowerCase() === nomeOriginal.toLowerCase();
+    }
+    return false;
+  });
+}
+
+function registrarOuAtualizarCliente(clienteData, entregaData, valorPedido, dataHoraPedido) {
+  if (!clienteData) return;
+  const telOriginal = (clienteData.telefone || '').trim();
+  const nomeOriginal = (clienteData.nome || 'Cliente').trim();
+  const endereco = (entregaData && entregaData.endereco) ? entregaData.endereco.trim() : '';
+  const bairro = (entregaData && entregaData.bairro) ? entregaData.bairro.trim() : '';
+  const agora = dataHoraPedido || new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+  const valor = Number(valorPedido) || 0;
+
+  let clienteExistente = encontrarClienteExistente(clienteData);
 
   if (clienteExistente) {
-    clienteExistente.nome = clienteData.nome || clienteExistente.nome;
-    clienteExistente.endereco = entregaData.endereco || clienteExistente.endereco;
-    clienteExistente.bairro = entregaData.bairro || clienteExistente.bairro;
-    clienteExistente.totalPedidos += 1;
-    clienteExistente.totalGasto += Number(valorPedido);
+    if (nomeOriginal && nomeOriginal !== 'Cliente') clienteExistente.nome = nomeOriginal;
+    if (telOriginal) clienteExistente.telefone = telOriginal;
+    if (endereco) clienteExistente.endereco = endereco;
+    if (bairro) clienteExistente.bairro = bairro;
+    clienteExistente.totalPedidos = (clienteExistente.totalPedidos || 0) + 1;
+    clienteExistente.totalGasto = Number(((clienteExistente.totalGasto || 0) + valor).toFixed(2));
     clienteExistente.ultimoPedido = agora;
   } else {
     clientes.push({
-      id: 'CLI-' + Date.now(),
-      nome: clienteData.nome,
-      telefone: clienteData.telefone,
-      endereco: entregaData.endereco,
-      bairro: entregaData.bairro,
+      id: 'CLI-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+      nome: nomeOriginal || 'Cliente VIP',
+      telefone: telOriginal || 'Não informado',
+      endereco: endereco || 'Balcão / Retirada',
+      bairro: bairro || 'Jardim Tamoio',
       totalPedidos: 1,
-      totalGasto: Number(valorPedido),
+      totalGasto: Number(valor.toFixed(2)),
       primeiroPedido: agora,
       ultimoPedido: agora
     });
   }
   salvarClientes();
 }
+
+function sincronizarClientesComPedidos() {
+  if (!pedidos || pedidos.length === 0) return;
+
+  // Se a lista de clientes estiver vazia, reconstrói integralmente a partir do histórico de pedidos
+  if (clientes.length === 0) {
+    const historico = [...pedidos].reverse();
+    historico.forEach(p => {
+      if (p.cliente) {
+        registrarOuAtualizarCliente(p.cliente, p.entrega, p.total, p.dataHora);
+      }
+    });
+  } else {
+    // Se já existem clientes, verifica se há clientes de pedidos que ainda não constam na lista
+    pedidos.forEach(p => {
+      if (!p.cliente) return;
+      const jaExiste = encontrarClienteExistente(p.cliente);
+      if (!jaExiste) {
+        registrarOuAtualizarCliente(p.cliente, p.entrega, p.total, p.dataHora);
+      }
+    });
+  }
+}
+
+// Sincroniza clientes na inicialização do servidor
+sincronizarClientesComPedidos();
 
 // Lista de clientes conectados ao SSE (tempo real para a cozinha)
 let sseClients = [];
@@ -301,6 +365,7 @@ app.post(['/api/pedidos', '/pedidos'], (req, res) => {
 
 // Listar Clientes VIP (invisível aos clientes, exclusivo para o painel administrativo)
 app.get(['/api/clientes', '/clientes'], (req, res) => {
+  sincronizarClientesComPedidos();
   res.json(clientes);
 });
 

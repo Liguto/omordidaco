@@ -110,16 +110,20 @@
     }
 
     .stat-card strong {
-      font-size: 24px;
-      font-weight: 800;
+      font-size: 26px;
+      font-weight: 900;
       color: var(--dark);
+      line-height: 1.1;
+      display: block;
     }
 
     .stat-card span {
-      font-size: 12px;
-      color: var(--text-muted);
+      font-size: 11px;
+      color: #64748b;
       text-transform: uppercase;
-      font-weight: 700;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      display: block;
     }
 
     /* ORDERS GRID */
@@ -416,20 +420,32 @@
     <!-- STATS -->
     <div class="stats-grid">
       <div class="stat-card">
-        <div><span>Pendentes</span><strong id="statPendentes" style="color: #d97706;">0</strong></div>
-        <div style="font-size: 24px;">⏳</div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase;">PENDENTES</span>
+          <strong id="statPendentes" style="font-size: 26px; font-weight: 900; color: #d97706;">0</strong>
+        </div>
+        <div style="font-size: 26px;">⏳</div>
       </div>
       <div class="stat-card">
-        <div><span>Em Preparo</span><strong id="statPreparo" style="color: #2563eb;">0</strong></div>
-        <div style="font-size: 24px;">🔥</div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase;">EM PREPARO</span>
+          <strong id="statPreparo" style="font-size: 26px; font-weight: 900; color: #2563eb;">0</strong>
+        </div>
+        <div style="font-size: 26px;">🔥</div>
       </div>
       <div class="stat-card">
-        <div><span>Total de Pedidos Hoje</span><strong id="statTotal" style="color: var(--dark);">0</strong></div>
-        <div style="font-size: 24px;">🌭</div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase;">TOTAL DE PEDIDOS HOJE</span>
+          <strong id="statTotal" style="font-size: 26px; font-weight: 900; color: var(--dark);">0</strong>
+        </div>
+        <div style="font-size: 26px;">🌭</div>
       </div>
       <div class="stat-card">
-        <div><span>Faturamento das Vendas</span><strong id="statFaturamento" style="color: #16a34a;">R$ 0,00</strong></div>
-        <div style="font-size: 24px;">💵</div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase;">FATURAMENTO DAS VENDAS</span>
+          <strong id="statFaturamento" style="font-size: 26px; font-weight: 900; color: #16a34a;">R$ 0,00</strong>
+        </div>
+        <div style="font-size: 26px;">💵</div>
       </div>
     </div>
 
@@ -873,7 +889,13 @@
 
     // Inicialização
     carregarPedidos();
+    carregarClientes();
     conectarTempoReal();
+    // Backup periódico para manter pedidos e clientes sincronizados na nuvem
+    setInterval(() => {
+      carregarPedidos();
+      carregarClientes();
+    }, 5000);
   </script>
 </body>
 </html>
