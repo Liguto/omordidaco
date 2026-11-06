@@ -274,7 +274,7 @@ const CARDAPIO = {
     endereco: "Jardim Tamoio, Campinas - SP",
     tempoEntrega: "35 a 50 min",
     taxaEntregaPadrao: 5.00,
-    whatsapp: "5519997981104"
+    whatsapp: "5519997881550"
   },
   categorias: [
     {
