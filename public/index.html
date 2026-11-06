@@ -1052,6 +1052,9 @@
 
         if (!res.ok) throw new Error('Falha ao enviar pedido');
         const pedidoCriado = await res.json();
+        if (!pedidoCriado.statusAtualizadoEm) {
+          pedidoCriado.statusAtualizadoEm = Date.now();
+        }
 
         // 1. Sincroniza pedido no cache local do navegador para a cozinha
         try {

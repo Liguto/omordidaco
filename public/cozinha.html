@@ -789,6 +789,12 @@
         if (salvo) {
           const arr = JSON.parse(salvo);
           if (Array.isArray(arr) && arr.length > 0) {
+            arr.forEach(p => {
+              if (!p.statusAtualizadoEm) {
+                const tsFromId = Number((p.id || '').replace('PED-', ''));
+                p.statusAtualizadoEm = !isNaN(tsFromId) && tsFromId > 0 ? tsFromId : 0;
+              }
+            });
             mesclarPedidos(arr, false);
           }
         }
@@ -810,9 +816,33 @@
         if (!novo || !novo.id) return;
         const idx = pedidosLocais.findIndex(p => p.id === novo.id || (p.numero && p.numero === novo.numero));
         if (idx >= 0) {
-          // Atualiza dados preservando campos mais atualizados
-          pedidosLocais[idx] = { ...pedidosLocais[idx], ...novo };
+          const local = pedidosLocais[idx];
+          const localTime = Number(local.statusAtualizadoEm) || 0;
+          const novoTime = Number(novo.statusAtualizadoEm) || 0;
+
+          // Resolução inteligente de conflitos temporais:
+          // Se a alteração local for mais recente do que o snapshot do backend/cache,
+          // preserva o status local e o timestamp mais recente, impedindo que o polling
+          // de 3s reverta o status!
+          let statusFinal = local.status;
+          let timestampFinal = localTime;
+
+          if (novoTime >= localTime) {
+            statusFinal = novo.status;
+            timestampFinal = novoTime;
+          }
+
+          pedidosLocais[idx] = {
+            ...local,
+            ...novo,
+            status: statusFinal,
+            statusAtualizadoEm: timestampFinal
+          };
         } else {
+          if (!novo.statusAtualizadoEm) {
+            const tsFromId = Number((novo.id || '').replace('PED-', ''));
+            novo.statusAtualizadoEm = !isNaN(tsFromId) && tsFromId > 0 ? tsFromId : Date.now();
+          }
           pedidosLocais.push(novo);
           if (alertarSeNovo && novo.status === 'Pendente') {
             houveNovo = true;
@@ -1000,9 +1030,11 @@
     }
 
     async function alterarStatus(id, novoStatus) {
+      const agora = Date.now();
       const p = pedidosLocais.find(item => item.id === id);
       if (p) {
         p.status = novoStatus;
+        p.statusAtualizadoEm = agora;
         salvarCacheLocalPedidos();
         renderizarPedidos();
         atualizarEstatisticas();
@@ -1012,7 +1044,13 @@
       try {
         if ('BroadcastChannel' in window) {
           const canal = new BroadcastChannel('omordidaco_canal');
-          canal.postMessage({ tipo: 'status_atualizado', id, status: novoStatus, numero: p ? p.numero : undefined });
+          canal.postMessage({
+            tipo: 'status_atualizado',
+            id,
+            status: novoStatus,
+            statusAtualizadoEm: agora,
+            numero: p ? p.numero : undefined
+          });
         }
       } catch (e) {}
 
@@ -1025,7 +1063,13 @@
             'Priority': 'default',
             'Tags': 'arrows_counterclockwise'
           },
-          body: JSON.stringify({ tipo: 'status_atualizado', id, status: novoStatus, numero: p ? p.numero : undefined })
+          body: JSON.stringify({
+            tipo: 'status_atualizado',
+            id,
+            status: novoStatus,
+            statusAtualizadoEm: agora,
+            numero: p ? p.numero : undefined
+          })
         }).catch(() => {});
       } catch (e) {}
 
@@ -1034,7 +1078,7 @@
         await fetch(`/api/pedidos/${id}/status`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: novoStatus })
+          body: JSON.stringify({ status: novoStatus, statusAtualizadoEm: agora })
         });
       } catch (err) {
         console.warn('Aviso: Erro ao sincronizar status na API:', err.message);
@@ -1119,16 +1163,21 @@
           const canal = new BroadcastChannel('omordidaco_canal');
           canal.onmessage = (ev) => {
             if (!ev.data) return;
-            if (ev.data.tipo === 'novo_pedido' && ev.data.pedido) {
-              receberNovoPedido(ev.data.pedido);
-            } else if (ev.data.tipo === 'status_atualizado') {
+            if (ev.data.tipo === 'status_atualizado') {
               const p = pedidosLocais.find(x => x.id === ev.data.id);
               if (p) {
-                p.status = ev.data.status;
-                salvarCacheLocalPedidos();
-                renderizarPedidos();
-                atualizarEstatisticas();
+                const msgTime = Number(ev.data.statusAtualizadoEm) || 0;
+                const localTime = Number(p.statusAtualizadoEm) || 0;
+                if (msgTime >= localTime) {
+                  p.status = ev.data.status;
+                  p.statusAtualizadoEm = msgTime || Date.now();
+                  salvarCacheLocalPedidos();
+                  renderizarPedidos();
+                  atualizarEstatisticas();
+                }
               }
+            } else if (ev.data.tipo === 'novo_pedido' && ev.data.pedido) {
+              receberNovoPedido(ev.data.pedido);
             }
           };
         }
@@ -1156,16 +1205,21 @@
             const envelope = JSON.parse(event.data);
             if (envelope.event === 'message' && envelope.message) {
               const dados = JSON.parse(envelope.message);
-              if (dados.id && dados.numero && dados.status) {
-                receberNovoPedido(dados);
-              } else if (dados.tipo === 'status_atualizado') {
+              if (dados.tipo === 'status_atualizado') {
                 const p = pedidosLocais.find(x => x.id === dados.id);
                 if (p) {
-                  p.status = dados.status;
-                  salvarCacheLocalPedidos();
-                  renderizarPedidos();
-                  atualizarEstatisticas();
+                  const msgTime = Number(dados.statusAtualizadoEm) || 0;
+                  const localTime = Number(p.statusAtualizadoEm) || 0;
+                  if (msgTime >= localTime) {
+                    p.status = dados.status;
+                    p.statusAtualizadoEm = msgTime || Date.now();
+                    salvarCacheLocalPedidos();
+                    renderizarPedidos();
+                    atualizarEstatisticas();
+                  }
                 }
+              } else if (dados.id && dados.numero && (dados.itens || dados.cliente)) {
+                receberNovoPedido(dados);
               }
             }
           } catch (e) {}
@@ -1187,16 +1241,21 @@
           if (!event.data) return;
           try {
             const data = JSON.parse(event.data);
-            if (data.id && data.numero) {
-              receberNovoPedido(data);
-            } else if (data.tipo === 'status_atualizado') {
+            if (data.tipo === 'status_atualizado') {
               const p = pedidosLocais.find(x => x.id === data.id);
               if (p) {
-                p.status = data.status;
-                salvarCacheLocalPedidos();
-                renderizarPedidos();
-                atualizarEstatisticas();
+                const msgTime = Number(data.statusAtualizadoEm) || 0;
+                const localTime = Number(p.statusAtualizadoEm) || 0;
+                if (msgTime >= localTime) {
+                  p.status = data.status;
+                  p.statusAtualizadoEm = msgTime || Date.now();
+                  salvarCacheLocalPedidos();
+                  renderizarPedidos();
+                  atualizarEstatisticas();
+                }
               }
+            } else if (data.id && data.numero && (data.itens || data.cliente)) {
+              receberNovoPedido(data);
             }
           } catch (e) {}
         };

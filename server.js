@@ -91,16 +91,17 @@ async function carregarClientesNuvem() {
 
 async function despacharEventoNuvem(evento) {
   try {
-    const titulo = evento.numero 
-      ? `🌭 Novo Pedido #${evento.numero} - ${evento.cliente ? evento.cliente.nome : ''}`
-      : `🔄 Status Atualizado: ${evento.status || ''}`;
+    const isStatusUpdate = evento.tipo === 'status_atualizado';
+    const titulo = isStatusUpdate 
+      ? `🔄 Status Pedido #${evento.numero || ''}: ${evento.status || ''}`
+      : `🌭 Novo Pedido #${evento.numero || ''} - ${evento.cliente ? evento.cliente.nome : ''}`;
 
     await fetch(`https://ntfy.sh/${CLOUD_TOPIC}`, {
       method: 'POST',
       headers: {
         'Title': titulo,
-        'Priority': evento.numero ? 'urgent' : 'default',
-        'Tags': evento.numero ? 'hotdog,bell' : 'arrows_counterclockwise'
+        'Priority': isStatusUpdate ? 'default' : 'urgent',
+        'Tags': isStatusUpdate ? 'arrows_counterclockwise' : 'hotdog,bell'
       },
       body: JSON.stringify(evento)
     });
@@ -461,6 +462,13 @@ app.get(['/api/pedidos', '/pedidos'], async (req, res) => {
   if (KV_URL && KV_TOKEN) {
     await carregarPedidosNuvem();
   }
+  // Garante timestamp de atualização em pedidos legados
+  pedidos.forEach(p => {
+    if (!p.statusAtualizadoEm) {
+      const tsFromId = Number((p.id || '').replace('PED-', ''));
+      p.statusAtualizadoEm = !isNaN(tsFromId) && tsFromId > 0 ? tsFromId : 0;
+    }
+  });
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
@@ -482,12 +490,14 @@ app.post(['/api/pedidos', '/pedidos'], async (req, res) => {
     }
 
     const proximoNumero = pedidos.length > 0 ? (pedidos[0].numero || 100) + 1 : 101;
+    const agora = Date.now();
 
     const novoPedido = {
-      id: 'PED-' + Date.now(),
+      id: 'PED-' + agora,
       numero: proximoNumero,
       dataHora: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
       status: 'Pendente',
+      statusAtualizadoEm: agora,
       cliente,
       itens,
       entrega: entrega || { endereco: 'Balcão / Retirada', bairro: 'Jardim Tamoio' },
@@ -545,21 +555,34 @@ app.patch(['/api/pedidos/:id/status', '/pedidos/:id/status'], async (req, res) =
     await carregarPedidosNuvem();
   }
   const { id } = req.params;
-  const { status } = req.body || {};
+  const { status, statusAtualizadoEm } = req.body || {};
 
   const pedido = pedidos.find(p => p.id === id);
   if (!pedido) {
     return res.status(404).json({ error: 'Pedido não encontrado.' });
   }
 
-  pedido.status = status;
-  salvarPedidos();
-  if (KV_URL && KV_TOKEN) {
-    await salvarPedidosNuvem();
+  const timestampAtualizacao = Number(statusAtualizadoEm) || Date.now();
+  const timestampAtual = Number(pedido.statusAtualizadoEm) || 0;
+
+  // Atualiza apenas se a alteração for mais recente ou simultânea
+  if (timestampAtualizacao >= timestampAtual) {
+    pedido.status = status;
+    pedido.statusAtualizadoEm = timestampAtualizacao;
+    salvarPedidos();
+    if (KV_URL && KV_TOKEN) {
+      await salvarPedidosNuvem();
+    }
   }
 
-  // Notifica painel da cozinha
-  notificarCozinha({ tipo: 'status_atualizado', id, status, numero: pedido.numero });
+  // Notifica painel da cozinha com versão temporal
+  notificarCozinha({
+    tipo: 'status_atualizado',
+    id,
+    status: pedido.status,
+    statusAtualizadoEm: pedido.statusAtualizadoEm,
+    numero: pedido.numero
+  });
 
   res.json(pedido);
 });
