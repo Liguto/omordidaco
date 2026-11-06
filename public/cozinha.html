@@ -498,7 +498,7 @@
       </div>
 
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
-        <span style="font-size: 13px; color: #64748b;">Números salvos automaticamente dos pedidos do site.</span>
+        <input type="text" id="filtroClientesInput" placeholder="🔍 Buscar por nome, WhatsApp ou bairro..." oninput="filtrarClientesUI()" style="padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; min-width: 240px; outline: none; flex: 1; max-width: 320px;">
         <button onclick="copiarTelefonesVIP()" style="background: #16a34a; color: #ffffff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer;">
           📋 Copiar Telefones para Transmissão VIP
         </button>
@@ -527,28 +527,180 @@
   <script>
     let pedidosLocais = [];
     let clientesLocais = [];
+    let ultimoHashClientesRenderizados = '';
+    let filtroClientesTermo = '';
+
+    function carregarCacheLocalClientes() {
+      try {
+        const salvo = localStorage.getItem('mordidaco_clientes_cache');
+        if (salvo) {
+          const arr = JSON.parse(salvo);
+          if (Array.isArray(arr) && arr.length > 0) {
+            consolidarClientesLocais(arr);
+          }
+        }
+      } catch (e) {}
+    }
+
+    function salvarCacheLocalClientes() {
+      try {
+        localStorage.setItem('mordidaco_clientes_cache', JSON.stringify(clientesLocais));
+      } catch (e) {}
+    }
+
+    function encontrarClienteNoArray(arr, cData) {
+      if (!cData) return null;
+      const telOriginal = (cData.telefone || '').trim();
+      const telLimpo = telOriginal.replace(/\D/g, '');
+      const nomeOriginal = (cData.nome || '').trim().toLowerCase();
+
+      return arr.find(c => {
+        const cTelLimpo = (c.telefone || '').replace(/\D/g, '');
+        if (telLimpo.length >= 8 && cTelLimpo.length >= 8) {
+          return cTelLimpo.slice(-8) === telLimpo.slice(-8);
+        }
+        if (telOriginal && c.telefone && c.telefone.trim().toLowerCase() === telOriginal.toLowerCase()) {
+          return true;
+        }
+        if (nomeOriginal && c.nome && c.nome.trim().toLowerCase() === nomeOriginal) {
+          return true;
+        }
+        return false;
+      });
+    }
+
+    function consolidarClientesLocais(listaExterna = []) {
+      let alterou = false;
+
+      // 1. Incorpora clientes da lista externa (API ou cache local)
+      if (Array.isArray(listaExterna)) {
+        listaExterna.forEach(cExt => {
+          if (!cExt) return;
+          const existente = encontrarClienteNoArray(clientesLocais, cExt);
+          if (existente) {
+            if (cExt.nome && cExt.nome !== 'Cliente' && existente.nome !== cExt.nome) {
+              existente.nome = cExt.nome;
+              alterou = true;
+            }
+            if (cExt.bairro && existente.bairro !== cExt.bairro) {
+              existente.bairro = cExt.bairro;
+              alterou = true;
+            }
+            if ((cExt.totalPedidos || 0) > (existente.totalPedidos || 0)) {
+              existente.totalPedidos = cExt.totalPedidos;
+              alterou = true;
+            }
+            if ((cExt.totalGasto || 0) > (existente.totalGasto || 0)) {
+              existente.totalGasto = cExt.totalGasto;
+              alterou = true;
+            }
+          } else {
+            clientesLocais.push({
+              id: cExt.id || 'CLI-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+              nome: cExt.nome || 'Cliente VIP',
+              telefone: cExt.telefone || 'Não informado',
+              endereco: cExt.endereco || 'Balcão / Retirada',
+              bairro: cExt.bairro || 'Jardim Tamoio',
+              totalPedidos: cExt.totalPedidos || 1,
+              totalGasto: Number((cExt.totalGasto || 0).toFixed(2)),
+              primeiroPedido: cExt.primeiroPedido || '',
+              ultimoPedido: cExt.ultimoPedido || ''
+            });
+            alterou = true;
+          }
+        });
+      }
+
+      // 2. Extrai e consolida clientes a partir de pedidosLocais (garante que novos pedidos nunca faltem)
+      if (Array.isArray(pedidosLocais)) {
+        pedidosLocais.forEach(p => {
+          if (!p.cliente || !p.cliente.nome) return;
+          const existente = encontrarClienteNoArray(clientesLocais, p.cliente);
+          if (!existente) {
+            clientesLocais.push({
+              id: 'CLI-' + (p.numero || Date.now()),
+              nome: p.cliente.nome,
+              telefone: p.cliente.telefone || 'Não informado',
+              endereco: (p.entrega && p.entrega.endereco) || 'Balcão / Retirada',
+              bairro: (p.entrega && p.entrega.bairro) || 'Jardim Tamoio',
+              totalPedidos: 1,
+              totalGasto: Number((p.total || 0).toFixed(2)),
+              primeiroPedido: p.dataHora || '',
+              ultimoPedido: p.dataHora || ''
+            });
+            alterou = true;
+          }
+        });
+      }
+
+      // Ordena por maior número de pedidos / maior gasto
+      clientesLocais.sort((a, b) => (b.totalPedidos || 0) - (a.totalPedidos || 0) || (b.totalGasto || 0) - (a.totalGasto || 0));
+
+      const badge = document.getElementById('totalClientesBadge');
+      if (badge && badge.innerText !== String(clientesLocais.length)) {
+        badge.innerText = clientesLocais.length;
+      }
+
+      salvarCacheLocalClientes();
+
+      // Só re-renderiza a tabela se o modal estiver aberto
+      const modal = document.getElementById('modalClientes');
+      if (modal && modal.style.display === 'flex') {
+        renderizarTabelaClientes(alterou);
+      }
+    }
 
     async function carregarClientes() {
       try {
         const res = await fetch('/api/clientes?_t=' + Date.now(), { cache: 'no-store' });
-        clientesLocais = await res.json();
-        document.getElementById('totalClientesBadge').innerText = clientesLocais.length;
-        renderizarTabelaClientes();
+        if (res.ok) {
+          const lista = await res.json();
+          if (Array.isArray(lista) && lista.length > 0) {
+            consolidarClientesLocais(lista);
+          }
+        }
       } catch (e) {
-        console.error('Erro ao carregar clientes:', e);
+        console.warn('Aviso: Não foi possível carregar clientes do servidor neste ciclo:', e.message);
       }
     }
 
-    function renderizarTabelaClientes() {
+    function filtrarClientesUI() {
+      const input = document.getElementById('filtroClientesInput');
+      filtroClientesTermo = input ? input.value.trim().toLowerCase() : '';
+      renderizarTabelaClientes(true);
+    }
+
+    function renderizarTabelaClientes(forcar = false) {
+      const modal = document.getElementById('modalClientes');
+      if (!modal || modal.style.display !== 'flex') return;
+
       const tbody = document.getElementById('tabelaClientesBody');
-      if (clientesLocais.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="padding: 20px; text-align: center; color: #94a3b8;">Nenhum cliente cadastrado ainda.</td></tr>';
+      if (!tbody) return;
+
+      const filtrados = clientesLocais.filter(c => {
+        if (!filtroClientesTermo) return true;
+        const nome = (c.nome || '').toLowerCase();
+        const tel = (c.telefone || '').toLowerCase();
+        const bairro = (c.bairro || '').toLowerCase();
+        return nome.includes(filtroClientesTermo) || tel.includes(filtroClientesTermo) || bairro.includes(filtroClientesTermo);
+      });
+
+      // Anti-flicker: se o conteúdo não mudou, NÃO destrói o DOM
+      const novoHash = filtroClientesTermo + '::' + filtrados.map(c => `${c.id}_${c.nome}_${c.telefone}_${c.totalPedidos}_${c.totalGasto}`).join('|');
+      if (!forcar && novoHash === ultimoHashClientesRenderizados) {
+        return;
+      }
+      ultimoHashClientesRenderizados = novoHash;
+
+      if (filtrados.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="padding: 20px; text-align: center; color: #94a3b8;">Nenhum cliente encontrado.</td></tr>';
         return;
       }
 
       tbody.innerHTML = '';
-      clientesLocais.forEach(c => {
-        const telLimpo = c.telefone.replace(/\D/g, '');
+      filtrados.forEach(c => {
+        const telLimpo = (c.telefone || '').replace(/\D/g, '');
+        const telZap = telLimpo.startsWith('55') ? telLimpo : (telLimpo.length >= 10 ? '55' + telLimpo : telLimpo);
         const tr = document.createElement('tr');
         tr.style.borderBottom = '1px solid #f1f5f9';
         tr.innerHTML = `
@@ -556,9 +708,9 @@
           <td style="padding: 8px 10px;">${c.telefone}</td>
           <td style="padding: 8px 10px;">${c.bairro || 'Jardim Tamoio'}</td>
           <td style="padding: 8px 10px; text-align: center; font-weight: 700; color: #2563eb;">${c.totalPedidos}</td>
-          <td style="padding: 8px 10px; font-weight: 700; color: #16a34a;">R$ ${c.totalGasto.toFixed(2).replace('.', ',')}</td>
+          <td style="padding: 8px 10px; font-weight: 700; color: #16a34a;">R$ ${(c.totalGasto || 0).toFixed(2).replace('.', ',')}</td>
           <td style="padding: 8px 10px;">
-            <a href="https://wa.me/55${telLimpo}?text=Ol%C3%A1%20${encodeURIComponent(c.nome)}!%20Aqui%20%C3%A9%20do%20O%20Mordida%C3%A7o%20%F0%9F%8C%AD" target="_blank" style="background:#25d366; color:#ffffff; padding:4px 8px; border-radius:6px; text-decoration:none; font-size:11px; font-weight:700;">
+            <a href="https://wa.me/${telZap}?text=Ol%C3%A1%20${encodeURIComponent(c.nome)}!%20Aqui%20%C3%A9%20do%20O%20Mordida%C3%A7o%20%F0%9F%8C%AD" target="_blank" style="background:#25d366; color:#ffffff; padding:4px 8px; border-radius:6px; text-decoration:none; font-size:11px; font-weight:700;">
               💬 WhatsApp
             </a>
           </td>
@@ -568,8 +720,10 @@
     }
 
     function abrirModalClientes() {
-      carregarClientes();
       document.getElementById('modalClientes').style.display = 'flex';
+      ultimoHashClientesRenderizados = ''; // Reseta hash para forçar render limpo
+      renderizarTabelaClientes(true);
+      carregarClientes();
     }
 
     function fecharModalClientes() {
@@ -670,6 +824,7 @@
       // Ordena decrescente por número do pedido
       pedidosLocais.sort((a, b) => (b.numero || 0) - (a.numero || 0));
       salvarCacheLocalPedidos();
+      consolidarClientesLocais();
       renderizarPedidos();
       atualizarEstatisticas();
 
@@ -1058,17 +1213,22 @@
 
     // Inicialização da Cozinha
     carregarCacheLocalPedidos();
+    carregarCacheLocalClientes();
     carregarPedidos();
     carregarClientes();
     conectarCanalLocal();
     conectarCanalNuvem();
     conectarServidorSSE();
 
-    // Auto-sync a cada 3 segundos com o backend para consolidar
+    // Auto-sync a cada 3 segundos com o backend para consolidar pedidos
     setInterval(() => {
       carregarPedidos();
-      carregarClientes();
     }, 3000);
+
+    // Consulta periódica de clientes VIP a cada 30 segundos em segundo plano
+    setInterval(() => {
+      carregarClientes();
+    }, 30000);
   </script>
 </body>
 </html>

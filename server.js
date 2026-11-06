@@ -58,6 +58,37 @@ async function carregarPedidosNuvem() {
   return false;
 }
 
+async function salvarClientesNuvem() {
+  if (!KV_URL || !KV_TOKEN) return;
+  try {
+    await fetch(`${KV_URL}/set/omordidaco_clientes`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${KV_TOKEN}` },
+      body: JSON.stringify(clientes)
+    });
+  } catch (e) {}
+}
+
+async function carregarClientesNuvem() {
+  if (!KV_URL || !KV_TOKEN) return false;
+  try {
+    const res = await fetch(`${KV_URL}/get/omordidaco_clientes`, {
+      headers: { Authorization: `Bearer ${KV_TOKEN}` }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.result) {
+        const listaNuvem = typeof data.result === 'string' ? JSON.parse(data.result) : data.result;
+        if (Array.isArray(listaNuvem) && listaNuvem.length > 0) {
+          mesclarClientesComLista(listaNuvem);
+          return true;
+        }
+      }
+    }
+  } catch (e) {}
+  return false;
+}
+
 async function despacharEventoNuvem(evento) {
   try {
     const titulo = evento.numero 
@@ -150,6 +181,26 @@ function recarregarClientesDoDisco() {
       clientes = JSON.parse(fs.readFileSync(path.join(__dirname, 'clientes.json'), 'utf8'));
     } catch (e) {}
   }
+}
+
+function mesclarClientesComLista(listaExterna) {
+  if (!Array.isArray(listaExterna)) return;
+  listaExterna.forEach(cExt => {
+    if (!cExt) return;
+    const existente = encontrarClienteExistente(cExt);
+    if (existente) {
+      if (cExt.nome && cExt.nome !== 'Cliente') existente.nome = cExt.nome;
+      if (cExt.telefone) existente.telefone = cExt.telefone;
+      if (cExt.endereco) existente.endereco = cExt.endereco;
+      if (cExt.bairro) existente.bairro = cExt.bairro;
+      existente.totalPedidos = Math.max(existente.totalPedidos || 0, cExt.totalPedidos || 0);
+      existente.totalGasto = Math.max(existente.totalGasto || 0, cExt.totalGasto || 0);
+      if (cExt.ultimoPedido) existente.ultimoPedido = cExt.ultimoPedido;
+    } else {
+      clientes.push(cExt);
+    }
+  });
+  salvarClientes();
 }
 
 function encontrarClienteExistente(clienteData) {
@@ -455,6 +506,9 @@ app.post(['/api/pedidos', '/pedidos'], async (req, res) => {
 
     // Salva ou atualiza cliente na lista VIP de forma invisível
     registrarOuAtualizarCliente(cliente, entrega, total);
+    if (KV_URL && KV_TOKEN) {
+      await salvarClientesNuvem();
+    }
 
     // Avisa a tela da cozinha em tempo real (Local SSE + Cloud SSE ntfy.sh)
     notificarCozinha(novoPedido);
@@ -467,9 +521,17 @@ app.post(['/api/pedidos', '/pedidos'], async (req, res) => {
 });
 
 // Listar Clientes VIP (invisível aos clientes, exclusivo para o painel administrativo)
-app.get(['/api/clientes', '/clientes'], (req, res) => {
+app.get(['/api/clientes', '/clientes'], async (req, res) => {
   recarregarClientesDoDisco();
+  recarregarPedidosDoDisco();
+  if (KV_URL && KV_TOKEN) {
+    await carregarPedidosNuvem();
+    await carregarClientesNuvem();
+  }
   sincronizarClientesComPedidos();
+  if (KV_URL && KV_TOKEN) {
+    await salvarClientesNuvem();
+  }
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
