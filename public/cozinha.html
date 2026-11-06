@@ -415,6 +415,7 @@
       </label>
       <button class="btn-top" onclick="testarAlarme()">🔔 Testar Som</button>
       <button class="btn-top" onclick="carregarPedidos()">🔄 Atualizar</button>
+      <button class="btn-top" style="background: #334155;" onclick="limparConcluidos()">🗑️ Limpar Concluídos</button>
     </div>
   </div>
 
@@ -627,29 +628,85 @@
 
     let ultimoIdPedidoConhecido = null;
 
-    // Carregar pedidos do backend (com detecção de novos pedidos para o Vercel)
+    // Cache local e persistência em navegador
+    function carregarCacheLocalPedidos() {
+      try {
+        const salvo = localStorage.getItem('mordidaco_pedidos_cache');
+        if (salvo) {
+          const arr = JSON.parse(salvo);
+          if (Array.isArray(arr) && arr.length > 0) {
+            mesclarPedidos(arr, false);
+          }
+        }
+      } catch (e) {}
+    }
+
+    function salvarCacheLocalPedidos() {
+      try {
+        localStorage.setItem('mordidaco_pedidos_cache', JSON.stringify(pedidosLocais.slice(0, 100)));
+      } catch (e) {}
+    }
+
+    function mesclarPedidos(novos, alertarSeNovo = true) {
+      if (!Array.isArray(novos)) return;
+      let houveNovo = false;
+      let pedidoParaImprimir = null;
+
+      novos.forEach(novo => {
+        if (!novo || !novo.id) return;
+        const idx = pedidosLocais.findIndex(p => p.id === novo.id || (p.numero && p.numero === novo.numero));
+        if (idx >= 0) {
+          // Atualiza dados preservando campos mais atualizados
+          pedidosLocais[idx] = { ...pedidosLocais[idx], ...novo };
+        } else {
+          pedidosLocais.push(novo);
+          if (alertarSeNovo && novo.status === 'Pendente') {
+            houveNovo = true;
+            pedidoParaImprimir = novo;
+          }
+        }
+      });
+
+      // Ordena decrescente por número do pedido
+      pedidosLocais.sort((a, b) => (b.numero || 0) - (a.numero || 0));
+      salvarCacheLocalPedidos();
+      renderizarPedidos();
+      atualizarEstatisticas();
+
+      if (houveNovo) {
+        tocarAlarmeSonoro();
+        if (pedidoParaImprimir && document.getElementById('chkAutoPrint').checked) {
+          setTimeout(() => imprimirComanda(pedidoParaImprimir.id), 600);
+        }
+      }
+    }
+
+    function receberNovoPedido(novoPedido) {
+      if (!novoPedido || !novoPedido.id) return;
+      const jaExiste = pedidosLocais.some(p => p.id === novoPedido.id || (p.numero && p.numero === novoPedido.numero));
+      if (!jaExiste) {
+        tocarAlarmeSonoro();
+        mesclarPedidos([novoPedido], false);
+        if (document.getElementById('chkAutoPrint').checked) {
+          setTimeout(() => imprimirComanda(novoPedido.id), 600);
+        }
+      } else {
+        mesclarPedidos([novoPedido], false);
+      }
+    }
+
+    // Carregar pedidos do backend com mesclagem inteligente
     async function carregarPedidos() {
       try {
         const res = await fetch('/api/pedidos?_t=' + Date.now(), { cache: 'no-store' });
-        const lista = await res.json();
-
-        // Se chegou um pedido novo que ainda não tínhamos visto
-        if (lista.length > 0) {
-          const maisRecente = lista[0];
-          if (ultimoIdPedidoConhecido && maisRecente.id !== ultimoIdPedidoConhecido && maisRecente.status === 'Pendente') {
-            tocarAlarmeSonoro();
-            if (document.getElementById('chkAutoPrint').checked) {
-              setTimeout(() => imprimirComanda(maisRecente.id), 600);
-            }
+        if (res.ok) {
+          const lista = await res.json();
+          if (Array.isArray(lista) && lista.length > 0) {
+            mesclarPedidos(lista, true);
           }
-          ultimoIdPedidoConhecido = maisRecente.id;
         }
-
-        pedidosLocais = lista;
-        renderizarPedidos();
-        atualizarEstatisticas();
       } catch (err) {
-        console.error('Erro ao buscar pedidos:', err);
+        console.warn('Aviso: Não foi possível obter pedidos do backend neste ciclo:', err.message);
       }
     }
 
@@ -788,15 +845,53 @@
     }
 
     async function alterarStatus(id, novoStatus) {
+      const p = pedidosLocais.find(item => item.id === id);
+      if (p) {
+        p.status = novoStatus;
+        salvarCacheLocalPedidos();
+        renderizarPedidos();
+        atualizarEstatisticas();
+      }
+
+      // 1. Notifica abas locais no mesmo navegador
+      try {
+        if ('BroadcastChannel' in window) {
+          const canal = new BroadcastChannel('omordidaco_canal');
+          canal.postMessage({ tipo: 'status_atualizado', id, status: novoStatus, numero: p ? p.numero : undefined });
+        }
+      } catch (e) {}
+
+      // 2. Notifica canal em nuvem (para outros aparelhos conectados)
+      try {
+        fetch('https://ntfy.sh/omordidaco_pedidos_tamoio_campinas_live', {
+          method: 'POST',
+          headers: {
+            'Title': `🔄 Pedido #${p ? p.numero : ''}: ${novoStatus}`,
+            'Priority': 'default',
+            'Tags': 'arrows_counterclockwise'
+          },
+          body: JSON.stringify({ tipo: 'status_atualizado', id, status: novoStatus, numero: p ? p.numero : undefined })
+        }).catch(() => {});
+      } catch (e) {}
+
+      // 3. Atualiza na API do servidor
       try {
         await fetch(`/api/pedidos/${id}/status`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ status: novoStatus })
         });
-        carregarPedidos();
       } catch (err) {
-        alert('Erro ao atualizar status do pedido.');
+        console.warn('Aviso: Erro ao sincronizar status na API:', err.message);
+      }
+    }
+
+    function limparConcluidos() {
+      if (confirm('Deseja limpar os pedidos com status "Entregue" da tela?')) {
+        pedidosLocais = pedidosLocais.filter(p => p.status !== 'Entregue');
+        salvarCacheLocalPedidos();
+        renderizarPedidos();
+        atualizarEstatisticas();
       }
     }
 
@@ -862,40 +957,114 @@
       window.print();
     }
 
-    // CONEXÃO EM TEMPO REAL VIA SSE (SERVER-SENT EVENTS)
-    function conectarTempoReal() {
-      const eventSource = new EventSource('/api/pedidos/stream');
-
-      eventSource.onmessage = (event) => {
-        if (!event.data) return;
-        const data = JSON.parse(event.data);
-
-        // Se for um novo pedido
-        if (data.id && data.numero) {
-          tocarAlarmeSonoro();
-          carregarPedidos();
-
-          // Auto-imprimir se checkbox estiver ativo
-          if (document.getElementById('chkAutoPrint').checked) {
-            setTimeout(() => {
-              imprimirComanda(data.id);
-            }, 600);
-          }
-        } else if (data.tipo === 'status_atualizado') {
-          carregarPedidos();
+    // 1. CANAL LOCAL / MESMO NAVEGADOR (BroadcastChannel)
+    function conectarCanalLocal() {
+      try {
+        if ('BroadcastChannel' in window) {
+          const canal = new BroadcastChannel('omordidaco_canal');
+          canal.onmessage = (ev) => {
+            if (!ev.data) return;
+            if (ev.data.tipo === 'novo_pedido' && ev.data.pedido) {
+              receberNovoPedido(ev.data.pedido);
+            } else if (ev.data.tipo === 'status_atualizado') {
+              const p = pedidosLocais.find(x => x.id === ev.data.id);
+              if (p) {
+                p.status = ev.data.status;
+                salvarCacheLocalPedidos();
+                renderizarPedidos();
+                atualizarEstatisticas();
+              }
+            }
+          };
         }
-      };
-
-      eventSource.onerror = () => {
-        console.warn('SSE desconectado, tentando reconectar...');
-      };
+      } catch (e) {}
     }
 
-    // Inicialização
+    // 2. CANAL NUVEM (ntfy.sh SSE - Conexão Direta em Tempo Real independente de Serverless)
+    function conectarCanalNuvem() {
+      try {
+        const cloudSource = new EventSource('https://ntfy.sh/omordidaco_pedidos_tamoio_campinas_live/sse');
+        
+        cloudSource.onopen = () => {
+          const badge = document.getElementById('statusSincronizacao');
+          if (badge) {
+            badge.style.background = 'rgba(34, 197, 94, 0.2)';
+            badge.style.borderColor = 'rgba(34, 197, 94, 0.5)';
+            badge.style.color = '#4ade80';
+            badge.innerHTML = `<span style="display:inline-block; width:8px; height:8px; background:#22c55e; border-radius:50%; box-shadow:0 0 6px #22c55e;"></span><span>Nuvem Tempo Real ⚡</span>`;
+          }
+        };
+
+        cloudSource.onmessage = (event) => {
+          if (!event.data) return;
+          try {
+            const envelope = JSON.parse(event.data);
+            if (envelope.event === 'message' && envelope.message) {
+              const dados = JSON.parse(envelope.message);
+              if (dados.id && dados.numero && dados.status) {
+                receberNovoPedido(dados);
+              } else if (dados.tipo === 'status_atualizado') {
+                const p = pedidosLocais.find(x => x.id === dados.id);
+                if (p) {
+                  p.status = dados.status;
+                  salvarCacheLocalPedidos();
+                  renderizarPedidos();
+                  atualizarEstatisticas();
+                }
+              }
+            }
+          } catch (e) {}
+        };
+
+        cloudSource.onerror = () => {
+          // Mantém silencioso e reconecta automaticamente
+        };
+      } catch (e) {}
+    }
+
+    // 3. CANAL DO SERVIDOR (Render / Local SSE)
+    function conectarServidorSSE() {
+      try {
+        const eventSource = new EventSource('/api/pedidos/stream');
+        let errosConsecutivos = 0;
+
+        eventSource.onmessage = (event) => {
+          if (!event.data) return;
+          try {
+            const data = JSON.parse(event.data);
+            if (data.id && data.numero) {
+              receberNovoPedido(data);
+            } else if (data.tipo === 'status_atualizado') {
+              const p = pedidosLocais.find(x => x.id === data.id);
+              if (p) {
+                p.status = data.status;
+                salvarCacheLocalPedidos();
+                renderizarPedidos();
+                atualizarEstatisticas();
+              }
+            }
+          } catch (e) {}
+        };
+
+        eventSource.onerror = () => {
+          errosConsecutivos++;
+          // Em ambientes Serverless sem suporte a SSE contínuo, fecha após 3 tentativas
+          if (errosConsecutivos > 2) {
+            eventSource.close();
+          }
+        };
+      } catch (e) {}
+    }
+
+    // Inicialização da Cozinha
+    carregarCacheLocalPedidos();
     carregarPedidos();
     carregarClientes();
-    conectarTempoReal();
-    // Auto-sync a cada 3 segundos na nuvem sem precisar de F5 manual
+    conectarCanalLocal();
+    conectarCanalNuvem();
+    conectarServidorSSE();
+
+    // Auto-sync a cada 3 segundos com o backend para consolidar
     setInterval(() => {
       carregarPedidos();
       carregarClientes();

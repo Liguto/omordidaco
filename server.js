@@ -13,9 +13,68 @@ const DB_FILE = isServerless ? path.join(os.tmpdir(), 'pedidos.json') : path.joi
 const CLIENTES_FILE = isServerless ? path.join(os.tmpdir(), 'clientes.json') : path.join(__dirname, 'clientes.json');
 
 app.use(express.json());
+app.use((req, res, next) => {
+  if (typeof req.body === 'string' && req.body.length > 0) {
+    try {
+      req.body = JSON.parse(req.body);
+    } catch (e) {}
+  }
+  next();
+});
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/assets', express.static(path.join(__dirname, 'public', 'assets')));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
+
+// Integração de nuvem para Serverless (Vercel KV / Upstash Redis e Cloud Pub/Sub)
+const KV_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+const KV_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+const CLOUD_TOPIC = process.env.CLOUD_TOPIC || 'omordidaco_pedidos_tamoio_campinas_live';
+
+async function salvarPedidosNuvem() {
+  if (!KV_URL || !KV_TOKEN) return;
+  try {
+    await fetch(`${KV_URL}/set/omordidaco_pedidos`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${KV_TOKEN}` },
+      body: JSON.stringify(pedidos)
+    });
+  } catch (e) {}
+}
+
+async function carregarPedidosNuvem() {
+  if (!KV_URL || !KV_TOKEN) return false;
+  try {
+    const res = await fetch(`${KV_URL}/get/omordidaco_pedidos`, {
+      headers: { Authorization: `Bearer ${KV_TOKEN}` }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.result) {
+        pedidos = typeof data.result === 'string' ? JSON.parse(data.result) : data.result;
+        return true;
+      }
+    }
+  } catch (e) {}
+  return false;
+}
+
+async function despacharEventoNuvem(evento) {
+  try {
+    const titulo = evento.numero 
+      ? `🌭 Novo Pedido #${evento.numero} - ${evento.cliente ? evento.cliente.nome : ''}`
+      : `🔄 Status Atualizado: ${evento.status || ''}`;
+
+    await fetch(`https://ntfy.sh/${CLOUD_TOPIC}`, {
+      method: 'POST',
+      headers: {
+        'Title': titulo,
+        'Priority': evento.numero ? 'urgent' : 'default',
+        'Tags': evento.numero ? 'hotdog,bell' : 'arrows_counterclockwise'
+      },
+      body: JSON.stringify(evento)
+    });
+  } catch (err) {}
+}
 
 // Inicializar banco de dados JSON de Pedidos
 let pedidos = [];
@@ -186,6 +245,7 @@ function notificarCozinha(novoPedido) {
       // Ignora clientes desconectados
     }
   });
+  despacharEventoNuvem(novoPedido);
 }
 
 // SSE: Conexão em tempo real do painel da cozinha
@@ -345,8 +405,11 @@ app.get(['/api/cardapio', '/cardapio'], (req, res) => {
 });
 
 // Listar Pedidos (para a Cozinha)
-app.get(['/api/pedidos', '/pedidos'], (req, res) => {
+app.get(['/api/pedidos', '/pedidos'], async (req, res) => {
   recarregarPedidosDoDisco();
+  if (KV_URL && KV_TOKEN) {
+    await carregarPedidosNuvem();
+  }
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
@@ -354,10 +417,14 @@ app.get(['/api/pedidos', '/pedidos'], (req, res) => {
 });
 
 // Receber Novo Pedido
-app.post(['/api/pedidos', '/pedidos'], (req, res) => {
+app.post(['/api/pedidos', '/pedidos'], async (req, res) => {
   recarregarPedidosDoDisco();
+  if (KV_URL && KV_TOKEN) {
+    await carregarPedidosNuvem();
+  }
   try {
-    const { cliente, itens, entrega, pagamento, observacoes, subtotal, taxaEntrega, total } = req.body;
+    const body = req.body || {};
+    const { cliente, itens, entrega, pagamento, observacoes, subtotal, taxaEntrega, total } = body;
 
     if (!cliente || !cliente.nome || !cliente.telefone || !itens || itens.length === 0) {
       return res.status(400).json({ error: 'Dados incompletos do pedido.' });
@@ -372,21 +439,24 @@ app.post(['/api/pedidos', '/pedidos'], (req, res) => {
       status: 'Pendente',
       cliente,
       itens,
-      entrega,
-      pagamento,
+      entrega: entrega || { endereco: 'Balcão / Retirada', bairro: 'Jardim Tamoio' },
+      pagamento: pagamento || 'A Combinar na Entrega',
       observacoes: observacoes || '',
-      subtotal: Number(subtotal),
-      taxaEntrega: Number(taxaEntrega),
-      total: Number(total)
+      subtotal: Number(subtotal) || 0,
+      taxaEntrega: Number(taxaEntrega) || 0,
+      total: Number(total) || 0
     };
 
     pedidos.unshift(novoPedido);
     salvarPedidos();
+    if (KV_URL && KV_TOKEN) {
+      await salvarPedidosNuvem();
+    }
 
     // Salva ou atualiza cliente na lista VIP de forma invisível
     registrarOuAtualizarCliente(cliente, entrega, total);
 
-    // Avisa a tela da cozinha em tempo real
+    // Avisa a tela da cozinha em tempo real (Local SSE + Cloud SSE ntfy.sh)
     notificarCozinha(novoPedido);
 
     res.status(201).json(novoPedido);
@@ -407,10 +477,13 @@ app.get(['/api/clientes', '/clientes'], (req, res) => {
 });
 
 // Atualizar Status do Pedido (Ex: Em Preparo, Saiu para Entrega)
-app.patch(['/api/pedidos/:id/status', '/pedidos/:id/status'], (req, res) => {
+app.patch(['/api/pedidos/:id/status', '/pedidos/:id/status'], async (req, res) => {
   recarregarPedidosDoDisco();
+  if (KV_URL && KV_TOKEN) {
+    await carregarPedidosNuvem();
+  }
   const { id } = req.params;
-  const { status } = req.body;
+  const { status } = req.body || {};
 
   const pedido = pedidos.find(p => p.id === id);
   if (!pedido) {
@@ -419,9 +492,12 @@ app.patch(['/api/pedidos/:id/status', '/pedidos/:id/status'], (req, res) => {
 
   pedido.status = status;
   salvarPedidos();
+  if (KV_URL && KV_TOKEN) {
+    await salvarPedidosNuvem();
+  }
 
   // Notifica painel da cozinha
-  notificarCozinha({ tipo: 'status_atualizado', id, status });
+  notificarCozinha({ tipo: 'status_atualizado', id, status, numero: pedido.numero });
 
   res.json(pedido);
 });

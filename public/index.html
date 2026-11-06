@@ -1053,6 +1053,37 @@
         if (!res.ok) throw new Error('Falha ao enviar pedido');
         const pedidoCriado = await res.json();
 
+        // 1. Sincroniza pedido no cache local do navegador para a cozinha
+        try {
+          const cachePedidos = JSON.parse(localStorage.getItem('mordidaco_pedidos_cache') || '[]');
+          const jaTem = cachePedidos.some(p => p.id === pedidoCriado.id || p.numero === pedidoCriado.numero);
+          if (!jaTem) {
+            cachePedidos.unshift(pedidoCriado);
+            localStorage.setItem('mordidaco_pedidos_cache', JSON.stringify(cachePedidos.slice(0, 50)));
+          }
+        } catch (e) {}
+
+        // 2. Avisa em tempo real qualquer aba aberta da Cozinha no mesmo navegador
+        try {
+          if ('BroadcastChannel' in window) {
+            const canal = new BroadcastChannel('omordidaco_canal');
+            canal.postMessage({ tipo: 'novo_pedido', pedido: pedidoCriado });
+          }
+        } catch (e) {}
+
+        // 3. Despacha evento direto para o canal de nuvem da Cozinha
+        try {
+          fetch('https://ntfy.sh/omordidaco_pedidos_tamoio_campinas_live', {
+            method: 'POST',
+            headers: {
+              'Title': `🌭 Novo Pedido #${pedidoCriado.numero} - ${nome}`,
+              'Priority': 'urgent',
+              'Tags': 'hotdog,bell'
+            },
+            body: JSON.stringify(pedidoCriado)
+          }).catch(() => {});
+        } catch (e) {}
+
         // Limpa carrinho
         carrinho = [];
         atualizarBarraCarrinho();
