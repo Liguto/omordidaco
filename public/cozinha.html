@@ -814,7 +814,8 @@
 
       novos.forEach(novo => {
         if (!novo || !novo.id) return;
-        const idx = pedidosLocais.findIndex(p => p.id === novo.id || (p.numero && p.numero === novo.numero));
+        // Identificação estrita por ID único do pedido (nunca sobrescreve pedidos diferentes)
+        const idx = pedidosLocais.findIndex(p => p.id === novo.id);
         if (idx >= 0) {
           const local = pedidosLocais[idx];
           const localTime = Number(local.statusAtualizadoEm) || 0;
@@ -839,8 +840,14 @@
             statusAtualizadoEm: timestampFinal
           };
         } else {
+          // Se for um novo pedido e coincidentemente houver outro pedido com mesmo número, desambigua
+          const colidiuNumero = pedidosLocais.some(p => p.id !== novo.id && String(p.numero) === String(novo.numero));
+          if (colidiuNumero) {
+            novo.numero = novo.numero + '-B';
+          }
+
           if (!novo.statusAtualizadoEm) {
-            const tsFromId = Number((novo.id || '').replace('PED-', ''));
+            const tsFromId = Number((novo.id || '').replace('PED-', '').split('-')[0]);
             novo.statusAtualizadoEm = !isNaN(tsFromId) && tsFromId > 0 ? tsFromId : Date.now();
           }
           pedidosLocais.push(novo);
@@ -868,7 +875,7 @@
 
     function receberNovoPedido(novoPedido) {
       if (!novoPedido || !novoPedido.id) return;
-      const jaExiste = pedidosLocais.some(p => p.id === novoPedido.id || (p.numero && p.numero === novoPedido.numero));
+      const jaExiste = pedidosLocais.some(p => p.id === novoPedido.id);
       if (!jaExiste) {
         tocarAlarmeSonoro();
         mesclarPedidos([novoPedido], false);

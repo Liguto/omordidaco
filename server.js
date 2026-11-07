@@ -475,6 +475,56 @@ app.get(['/api/pedidos', '/pedidos'], async (req, res) => {
   res.json(pedidos);
 });
 
+// Gerador de número de pedido sequencial compartilhado (Vercel KV / Cloud Counter)
+const COUNTER_STORE_ID = 'ff808181a09d98f701a1b34dd88057e1';
+
+async function obterProximoNumeroPedido() {
+  // 1. Se Vercel KV / Redis estiver configurado no painel da Vercel
+  if (KV_URL && KV_TOKEN) {
+    try {
+      const res = await fetch(`${KV_URL}/incr/omordidaco_order_counter`, {
+        headers: { Authorization: `Bearer ${KV_TOKEN}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.result) return Number(data.result);
+      }
+    } catch (e) {}
+  }
+
+  // 2. Contador Cloud Persistente (compartilhado entre todas as lambdas e celulares)
+  try {
+    const res = await fetch(`https://api.restful-api.dev/objects/${COUNTER_STORE_ID}`);
+    if (res.ok) {
+      const doc = await res.json();
+      let current = (doc.data && doc.data.current) ? Number(doc.data.current) : 104;
+
+      const maxMemoria = pedidos.length > 0 ? Math.max(...pedidos.map(p => Number(p.numero) || 0)) : 102;
+      current = Math.max(current, maxMemoria);
+
+      const next = current + 1;
+
+      // Atualiza o contador na nuvem para o próximo pedido
+      fetch(`https://api.restful-api.dev/objects/${COUNTER_STORE_ID}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: 'omordidaco_order_counter',
+          data: { current: next, lastUpdated: Date.now() }
+        })
+      }).catch(() => {});
+
+      return next;
+    }
+  } catch (e) {
+    console.warn('Aviso: Falha ao consultar contador em nuvem:', e.message);
+  }
+
+  // 3. Fallback determinístico caso a nuvem esteja temporariamente offline
+  const maxLocal = pedidos.length > 0 ? Math.max(...pedidos.map(p => Number(p.numero) || 0)) : 104;
+  return maxLocal + 1;
+}
+
 // Receber Novo Pedido
 app.post(['/api/pedidos', '/pedidos'], async (req, res) => {
   recarregarPedidosDoDisco();
@@ -489,11 +539,12 @@ app.post(['/api/pedidos', '/pedidos'], async (req, res) => {
       return res.status(400).json({ error: 'Dados incompletos do pedido.' });
     }
 
-    const proximoNumero = pedidos.length > 0 ? (pedidos[0].numero || 100) + 1 : 101;
+    const proximoNumero = await obterProximoNumeroPedido();
     const agora = Date.now();
+    const uniqueSuffix = Math.floor(Math.random() * 10000);
 
     const novoPedido = {
-      id: 'PED-' + agora,
+      id: 'PED-' + agora + '-' + uniqueSuffix,
       numero: proximoNumero,
       dataHora: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
       status: 'Pendente',

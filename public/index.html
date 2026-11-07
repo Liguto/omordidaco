@@ -1059,7 +1059,7 @@
         // 1. Sincroniza pedido no cache local do navegador para a cozinha
         try {
           const cachePedidos = JSON.parse(localStorage.getItem('mordidaco_pedidos_cache') || '[]');
-          const jaTem = cachePedidos.some(p => p.id === pedidoCriado.id || p.numero === pedidoCriado.numero);
+          const jaTem = cachePedidos.some(p => p.id === pedidoCriado.id);
           if (!jaTem) {
             cachePedidos.unshift(pedidoCriado);
             localStorage.setItem('mordidaco_pedidos_cache', JSON.stringify(cachePedidos.slice(0, 50)));
