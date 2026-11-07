@@ -354,6 +354,66 @@
     .btn-status-saiu { background: #6366f1; color: #ffffff; }
     .btn-status-entregue { background: var(--green); color: #ffffff; }
 
+    .btn-whatsapp-aviso {
+      background: #16a34a;
+      color: #ffffff;
+      grid-column: span 2;
+      font-size: 13.5px;
+      font-weight: 800;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 2px 6px rgba(22, 163, 74, 0.25);
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-whatsapp-aviso:hover {
+      background: #15803d;
+      transform: translateY(-1px);
+    }
+
+    /* TOAST FLUTUANTE DE AVISO WHATSAPP */
+    #toastAvisoWhatsApp {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      background: #0f172a;
+      color: #ffffff;
+      border: 2px solid #22c55e;
+      border-radius: 12px;
+      padding: 14px 18px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      max-width: 440px;
+      transform: translateY(150%);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+    }
+    #toastAvisoWhatsApp.toast-visivel {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    @media (max-width: 768px) {
+      #toastAvisoWhatsApp {
+        bottom: 12px;
+        left: 12px;
+        right: 12px;
+        max-width: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+    }
+
     /* ==================================================== */
     /* RESPONSIVIDADE MOBILE & TABLET (KDS TOUCH-FRIENDLY)  */
     /* ==================================================== */
@@ -510,7 +570,6 @@
       </label>
       <button class="btn-top" onclick="testarAlarme()">🔔 Testar Som</button>
       <button class="btn-top" onclick="carregarPedidos()">🔄 Atualizar</button>
-      <button class="btn-top" style="background: #334155;" onclick="limparConcluidos()">🗑️ Limpar Concluídos</button>
     </div>
   </div>
 
@@ -676,6 +735,20 @@
           </tbody>
         </table>
       </div>
+    </div>
+  </div>
+
+  <!-- TOAST FLUTUANTE DE AVISO WHATSAPP (1-CLIQUE) -->
+  <div id="toastAvisoWhatsApp" role="alert" aria-live="polite">
+    <div style="flex: 1; font-size: 13.5px; line-height: 1.35;">
+      <div id="toastAvisoTexto" style="font-weight: 700; color: #f8fafc;">Status atualizado com sucesso!</div>
+      <div style="font-size: 11.5px; color: #94a3b8; margin-top: 2px;">Deseja avisar o cliente no WhatsApp agora?</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <button id="toastAvisoBtn" style="background: #16a34a; color: #ffffff; border: none; padding: 8px 14px; border-radius: 8px; font-size: 12.5px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px; white-space: nowrap; box-shadow: 0 2px 6px rgba(22, 163, 74, 0.4);">
+        📲 Avisar no Zap
+      </button>
+      <button onclick="fecharToastAviso()" title="Fechar" style="background: rgba(255, 255, 255, 0.1); border: none; color: #94a3b8; width: 28px; height: 28px; border-radius: 50%; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
     </div>
   </div>
 
@@ -1248,6 +1321,9 @@
               <button class="btn-action btn-print" onclick="imprimirComanda('${p.id}')">
                 🖨️ IMPRIMIR COMANDA TÉRMICA
               </button>
+              <button class="btn-action btn-whatsapp-aviso" onclick="abrirWhatsAppAviso('${p.id}')">
+                📲 Avisar Cliente no WhatsApp
+              </button>
             </div>
           </div>
         `;
@@ -1285,6 +1361,7 @@
         salvarCacheLocalPedidos();
         renderizarPedidos();
         atualizarEstatisticas();
+        exibirToastWhatsApp(id, novoStatus);
       }
 
       // 1. Notifica abas locais no mesmo navegador
@@ -1334,13 +1411,85 @@
       }
     }
 
-    function limparConcluidos() {
-      if (confirm('Deseja limpar os pedidos com status "Entregue" da tela?')) {
-        pedidosLocais = pedidosLocais.filter(p => p.status !== 'Entregue');
-        salvarCacheLocalPedidos();
-        renderizarPedidos();
-        atualizarEstatisticas();
+    // DISPARO ÁGIL DE AVISO DE STATUS NO WHATSAPP (1-CLIQUE)
+    function abrirWhatsAppAviso(id) {
+      const p = pedidosLocais.find(item => item.id === id);
+      if (!p) return;
+
+      let tel = String((p.cliente && p.cliente.telefone) ? p.cliente.telefone : '').replace(/\D/g, '');
+      if (!tel) {
+        alert('⚠️ Este pedido não possui telefone/WhatsApp do cliente cadastrado.');
+        return;
       }
+
+      // Garante o DDI 55 (Brasil)
+      if (tel.length === 10 || tel.length === 11) {
+        tel = '55' + tel;
+      } else if (!tel.startsWith('55') && tel.length >= 8) {
+        tel = '55' + tel;
+      }
+
+      const nomeCompleto = ((p.cliente && p.cliente.nome) ? p.cliente.nome : 'Cliente').trim();
+      const primeiroNome = nomeCompleto.split(' ')[0] || 'Cliente';
+
+      let enderecoBairro = 'seu endereço';
+      if (p.entrega && p.entrega.endereco && p.entrega.endereco !== 'Balcão / Retirada') {
+        enderecoBairro = `${p.entrega.endereco}${p.entrega.bairro ? ' - ' + p.entrega.bairro : ''}`;
+      } else if (p.entrega && p.entrega.endereco === 'Balcão / Retirada') {
+        enderecoBairro = 'Balcão / Retirada';
+      }
+
+      let mensagem = '';
+      if (p.status === 'Em Preparo') {
+        mensagem = `Olá ${primeiroNome}! 🌭 Seu pedido #${p.numero} do O Mordidaço acabou de entrar em preparo na nossa bancada com todo o capricho! Em breve te avisamos quando sair com o motoboy. ❤️`;
+      } else if (p.status === 'Saiu p/ Entrega') {
+        if (p.entrega && p.entrega.endereco === 'Balcão / Retirada') {
+          mensagem = `Olá ${primeiroNome}! 🌭 Seu pedido #${p.numero} do O Mordidaço está PRONTO PARA RETIRADA no balcão! Pode vir buscar quentinho! Te esperamos com carinho! ❤️`;
+        } else {
+          mensagem = `Olá ${primeiroNome}! 🛵 Seu pedido #${p.numero} do O Mordidaço ACABOU DE SAIR com nosso motoboy! Ele vai bem quentinho até ${enderecoBairro}. Fique atento ao interfone/campainha! Bom apetite! 🌭🔥`;
+        }
+      } else if (p.status === 'Entregue') {
+        mensagem = `Olá ${primeiroNome}! Esperamos que tenha amado seu hot dog do O Mordidaço! 🌭❤️ Se puder, tire uma foto e nos marque no Instagram @omordidaco.lanches. Sua avaliação faz toda a diferença para a nossa família! Tenha uma excelente noite!`;
+      } else {
+        // Pendente ou outro
+        mensagem = `Olá ${primeiroNome}! 🌭 Confirmamos o recebimento do seu pedido #${p.numero} no O Mordidaço! Já está na fila de preparo. Qualquer dúvida, estamos por aqui!`;
+      }
+
+      const url = `https://wa.me/${tel}?text=${encodeURIComponent(mensagem)}`;
+      window.open(url, '_blank');
+    }
+
+    // TOAST FLUTUANTE DE ATALHO RÁPIDO PARA O WHATSAPP
+    let toastTimeout = null;
+    function exibirToastWhatsApp(id, novoStatus) {
+      const p = pedidosLocais.find(item => item.id === id);
+      if (!p) return;
+
+      const toast = document.getElementById('toastAvisoWhatsApp');
+      const toastTexto = document.getElementById('toastAvisoTexto');
+      const toastBtn = document.getElementById('toastAvisoBtn');
+      if (!toast || !toastTexto || !toastBtn) return;
+
+      clearTimeout(toastTimeout);
+
+      const primeiroNome = ((p.cliente && p.cliente.nome) ? p.cliente.nome : 'Cliente').trim().split(' ')[0] || 'Cliente';
+      toastTexto.innerHTML = `Pedido <strong>#${p.numero}</strong> (${primeiroNome}) alterado para <strong>${novoStatus}</strong>!`;
+
+      toastBtn.onclick = () => {
+        abrirWhatsAppAviso(id);
+        toast.classList.remove('toast-visivel');
+      };
+
+      toast.classList.add('toast-visivel');
+
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('toast-visivel');
+      }, 9000);
+    }
+
+    function fecharToastAviso() {
+      const toast = document.getElementById('toastAvisoWhatsApp');
+      if (toast) toast.classList.remove('toast-visivel');
     }
 
     // Fechar Caixa / Reset com Dupla Confirmação (Começa o dia do zero, guarda no histórico e preserva clientes VIP)
