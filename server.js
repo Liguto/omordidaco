@@ -673,7 +673,7 @@ app.post(['/api/pedidos', '/pedidos'], async (req, res) => {
   }
   try {
     const body = req.body || {};
-    const { cliente, itens, entrega, pagamento, observacoes, subtotal, taxaEntrega, total } = body;
+    const { cliente, itens, entrega, pagamento, observacoes, subtotal, taxaEntrega, total, acompanharWhatsapp } = body;
 
     if (!cliente || !cliente.nome || !cliente.telefone || !itens || itens.length === 0) {
       return res.status(400).json({ error: 'Dados incompletos do pedido.' });
@@ -689,6 +689,7 @@ app.post(['/api/pedidos', '/pedidos'], async (req, res) => {
       dataHora: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
       status: 'Pendente',
       statusAtualizadoEm: agora,
+      acompanharWhatsapp: Boolean(acompanharWhatsapp),
       cliente,
       itens,
       entrega: entrega || { endereco: 'Balcão / Retirada', bairro: 'Jardim Tamoio' },
@@ -719,6 +720,26 @@ app.post(['/api/pedidos', '/pedidos'], async (req, res) => {
     console.error('Erro ao processar pedido:', err);
     res.status(500).json({ error: 'Erro interno ao processar pedido: ' + err.message });
   }
+});
+
+// Ativar Opt-in de Acompanhamento no WhatsApp após clique na tela de sucesso
+app.post(['/api/pedidos/:id/acompanhar-whatsapp', '/pedidos/:id/acompanhar-whatsapp'], async (req, res) => {
+  recarregarPedidosDoDisco();
+  const { id } = req.params;
+  const pedido = pedidos.find(p => p.id === id);
+  if (pedido) {
+    pedido.acompanharWhatsapp = true;
+    salvarPedidos();
+    if (KV_URL && KV_TOKEN) {
+      await salvarPedidosNuvem();
+    }
+    notificarCozinha({
+      tipo: 'optin_whatsapp',
+      id,
+      numero: pedido.numero
+    });
+  }
+  res.json({ success: true, acompanharWhatsapp: true });
 });
 
 // Listar Clientes VIP (invisível aos clientes, exclusivo para o painel administrativo)

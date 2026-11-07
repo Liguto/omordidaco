@@ -1082,6 +1082,14 @@
         <input type="text" class="form-control" id="trocoValor" placeholder="Ex: Troco para R$ 50,00 ou Não preciso de troco">
       </div>
 
+      <!-- OPÇÃO DE ACOMPANHAR PELO WHATSAPP -->
+      <label class="check-option" style="cursor: pointer; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 10px; padding: 12px; margin-top: 14px; display: flex; align-items: center; gap: 10px;">
+        <input type="checkbox" id="chkAcompanharWhats" style="width: 18px; height: 18px; accent-color: #16a34a;">
+        <span style="font-size: 13px; font-weight: 700; color: #166534; line-height: 1.35;">
+          📲 Desejo acompanhar a saída do motoboy pelo WhatsApp
+        </span>
+      </label>
+
       <button class="btn-add" style="width: 100%; justify-content: center; padding: 15px; font-size: 16px; margin-top: 16px; background: var(--green); color: #ffffff;" onclick="finalizarPedido()">
         ✓ Confirmar & Enviar Pedido
       </button>
@@ -1110,7 +1118,7 @@
           Clique no botão verde abaixo para abrir nossa conversa no WhatsApp. Assim enviamos uma mensagem no seu celular no exato minuto em que o motoboy sair com o seu dogão quentinho! 🔥
         </div>
 
-        <a href="#" target="_blank" class="btn-whatsapp-send" id="btnWhatsappShare">
+        <a href="#" target="_blank" class="btn-whatsapp-send" id="btnWhatsappShare" onclick="ativarOptInWhatsappAposClique()">
           📲 Acompanhar Saída do Motoboy no WhatsApp
         </a>
 
@@ -1477,6 +1485,8 @@
         if (troco) pagtoDetalhe += ` (${troco})`;
       }
 
+      const querAcompanharWhats = Boolean(document.getElementById('chkAcompanharWhats') ? document.getElementById('chkAcompanharWhats').checked : false);
+
       const pedidoPayload = {
         cliente: { nome, telefone },
         entrega: { endereco, bairro, referencia: ref },
@@ -1484,7 +1494,8 @@
         pagamento: pagtoDetalhe,
         subtotal,
         taxaEntrega: taxa,
-        total
+        total,
+        acompanharWhatsapp: querAcompanharWhats
       };
 
       try {
@@ -1496,6 +1507,7 @@
 
         if (!res.ok) throw new Error('Falha ao enviar pedido');
         const pedidoCriado = await res.json();
+        ultimoPedidoCriadoId = pedidoCriado.id;
         if (!pedidoCriado.statusAtualizadoEm) {
           pedidoCriado.statusAtualizadoEm = Date.now();
         }
@@ -1566,6 +1578,25 @@
       } catch (err) {
         alert('Erro ao enviar pedido para o restaurante. Verifique sua conexão.');
       }
+    }
+
+    function ativarOptInWhatsappAposClique() {
+      if (!ultimoPedidoCriadoId) return;
+      try {
+        fetch(`/api/pedidos/${ultimoPedidoCriadoId}/acompanhar-whatsapp`, { method: 'POST' }).catch(() => {});
+      } catch(e) {}
+      try {
+        if ('BroadcastChannel' in window) {
+          const canal = new BroadcastChannel('omordidaco_canal');
+          canal.postMessage({ tipo: 'optin_whatsapp', id: ultimoPedidoCriadoId });
+        }
+      } catch(e) {}
+      try {
+        fetch('https://ntfy.sh/omordidaco_pedidos_tamoio_campinas_live', {
+          method: 'POST',
+          body: JSON.stringify({ tipo: 'optin_whatsapp', id: ultimoPedidoCriadoId })
+        }).catch(() => {});
+      } catch(e) {}
     }
 
     function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
