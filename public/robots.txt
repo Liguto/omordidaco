@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /cozinha
+Disallow: /cozinha.html
+Disallow: /api/
+
+Sitemap: https://omordidaco.com.br/sitemap.xml
