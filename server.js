@@ -499,86 +499,66 @@ const CARDAPIO = {
           nome: "Combo Casal do Mordidaço",
           descricao: "2 Dogs Duplos Especiais (à sua escolha: Tradicional no Pão ou No Prato) + 2 Refrigerantes Lata (ou 1 Guaraná 2L) + 2 Potes de Maionese Verde Secreta da Casa (50ml). A janta perfeita para dois!",
           preco: 49.90,
+          adicionalPrato: 0.00,
           permiteFormato: true,
-          destaque: true
+          destaque: true,
+          isLanche: true
         },
         {
           id: "combo-familia",
           nome: "Combo Família do Tamoio",
           descricao: "2 Dogs Duplos Especiais + 1 Dog Tradicional + 1 Guaraná Antarctica 2 Litros + 2 Potes de Maionese Verde da Casa. Fartura garantida para toda a família!",
           preco: 62.00,
+          adicionalPrato: 0.00,
           permiteFormato: true,
-          destaque: false
+          destaque: false,
+          isLanche: true
         }
       ]
     },
     {
-      id: "tradicionais",
-      nome: "🌭 Hot Dogs Tradicionais de Rua (No Pão)",
+      id: "hotdogs",
+      nome: "🌭 Hot Dogs Artesanais (No Pão ou No Prato)",
       itens: [
         {
-          id: "dog-tradicional-pao",
-          nome: "Hot Dog Tradicional (No Pão)",
-          descricao: "Pão macio aberto por cima, purê de batata artesanal cremoso, 1 salsicha suculenta no molho caseiro, milho, vinagrete suave, maionese verde da casa, batata palha e coroado com queijo parmesão ralado na hora.",
+          id: "dog-tradicional",
+          nome: "Dog Tradicional do Mordidaço",
+          descricao: "Purê de batata artesanal cremoso, 1 salsicha suculenta no molho caseiro, milho, vinagrete suave, maionese verde da casa, batata palha e queijo parmesão ralado na hora. Escolha no Pão macio ou no Prato (Marmitinha 500ml).",
           preco: 16.00,
-          formato: "Tradicional no Pão"
+          adicionalPrato: 1.00,
+          permiteFormato: true,
+          destaque: false,
+          isLanche: true
         },
         {
-          id: "dog-duplo-pao",
-          nome: "Hot Dog Duplo Especial (No Pão)",
-          descricao: "O campeão de vendas! 2 salsichas, dobro de queijo muçarela (2 fatias que derretem no calor do molho), purê cremoso artesanal, molho caseiro, milho, vinagrete, maionese verde, batata palha e chuva de parmesão ralado.",
+          id: "dog-duplo",
+          nome: "Dog Duplo Especial do Mordidaço",
+          descricao: "O campeão de vendas! 2 salsichas, dobro de queijo muçarela (2 fatias generosas derretidas no calor do molho), purê cremoso artesanal, molho caseiro, milho, vinagrete, maionese verde, batata palha e chuva de parmesão ralado.",
           preco: 20.00,
-          formato: "Tradicional no Pão",
-          destaque: true
+          adicionalPrato: 2.00,
+          permiteFormato: true,
+          destaque: true,
+          isLanche: true
         },
         {
-          id: "dog-bacon-pao",
-          nome: "Hot Dog Bacon Supreme (No Pão)",
-          descricao: "2 salsichas, muito bacon em cubos dourados e crocantes, queijo muçarela derretido, purê de batata artesanal, molho caseiro e batata palha crocante.",
+          id: "dog-bacon",
+          nome: "Dog Bacon Supreme",
+          descricao: "2 salsichas, muito bacon em cubos dourados e crocantes, queijo muçarela derretido no molho, purê de batata artesanal, molho caseiro e batata palha crocante.",
           preco: 24.00,
-          formato: "Tradicional no Pão"
+          adicionalPrato: 2.00,
+          permiteFormato: true,
+          destaque: false,
+          isLanche: true
         },
         {
-          id: "dog-frango-pao",
-          nome: "Hot Dog Frango Cremoso c/ Catupiry (No Pão)",
-          descricao: "1 salsicha, peito de frango desfiado artesanal bem temperado, Catupiry original em espiral generosa, purê de batata artesanal e batata palha.",
+          id: "dog-frango",
+          nome: "Dog Frango Cremoso c/ Catupiry",
+          descricao: "1 salsicha, peito de frango desfiado artesanal bem temperado, Catupiry original em espiral generosa, purê de batata artesanal e batata palha crocante.",
           preco: 25.00,
-          formato: "Tradicional no Pão"
-        }
-      ]
-    },
-    {
-      id: "noprato",
-      nome: "🥣 Hot Dogs No Prato (Marmitinha Térmica 500ml - Sem Pão)",
-      itens: [
-        {
-          id: "dog-tradicional-prato",
-          nome: "Hot Dog Tradicional No Prato",
-          descricao: "Sem pão! Na marmitinha térmica de 500ml com base reforçada de purê (+40g), salsicha em rodelas bem quente com molho caseiro, milho, vinagrete, maionese verde e batata palha. Acompanha garfo reforçado.",
-          preco: 17.00,
-          formato: "No Prato (Sem Pão)"
-        },
-        {
-          id: "dog-duplo-prato",
-          nome: "Hot Dog Duplo Especial No Prato",
-          descricao: "A janta no sofá perfeita! 2 salsichas em rodelas, 2 fatias de muçarela derretida no calor do molho, purê de batata reforçado, molho caseiro, milho, vinagrete e batata palha. Acompanha garfo reforçado.",
-          preco: 22.00,
-          formato: "No Prato (Sem Pão)",
-          destaque: true
-        },
-        {
-          id: "dog-bacon-prato",
-          nome: "Hot Dog Bacon Supreme No Prato",
-          descricao: "Sem pão! 2 salsichas fatiadas, cubos de bacon crocante, muçarela derretida no molho e purê cremoso com garfo reforçado.",
-          preco: 26.00,
-          formato: "No Prato (Sem Pão)"
-        },
-        {
-          id: "dog-frango-prato",
-          nome: "Hot Dog Frango Cremoso c/ Catupiry No Prato",
-          descricao: "Sem pão! Frango desfiado suculento, Catupiry original, 1 salsicha fatiada, purê reforçado e garfo reforçado.",
-          preco: 27.00,
-          formato: "No Prato (Sem Pão)"
+          adicionalPrato: 2.00,
+          permiteFormato: true,
+          destaque: false,
+          isLanche: true
         }
       ]
     },
@@ -598,7 +578,6 @@ const CARDAPIO = {
       nome: "🥫 Molhos & Adicionais Extras",
       itens: [
         { id: "add-maionese", nome: "Pote Extra de Maionese Verde (50ml)", preco: 3.50 },
-        { id: "add-queijo", nome: "Queijo Muçarela Derretido Extra", preco: 3.50 },
         { id: "add-bacon", nome: "Bacon Crocante Extra em Cubos", preco: 4.50 },
         { id: "add-catupiry", nome: "Catupiry Original Extra", preco: 4.00 },
         { id: "add-batata-palha", nome: "Batata Palha Crocante Extra", preco: 2.50 }

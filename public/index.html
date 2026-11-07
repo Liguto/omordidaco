@@ -926,14 +926,41 @@
       
       <!-- Escolha do Formato (se aplicável ao item) -->
       <div class="form-group" id="formatoGroup" style="display: none;">
-        <label class="form-label">Escolha o Formato:</label>
-        <label class="check-option">
-          <input type="radio" name="itemFormato" value="Tradicional no Pão" checked>
-          <span><strong>Tradicional de Rua (No Pão)</strong> - Aberto farto c/ queijo parmesão ralado na hora</span>
+        <label class="form-label">Escolha o Formato do Hot Dog:</label>
+        <label class="check-option" style="cursor: pointer; margin-bottom: 8px;">
+          <input type="radio" name="itemFormato" id="formatoPaoRadio" value="Tradicional no Pão" checked onchange="recalcularPrecoModal()">
+          <span>
+            <strong>🥖 Tradicional de Rua (No Pão)</strong><br>
+            <span style="font-size: 11.5px; color: var(--text-muted);">Aberto farto, selado e com queijo parmesão ralado na hora</span> • <strong id="precoPaoLabel" style="color: var(--primary);">R$ 0,00</strong>
+          </span>
         </label>
-        <label class="check-option">
-          <input type="radio" name="itemFormato" value="No Prato (Sem Pão)">
-          <span><strong>No Prato (Marmitinha 500ml - Sem Pão)</strong> - +40g de purê artesanal e garfo</span>
+        <label class="check-option" style="cursor: pointer;">
+          <input type="radio" name="itemFormato" id="formatoPratoRadio" value="No Prato (Sem Pão)" onchange="recalcularPrecoModal()">
+          <span>
+            <strong>🥣 No Prato (Marmitinha 500ml - Sem Pão)</strong><br>
+            <span style="font-size: 11.5px; color: var(--text-muted);">Sem pão! +40g de purê artesanal reforçado e garfo</span> • <strong id="precoPratoLabel" style="color: var(--primary);">R$ 0,00</strong>
+          </span>
+        </label>
+      </div>
+
+      <!-- Turbinar com Adicionais Extras -->
+      <div class="form-group" id="adicionaisGroup">
+        <label class="form-label">🥫 Turbinar com Adicionais Extras?</label>
+        <label class="check-option" style="cursor: pointer; margin-bottom: 6px;">
+          <input type="checkbox" class="check-adicional" data-id="add-maionese" data-nome="Pote Extra de Maionese Verde (50ml)" data-preco="3.50" onchange="recalcularPrecoModal()">
+          <span>Pote Extra de Maionese Verde (50ml) • <strong style="color: #15803d;">+ R$ 3,50</strong></span>
+        </label>
+        <label class="check-option" style="cursor: pointer; margin-bottom: 6px;">
+          <input type="checkbox" class="check-adicional" data-id="add-bacon" data-nome="Bacon Crocante Extra em Cubos" data-preco="4.50" onchange="recalcularPrecoModal()">
+          <span>Bacon Crocante Extra em Cubos • <strong style="color: #15803d;">+ R$ 4,50</strong></span>
+        </label>
+        <label class="check-option" style="cursor: pointer; margin-bottom: 6px;">
+          <input type="checkbox" class="check-adicional" data-id="add-catupiry" data-nome="Catupiry Original Extra" data-preco="4.00" onchange="recalcularPrecoModal()">
+          <span>Catupiry Original Extra • <strong style="color: #15803d;">+ R$ 4,00</strong></span>
+        </label>
+        <label class="check-option" style="cursor: pointer;">
+          <input type="checkbox" class="check-adicional" data-id="add-batata-palha" data-nome="Batata Palha Crocante Extra" data-preco="2.50" onchange="recalcularPrecoModal()">
+          <span>Batata Palha Crocante Extra • <strong style="color: #15803d;">+ R$ 2,50</strong></span>
         </label>
       </div>
 
@@ -1176,14 +1203,36 @@
       }
       if (!item) return;
 
-      // Bebidas e Adicionais: Adiciona DIRETO à sacola sem perguntar de vinagrete!
-      if (catId === 'bebidas' || catId === 'adicionais') {
+      // Bebidas e Adicionais
+      if (catId === 'adicionais') {
+        const temLanche = carrinho.some(i => i.isLanche || i.catId === 'hotdogs' || i.catId === 'combos');
+        if (!temLanche) {
+          alert('⚠️ Para pedir um adicional, primeiro adicione um Hot Dog ou Combo ao seu carrinho!');
+          return;
+        }
         carrinho.push({
           id: item.id,
           nome: item.nome,
           formato: '',
           preco: item.preco,
-          observacoes: ''
+          observacoes: '',
+          isLanche: false,
+          catId: 'adicionais'
+        });
+        atualizarBarraCarrinho();
+        mostrarToast(`✓ ${item.nome} adicionado!`);
+        return;
+      }
+
+      if (catId === 'bebidas') {
+        carrinho.push({
+          id: item.id,
+          nome: item.nome,
+          formato: '',
+          preco: item.preco,
+          observacoes: '',
+          isLanche: false,
+          catId: 'bebidas'
         });
         atualizarBarraCarrinho();
         mostrarToast(`✓ ${item.nome} adicionado!`);
@@ -1191,27 +1240,57 @@
       }
 
       // Hot Dogs e Combos abrem a personalização
-      abrirModalPersonalizacao(item);
+      abrirModalPersonalizacao(item, catId);
     }
 
-    function abrirModalPersonalizacao(item) {
-      itemSelecionadoTemp = item;
+    function recalcularPrecoModal() {
+      if (!itemSelecionadoTemp) return;
+      let total = itemSelecionadoTemp.preco || 0;
+
+      // Adicional embutido do formato No Prato
+      const radioPrato = document.getElementById('formatoPratoRadio');
+      if (radioPrato && radioPrato.checked) {
+        total += (itemSelecionadoTemp.adicionalPrato || 0);
+      }
+
+      // Soma adicionais selecionados no modal
+      document.querySelectorAll('.check-adicional:checked').forEach(chk => {
+        total += Number(chk.dataset.preco) || 0;
+      });
+
+      document.getElementById('modalItemPrice').innerText = 'R$ ' + total.toFixed(2).replace('.', ',');
+    }
+
+    function abrirModalPersonalizacao(item, catId = 'hotdogs') {
+      itemSelecionadoTemp = { ...item, catId };
       document.getElementById('modalItemTitle').innerText = item.nome;
       document.getElementById('modalItemDesc').innerText = item.descricao || '';
-      document.getElementById('modalItemPrice').innerText = 'R$ ' + item.preco.toFixed(2).replace('.', ',');
       document.getElementById('itemObs').value = '';
       document.getElementById('semVinagrete').checked = false;
       document.getElementById('semMilho').checked = false;
       document.getElementById('semBatataPalha').checked = false;
 
-      // Exibe formato apenas se for combo ou se tiver opções
+      // Desmarca todos os adicionais extras
+      document.querySelectorAll('.check-adicional').forEach(chk => chk.checked = false);
+
+      // Configura os formatos disponíveis e valores embutidos
       const formatoGroup = document.getElementById('formatoGroup');
+      const formatoPaoRadio = document.getElementById('formatoPaoRadio');
+
       if (item.permiteFormato) {
         formatoGroup.style.display = 'block';
+        if (formatoPaoRadio) formatoPaoRadio.checked = true;
+
+        const precoPao = item.preco;
+        const precoPrato = item.preco + (item.adicionalPrato || 0);
+
+        document.getElementById('precoPaoLabel').innerText = 'R$ ' + precoPao.toFixed(2).replace('.', ',');
+        document.getElementById('precoPratoLabel').innerText = 'R$ ' + precoPrato.toFixed(2).replace('.', ',');
       } else {
         formatoGroup.style.display = 'none';
       }
 
+      recalcularPrecoModal();
       abrirModal('itemModal');
     }
 
@@ -1223,22 +1302,44 @@
       const obsTexto = document.getElementById('itemObs').value.trim();
       if (obsTexto) observacoes.push(obsTexto);
 
-      let formato = itemSelecionadoTemp.formato || '';
+      let formato = itemSelecionadoTemp.formato || 'Tradicional no Pão';
+      let precoCalculado = itemSelecionadoTemp.preco;
+
       if (itemSelecionadoTemp.permiteFormato) {
         const radio = document.querySelector('input[name="itemFormato"]:checked');
-        if (radio) formato = radio.value;
+        if (radio) {
+          formato = radio.value;
+          if (formato.includes('No Prato')) {
+            precoCalculado += (itemSelecionadoTemp.adicionalPrato || 0);
+          }
+        }
+      }
+
+      // Adicionais extras selecionados no modal
+      let adicionaisEscolhidos = [];
+      document.querySelectorAll('.check-adicional:checked').forEach(chk => {
+        const pAdd = Number(chk.dataset.preco) || 0;
+        precoCalculado += pAdd;
+        adicionaisEscolhidos.push(chk.dataset.nome);
+      });
+
+      if (adicionaisEscolhidos.length > 0) {
+        observacoes.push('Adicionais: ' + adicionaisEscolhidos.join(', '));
       }
 
       carrinho.push({
         id: itemSelecionadoTemp.id,
         nome: itemSelecionadoTemp.nome,
         formato: formato,
-        preco: itemSelecionadoTemp.preco,
-        observacoes: observacoes.join(', ')
+        preco: Number(precoCalculado.toFixed(2)),
+        observacoes: observacoes.join(' | '),
+        isLanche: true,
+        catId: itemSelecionadoTemp.catId || 'hotdogs'
       });
 
       fecharModal('itemModal');
       atualizarBarraCarrinho();
+      mostrarToast(`✓ ${itemSelecionadoTemp.nome} adicionado!`);
     }
 
     function atualizarBarraCarrinho() {
