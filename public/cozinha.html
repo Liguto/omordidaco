@@ -502,6 +502,7 @@
         <span style="display: inline-block; width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 6px #22c55e;"></span>
         <span>Auto-Sync 3s</span>
       </div>
+      <button class="btn-top" style="background: #0284c7;" onclick="abrirModalHistorico()">📜 Histórico (<span id="totalHistoricoBadge">0</span>)</button>
       <button class="btn-top" style="background: #2563eb;" onclick="abrirModalClientes()">👥 Clientes VIP (<span id="totalClientesBadge">0</span>)</button>
       <label class="switch-label">
         <input type="checkbox" id="chkAutoPrint">
@@ -578,6 +579,66 @@
       <p style="color: #94a3b8;">Aguardando novos pedidos...</p>
     </div>
 
+    <!-- SEÇÃO DE FECHAMENTO DO EXPEDIENTE / RESET SEGURO DO DIA -->
+    <div style="margin-top: 40px; margin-bottom: 20px; padding: 22px 18px; background: #ffffff; border: 2px dashed #fca5a5; border-radius: 14px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+      <div style="font-size: 26px; margin-bottom: 6px;">🏁</div>
+      <h4 style="font-size: 16px; font-weight: 800; color: #991b1b; margin-bottom: 6px;">
+        Fechamento do Expediente / Iniciar Novo Dia
+      </h4>
+      <p style="font-size: 13px; color: #64748b; max-width: 620px; margin: 0 auto 16px auto; line-height: 1.45;">
+        Ao encerrar o expediente, os pedidos de hoje são salvos no <strong>Histórico Permanente</strong> e a bancada da cozinha é zerada para amanhã começar limpa do <strong>#101</strong>.<br>
+        <span style="color: #15803d; font-weight: 800;">🔒 Os dados e telefones dos Clientes VIP NUNCA são apagados!</span>
+      </p>
+      <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+        <button class="btn-top" style="background: #0284c7; padding: 12px 20px; border-radius: 10px; font-size: 13.5px;" onclick="abrirModalHistorico()">
+          📜 Ver Histórico de Dias Anteriores
+        </button>
+        <button class="btn-top" style="background: #dc2626; padding: 12px 24px; border-radius: 10px; font-size: 13.5px;" onclick="executarResetDiaComDuplaConfirmacao()">
+          ⚠️ Fechar Caixa & Zerar Painel do Dia (Reset Seguro)
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONTAINER DE IMPRESSÃO TÉRMICA (ESCONDIDO NA TELA, VISÍVEL NO PRINT) -->
+  <div id="printReceipt"></div>
+
+  <!-- MODAL: HISTÓRICO DE DIAS ANTERIORES -->
+  <div id="modalHistorico" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.7); z-index: 100; justify-content: center; align-items: center; padding: 16px;">
+    <div style="background: #ffffff; width: 100%; max-width: 900px; border-radius: 14px; padding: 22px; max-height: 88vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 24px;">📜</span>
+          <div>
+            <h3 style="font-size: 18px; font-weight: 800; color: var(--dark); margin: 0;">Histórico de Vendas & Dias Anteriores</h3>
+            <span style="font-size: 12px; color: #64748b;">Relatório completo de fechamento de caixa por data</span>
+          </div>
+        </div>
+        <button onclick="fecharModalHistorico()" style="background:#f1f5f9; border:none; width:32px; height:32px; border-radius:50%; font-size:16px; cursor:pointer;">✕</button>
+      </div>
+
+      <!-- CARDS DE MÉTRICAS DO HISTÓRICO -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px;">
+        <div style="background: #f8fafc; border: 1px solid var(--border); padding: 12px 14px; border-radius: 10px;">
+          <span style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase;">FATURAMENTO TOTAL HISTÓRICO</span>
+          <strong id="histTotalFaturamento" style="font-size: 20px; font-weight: 900; color: #15803d; display: block; margin-top: 4px;">R$ 0,00</strong>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid var(--border); padding: 12px 14px; border-radius: 10px;">
+          <span style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase;">TOTAL DE PEDIDOS ARQUIVADOS</span>
+          <strong id="histTotalPedidos" style="font-size: 20px; font-weight: 900; color: #2563eb; display: block; margin-top: 4px;">0</strong>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid var(--border); padding: 12px 14px; border-radius: 10px;">
+          <span style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase;">DIAS DE OPERAÇÃO</span>
+          <strong id="histTotalDias" style="font-size: 20px; font-weight: 900; color: #0f172a; display: block; margin-top: 4px;">0</strong>
+        </div>
+      </div>
+
+      <!-- LISTAGEM AGRUPADA POR DATA -->
+      <div id="historicoContainer">
+        <p style="text-align: center; color: #94a3b8; padding: 20px;">Carregando histórico...</p>
+      </div>
+    </div>
   </div>
 
   <!-- CONTAINER DE IMPRESSÃO TÉRMICA (ESCONDIDO NA TELA, VISÍVEL NO PRINT) -->
@@ -955,11 +1016,14 @@
       try {
         const salvo = localStorage.getItem('mordidaco_pedidos_cache');
         if (salvo) {
-          const arr = JSON.parse(salvo);
+          let arr = JSON.parse(salvo);
           if (Array.isArray(arr) && arr.length > 0) {
+            // Expurga definitivamente pedidos de teste legados (101 e 102) do painel ativo
+            arr = arr.filter(p => p.id !== 'PED-1793903889661' && p.id !== 'PED-1793903211585' && Number(p.numero) !== 101 && Number(p.numero) !== 102);
+            localStorage.setItem('mordidaco_pedidos_cache', JSON.stringify(arr));
             arr.forEach(p => {
               if (!p.statusAtualizadoEm) {
-                const tsFromId = Number((p.id || '').replace('PED-', ''));
+                const tsFromId = Number((p.id || '').replace('PED-', '').split('-')[0]);
                 p.statusAtualizadoEm = !isNaN(tsFromId) && tsFromId > 0 ? tsFromId : 0;
               }
             });
@@ -1279,6 +1343,190 @@
       }
     }
 
+    // Fechar Caixa / Reset com Dupla Confirmação (Começa o dia do zero, guarda no histórico e preserva clientes VIP)
+    async function executarResetDiaComDuplaConfirmacao() {
+      const confirmacao1 = confirm(
+        "⚠️ ATENÇÃO - FECHAMENTO DE CAIXA / INICIAR NOVO DIA:\n\n" +
+        "Deseja realmente encerrar o expediente atual?\n" +
+        "Todos os pedidos atuais serão arquivados com segurança no HISTÓRICO DE VENDAS e a bancada da cozinha será zerada para o próximo dia começar do #101.\n\n" +
+        "🔒 (A lista de Clientes VIP e histórico de telefones NÃO será afetada)."
+      );
+      if (!confirmacao1) return;
+
+      const confirmacao2 = confirm(
+        "🚨 CONFIRMAÇÃO FINAL DE SEGURANÇA:\n\n" +
+        "Tem certeza absoluta? O painel da cozinha ficará limpo com 0 pedidos.\n\n" +
+        "Clique em OK para confirmar o reset."
+      );
+      if (!confirmacao2) return;
+
+      try {
+        // 1. Arquiva pedidos locais no cache de histórico local
+        try {
+          const histLocal = JSON.parse(localStorage.getItem('mordidaco_historico_cache') || '[]');
+          pedidosLocais.forEach(p => {
+            if (!histLocal.some(h => h.id === p.id)) {
+              histLocal.unshift({ ...p, status: p.status === 'Pendente' ? 'Entregue' : p.status });
+            }
+          });
+          localStorage.setItem('mordidaco_historico_cache', JSON.stringify(histLocal));
+        } catch (e) {}
+
+        // 2. Limpa pedidos ativos locais imediatamente
+        pedidosLocais = [];
+        localStorage.setItem('mordidaco_pedidos_cache', '[]');
+        renderizarPedidos();
+        atualizarEstatisticas();
+
+        // 3. Avisa o backend para arquivar e resetar
+        const res = await fetch('/api/pedidos/fechar-dia', { method: 'POST' });
+        const dados = await res.json();
+
+        // 4. Notifica outras abas e canais
+        try {
+          if ('BroadcastChannel' in window) {
+            const canal = new BroadcastChannel('omordidaco_canal');
+            canal.postMessage({ tipo: 'pedidos_resetados' });
+          }
+        } catch (e) {}
+
+        alert(`✅ Caixa fechado com sucesso!\n\n${dados.arquivados || 0} pedidos foram arquivados com segurança no Histórico.\nA tela da cozinha foi zerada e está pronta para o próximo dia!`);
+        carregarHistorico();
+      } catch (err) {
+        alert('Aviso: Pedidos limpos na tela local. Verifique sua conexão com o servidor.');
+      }
+    }
+
+    // Gestão do Histórico de Vendas de Dias Anteriores
+    let historicoLocais = [];
+
+    async function carregarHistorico() {
+      // 1. Carrega do cache local
+      try {
+        const salvo = localStorage.getItem('mordidaco_historico_cache');
+        if (salvo) {
+          const arr = JSON.parse(salvo);
+          if (Array.isArray(arr)) historicoLocais = arr;
+        }
+      } catch (e) {}
+
+      // 2. Busca do servidor
+      try {
+        const res = await fetch('/api/pedidos/historico?_t=' + Date.now(), { cache: 'no-store' });
+        if (res.ok) {
+          const listaServidor = await res.json();
+          if (Array.isArray(listaServidor)) {
+            listaServidor.forEach(p => {
+              if (!historicoLocais.some(h => h.id === p.id)) {
+                historicoLocais.push(p);
+              }
+            });
+            localStorage.setItem('mordidaco_historico_cache', JSON.stringify(historicoLocais));
+          }
+        }
+      } catch (e) {}
+
+      const badge = document.getElementById('totalHistoricoBadge');
+      if (badge) badge.innerText = historicoLocais.length;
+
+      renderizarHistorico();
+    }
+
+    function renderizarHistorico() {
+      const container = document.getElementById('historicoContainer');
+      if (!container) return;
+
+      if (historicoLocais.length === 0) {
+        container.innerHTML = '<p style="text-align:center; padding:30px; color:#94a3b8;">Nenhum pedido arquivado no histórico ainda.</p>';
+        return;
+      }
+
+      // Agrupa pedidos por data (ex: "05/11/2026")
+      const grupos = new Map();
+      let faturamentoTotal = 0;
+
+      historicoLocais.forEach(p => {
+        faturamentoTotal += Number(p.total) || 0;
+        let dataStr = 'Sem data';
+        if (p.dataHora) {
+          dataStr = p.dataHora.split(',')[0].trim();
+        }
+        if (!grupos.has(dataStr)) {
+          grupos.set(dataStr, []);
+        }
+        grupos.get(dataStr).push(p);
+      });
+
+      document.getElementById('histTotalFaturamento').innerText = 'R$ ' + faturamentoTotal.toFixed(2).replace('.', ',');
+      document.getElementById('histTotalPedidos').innerText = historicoLocais.length;
+      document.getElementById('histTotalDias').innerText = grupos.size;
+
+      let html = '';
+      grupos.forEach((pedidosDoDia, dataStr) => {
+        const fatDia = pedidosDoDia.reduce((acc, p) => acc + (Number(p.total) || 0), 0);
+        html += `
+          <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px; overflow: hidden;">
+            <div style="background: #0f172a; color: #ffffff; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 16px;">📅</span>
+                <strong style="font-size: 15px;">Expediente: ${dataStr}</strong>
+                <span style="background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 6px; font-size: 12px;">${pedidosDoDia.length} pedidos</span>
+              </div>
+              <div style="color: #4ade80; font-size: 15px; font-weight: 800;">
+                Faturamento: R$ ${fatDia.toFixed(2).replace('.', ',')}
+              </div>
+            </div>
+            <div style="padding: 12px 16px; overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                <thead>
+                  <tr style="border-bottom: 1px solid #cbd5e1; color: #64748b; text-align: left;">
+                    <th style="padding: 6px 8px;">#</th>
+                    <th style="padding: 6px 8px;">Horário</th>
+                    <th style="padding: 6px 8px;">Cliente</th>
+                    <th style="padding: 6px 8px;">Bairro</th>
+                    <th style="padding: 6px 8px;">Itens</th>
+                    <th style="padding: 6px 8px;">Pagamento</th>
+                    <th style="padding: 6px 8px; text-align: right;">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+        `;
+
+        pedidosDoDia.forEach(p => {
+          const itensStr = (p.itens || []).map(i => `${i.nome} ${i.formato ? `(${i.formato})` : ''}`).join(', ');
+          html += `
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 8px; font-weight: 800; color: #0f172a;">#${p.numero}</td>
+              <td style="padding: 8px; color: #64748b;">${p.dataHora ? (p.dataHora.split(',')[1] || '').trim() : ''}</td>
+              <td style="padding: 8px; font-weight: 700;">${p.cliente ? p.cliente.nome : 'Cliente'}</td>
+              <td style="padding: 8px;">${p.entrega ? p.entrega.bairro : ''}</td>
+              <td style="padding: 8px; max-width: 280px;">${itensStr}</td>
+              <td style="padding: 8px; font-size: 11px;">${p.pagamento || ''}</td>
+              <td style="padding: 8px; text-align: right; font-weight: 800; color: #15803d;">R$ ${(Number(p.total) || 0).toFixed(2).replace('.', ',')}</td>
+            </tr>
+          `;
+        });
+
+        html += `
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function abrirModalHistorico() {
+      document.getElementById('modalHistorico').style.display = 'flex';
+      carregarHistorico();
+    }
+
+    function fecharModalHistorico() {
+      document.getElementById('modalHistorico').style.display = 'none';
+    }
+
     // Gerar Comanda e Mandar para Impressora Térmica
     function imprimirComanda(id) {
       const p = pedidosLocais.find(item => item.id === id);
@@ -1364,6 +1612,12 @@
               }
             } else if (ev.data.tipo === 'novo_pedido' && ev.data.pedido) {
               receberNovoPedido(ev.data.pedido);
+            } else if (ev.data.tipo === 'pedidos_resetados') {
+              pedidosLocais = [];
+              localStorage.setItem('mordidaco_pedidos_cache', '[]');
+              renderizarPedidos();
+              atualizarEstatisticas();
+              carregarHistorico();
             }
           };
         }
@@ -1405,6 +1659,12 @@
                     atualizarEstatisticas();
                   }
                 }
+              } else if (dados.tipo === 'pedidos_resetados') {
+                pedidosLocais = [];
+                localStorage.setItem('mordidaco_pedidos_cache', '[]');
+                renderizarPedidos();
+                atualizarEstatisticas();
+                carregarHistorico();
               } else if (dados.id && dados.numero && (dados.itens || dados.cliente)) {
                 receberNovoPedido(dados);
               }
@@ -1442,6 +1702,12 @@
                   atualizarEstatisticas();
                 }
               }
+            } else if (data.tipo === 'pedidos_resetados') {
+              pedidosLocais = [];
+              localStorage.setItem('mordidaco_pedidos_cache', '[]');
+              renderizarPedidos();
+              atualizarEstatisticas();
+              carregarHistorico();
             } else if (data.id && data.numero && (data.itens || data.cliente)) {
               receberNovoPedido(data);
             }
@@ -1463,6 +1729,7 @@
     carregarCacheLocalClientes();
     carregarPedidos();
     carregarClientes();
+    carregarHistorico();
     conectarCanalLocal();
     conectarCanalNuvem();
     conectarServidorSSE();

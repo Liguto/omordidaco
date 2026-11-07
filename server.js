@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 3000;
 // Usamos a pasta temporária do sistema operacional (os.tmpdir()) com fallback para memória.
 const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
 const DB_FILE = isServerless ? path.join(os.tmpdir(), 'pedidos.json') : path.join(__dirname, 'pedidos.json');
+const HISTORICO_FILE = isServerless ? path.join(os.tmpdir(), 'historico_pedidos.json') : path.join(__dirname, 'historico_pedidos.json');
 const CLIENTES_FILE = isServerless ? path.join(os.tmpdir(), 'clientes.json') : path.join(__dirname, 'clientes.json');
 
 app.use(express.json());
@@ -142,6 +143,42 @@ function recarregarPedidosDoDisco() {
   } else if (isServerless && fs.existsSync(path.join(__dirname, 'pedidos.json'))) {
     try {
       pedidos = JSON.parse(fs.readFileSync(path.join(__dirname, 'pedidos.json'), 'utf8'));
+    } catch (e) {}
+  }
+}
+
+// Inicializar banco de dados JSON de Histórico de Pedidos Anteriores
+let historicoPedidos = [];
+if (fs.existsSync(HISTORICO_FILE)) {
+  try {
+    historicoPedidos = JSON.parse(fs.readFileSync(HISTORICO_FILE, 'utf8'));
+  } catch (e) {
+    historicoPedidos = [];
+  }
+} else if (isServerless && fs.existsSync(path.join(__dirname, 'historico_pedidos.json'))) {
+  try {
+    historicoPedidos = JSON.parse(fs.readFileSync(path.join(__dirname, 'historico_pedidos.json'), 'utf8'));
+  } catch (e) {
+    historicoPedidos = [];
+  }
+}
+
+function salvarHistorico() {
+  try {
+    fs.writeFileSync(HISTORICO_FILE, JSON.stringify(historicoPedidos, null, 2), 'utf8');
+  } catch (err) {
+    console.warn('Aviso: Gravação de histórico em disco ignorada em ambiente Serverless:', err.message);
+  }
+}
+
+function recarregarHistoricoDoDisco() {
+  if (fs.existsSync(HISTORICO_FILE)) {
+    try {
+      historicoPedidos = JSON.parse(fs.readFileSync(HISTORICO_FILE, 'utf8'));
+    } catch (e) {}
+  } else if (isServerless && fs.existsSync(path.join(__dirname, 'historico_pedidos.json'))) {
+    try {
+      historicoPedidos = JSON.parse(fs.readFileSync(path.join(__dirname, 'historico_pedidos.json'), 'utf8'));
     } catch (e) {}
   }
 }
@@ -323,16 +360,17 @@ function registrarOuAtualizarCliente(clienteData, entregaData, valorPedido, data
 }
 
 function sincronizarClientesComPedidos() {
-  if (!pedidos || pedidos.length === 0) return;
+  const todosOsPedidos = [...(historicoPedidos || []), ...(pedidos || [])];
+  if (todosOsPedidos.length === 0) return;
 
   // Deduplica primeiro a lista existente
   deduplicarClientes();
 
   // Mapeia histórico consolidado de pedidos por número de telefone
   // Ordena pedidos do mais antigo para o mais recente para calcular primeiro e último pedido
-  const pedidosOrdenados = [...pedidos].sort((a, b) => {
-    const tA = Number((a.id || '').replace('PED-', '')) || 0;
-    const tB = Number((b.id || '').replace('PED-', '')) || 0;
+  const pedidosOrdenados = [...todosOsPedidos].sort((a, b) => {
+    const tA = Number((a.id || '').replace('PED-', '').split('-')[0]) || 0;
+    const tB = Number((b.id || '').replace('PED-', '').split('-')[0]) || 0;
     return tA - tB;
   });
 
@@ -762,6 +800,80 @@ app.patch(['/api/pedidos/:id/status', '/pedidos/:id/status'], async (req, res) =
   });
 
   res.json(pedido);
+});
+
+// Listar Histórico de Pedidos Anteriores
+app.get(['/api/pedidos/historico', '/pedidos/historico'], (req, res) => {
+  recarregarHistoricoDoDisco();
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  res.json(historicoPedidos);
+});
+
+// Fechar Caixa / Resetar Pedidos do Dia (Arquiva no histórico e limpa o painel da cozinha)
+// OS CLIENTES VIP NUNCA SÃO RESETADOS!
+app.post(['/api/pedidos/fechar-dia', '/api/pedidos/reset', '/pedidos/fechar-dia', '/pedidos/reset'], async (req, res) => {
+  recarregarPedidosDoDisco();
+  recarregarHistoricoDoDisco();
+
+  const pedidosParaArquivar = [...pedidos];
+  let arquivadosCount = 0;
+
+  pedidosParaArquivar.forEach(p => {
+    if (!p || !p.id) return;
+    const jaTemNoHistorico = historicoPedidos.some(h => h.id === p.id);
+    if (!jaTemNoHistorico) {
+      historicoPedidos.unshift(p);
+      arquivadosCount++;
+    }
+  });
+
+  // Limpa os pedidos ativos do dia
+  pedidos = [];
+  salvarPedidos();
+  salvarHistorico();
+
+  // Limpa também na nuvem se KV estiver configurado
+  if (KV_URL && KV_TOKEN) {
+    try {
+      await fetch(`${KV_URL}/set/omordidaco_pedidos`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${KV_TOKEN}` },
+        body: JSON.stringify([])
+      });
+      await fetch(`${KV_URL}/set/omordidaco_historico`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${KV_TOKEN}` },
+        body: JSON.stringify(historicoPedidos)
+      });
+    } catch (e) {}
+  }
+
+  // Reseta o contador cloud para 100 para o próximo dia começar limpo do #101
+  try {
+    await fetch(`https://api.restful-api.dev/objects/${COUNTER_STORE_ID}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'omordidaco_order_counter',
+        data: { current: 100, lastUpdated: Date.now() }
+      })
+    });
+  } catch (e) {}
+
+  // Notifica a cozinha em tempo real de que o dia foi encerrado
+  notificarCozinha({
+    tipo: 'pedidos_resetados',
+    dataFechamento: new Date().toLocaleDateString('pt-BR')
+  });
+
+  res.json({
+    success: true,
+    message: 'Expediente encerrado com sucesso! Pedidos arquivados no histórico.',
+    arquivados: arquivadosCount,
+    totalHistorico: historicoPedidos.length
+  });
 });
 
 // Exporta o app para o Vercel Serverless
