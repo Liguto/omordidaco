@@ -731,22 +731,25 @@ app.patch(['/api/pedidos/:id/status', '/pedidos/:id/status'], async (req, res) =
   const { id } = req.params;
   const { status, statusAtualizadoEm } = req.body || {};
 
-  const pedido = pedidos.find(p => p.id === id);
-  if (!pedido) {
-    return res.status(404).json({ error: 'Pedido não encontrado.' });
-  }
-
   const timestampAtualizacao = Number(statusAtualizadoEm) || Date.now();
-  const timestampAtual = Number(pedido.statusAtualizadoEm) || 0;
 
-  // Atualiza apenas se a alteração for mais recente ou simultânea
-  if (timestampAtualizacao >= timestampAtual) {
+  let pedido = pedidos.find(p => p.id === id);
+  if (!pedido) {
+    // Se o pedido ainda não estava na memória desta Lambda fria, registra para não perder o status
+    pedido = {
+      id,
+      status: status || 'Pendente',
+      statusAtualizadoEm: timestampAtualizacao
+    };
+    pedidos.unshift(pedido);
+  } else {
     pedido.status = status;
     pedido.statusAtualizadoEm = timestampAtualizacao;
-    salvarPedidos();
-    if (KV_URL && KV_TOKEN) {
-      await salvarPedidosNuvem();
-    }
+  }
+
+  salvarPedidos();
+  if (KV_URL && KV_TOKEN) {
+    await salvarPedidosNuvem();
   }
 
   // Notifica painel da cozinha com versão temporal

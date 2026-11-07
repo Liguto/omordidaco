@@ -986,26 +986,33 @@
         const idx = pedidosLocais.findIndex(p => p.id === novo.id);
         if (idx >= 0) {
           const local = pedidosLocais[idx];
-          const localTime = Number(local.statusAtualizadoEm) || 0;
-          const novoTime = Number(novo.statusAtualizadoEm) || 0;
-
-          // Resolução inteligente de conflitos temporais:
-          // Se a alteração local for mais recente do que o snapshot do backend/cache,
-          // preserva o status local e o timestamp mais recente, impedindo que o polling
-          // de 3s reverta o status!
+          
           let statusFinal = local.status;
-          let timestampFinal = localTime;
+          let timestampFinal = Number(local.statusAtualizadoEm) || 0;
 
-          if (novoTime >= localTime) {
-            statusFinal = novo.status;
-            timestampFinal = novoTime;
+          const localTravadoEm = Number(local.statusTravadoLocalmenteEm) || 0;
+          const tempoDesdeTrava = Date.now() - localTravadoEm;
+
+          // REGRA DE OURO DA COZINHA:
+          // Se o operador da cozinha alterou o status (ou nos últimos 5 minutos),
+          // o status local da tela é a AUTORIDADE MÁXIMA e NUNCA é revertido pelo polling do servidor!
+          if (localTravadoEm > 0 && tempoDesdeTrava < 300000 && local.status) {
+            statusFinal = local.status;
+          } else {
+            const novoTime = Number(novo.statusAtualizadoEm) || 0;
+            // Só aceita status vindo de fora se for comprovadamente mais recente (diferença de mais de 1s para evitar clock skew)
+            if (novoTime > timestampFinal + 1000) {
+              statusFinal = novo.status;
+              timestampFinal = novoTime;
+            }
           }
 
           pedidosLocais[idx] = {
             ...local,
             ...novo,
             status: statusFinal,
-            statusAtualizadoEm: timestampFinal
+            statusAtualizadoEm: timestampFinal,
+            statusTravadoLocalmenteEm: local.statusTravadoLocalmenteEm || localTravadoEm
           };
         } else {
           // Se for um novo pedido e coincidentemente houver outro pedido com mesmo número, desambigua
@@ -1210,6 +1217,7 @@
       if (p) {
         p.status = novoStatus;
         p.statusAtualizadoEm = agora;
+        p.statusTravadoLocalmenteEm = agora;
         salvarCacheLocalPedidos();
         renderizarPedidos();
         atualizarEstatisticas();
@@ -1224,6 +1232,7 @@
             id,
             status: novoStatus,
             statusAtualizadoEm: agora,
+            statusTravadoLocalmenteEm: agora,
             numero: p ? p.numero : undefined
           });
         }
@@ -1243,6 +1252,7 @@
             id,
             status: novoStatus,
             statusAtualizadoEm: agora,
+            statusTravadoLocalmenteEm: agora,
             numero: p ? p.numero : undefined
           })
         }).catch(() => {});
@@ -1346,6 +1356,7 @@
                 if (msgTime >= localTime) {
                   p.status = ev.data.status;
                   p.statusAtualizadoEm = msgTime || Date.now();
+                  p.statusTravadoLocalmenteEm = Date.now();
                   salvarCacheLocalPedidos();
                   renderizarPedidos();
                   atualizarEstatisticas();
@@ -1388,6 +1399,7 @@
                   if (msgTime >= localTime) {
                     p.status = dados.status;
                     p.statusAtualizadoEm = msgTime || Date.now();
+                    p.statusTravadoLocalmenteEm = Date.now();
                     salvarCacheLocalPedidos();
                     renderizarPedidos();
                     atualizarEstatisticas();
@@ -1424,6 +1436,7 @@
                 if (msgTime >= localTime) {
                   p.status = data.status;
                   p.statusAtualizadoEm = msgTime || Date.now();
+                  p.statusTravadoLocalmenteEm = Date.now();
                   salvarCacheLocalPedidos();
                   renderizarPedidos();
                   atualizarEstatisticas();
