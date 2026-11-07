@@ -34,26 +34,53 @@
       padding-bottom: 96px;
     }
 
-    /* HEADER CLEAN & VIBRANT */
+    /* HEADER & HERO SECTION (ELEVATED DESKTOP & MOBILE) */
     header {
-      background: #0f172a;
+      background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 100%);
       color: #ffffff;
-      padding: 26px 16px 22px 16px;
-      text-align: center;
       border-bottom: 4px solid var(--primary);
       position: relative;
+      overflow: hidden;
+    }
+
+    .hero-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 20px 28px 20px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      align-items: center;
+      text-align: center;
+    }
+
+    @media (min-width: 900px) {
+      .hero-grid {
+        grid-template-columns: 1.25fr 0.75fr;
+        text-align: left;
+        gap: 40px;
+      }
     }
 
     .brand-logo-img {
-      width: 105px;
-      height: 105px;
+      width: 110px;
+      height: 110px;
       border-radius: 50%;
       object-fit: cover;
       margin: 0 auto 12px auto;
       display: block;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
       border: 3px solid #f59e0b;
       background: #ffffff;
+    }
+
+    @media (min-width: 900px) {
+      .brand-logo-img {
+        margin: 0 0 16px 0;
+      }
     }
 
     .brand-badge {
@@ -61,7 +88,7 @@
       background: rgba(245, 158, 11, 0.18);
       color: #fbbf24;
       border: 1px solid rgba(245, 158, 11, 0.4);
-      padding: 4px 14px;
+      padding: 5px 14px;
       border-radius: 20px;
       font-size: 11px;
       font-weight: 800;
@@ -72,17 +99,71 @@
 
     header h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 29px;
+      font-size: 32px;
       font-weight: 900;
       color: #ffffff;
       letter-spacing: -0.5px;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      line-height: 1.15;
+    }
+
+    @media (min-width: 900px) {
+      header h1 {
+        font-size: 42px;
+      }
     }
 
     header p.slogan {
-      font-size: 13.5px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #fde68a;
+      margin-bottom: 10px;
+    }
+
+    header p.hero-description {
+      font-size: 14px;
       color: #cbd5e1;
-      margin-bottom: 12px;
+      max-width: 600px;
+      margin: 0 auto 16px auto;
+      line-height: 1.5;
+    }
+
+    @media (min-width: 900px) {
+      header p.hero-description {
+        margin: 0 0 18px 0;
+      }
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    @media (min-width: 900px) {
+      .hero-actions {
+        justify-content: flex-start;
+      }
+    }
+
+    .btn-hero-order {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #ffffff;
+      padding: 10px 22px;
+      border-radius: 24px;
+      font-size: 13.5px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-hero-order:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(217, 119, 6, 0.5);
     }
 
     /* INSTAGRAM BADGE */
@@ -92,12 +173,11 @@
       gap: 6px;
       background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
       color: #ffffff;
-      padding: 6px 16px;
+      padding: 8px 18px;
       border-radius: 20px;
       font-size: 12px;
       font-weight: 700;
       text-decoration: none;
-      margin-bottom: 14px;
       box-shadow: 0 2px 10px rgba(220, 39, 67, 0.25);
       transition: transform 0.2s, box-shadow 0.2s;
     }
@@ -116,10 +196,16 @@
       flex-wrap: wrap;
     }
 
+    @media (min-width: 900px) {
+      .info-bar {
+        justify-content: flex-start;
+      }
+    }
+
     .info-pill {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.12);
-      padding: 4px 12px;
+      padding: 5px 12px;
       border-radius: 12px;
       display: flex;
       align-items: center;
@@ -131,14 +217,98 @@
       font-weight: 800;
     }
 
+    /* HERO FEATURED CARD (DESKTOP) */
+    .hero-featured-card {
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+      border: 2px solid rgba(245, 158, 11, 0.4);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+      display: none;
+      position: relative;
+    }
+
+    @media (min-width: 900px) {
+      .hero-featured-card {
+        display: block;
+      }
+    }
+
+    .hero-featured-tag {
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: #ea580c;
+      color: #ffffff;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(234, 88, 12, 0.4);
+    }
+
+    /* BARRA DE PILARES & GARANTIAS DA CASA */
+    .pillars-bar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--card-border);
+      padding: 18px 0;
+    }
+
+    .pillars-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .pillar-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      background: #f8fafc;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .pillar-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .pillar-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .pillar-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--dark);
+      display: block;
+    }
+
+    .pillar-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.35;
+      display: block;
+    }
+
     /* CATEGORY NAV CLEAN */
     .cat-nav {
       position: sticky;
       top: 0;
-      background: #ffffff;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
       display: flex;
-      gap: 8px;
-      padding: 12px 16px;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 20px;
       overflow-x: auto;
       border-bottom: 1px solid var(--card-border);
       z-index: 20;
@@ -147,15 +317,21 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     }
 
+    @media (max-width: 768px) {
+      .cat-nav {
+        justify-content: flex-start;
+      }
+    }
+
     .cat-nav::-webkit-scrollbar { display: none; }
 
     .cat-btn {
       background: #f1f5f9;
       color: #475569;
       border: 1px solid transparent;
-      padding: 8px 16px;
+      padding: 9px 20px;
       border-radius: 20px;
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
@@ -164,50 +340,66 @@
     .cat-btn.active, .cat-btn:hover {
       background: var(--dark);
       color: #ffffff;
-      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.2);
     }
 
-    /* CONTAINER */
+    /* CONTAINER AMPLO PARA DESKTOP */
     .container {
-      max-width: 720px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 16px;
+      padding: 24px 20px;
     }
 
     .section-title {
-      font-size: 17px;
-      font-weight: 800;
+      font-size: 20px;
+      font-weight: 900;
       color: var(--dark);
-      margin: 22px 0 12px 0;
+      margin: 28px 0 16px 0;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 6px;
+      padding-bottom: 8px;
     }
 
-    /* ITEM CARD CLEAN & POLISHED */
+    /* GRID RESPONSIVO DE PRODUTOS */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 640px) {
+      .category-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+    }
+
+    /* ITEM CARD ELEVADO */
     .item-card {
       background: #ffffff;
       border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 14px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+      justify-content: space-between;
+      gap: 12px;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
     }
 
     .item-card:hover {
       border-color: #cbd5e1;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
     }
 
     .item-card.destaque {
       border-left: 5px solid var(--primary);
+      background: linear-gradient(180deg, #ffffff 0%, #fffcf5 100%);
     }
 
     .item-header {
@@ -218,7 +410,7 @@
     }
 
     .item-title {
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 800;
       color: var(--dark);
     }
@@ -227,10 +419,10 @@
       background: #fef3c7;
       color: #b45309;
       border: 1px solid #fde68a;
-      font-size: 10px;
+      font-size: 10.5px;
       font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 8px;
+      padding: 3px 10px;
+      border-radius: 10px;
       text-transform: uppercase;
       white-space: nowrap;
     }
@@ -238,15 +430,15 @@
     .item-desc {
       font-size: 13.5px;
       color: var(--text-muted);
-      line-height: 1.45;
+      line-height: 1.5;
     }
 
     .item-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 8px;
-      padding-top: 8px;
+      margin-top: 10px;
+      padding-top: 10px;
       border-top: 1px solid #f1f5f9;
     }
 
@@ -537,33 +729,130 @@
       margin-top: 14px;
       box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25);
     }
+
+    /* FOOTER OFICIAL DE DELIVERY */
+    .site-footer {
+      background: #0f172a;
+      color: #94a3b8;
+      padding: 40px 20px 30px 20px;
+      margin-top: 40px;
+      border-top: 3px solid var(--primary);
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 30px;
+    }
+
+    .footer-col h4 {
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .footer-col p {
+      font-size: 13px;
+      line-height: 1.6;
+    }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
+  <!-- HEADER ELEVADO COM HERO DESKTOP -->
   <header>
-    <!-- LOGO OFICIAL DE O MORDIDAÇO -->
-    <img src="assets/logo.png" alt="O Mordidaço" class="brand-logo-img">
-    
-    <div class="brand-badge">Hot-Dogueria Artesanal • Campinas/SP</div>
-    <h1>O MORDIDAÇO</h1>
-    <p class="slogan">A mordida mais caprichada de Campinas !</p>
+    <div class="hero-container">
+      <div class="hero-grid">
+        <!-- LADO ESQUERDO: APRESENTAÇÃO DE AUTORIDADE -->
+        <div class="hero-left">
+          <img src="assets/logo.png" alt="O Mordidaço" class="brand-logo-img">
+          <div class="brand-badge">Hot-Dogueria Artesanal • Campinas/SP</div>
+          <h1>O MORDIDAÇO</h1>
+          <p class="slogan">A mordida mais caprichada de Campinas !</p>
+          <p class="hero-description">
+            Cachorros-quentes fartos montados no pão de rua selado ou na marmitinha térmica 500ml com dobro de muçarela derretida no molho caseiro, purê de ouro e chuva de parmesão fresco.
+          </p>
 
-    <!-- BOTÃO OFICIAL DO INSTAGRAM -->
-    <div>
-      <a href="https://instagram.com/omordidaco.lanches" target="_blank" class="instagram-btn">
-        📸 Siga nosso Instagram: @omordidaco.lanches
-      </a>
-    </div>
+          <div class="hero-actions">
+            <a href="#menuContainer" class="btn-hero-order">🌭 Ver Cardápio & Pedir</a>
+            <a href="https://instagram.com/omordidaco.lanches" target="_blank" class="instagram-btn">
+              📸 @omordidaco.lanches
+            </a>
+          </div>
 
-    <div class="info-bar">
-      <div class="info-pill status-open">● Aberto Agora</div>
-      <div class="info-pill">📍 Jardim Tamoio</div>
-      <div class="info-pill">🛵 35 - 50 min</div>
-      <div class="info-pill">💳 Pagto na Entrega</div>
+          <div class="info-bar">
+            <div class="info-pill status-open">● Aberto Agora</div>
+            <div class="info-pill">📍 Jardim Tamoio</div>
+            <div class="info-pill">🛵 35 - 50 min</div>
+            <div class="info-pill">💳 Pagto na Entrega</div>
+          </div>
+        </div>
+
+        <!-- LADO DIREITO (DESKTOP): CARD SHOWCASE DO COMBO CAMPEÃO -->
+        <div class="hero-right">
+          <div class="hero-featured-card">
+            <div class="hero-featured-tag">🔥 O CAMPEÃO DO TAMOIO</div>
+            <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 12px;">
+              <img src="assets/logo.png" style="width: 70px; height: 70px; border-radius: 12px; object-fit: cover; border: 2px solid #f59e0b;">
+              <div>
+                <strong style="color: #ffffff; font-size: 16px; display: block;">Combo Casal do Mordidaço</strong>
+                <span style="color: #fde68a; font-size: 13px; font-weight: 700;">2 Dogs Duplos + 2 Refris + 2 Maioneses</span>
+              </div>
+            </div>
+            <p style="font-size: 12.5px; color: #94a3b8; line-height: 1.4; margin-bottom: 14px;">
+              Dois dogs com o dobro real de muçarela derretida no calor do molho caseiro, purê artesanal, coroado com parmesão ralado na hora!
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span style="font-size: 11px; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Apenas</span>
+                <div style="color: #22c55e; font-size: 22px; font-weight: 900;">R$ 52,00</div>
+              </div>
+              <button onclick="tratarAdicionarItem('combos', 'combo-casal')" style="background: #f59e0b; color: #0f172a; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; transition: transform 0.2s;">
+                + Pedir Esse Combo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </header>
+
+  <!-- FAIXA DE PILARES & GARANTIAS ARTESANAIS -->
+  <div class="pillars-bar">
+    <div class="pillars-inner">
+      <div class="pillar-card">
+        <span class="pillar-icon">🥖</span>
+        <div>
+          <span class="pillar-title">Pão Macio & Selado</span>
+          <span class="pillar-desc">Pão de rua farto que abraça o recheio até a borda</span>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <span class="pillar-icon">🥔</span>
+        <div>
+          <span class="pillar-title">Purê de Ouro Artesanal</span>
+          <span class="pillar-desc">Receita caseira da família, cremoso e amanteigado</span>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <span class="pillar-icon">🧀</span>
+        <div>
+          <span class="pillar-title">Dobro de Muçarela</span>
+          <span class="pillar-desc">Fatias generosas derretidas no calor do molho</span>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <span class="pillar-icon">👑</span>
+        <div>
+          <span class="pillar-title">Chuva de Parmesão</span>
+          <span class="pillar-desc">Coroado com queijo fresco ralado na hora</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- CATEGORY NAV -->
   <nav class="cat-nav" id="catNav">
@@ -574,6 +863,44 @@
   <div class="container" id="menuContainer">
     <p style="text-align:center; padding: 40px; color: #94a3b8;">Carregando cardápio de hot dogs artesanais...</p>
   </div>
+
+  <!-- RODAPÉ INSTITUCIONAL & INFORMAÇÕES DE DELIVERY -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+          <img src="assets/logo.png" style="width: 44px; height: 44px; border-radius: 50%; border: 2px solid #f59e0b;">
+          <div>
+            <h4 style="margin: 0; color: #ffffff; font-size: 15px;">O MORDIDAÇO</h4>
+            <span style="font-size: 11px; color: #fbbf24; font-weight: 700; text-transform: uppercase;">Hot-Dogueria Artesanal</span>
+          </div>
+        </div>
+        <p>A mordida mais caprichada de Campinas! Operação familiar de dark kitchen dedicada 100% a cachorros-quentes artesanais de alta fartura e qualidade.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>📍 Endereço & Entrega</h4>
+        <p>
+          <strong>Localização:</strong> Jardim Tamoio, Campinas - SP<br>
+          <strong>Região Atendida:</strong> Jd. Tamoio, Flamboyant, Proença, Nova Campinas e bairros vizinhos.<br>
+          <strong>Tempo Médio:</strong> 35 a 50 minutos.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>💳 Pagamento na Entrega</h4>
+        <p>
+          Levamos a maquininha até você com total comodidade:<br>
+          • <strong>Pix na maquininha</strong> (QR Code na hora)<br>
+          • <strong>Cartões de Crédito e Débito</strong><br>
+          • <strong>Dinheiro com troco</strong> garantido
+        </p>
+      </div>
+    </div>
+    <div style="max-width: 1200px; margin: 24px auto 0 auto; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); text-align: center; font-size: 11.5px; color: #64748b;">
+      © 2026 O Mordidaço Hot-Dogueria Artesanal • CNPJ: 69.985.669/0001-86 • Campinas/SP • Feito com amor de nossa família para a sua.
+    </div>
+  </footer>
 
   <!-- FLOATING CART BAR (BOTTOM) -->
   <div class="cart-bar" id="cartBar" style="display: none;">
@@ -797,23 +1124,29 @@
         sec.id = cat.id;
         sec.innerHTML = `<h2 class="section-title">${cat.nome}</h2>`;
 
+        const grid = document.createElement('div');
+        grid.className = 'category-grid';
+
         cat.itens.forEach(item => {
           const card = document.createElement('div');
           card.className = `item-card ${item.destaque ? 'destaque' : ''}`;
           card.innerHTML = `
-            <div class="item-header">
-              <span class="item-title">${item.nome}</span>
-              ${item.destaque ? '<span class="item-badge">Mais Pedido</span>' : ''}
+            <div>
+              <div class="item-header">
+                <span class="item-title">${item.nome}</span>
+                ${item.destaque ? '<span class="item-badge">Mais Pedido</span>' : ''}
+              </div>
+              ${item.descricao ? `<p class="item-desc">${item.descricao}</p>` : ''}
             </div>
-            ${item.descricao ? `<p class="item-desc">${item.descricao}</p>` : ''}
             <div class="item-footer">
               <span class="item-price">R$ ${item.preco.toFixed(2).replace('.', ',')}</span>
               <button class="btn-add" onclick="tratarAdicionarItem('${cat.id}', '${item.id}')">+ Adicionar</button>
             </div>
           `;
-          sec.appendChild(card);
+          grid.appendChild(card);
         });
 
+        sec.appendChild(grid);
         container.appendChild(sec);
       });
     }

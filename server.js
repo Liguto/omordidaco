@@ -184,16 +184,89 @@ function recarregarClientesDoDisco() {
   }
 }
 
+function normalizarTelefone(tel) {
+  if (!tel) return '';
+  const digitos = String(tel).replace(/\D/g, '');
+  if (!digitos) return '';
+  // Se vier com DDI Brasil (55) e tiver 12 ou 13 dígitos: 5519997981104 -> 19997981104
+  if (digitos.startsWith('55') && (digitos.length === 12 || digitos.length === 13)) {
+    return digitos.slice(2);
+  }
+  return digitos;
+}
+
+function saoTelefonesIguais(telA, telB) {
+  const a = normalizarTelefone(telA);
+  const b = normalizarTelefone(telB);
+  if (!a || !b) return false;
+  if (a === b) return true;
+  // Se ambos tiverem pelo menos 8 dígitos significativos (com ou sem DDD ou 9º dígito)
+  if (a.length >= 8 && b.length >= 8) {
+    return a.slice(-8) === b.slice(-8);
+  }
+  return false;
+}
+
+function encontrarClienteExistente(clienteData, lista = clientes) {
+  if (!clienteData) return null;
+  const tel = (clienteData.telefone || '').trim();
+  if (!tel) return null;
+
+  // Chave ÚNICA ESTRITA: número de telefone
+  return lista.find(c => saoTelefonesIguais(c.telefone, tel)) || null;
+}
+
+function deduplicarClientes() {
+  if (!Array.isArray(clientes) || clientes.length === 0) return;
+
+  const mapa = new Map();
+  clientes.forEach(c => {
+    if (!c || !c.telefone) return;
+    const chave = normalizarTelefone(c.telefone).slice(-8) || normalizarTelefone(c.telefone);
+    if (!chave) return;
+
+    if (!mapa.has(chave)) {
+      mapa.set(chave, {
+        id: c.id || ('CLI-' + Date.now() + '-' + Math.floor(Math.random() * 1000)),
+        nome: c.nome || 'Cliente VIP',
+        telefone: c.telefone,
+        endereco: c.endereco || 'Balcão / Retirada',
+        bairro: c.bairro || 'Jardim Tamoio',
+        totalPedidos: Number(c.totalPedidos) || 1,
+        totalGasto: Number((Number(c.totalGasto) || 0).toFixed(2)),
+        primeiroPedido: c.primeiroPedido || '',
+        ultimoPedido: c.ultimoPedido || ''
+      });
+    } else {
+      const existente = mapa.get(chave);
+      // Se tiver nome mais completo, atualiza
+      if (c.nome && c.nome !== 'Cliente' && c.nome !== 'Cliente VIP' && (existente.nome === 'Cliente' || existente.nome === 'Cliente VIP' || c.nome.length > existente.nome.length)) {
+        existente.nome = c.nome;
+      }
+      if (c.endereco && c.endereco !== 'Balcão / Retirada') existente.endereco = c.endereco;
+      if (c.bairro && c.bairro !== 'Jardim Tamoio') existente.bairro = c.bairro;
+      existente.totalPedidos += (Number(c.totalPedidos) || 1);
+      existente.totalGasto = Number((existente.totalGasto + (Number(c.totalGasto) || 0)).toFixed(2));
+      if (c.ultimoPedido) existente.ultimoPedido = c.ultimoPedido;
+      if (!existente.primeiroPedido && c.primeiroPedido) existente.primeiroPedido = c.primeiroPedido;
+    }
+  });
+
+  clientes = Array.from(mapa.values());
+  salvarClientes();
+}
+
 function mesclarClientesComLista(listaExterna) {
   if (!Array.isArray(listaExterna)) return;
   listaExterna.forEach(cExt => {
-    if (!cExt) return;
+    if (!cExt || !cExt.telefone) return;
     const existente = encontrarClienteExistente(cExt);
     if (existente) {
-      if (cExt.nome && cExt.nome !== 'Cliente') existente.nome = cExt.nome;
-      if (cExt.telefone) existente.telefone = cExt.telefone;
-      if (cExt.endereco) existente.endereco = cExt.endereco;
-      if (cExt.bairro) existente.bairro = cExt.bairro;
+      if (cExt.nome && cExt.nome !== 'Cliente' && cExt.nome !== 'Cliente VIP') {
+        existente.nome = cExt.nome;
+      }
+      if (cExt.endereco && cExt.endereco !== 'Balcão / Retirada') existente.endereco = cExt.endereco;
+      if (cExt.bairro && cExt.bairro !== 'Jardim Tamoio') existente.bairro = cExt.bairro;
       existente.totalPedidos = Math.max(existente.totalPedidos || 0, cExt.totalPedidos || 0);
       existente.totalGasto = Math.max(existente.totalGasto || 0, cExt.totalGasto || 0);
       if (cExt.ultimoPedido) existente.ultimoPedido = cExt.ultimoPedido;
@@ -201,33 +274,14 @@ function mesclarClientesComLista(listaExterna) {
       clientes.push(cExt);
     }
   });
-  salvarClientes();
-}
-
-function encontrarClienteExistente(clienteData) {
-  if (!clienteData) return null;
-  const telOriginal = (clienteData.telefone || '').trim();
-  const telLimpo = telOriginal.replace(/\D/g, '');
-  const nomeOriginal = (clienteData.nome || '').trim();
-
-  return clientes.find(c => {
-    const cTelLimpo = (c.telefone || '').replace(/\D/g, '');
-    if (telLimpo.length >= 4 && cTelLimpo.length >= 4) {
-      return cTelLimpo === telLimpo;
-    }
-    if (telOriginal && c.telefone) {
-      return c.telefone.trim().toLowerCase() === telOriginal.toLowerCase();
-    }
-    if (nomeOriginal && c.nome) {
-      return c.nome.trim().toLowerCase() === nomeOriginal.toLowerCase();
-    }
-    return false;
-  });
+  deduplicarClientes();
 }
 
 function registrarOuAtualizarCliente(clienteData, entregaData, valorPedido, dataHoraPedido) {
   if (!clienteData) return;
   const telOriginal = (clienteData.telefone || '').trim();
+  if (!telOriginal) return;
+
   const nomeOriginal = (clienteData.nome || 'Cliente').trim();
   const endereco = (entregaData && entregaData.endereco) ? entregaData.endereco.trim() : '';
   const bairro = (entregaData && entregaData.bairro) ? entregaData.bairro.trim() : '';
@@ -237,18 +291,26 @@ function registrarOuAtualizarCliente(clienteData, entregaData, valorPedido, data
   let clienteExistente = encontrarClienteExistente(clienteData);
 
   if (clienteExistente) {
-    if (nomeOriginal && nomeOriginal !== 'Cliente') clienteExistente.nome = nomeOriginal;
-    if (telOriginal) clienteExistente.telefone = telOriginal;
-    if (endereco) clienteExistente.endereco = endereco;
-    if (bairro) clienteExistente.bairro = bairro;
+    // Chave única por telefone: já tem cliente cadastrado com esse número!
+    // Aumenta o número de pedidos da mesma pessoa
     clienteExistente.totalPedidos = (clienteExistente.totalPedidos || 0) + 1;
     clienteExistente.totalGasto = Number(((clienteExistente.totalGasto || 0) + valor).toFixed(2));
     clienteExistente.ultimoPedido = agora;
+
+    // Atualiza nome caso o novo seja mais completo ou o anterior fosse genérico
+    if (nomeOriginal && nomeOriginal !== 'Cliente' && nomeOriginal !== 'Cliente VIP') {
+      clienteExistente.nome = nomeOriginal;
+    }
+    // Atualiza endereço e bairro para o do último pedido feito
+    if (endereco && endereco !== 'Balcão / Retirada') clienteExistente.endereco = endereco;
+    if (bairro && bairro !== 'Jardim Tamoio') clienteExistente.bairro = bairro;
+    if (telOriginal) clienteExistente.telefone = telOriginal;
   } else {
+    // Novo contato com telefone inédito
     clientes.push({
       id: 'CLI-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
       nome: nomeOriginal || 'Cliente VIP',
-      telefone: telOriginal || 'Não informado',
+      telefone: telOriginal,
       endereco: endereco || 'Balcão / Retirada',
       bairro: bairro || 'Jardim Tamoio',
       totalPedidos: 1,
@@ -263,24 +325,85 @@ function registrarOuAtualizarCliente(clienteData, entregaData, valorPedido, data
 function sincronizarClientesComPedidos() {
   if (!pedidos || pedidos.length === 0) return;
 
-  // Se a lista de clientes estiver vazia, reconstrói integralmente a partir do histórico de pedidos
-  if (clientes.length === 0) {
-    const historico = [...pedidos].reverse();
-    historico.forEach(p => {
-      if (p.cliente) {
-        registrarOuAtualizarCliente(p.cliente, p.entrega, p.total, p.dataHora);
+  // Deduplica primeiro a lista existente
+  deduplicarClientes();
+
+  // Mapeia histórico consolidado de pedidos por número de telefone
+  // Ordena pedidos do mais antigo para o mais recente para calcular primeiro e último pedido
+  const pedidosOrdenados = [...pedidos].sort((a, b) => {
+    const tA = Number((a.id || '').replace('PED-', '')) || 0;
+    const tB = Number((b.id || '').replace('PED-', '')) || 0;
+    return tA - tB;
+  });
+
+  const consolidadoPorTelefone = new Map();
+
+  pedidosOrdenados.forEach(p => {
+    if (!p.cliente || !p.cliente.telefone) return;
+    const tel = p.cliente.telefone.trim();
+    const chave = normalizarTelefone(tel).slice(-8) || normalizarTelefone(tel);
+    if (!chave) return;
+
+    const valor = Number(p.total) || 0;
+    const dataHora = p.dataHora || '';
+    const end = (p.entrega && p.entrega.endereco) || '';
+    const bai = (p.entrega && p.entrega.bairro) || '';
+    const nome = (p.cliente.nome || '').trim();
+
+    if (!consolidadoPorTelefone.has(chave)) {
+      consolidadoPorTelefone.set(chave, {
+        nome: nome || 'Cliente VIP',
+        telefone: tel,
+        endereco: end || 'Balcão / Retirada',
+        bairro: bai || 'Jardim Tamoio',
+        totalPedidos: 1,
+        totalGasto: valor,
+        primeiroPedido: dataHora,
+        ultimoPedido: dataHora
+      });
+    } else {
+      const c = consolidadoPorTelefone.get(chave);
+      c.totalPedidos += 1;
+      c.totalGasto = Number((c.totalGasto + valor).toFixed(2));
+      if (nome && nome !== 'Cliente' && (c.nome === 'Cliente' || nome.length > c.nome.length)) {
+        c.nome = nome;
       }
-    });
-  } else {
-    // Se já existem clientes, verifica se há clientes de pedidos que ainda não constam na lista
-    pedidos.forEach(p => {
-      if (!p.cliente) return;
-      const jaExiste = encontrarClienteExistente(p.cliente);
-      if (!jaExiste) {
-        registrarOuAtualizarCliente(p.cliente, p.entrega, p.total, p.dataHora);
+      if (end && end !== 'Balcão / Retirada') c.endereco = end;
+      if (bai && bai !== 'Jardim Tamoio') c.bairro = bai;
+      c.ultimoPedido = dataHora;
+    }
+  });
+
+  // Atualiza ou insere na lista de clientes VIP
+  consolidadoPorTelefone.forEach((dadosConsolidados, chave) => {
+    const existente = clientes.find(c => saoTelefonesIguais(c.telefone, dadosConsolidados.telefone));
+    if (existente) {
+      if (dadosConsolidados.nome && dadosConsolidados.nome !== 'Cliente' && (existente.nome === 'Cliente' || existente.nome === 'Cliente VIP' || dadosConsolidados.nome.length > existente.nome.length)) {
+        existente.nome = dadosConsolidados.nome;
       }
-    });
-  }
+      if (dadosConsolidados.endereco && dadosConsolidados.endereco !== 'Balcão / Retirada') existente.endereco = dadosConsolidados.endereco;
+      if (dadosConsolidados.bairro && dadosConsolidados.bairro !== 'Jardim Tamoio') existente.bairro = dadosConsolidados.bairro;
+      // Garante que o total de pedidos reflita com exatidão o histórico real dos pedidos
+      existente.totalPedidos = Math.max(existente.totalPedidos || 0, dadosConsolidados.totalPedidos);
+      existente.totalGasto = Number(Math.max(existente.totalGasto || 0, dadosConsolidados.totalGasto).toFixed(2));
+      if (dadosConsolidados.ultimoPedido) existente.ultimoPedido = dadosConsolidados.ultimoPedido;
+      if (!existente.primeiroPedido && dadosConsolidados.primeiroPedido) existente.primeiroPedido = dadosConsolidados.primeiroPedido;
+    } else {
+      clientes.push({
+        id: 'CLI-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+        nome: dadosConsolidados.nome || 'Cliente VIP',
+        telefone: dadosConsolidados.telefone,
+        endereco: dadosConsolidados.endereco || 'Balcão / Retirada',
+        bairro: dadosConsolidados.bairro || 'Jardim Tamoio',
+        totalPedidos: dadosConsolidados.totalPedidos,
+        totalGasto: Number(dadosConsolidados.totalGasto.toFixed(2)),
+        primeiroPedido: dadosConsolidados.primeiroPedido,
+        ultimoPedido: dadosConsolidados.ultimoPedido
+      });
+    }
+  });
+
+  deduplicarClientes();
 }
 
 // Sincroniza clientes na inicialização do servidor

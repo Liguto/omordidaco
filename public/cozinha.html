@@ -355,6 +355,100 @@
     .btn-status-entregue { background: var(--green); color: #ffffff; }
 
     /* ==================================================== */
+    /* RESPONSIVIDADE MOBILE & TABLET (KDS TOUCH-FRIENDLY)  */
+    /* ==================================================== */
+    @media (max-width: 768px) {
+      .topbar {
+        padding: 10px 12px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .topbar > div:first-child {
+        justify-content: space-between;
+      }
+      .topbar-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+        width: 100%;
+      }
+      .topbar-actions .btn-top,
+      .topbar-actions .switch-label,
+      .topbar-actions #statusSincronizacao {
+        font-size: 11.5px;
+        padding: 8px 10px;
+        min-height: 40px;
+        justify-content: center;
+        text-align: center;
+      }
+      .topbar-actions #statusSincronizacao {
+        grid-column: span 2;
+      }
+      .topbar-actions .switch-label {
+        grid-column: span 2;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 8px;
+        padding: 8px 12px;
+      }
+      .dashboard {
+        margin: 12px auto;
+        padding: 0 10px;
+      }
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .stat-card {
+        padding: 12px;
+      }
+      .stat-card strong {
+        font-size: 20px;
+      }
+      .filter-bar {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 6px;
+        padding-bottom: 6px;
+        margin-bottom: 12px;
+      }
+      .filter-bar::-webkit-scrollbar {
+        display: none;
+      }
+      .filter-btn {
+        flex: 0 0 auto;
+        font-size: 12px;
+        padding: 7px 12px;
+        white-space: nowrap;
+      }
+      .orders-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      .order-card {
+        border-radius: 12px;
+      }
+      .order-num-large {
+        font-size: 30px !important;
+      }
+      .order-actions .btn-action {
+        min-height: 44px;
+      }
+      #modalClientes > div {
+        padding: 14px !important;
+        max-height: 92vh !important;
+      }
+      #filtroClientesInput {
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+    }
+
+    /* ==================================================== */
     /* ESTILOS DE IMPRESSÃO TÉRMICA (58mm / 80mm)           */
     /* ==================================================== */
     #printReceipt {
@@ -548,25 +642,27 @@
       } catch (e) {}
     }
 
-    function encontrarClienteNoArray(arr, cData) {
-      if (!cData) return null;
-      const telOriginal = (cData.telefone || '').trim();
-      const telLimpo = telOriginal.replace(/\D/g, '');
-      const nomeOriginal = (cData.nome || '').trim().toLowerCase();
+    function normalizarTelefoneClient(tel) {
+      if (!tel) return '';
+      const d = String(tel).replace(/\D/g, '');
+      if (d.startsWith('55') && (d.length === 12 || d.length === 13)) return d.slice(2);
+      return d;
+    }
 
-      return arr.find(c => {
-        const cTelLimpo = (c.telefone || '').replace(/\D/g, '');
-        if (telLimpo.length >= 8 && cTelLimpo.length >= 8) {
-          return cTelLimpo.slice(-8) === telLimpo.slice(-8);
-        }
-        if (telOriginal && c.telefone && c.telefone.trim().toLowerCase() === telOriginal.toLowerCase()) {
-          return true;
-        }
-        if (nomeOriginal && c.nome && c.nome.trim().toLowerCase() === nomeOriginal) {
-          return true;
-        }
-        return false;
-      });
+    function saoTelefonesIguaisClient(telA, telB) {
+      const a = normalizarTelefoneClient(telA);
+      const b = normalizarTelefoneClient(telB);
+      if (!a || !b) return false;
+      if (a === b) return true;
+      if (a.length >= 8 && b.length >= 8) {
+        return a.slice(-8) === b.slice(-8);
+      }
+      return false;
+    }
+
+    function encontrarClienteNoArray(arr, cData) {
+      if (!cData || !cData.telefone) return null;
+      return arr.find(c => saoTelefonesIguaisClient(c.telefone, cData.telefone)) || null;
     }
 
     function consolidarClientesLocais(listaExterna = []) {
@@ -575,15 +671,19 @@
       // 1. Incorpora clientes da lista externa (API ou cache local)
       if (Array.isArray(listaExterna)) {
         listaExterna.forEach(cExt => {
-          if (!cExt) return;
+          if (!cExt || !cExt.telefone) return;
           const existente = encontrarClienteNoArray(clientesLocais, cExt);
           if (existente) {
-            if (cExt.nome && cExt.nome !== 'Cliente' && existente.nome !== cExt.nome) {
+            if (cExt.nome && cExt.nome !== 'Cliente' && cExt.nome !== 'Cliente VIP' && (existente.nome === 'Cliente' || existente.nome === 'Cliente VIP' || cExt.nome.length > existente.nome.length)) {
               existente.nome = cExt.nome;
               alterou = true;
             }
-            if (cExt.bairro && existente.bairro !== cExt.bairro) {
+            if (cExt.bairro && cExt.bairro !== 'Jardim Tamoio') {
               existente.bairro = cExt.bairro;
+              alterou = true;
+            }
+            if (cExt.endereco && cExt.endereco !== 'Balcão / Retirada') {
+              existente.endereco = cExt.endereco;
               alterou = true;
             }
             if ((cExt.totalPedidos || 0) > (existente.totalPedidos || 0)) {
@@ -594,11 +694,12 @@
               existente.totalGasto = cExt.totalGasto;
               alterou = true;
             }
+            if (cExt.ultimoPedido) existente.ultimoPedido = cExt.ultimoPedido;
           } else {
             clientesLocais.push({
-              id: cExt.id || 'CLI-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+              id: cExt.id || ('CLI-' + Date.now() + '-' + Math.floor(Math.random() * 1000)),
               nome: cExt.nome || 'Cliente VIP',
-              telefone: cExt.telefone || 'Não informado',
+              telefone: cExt.telefone,
               endereco: cExt.endereco || 'Balcão / Retirada',
               bairro: cExt.bairro || 'Jardim Tamoio',
               totalPedidos: cExt.totalPedidos || 1,
@@ -611,27 +712,94 @@
         });
       }
 
-      // 2. Extrai e consolida clientes a partir de pedidosLocais (garante que novos pedidos nunca faltem)
-      if (Array.isArray(pedidosLocais)) {
+      // 2. Extrai e consolida histórico de pedidosLocais agrupando estritamente pelo telefone
+      if (Array.isArray(pedidosLocais) && pedidosLocais.length > 0) {
+        const mapaPedidosPorTelefone = new Map();
+
         pedidosLocais.forEach(p => {
-          if (!p.cliente || !p.cliente.nome) return;
-          const existente = encontrarClienteNoArray(clientesLocais, p.cliente);
-          if (!existente) {
-            clientesLocais.push({
-              id: 'CLI-' + (p.numero || Date.now()),
-              nome: p.cliente.nome,
-              telefone: p.cliente.telefone || 'Não informado',
-              endereco: (p.entrega && p.entrega.endereco) || 'Balcão / Retirada',
-              bairro: (p.entrega && p.entrega.bairro) || 'Jardim Tamoio',
+          if (!p.cliente || !p.cliente.telefone) return;
+          const tel = p.cliente.telefone.trim();
+          const chave = normalizarTelefoneClient(tel).slice(-8) || normalizarTelefoneClient(tel);
+          if (!chave) return;
+
+          if (!mapaPedidosPorTelefone.has(chave)) {
+            mapaPedidosPorTelefone.set(chave, {
+              telefone: tel,
+              nome: (p.cliente.nome || '').trim(),
+              endereco: (p.entrega && p.entrega.endereco) || '',
+              bairro: (p.entrega && p.entrega.bairro) || '',
               totalPedidos: 1,
-              totalGasto: Number((p.total || 0).toFixed(2)),
-              primeiroPedido: p.dataHora || '',
-              ultimoPedido: p.dataHora || ''
+              totalGasto: Number(p.total) || 0,
+              dataHora: p.dataHora || ''
+            });
+          } else {
+            const ag = mapaPedidosPorTelefone.get(chave);
+            ag.totalPedidos += 1;
+            ag.totalGasto = Number((ag.totalGasto + (Number(p.total) || 0)).toFixed(2));
+            if (p.cliente.nome && p.cliente.nome !== 'Cliente' && (ag.nome === 'Cliente' || p.cliente.nome.length > ag.nome.length)) {
+              ag.nome = p.cliente.nome;
+            }
+            if (p.entrega && p.entrega.endereco && p.entrega.endereco !== 'Balcão / Retirada') {
+              ag.endereco = p.entrega.endereco;
+            }
+            if (p.entrega && p.entrega.bairro && p.entrega.bairro !== 'Jardim Tamoio') {
+              ag.bairro = p.entrega.bairro;
+            }
+          }
+        });
+
+        mapaPedidosPorTelefone.forEach((ag) => {
+          const existente = clientesLocais.find(c => saoTelefonesIguaisClient(c.telefone, ag.telefone));
+          if (existente) {
+            if (ag.totalPedidos > (existente.totalPedidos || 0)) {
+              existente.totalPedidos = ag.totalPedidos;
+              alterou = true;
+            }
+            if (ag.totalGasto > (existente.totalGasto || 0)) {
+              existente.totalGasto = ag.totalGasto;
+              alterou = true;
+            }
+            if (ag.nome && ag.nome !== 'Cliente' && (existente.nome === 'Cliente' || existente.nome === 'Cliente VIP' || ag.nome.length > existente.nome.length)) {
+              existente.nome = ag.nome;
+              alterou = true;
+            }
+            if (ag.endereco && ag.endereco !== 'Balcão / Retirada') existente.endereco = ag.endereco;
+            if (ag.bairro && ag.bairro !== 'Jardim Tamoio') existente.bairro = ag.bairro;
+          } else {
+            clientesLocais.push({
+              id: 'CLI-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+              nome: ag.nome || 'Cliente VIP',
+              telefone: ag.telefone,
+              endereco: ag.endereco || 'Balcão / Retirada',
+              bairro: ag.bairro || 'Jardim Tamoio',
+              totalPedidos: ag.totalPedidos,
+              totalGasto: ag.totalGasto,
+              primeiroPedido: ag.dataHora || '',
+              ultimoPedido: ag.dataHora || ''
             });
             alterou = true;
           }
         });
       }
+
+      // 3. Deduplica clientesLocais estritamente por telefone
+      const mapaFinal = new Map();
+      clientesLocais.forEach(c => {
+        if (!c || !c.telefone) return;
+        const chave = normalizarTelefoneClient(c.telefone).slice(-8) || normalizarTelefoneClient(c.telefone);
+        if (!mapaFinal.has(chave)) {
+          mapaFinal.set(chave, c);
+        } else {
+          const ex = mapaFinal.get(chave);
+          ex.totalPedidos = Math.max(ex.totalPedidos || 0, c.totalPedidos || 0);
+          ex.totalGasto = Math.max(ex.totalGasto || 0, c.totalGasto || 0);
+          if (c.nome && c.nome !== 'Cliente' && (ex.nome === 'Cliente' || ex.nome.length < c.nome.length)) {
+            ex.nome = c.nome;
+          }
+          alterou = true;
+        }
+      });
+      clientesLocais = Array.from(mapaFinal.values());
 
       // Ordena por maior número de pedidos / maior gasto
       clientesLocais.sort((a, b) => (b.totalPedidos || 0) - (a.totalPedidos || 0) || (b.totalGasto || 0) - (a.totalGasto || 0));
