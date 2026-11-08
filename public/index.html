@@ -19,9 +19,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
 
-  <!-- Meta Pixel Code (O Mordidaço - Rastreamento de Anúncios Instagram/Facebook) -->
+  <!-- Meta Pixel Code (O Mordidaço - ID Oficial: 1998199324180529) -->
   <script>
-    window.META_PIXEL_ID = window.META_PIXEL_ID || ''; // Cole seu ID numérico do Meta Events Manager aqui
+    window.META_PIXEL_ID = '1998199324180529';
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -31,26 +31,24 @@
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
 
+    fbq('init', '1998199324180529');
+    fbq('track', 'PageView');
+    window._pixelIniciado = true;
+
     function dispararPixel(evento, params = {}) {
       try {
-        if (window.META_PIXEL_ID) {
-          if (!window._pixelIniciado) {
-            fbq('init', window.META_PIXEL_ID);
-            fbq('track', 'PageView');
-            window._pixelIniciado = true;
-          }
+        if (typeof fbq === 'function') {
           fbq('track', evento, params);
         }
       } catch (err) {
         console.warn('[Pixel]', err);
       }
     }
-    if (window.META_PIXEL_ID) {
-      fbq('init', window.META_PIXEL_ID);
-      fbq('track', 'PageView');
-      window._pixelIniciado = true;
-    }
   </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1998199324180529&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
 
   <style>
     :root {
