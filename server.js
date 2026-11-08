@@ -668,11 +668,15 @@ async function obterProximoNumeroPedido() {
 // Buscar Detalhes de um Pedido Específico (para Acompanhamento em Tempo Real)
 app.get(['/api/pedidos/:id', '/pedidos/:id'], async (req, res) => {
   recarregarPedidosDoDisco();
+  recarregarHistoricoDoDisco();
   if (KV_URL && KV_TOKEN) {
     await carregarPedidosNuvem();
   }
   const { id } = req.params;
-  const pedido = pedidos.find(p => p.id === id || String(p.numero) === String(id));
+  let pedido = pedidos.find(p => p.id === id || String(p.numero) === String(id));
+  if (!pedido) {
+    pedido = historicoPedidos.find(p => p.id === id || String(p.numero) === String(id));
+  }
   if (!pedido) {
     return res.status(404).json({ error: 'Pedido não encontrado.' });
   }
@@ -783,29 +787,53 @@ app.get(['/api/clientes', '/clientes'], async (req, res) => {
 // Atualizar Status do Pedido (Ex: Em Preparo, Saiu para Entrega)
 app.patch(['/api/pedidos/:id/status', '/pedidos/:id/status'], async (req, res) => {
   recarregarPedidosDoDisco();
+  recarregarHistoricoDoDisco();
   if (KV_URL && KV_TOKEN) {
     await carregarPedidosNuvem();
   }
   const { id } = req.params;
-  const { status, statusAtualizadoEm } = req.body || {};
+  const { status, statusAtualizadoEm, pedidoCompleto } = req.body || {};
 
   const timestampAtualizacao = Number(statusAtualizadoEm) || Date.now();
 
   let pedido = pedidos.find(p => p.id === id);
+  let encontradoNoHistorico = false;
+
   if (!pedido) {
-    // Se o pedido ainda não estava na memória desta Lambda fria, registra para não perder o status
-    pedido = {
-      id,
-      status: status || 'Pendente',
-      statusAtualizadoEm: timestampAtualizacao
-    };
+    pedido = historicoPedidos.find(p => p.id === id);
+    if (pedido) encontradoNoHistorico = true;
+  }
+
+  if (!pedido) {
+    // Se o pedido não estava em memória, hidrata com o pedidoCompleto enviado pela cozinha
+    if (pedidoCompleto && pedidoCompleto.id) {
+      pedido = {
+        ...pedidoCompleto,
+        status: status || pedidoCompleto.status || 'Pendente',
+        statusAtualizadoEm: timestampAtualizacao
+      };
+    } else {
+      pedido = {
+        id,
+        status: status || 'Pendente',
+        statusAtualizadoEm: timestampAtualizacao
+      };
+    }
     pedidos.unshift(pedido);
   } else {
+    // Se o pedido já existia mas faltavam dados essenciais (como número ou itens)
+    if (pedidoCompleto && (!pedido.numero || !pedido.itens || !pedido.total)) {
+      Object.assign(pedido, pedidoCompleto);
+    }
     pedido.status = status;
     pedido.statusAtualizadoEm = timestampAtualizacao;
   }
 
   salvarPedidos();
+  if (encontradoNoHistorico) {
+    salvarHistorico();
+  }
+
   if (KV_URL && KV_TOKEN) {
     await salvarPedidosNuvem();
   }

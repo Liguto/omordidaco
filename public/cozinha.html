@@ -1374,7 +1374,8 @@
             status: novoStatus,
             statusAtualizadoEm: agora,
             statusTravadoLocalmenteEm: agora,
-            numero: p ? p.numero : undefined
+            numero: p ? p.numero : undefined,
+            pedido: p
           });
         }
       } catch (e) {}
@@ -1394,17 +1395,22 @@
             status: novoStatus,
             statusAtualizadoEm: agora,
             statusTravadoLocalmenteEm: agora,
-            numero: p ? p.numero : undefined
+            numero: p ? p.numero : undefined,
+            pedido: p
           })
         }).catch(() => {});
       } catch (e) {}
 
-      // 3. Atualiza na API do servidor
+      // 3. Atualiza na API do servidor com pedidoCompleto
       try {
         await fetch(`/api/pedidos/${id}/status`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: novoStatus, statusAtualizadoEm: agora })
+          body: JSON.stringify({
+            status: novoStatus,
+            statusAtualizadoEm: agora,
+            pedidoCompleto: p
+          })
         });
       } catch (err) {
         console.warn('Aviso: Erro ao sincronizar status na API:', err.message);

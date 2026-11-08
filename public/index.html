@@ -574,34 +574,37 @@
       transform: scale(1.02);
     }
 
-    /* MODAL CLEAN */
+    /* MODAL CENTRALIZADO NA TELA */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(3px);
+      background: rgba(15, 23, 42, 0.72);
+      backdrop-filter: blur(4px);
       display: none;
       justify-content: center;
-      align-items: flex-end;
-      z-index: 100;
+      align-items: center; /* Centralização geométrica perfeita */
+      z-index: 1000;
+      padding: 16px;
+      overflow-y: auto;
     }
 
     .modal-box {
       background: #ffffff;
       color: var(--text);
       width: 100%;
-      max-width: 580px;
-      border-radius: 20px 20px 0 0;
-      padding: 22px 20px 28px 20px;
+      max-width: 540px;
+      border-radius: 20px;
+      padding: 24px 22px;
       max-height: 88vh;
       overflow-y: auto;
-      animation: slideUp 0.25s ease-out;
-      box-shadow: 0 -10px 30px rgba(0,0,0,0.15);
+      margin: auto;
+      animation: modalCenterZoom 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
     }
 
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
+    @keyframes modalCenterZoom {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     .modal-header {
@@ -948,6 +951,11 @@
 </head>
 <body>
 
+  <!-- BANNER OFICIAL DE PRÉ-INAUGURAÇÃO / AMBIENTE DE TESTES -->
+  <div style="background: linear-gradient(90deg, #b45309, #d97706, #ea580c); color: #ffffff; text-align: center; padding: 10px 14px; font-size: 13px; font-weight: 800; letter-spacing: 0.3px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+    🚀 AMBIENTE DE TESTES & DESENVOLVIMENTO • Inauguração Oficial em <strong>Dezembro de 2026</strong>!
+  </div>
+
   <!-- HEADER ELEVADO COM HERO DESKTOP -->
   <header>
     <div class="hero-container">
@@ -963,14 +971,14 @@
           </p>
 
           <div class="hero-actions">
-            <a href="#menuContainer" class="btn-hero-order">🌭 Ver Cardápio & Pedir</a>
+            <a href="#menuContainer" class="btn-hero-order" onclick="trocarAbaPrincipal('cardapio')">🌭 Ver Cardápio & Pedir</a>
             <a href="https://instagram.com/omordidaco.dogs" target="_blank" class="instagram-btn">
               📸 @omordidaco.dogs
             </a>
           </div>
 
           <div class="info-bar">
-            <div class="info-pill status-open">● Aberto Agora</div>
+            <div class="info-pill" style="background: #fef3c7; color: #b45309; border: 1.5px solid #fde68a; font-weight: 800;">🚧 Pré-Inauguração • Dezembro/2026</div>
             <div class="info-pill">📍 Jardim Tamoio</div>
             <div class="info-pill">🛵 35 - 50 min</div>
             <div class="info-pill">💳 Pagto na Entrega</div>
@@ -1040,14 +1048,49 @@
     </div>
   </div>
 
-  <!-- CATEGORY NAV -->
-  <nav class="cat-nav" id="catNav">
-    <!-- Inserido dinamicamente -->
-  </nav>
+  <!-- BARRA DE NAVEGAÇÃO PRINCIPAL (CARDÁPIO vs MEUS PEDIDOS) -->
+  <div style="background: #ffffff; border-bottom: 2px solid #e2e8f0; position: sticky; top: 0; z-index: 90; box-shadow: 0 2px 10px rgba(0,0,0,0.04);">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: center; gap: 12px; padding: 10px 16px;">
+      <button id="btnTabCardapio" onclick="trocarAbaPrincipal('cardapio')" style="padding: 10px 24px; border-radius: 25px; border: none; font-weight: 800; font-size: 14px; cursor: pointer; background: var(--primary); color: #ffffff; transition: all 0.2s; box-shadow: 0 2px 8px rgba(217, 119, 6, 0.3);">
+        🌭 Cardápio
+      </button>
+      <button id="btnTabPedidos" onclick="trocarAbaPrincipal('pedidos')" style="padding: 10px 24px; border-radius: 25px; border: 1.5px solid #cbd5e1; font-weight: 800; font-size: 14px; cursor: pointer; background: #f8fafc; color: var(--dark); position: relative; transition: all 0.2s;">
+        🛍️ Meus Pedidos
+        <span id="badgePedidosAtivos" style="display: none; position: absolute; top: -5px; right: -5px; background: #dc2626; color: #ffffff; font-size: 11px; padding: 2px 7px; border-radius: 12px; font-weight: 900; box-shadow: 0 2px 6px rgba(220,38,38,0.4);">1</span>
+      </button>
+    </div>
+  </div>
 
-  <!-- MAIN MENU CONTAINER -->
-  <div class="container" id="menuContainer">
-    <p style="text-align:center; padding: 40px; color: #94a3b8;">Carregando cardápio de hot dogs artesanais...</p>
+  <!-- VIEW 1: CARDÁPIO (PRINCIPAL) -->
+  <div id="viewCardapio">
+    <!-- CATEGORY NAV -->
+    <nav class="cat-nav" id="catNav">
+      <!-- Inserido dinamicamente -->
+    </nav>
+
+    <!-- MAIN MENU CONTAINER -->
+    <div class="container" id="menuContainer">
+      <p style="text-align:center; padding: 40px; color: #94a3b8;">Carregando cardápio de hot dogs artesanais...</p>
+    </div>
+  </div>
+
+  <!-- VIEW 2: MEUS PEDIDOS & HISTÓRICO (DEDICADO ESTILO GIGIO'S) -->
+  <div id="viewPedidos" style="display: none; max-width: 680px; margin: 24px auto; padding: 0 16px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <div>
+        <h2 style="font-size: 24px; font-weight: 900; color: var(--dark); margin: 0;">🛍️ Meus Pedidos</h2>
+        <span style="font-size: 13px; color: var(--text-muted);">Acompanhe seus pedidos em tempo real e consulte seu histórico.</span>
+      </div>
+      <button onclick="trocarAbaPrincipal('cardapio')" style="background: none; border: 1.5px solid #cbd5e1; padding: 8px 14px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; color: var(--dark);">
+        ← Voltar ao Cardápio
+      </button>
+    </div>
+
+    <!-- SESSÃO DE PEDIDO ATIVO EM ANDAMENTO -->
+    <div id="secaoPedidoAtivo"></div>
+
+    <!-- SESSÃO DE HISTÓRICO DE PEDIDOS ANTERIORES -->
+    <div id="secaoHistoricoPedidos" style="margin-top: 24px;"></div>
   </div>
 
   <!-- RODAPÉ INSTITUCIONAL & INFORMAÇÕES DE DELIVERY -->
@@ -1362,12 +1405,12 @@
         </div>
 
         <!-- AÇÕES DO CLIENTE -->
-        <a href="#" target="_blank" class="btn-whatsapp-send" id="btnWhatsappShare" style="margin-top: 0; margin-bottom: 8px;">
-          📲 Abrir Comprovante no WhatsApp
-        </a>
+        <button onclick="irParaAbaMeusPedidos()" style="display: block; width: 100%; background: var(--primary); color: #ffffff; border: none; padding: 13px; border-radius: 10px; font-size: 14.5px; font-weight: 800; cursor: pointer; margin-bottom: 8px; box-shadow: 0 3px 10px rgba(217, 119, 6, 0.25);">
+          🛍️ Acompanhar na aba Meus Pedidos
+        </button>
 
         <button onclick="fecharModal('successModal')" style="display: block; width: 100%; background: #f1f5f9; color: var(--dark); border: 1px solid #cbd5e1; padding: 12px; border-radius: 10px; font-size: 13.5px; font-weight: 700; cursor: pointer;">
-          ✕ Fechar e Continuar Navegando
+          ✕ Fechar e Continuar no Cardápio
         </button>
       </div>
     </div>
@@ -1862,12 +1905,7 @@
         if (floatingText) floatingText.innerText = `Pedido #${pedido.numero}: Cancelado`;
       }
 
-      // Link para o WhatsApp com comprovante
-      const telRestaurante = (cardapioGlobal && cardapioGlobal.restaurante && cardapioGlobal.restaurante.whatsapp) ? cardapioGlobal.restaurante.whatsapp : '5519997881550';
-      const trackingUrl = `${window.location.origin}/?pedido=${pedido.id}`;
-      let zapMsg = `Olá! Sou ${pedido.cliente ? pedido.cliente.nome : 'Cliente'}, sobre o meu Pedido #${pedido.numero} no O Mordidaço.\n`;
-      zapMsg += `📍 Rastreamento ao Vivo: ${trackingUrl}`;
-      document.getElementById('btnWhatsappShare').href = `https://wa.me/${telRestaurante}?text=${encodeURIComponent(zapMsg)}`;
+      // Link de WhatsApp removido conforme preferência do usuário
     }
 
     function tocarSinoNotificacao() {
@@ -1887,6 +1925,64 @@
       } catch (e) {}
     }
 
+    // CONTROLE TEMPORAL MONOTÔNICO ANTI-FLAPPING & HIDRATAÇÃO LOCAL
+    let ultimoStatusAtualizadoEm = 0;
+
+    function processarAtualizacaoPedido(dados) {
+      if (!dados || !dados.id) return;
+      const ts = Number(dados.statusAtualizadoEm) || 0;
+      
+      // Controle temporal monotônico: descarta respostas de rede desatualizadas para evitar flapping
+      if (ts > 0 && ultimoStatusAtualizadoEm > 0 && ts < ultimoStatusAtualizadoEm) {
+        return;
+      }
+      if (ts > 0) {
+        ultimoStatusAtualizadoEm = ts;
+      }
+
+      // Mescla com os dados salvos no navegador para NUNCA exibir undefined ou R$ 0,00
+      let meusPedidos = [];
+      try {
+        meusPedidos = JSON.parse(localStorage.getItem('mordidaco_meus_pedidos') || '[]');
+      } catch(e) {}
+
+      const idx = meusPedidos.findIndex(p => p.id === dados.id);
+      let pedidoMesclado = dados;
+
+      if (idx >= 0) {
+        const local = meusPedidos[idx];
+        pedidoMesclado = {
+          ...local,
+          ...dados,
+          numero: dados.numero || local.numero,
+          cliente: dados.cliente || local.cliente,
+          entrega: dados.entrega || local.entrega,
+          pagamento: dados.pagamento || local.pagamento,
+          itens: (dados.itens && dados.itens.length > 0) ? dados.itens : (local.itens || []),
+          total: (dados.total && dados.total > 0) ? dados.total : (local.total || 0)
+        };
+        meusPedidos[idx] = pedidoMesclado;
+      } else {
+        meusPedidos.unshift(dados);
+      }
+
+      try {
+        localStorage.setItem('mordidaco_meus_pedidos', JSON.stringify(meusPedidos.slice(0, 30)));
+      } catch(e) {}
+
+      if (ultimoStatusRastreado && ultimoStatusRastreado !== pedidoMesclado.status) {
+        tocarSinoNotificacao();
+      }
+
+      atualizarVisualizacaoRastreamento(pedidoMesclado);
+      atualizarBadgeMeusPedidos();
+
+      const viewPedidos = document.getElementById('viewPedidos');
+      if (viewPedidos && viewPedidos.style.display === 'block') {
+        renderizarAbaMeusPedidos();
+      }
+    }
+
     function iniciarRastreamentoAoVivo(pedidoId, dadosIniciais = null) {
       if (!pedidoId) return;
       ultimoPedidoCriadoId = pedidoId;
@@ -1899,12 +1995,12 @@
       if (floatingBar) floatingBar.style.display = 'flex';
 
       if (dadosIniciais) {
-        atualizarVisualizacaoRastreamento(dadosIniciais);
+        processarAtualizacaoPedido(dadosIniciais);
       }
 
       abrirModal('successModal');
 
-      // Polling a cada 6 segundos
+      // Polling a cada 5 segundos
       if (intervalRastreamento) clearInterval(intervalRastreamento);
       intervalRastreamento = setInterval(async () => {
         try {
@@ -1912,17 +2008,14 @@
           if (!res.ok) return;
           const pedidoAtualizado = await res.json();
           if (pedidoAtualizado && pedidoAtualizado.status) {
-            if (ultimoStatusRastreado && ultimoStatusRastreado !== pedidoAtualizado.status) {
-              tocarSinoNotificacao();
-            }
-            atualizarVisualizacaoRastreamento(pedidoAtualizado);
+            processarAtualizacaoPedido(pedidoAtualizado);
 
             if (pedidoAtualizado.status === 'Entregue' || pedidoAtualizado.status === 'Cancelado') {
               clearInterval(intervalRastreamento);
             }
           }
         } catch (e) {}
-      }, 6000);
+      }, 5000);
     }
 
     async function finalizarPedido() {
@@ -1983,6 +2076,15 @@
           }));
         } catch(e) {}
 
+        // Salva na lista de Meus Pedidos no navegador
+        try {
+          const meusPedidos = JSON.parse(localStorage.getItem('mordidaco_meus_pedidos') || '[]');
+          const filtrados = meusPedidos.filter(p => p.id !== pedidoCriado.id);
+          filtrados.unshift(pedidoCriado);
+          localStorage.setItem('mordidaco_meus_pedidos', JSON.stringify(filtrados.slice(0, 30)));
+          atualizarBadgeMeusPedidos();
+        } catch(e) {}
+
         // 1. Sincroniza pedido no cache local do navegador para a cozinha
         try {
           const cachePedidos = JSON.parse(localStorage.getItem('mordidaco_pedidos_cache') || '[]');
@@ -2024,30 +2126,235 @@
 
         // Inicia o rastreador ao vivo na tela imediatamente
         iniciarRastreamentoAoVivo(pedidoCriado.id, pedidoCriado);
-
-        // Monta mensagem do WhatsApp com link de rastreamento direto
-        let msgWhats = `*NOVO PEDIDO - O MORDIDAÇO (#${pedidoCriado.numero})*\n\n`;
-        msgWhats += `*Cliente:* ${nome}\n`;
-        msgWhats += `*WhatsApp:* ${telefone}\n`;
-        msgWhats += `*Endereço:* ${enderecoCompleto} - ${bairro}\n`;
-        if (ref) msgWhats += `*Ref:* ${ref}\n`;
-        msgWhats += `\n*ITENS DO PEDIDO:*\n`;
-        pedidoPayload.itens.forEach(i => {
-          msgWhats += `• 1x ${i.nome} (R$ ${i.preco.toFixed(2)})\n`;
-          if (i.formato) msgWhats += `  Formato: ${i.formato}\n`;
-          if (i.observacoes) msgWhats += `  Obs: ${i.observacoes}\n`;
-        });
-        msgWhats += `\n*Subtotal:* R$ ${subtotal.toFixed(2)}\n`;
-        msgWhats += `*Taxa Entrega:* R$ ${taxa.toFixed(2)}\n`;
-        msgWhats += `*TOTAL A PAGAR AO MOTOBOY:* R$ ${total.toFixed(2)}\n`;
-        msgWhats += `*Forma de Pagamento:* ${pagtoDetalhe}\n\n`;
-        msgWhats += `📍 *Acompanhar Pedido ao Vivo:* ${window.location.origin}/?pedido=${pedidoCriado.id}\n`;
-
-        const zapUrl = `https://wa.me/${cardapioGlobal.restaurante.whatsapp}?text=${encodeURIComponent(msgWhats)}`;
-        document.getElementById('btnWhatsappShare').href = zapUrl;
       } catch (err) {
         alert('Erro ao enviar pedido para o restaurante. Verifique sua conexão.');
       }
+    }
+
+    // NAVEGAÇÃO ENTRE ABAS: CARDÁPIO vs MEUS PEDIDOS
+    function trocarAbaPrincipal(aba) {
+      const btnCardapio = document.getElementById('btnTabCardapio');
+      const btnPedidos = document.getElementById('btnTabPedidos');
+      const viewCardapio = document.getElementById('viewCardapio');
+      const viewPedidos = document.getElementById('viewPedidos');
+
+      if (aba === 'pedidos') {
+        btnCardapio.style.background = '#f8fafc';
+        btnCardapio.style.color = 'var(--dark)';
+        btnCardapio.style.border = '1.5px solid #cbd5e1';
+        btnCardapio.style.boxShadow = 'none';
+
+        btnPedidos.style.background = 'var(--primary)';
+        btnPedidos.style.color = '#ffffff';
+        btnPedidos.style.border = 'none';
+        btnPedidos.style.boxShadow = '0 2px 8px rgba(217, 119, 6, 0.3)';
+
+        viewCardapio.style.display = 'none';
+        viewPedidos.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        renderizarAbaMeusPedidos();
+      } else {
+        btnCardapio.style.background = 'var(--primary)';
+        btnCardapio.style.color = '#ffffff';
+        btnCardapio.style.border = 'none';
+        btnCardapio.style.boxShadow = '0 2px 8px rgba(217, 119, 6, 0.3)';
+
+        btnPedidos.style.background = '#f8fafc';
+        btnPedidos.style.color = 'var(--dark)';
+        btnPedidos.style.border = '1.5px solid #cbd5e1';
+        btnPedidos.style.boxShadow = 'none';
+
+        viewCardapio.style.display = 'block';
+        viewPedidos.style.display = 'none';
+      }
+    }
+
+    function irParaAbaMeusPedidos() {
+      fecharModal('successModal');
+      trocarAbaPrincipal('pedidos');
+    }
+
+    function atualizarBadgeMeusPedidos() {
+      let meusPedidos = [];
+      try {
+        meusPedidos = JSON.parse(localStorage.getItem('mordidaco_meus_pedidos') || '[]');
+      } catch(e) {}
+      const badge = document.getElementById('badgePedidosAtivos');
+      const ativos = meusPedidos.filter(p => p.status === 'Pendente' || p.status === 'Em Preparo' || p.status === 'Saiu p/ Entrega');
+      if (badge) {
+        if (ativos.length > 0) {
+          badge.style.display = 'inline-block';
+          badge.innerText = ativos.length;
+        } else {
+          badge.style.display = 'none';
+        }
+      }
+    }
+
+    function renderizarAbaMeusPedidos() {
+      const containerAtivo = document.getElementById('secaoPedidoAtivo');
+      const containerHistorico = document.getElementById('secaoHistoricoPedidos');
+      let meusPedidos = [];
+      try {
+        meusPedidos = JSON.parse(localStorage.getItem('mordidaco_meus_pedidos') || '[]');
+      } catch(e) {}
+
+      if (meusPedidos.length === 0) {
+        containerAtivo.innerHTML = `
+          <div style="background: #ffffff; border: 2px dashed #cbd5e1; border-radius: 16px; padding: 40px 20px; text-align: center;">
+            <div style="font-size: 40px; margin-bottom: 10px;">🌭</div>
+            <h3 style="font-size: 18px; font-weight: 800; color: var(--dark); margin-bottom: 6px;">Nenhum pedido realizado ainda</h3>
+            <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 18px;">Seus pedidos ficarão salvos aqui para você acompanhar a entrega em tempo real e pedir de novo com 1 clique.</p>
+            <button onclick="trocarAbaPrincipal('cardapio')" style="background: var(--primary); color: #fff; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 800; font-size: 14px; cursor: pointer;">
+              Ver Cardápio Agora ➔
+            </button>
+          </div>
+        `;
+        containerHistorico.innerHTML = '';
+        return;
+      }
+
+      // Procura pedido ativo mais recente
+      const ativo = meusPedidos.find(p => p.status === 'Pendente' || p.status === 'Em Preparo' || p.status === 'Saiu p/ Entrega');
+
+      if (ativo) {
+        let badgeClass = 'badge-preparo';
+        let badgeTxt = '🔥 Na Cozinha';
+        let step1 = 'completed', step2 = 'active', step3 = '', step4 = '';
+        let msgTitulo = 'Seu pedido está sendo montado com todo capricho!';
+        let msgDesc = 'Nossa cozinha já está no preparo dos ingredientes frescos, purê de ouro e muçarela derretida.';
+
+        if (ativo.status === 'Pendente') {
+          badgeClass = 'badge-pendente';
+          badgeTxt = '📝 Pedido Recebido';
+          step1 = 'active'; step2 = '';
+          msgTitulo = 'Pedido recebido com sucesso!';
+          msgDesc = 'O alarme já tocou na cozinha e nossa equipe já está conferindo sua comanda.';
+        } else if (ativo.status === 'Saiu p/ Entrega') {
+          badgeClass = 'badge-saiu';
+          badgeTxt = '🛵 Com o Motoboy';
+          step1 = 'completed'; step2 = 'completed'; step3 = 'active';
+          msgTitulo = 'O motoboy acabou de sair com sua entrega!';
+          msgDesc = `Seu hot dog saiu quentinho na sacola térmica a caminho de ${ativo.entrega ? ativo.entrega.endereco : 'seu endereço'}. Fique atento(a)!`;
+        }
+
+        containerAtivo.innerHTML = `
+          <div class="tracker-card" style="border: 2px solid var(--primary); box-shadow: 0 8px 25px rgba(217, 119, 6, 0.12);">
+            <div class="tracker-header">
+              <div>
+                <span style="font-size: 11px; font-weight: 800; color: var(--primary-dark); text-transform: uppercase;">⚡ Acompanhamento ao Vivo</span>
+                <h3 style="font-size: 20px; font-weight: 900; color: var(--dark); margin: 2px 0;">Pedido #${ativo.numero || '...'}</h3>
+                <span style="font-size: 12px; color: var(--text-muted);">${ativo.dataHora || 'Registrado agora'}</span>
+              </div>
+              <span class="tracker-badge ${badgeClass}">${badgeTxt}</span>
+            </div>
+
+            <div class="tracker-timeline">
+              <div class="tracker-step ${step1}">
+                <div class="step-icon-box">📝</div>
+                <div class="step-label">Recebido</div>
+              </div>
+              <div class="tracker-step ${step2}">
+                <div class="step-icon-box">🔥</div>
+                <div class="step-label">Na Cozinha</div>
+              </div>
+              <div class="tracker-step ${step3}">
+                <div class="step-icon-box">🛵</div>
+                <div class="step-label">Com Motoboy</div>
+              </div>
+              <div class="tracker-step ${step4}">
+                <div class="step-icon-box">✅</div>
+                <div class="step-label">Entregue</div>
+              </div>
+            </div>
+
+            <div class="tracker-status-box" style="margin-bottom: 14px;">
+              <span style="font-size: 22px;">⚡</span>
+              <div style="font-size: 13px; line-height: 1.4;">
+                <strong style="color: var(--dark); display: block; margin-bottom: 2px;">${msgTitulo}</strong>
+                <span>${msgDesc}</span>
+              </div>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; font-size: 13px; margin-bottom: 12px;">
+              <div style="margin-bottom: 4px;"><strong>📍 Endereço:</strong> ${ativo.entrega ? ativo.entrega.endereco : 'Balcão / Retirada'}</div>
+              <div style="margin-bottom: 4px;"><strong>💵 Pagamento:</strong> ${ativo.pagamento || 'Na Entrega'}</div>
+              <div style="display: flex; justify-content: space-between; border-top: 1px dashed #cbd5e1; padding-top: 6px; margin-top: 6px; font-weight: 700;">
+                <span>Total a pagar:</span>
+                <strong style="color: #15803d; font-size: 15px;">R$ ${Number(ativo.total || 0).toFixed(2).replace('.', ',')}</strong>
+              </div>
+            </div>
+
+            <div style="text-align: center; font-size: 11.5px; color: #64748b;">
+              🟢 <em>Sincronizado automaticamente em tempo real com a bancada da cozinha.</em>
+            </div>
+          </div>
+        `;
+      } else {
+        containerAtivo.innerHTML = `
+          <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 14px; padding: 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 26px;">🎉</span>
+              <div>
+                <strong style="color: #166534; font-size: 14.5px; display: block;">Nenhum pedido em rota no momento</strong>
+                <span style="color: #15803d; font-size: 12.5px;">Seus últimos pedidos foram concluídos com sucesso!</span>
+              </div>
+            </div>
+            <button onclick="trocarAbaPrincipal('cardapio')" style="background: #16a34a; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 800; font-size: 12.5px; cursor: pointer;">
+              Novo Pedido ➔
+            </button>
+          </div>
+        `;
+      }
+
+      // Histórico
+      let histHtml = '<h3 style="font-size: 17px; font-weight: 900; color: var(--dark); margin-bottom: 12px;">📜 Histórico de Pedidos Anteriores</h3>';
+      meusPedidos.forEach(p => {
+        let itensTexto = (p.itens || []).map(i => `${i.nome}${i.formato ? ' (' + i.formato + ')' : ''}`).join(', ');
+        histHtml += `
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; margin-bottom: 12px; transition: box-shadow 0.2s;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div>
+                <strong style="color: var(--dark); font-size: 15px;">Pedido #${p.numero || '...'}</strong>
+                <span style="font-size: 12px; color: #64748b; margin-left: 8px;">${p.dataHora || ''}</span>
+              </div>
+              <span class="tracker-badge ${p.status === 'Entregue' ? 'badge-entregue' : (p.status === 'Saiu p/ Entrega' ? 'badge-saiu' : 'badge-preparo')}">
+                ${p.status}
+              </span>
+            </div>
+            <p style="font-size: 13px; color: #475569; margin-bottom: 10px; line-height: 1.4;">
+              ${itensTexto || 'Hot Dog Artesanal'}
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #e2e8f0; padding-top: 10px;">
+              <strong style="color: var(--dark); font-size: 15px;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</strong>
+              <button onclick="repetirPedido('${p.id}')" style="background: #f1f5f9; color: var(--dark); border: 1px solid #cbd5e1; padding: 6px 14px; border-radius: 8px; font-weight: 700; font-size: 12.5px; cursor: pointer;">
+                🔁 Pedir Novamente
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      containerHistorico.innerHTML = histHtml;
+    }
+
+    function repetirPedido(pedidoId) {
+      let meusPedidos = [];
+      try {
+        meusPedidos = JSON.parse(localStorage.getItem('mordidaco_meus_pedidos') || '[]');
+      } catch(e) {}
+      const p = meusPedidos.find(item => item.id === pedidoId);
+      if (!p || !p.itens || p.itens.length === 0) {
+        mostrarToast('Não foi possível recuperar os itens deste pedido.');
+        return;
+      }
+      p.itens.forEach(i => {
+        carrinho.push({ ...i });
+      });
+      atualizarBarraCarrinho();
+      mostrarToast('✓ Itens adicionados à sua sacola!');
+      trocarAbaPrincipal('cardapio');
+      setTimeout(abrirCarrinho, 300);
     }
 
     function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
@@ -2055,6 +2362,26 @@
 
     // Verificar se há pedido para rastrear na URL ou no armazenamento local
     function verificarRastreamentoAoCarregar() {
+      atualizarBadgeMeusPedidos();
+
+      // BroadcastChannel para sincronização instantânea em 0ms
+      try {
+        if ('BroadcastChannel' in window) {
+          const canal = new BroadcastChannel('omordidaco_canal');
+          canal.onmessage = (ev) => {
+            if (ev.data && (ev.data.tipo === 'status_atualizado' || ev.data.tipo === 'novo_pedido')) {
+              const p = ev.data.pedido || {
+                id: ev.data.id,
+                status: ev.data.status,
+                statusAtualizadoEm: ev.data.statusAtualizadoEm,
+                numero: ev.data.numero
+              };
+              processarAtualizacaoPedido(p);
+            }
+          };
+        }
+      } catch(e) {}
+
       const urlParams = new URLSearchParams(window.location.search);
       let pedidoId = urlParams.get('pedido') || urlParams.get('acompanhar');
       if (!pedidoId && window.location.pathname.startsWith('/pedido/')) {
@@ -2071,14 +2398,13 @@
           .then(r => r.ok ? r.json() : null)
           .then(ped => {
             if (ped && ped.status) {
+              processarAtualizacaoPedido(ped);
               const floatingBar = document.getElementById('floatingTrackerBar');
               if (floatingBar) floatingBar.style.display = 'flex';
-              const floatingText = document.getElementById('floatingTrackerText');
-              if (floatingText) floatingText.innerText = `Pedido #${ped.numero}: ${ped.status}`;
               
-              // Se veio explicitamente pelo link de pedido na URL, abre o modal direto
+              // Se veio explicitamente pelo link de pedido na URL, abre a aba de pedidos
               if (urlParams.get('pedido') || urlParams.get('acompanhar') || window.location.pathname.startsWith('/pedido/')) {
-                iniciarRastreamentoAoVivo(ped.id, ped);
+                trocarAbaPrincipal('pedidos');
               }
             }
           })
