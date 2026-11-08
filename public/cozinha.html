@@ -1763,6 +1763,10 @@
                   salvarCacheLocalPedidos();
                   renderizarPedidos();
                   atualizarEstatisticas();
+
+                  if (ev.data.origem === 'cliente' && ev.data.status === 'Entregue') {
+                    exibirToastWhatsApp(p.id, 'Entregue (Confirmado pelo Cliente 🎉)');
+                  }
                 }
               }
             } else if (ev.data.tipo === 'novo_pedido' && ev.data.pedido) {

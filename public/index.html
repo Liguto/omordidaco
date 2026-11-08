@@ -1405,6 +1405,10 @@
         </div>
 
         <!-- AÇÕES DO CLIENTE -->
+        <button id="btnConfirmarEntregaModal" onclick="confirmarEntregaPeloCliente()" style="display: none; width: 100%; background: #16a34a; color: #ffffff; border: none; padding: 13px; border-radius: 10px; font-size: 14.5px; font-weight: 800; cursor: pointer; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3); transition: transform 0.15s;">
+          ✅ Já Recebi meu Pedido! (Confirmar Entrega)
+        </button>
+
         <button onclick="irParaAbaMeusPedidos()" style="display: block; width: 100%; background: var(--primary); color: #ffffff; border: none; padding: 13px; border-radius: 10px; font-size: 14.5px; font-weight: 800; cursor: pointer; margin-bottom: 8px; box-shadow: 0 3px 10px rgba(217, 119, 6, 0.25);">
           🛍️ Acompanhar na aba Meus Pedidos
         </button>
@@ -1905,7 +1909,85 @@
         if (floatingText) floatingText.innerText = `Pedido #${pedido.numero}: Cancelado`;
       }
 
-      // Link de WhatsApp removido conforme preferência do usuário
+      // Controle do Botão de Confirmação de Entrega pelo Cliente no Modal
+      const btnConfirmar = document.getElementById('btnConfirmarEntregaModal');
+      if (btnConfirmar) {
+        if (status === 'Saiu p/ Entrega' || status === 'Em Preparo') {
+          btnConfirmar.style.display = 'block';
+          btnConfirmar.onclick = () => confirmarEntregaPeloCliente(pedido.id);
+        } else {
+          btnConfirmar.style.display = 'none';
+        }
+      }
+    }
+
+    // CONFIRMAÇÃO DE ENTREGA PELO PRÓPRIO CLIENTE
+    async function confirmarEntregaPeloCliente(pedidoId) {
+      const idParaConfirmar = pedidoId || ultimoPedidoCriadoId;
+      if (!idParaConfirmar) return;
+
+      if (!confirm('Seu pedido acabou de chegar? Deseja confirmar que já recebeu tudo quentinho? 🌭❤️')) {
+        return;
+      }
+
+      const agora = Date.now();
+
+      // 1. Atualiza na API do servidor
+      try {
+        await fetch(`/api/pedidos/${idParaConfirmar}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            status: 'Entregue',
+            statusAtualizadoEm: agora
+          })
+        });
+      } catch (err) {
+        console.warn('Aviso: Erro ao enviar status ao servidor:', err);
+      }
+
+      // 2. Notifica canal local da cozinha em 0ms (BroadcastChannel)
+      try {
+        if ('BroadcastChannel' in window) {
+          const canal = new BroadcastChannel('omordidaco_canal');
+          canal.postMessage({
+            tipo: 'status_atualizado',
+            id: idParaConfirmar,
+            status: 'Entregue',
+            statusAtualizadoEm: agora,
+            origem: 'cliente'
+          });
+        }
+      } catch (e) {}
+
+      // 3. Notifica canal em nuvem (ntfy.sh) para o celular/computador da cozinha
+      try {
+        fetch('https://ntfy.sh/omordidaco_pedidos_tamoio_campinas_live', {
+          method: 'POST',
+          headers: {
+            'Title': '🎉 Cliente confirmou a entrega!',
+            'Priority': 'default',
+            'Tags': 'white_check_mark,party'
+          },
+          body: JSON.stringify({
+            tipo: 'status_atualizado',
+            id: idParaConfirmar,
+            status: 'Entregue',
+            statusAtualizadoEm: agora,
+            origem: 'cliente'
+          })
+        }).catch(() => {});
+      } catch (e) {}
+
+      // 4. Atualiza imediatamente a visualização do cliente
+      processarAtualizacaoPedido({
+        id: idParaConfirmar,
+        status: 'Entregue',
+        statusAtualizadoEm: agora
+      });
+
+      mostrarToast('🎉 Entrega confirmada com sucesso! Bom apetite!');
+      tocarSinoNotificacao();
     }
 
     function tocarSinoNotificacao() {
@@ -2284,6 +2366,12 @@
                 <strong style="color: #15803d; font-size: 15px;">R$ ${Number(ativo.total || 0).toFixed(2).replace('.', ',')}</strong>
               </div>
             </div>
+
+            ${(ativo.status === 'Saiu p/ Entrega' || ativo.status === 'Em Preparo') ? `
+              <button onclick="confirmarEntregaPeloCliente('${ativo.id}')" style="display: block; width: 100%; background: #16a34a; color: #ffffff; border: none; padding: 13px; border-radius: 10px; font-size: 14.5px; font-weight: 800; cursor: pointer; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3); transition: transform 0.15s;">
+                ✅ Já Recebi meu Pedido! (Confirmar Entrega)
+              </button>
+            ` : ''}
 
             <div style="text-align: center; font-size: 11.5px; color: #64748b;">
               🟢 <em>Sincronizado automaticamente em tempo real com a bancada da cozinha.</em>
