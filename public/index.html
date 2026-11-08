@@ -18,6 +18,40 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Meta Pixel Code (O Mordidaço - Rastreamento de Anúncios Instagram/Facebook) -->
+  <script>
+    window.META_PIXEL_ID = window.META_PIXEL_ID || ''; // Cole seu ID numérico do Meta Events Manager aqui
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+
+    function dispararPixel(evento, params = {}) {
+      try {
+        if (window.META_PIXEL_ID) {
+          if (!window._pixelIniciado) {
+            fbq('init', window.META_PIXEL_ID);
+            fbq('track', 'PageView');
+            window._pixelIniciado = true;
+          }
+          fbq('track', evento, params);
+        }
+      } catch (err) {
+        console.warn('[Pixel]', err);
+      }
+    }
+    if (window.META_PIXEL_ID) {
+      fbq('init', window.META_PIXEL_ID);
+      fbq('track', 'PageView');
+      window._pixelIniciado = true;
+    }
+  </script>
+
   <style>
     :root {
       --primary: #d97706;
@@ -768,6 +802,150 @@
       font-size: 13px;
       line-height: 1.6;
     }
+
+    /* CEP & ENDEREÇO RESPONSIVO */
+    .cep-loading-spinner {
+      display: inline-block;
+      width: 13px;
+      height: 13px;
+      border: 2px solid #cbd5e1;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* TRACKER STEPPER (ACOMPANHAMENTO AO VIVO EM TEMPO REAL) */
+    .tracker-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .tracker-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .tracker-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-pendente { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+    .badge-preparo { background: #ffedd5; color: #c2410c; border: 1px solid #fed7aa; }
+    .badge-saiu { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+    .badge-entregue { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+
+    .tracker-timeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      position: relative;
+      margin: 20px 0 18px 0;
+      gap: 4px;
+    }
+
+    .tracker-step {
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: #94a3b8;
+      border: 2px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      margin: 0 auto 8px auto;
+      transition: all 0.3s ease;
+    }
+
+    .tracker-step.completed .step-icon-box {
+      background: #16a34a;
+      border-color: #16a34a;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(22, 163, 74, 0.35);
+    }
+
+    .tracker-step.active .step-icon-box {
+      background: #f59e0b;
+      border-color: #d97706;
+      color: #ffffff;
+      animation: pulseGlow 1.8s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6); }
+      70% { transform: scale(1.08); box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    }
+
+    .step-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      line-height: 1.25;
+    }
+
+    .tracker-step.active .step-label {
+      color: var(--dark);
+      font-weight: 800;
+    }
+
+    .tracker-step.completed .step-label {
+      color: #16a34a;
+    }
+
+    .tracker-status-box {
+      background: #fffbeb;
+      border: 1.5px solid #fde68a;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      text-align: left;
+    }
+
+    .tracker-status-box.preparo {
+      background: #fff7ed;
+      border-color: #fed7aa;
+    }
+
+    .tracker-status-box.saiu {
+      background: #f0f9ff;
+      border-color: #bae6fd;
+    }
+
+    .tracker-status-box.entregue {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
   </style>
 </head>
 <body>
@@ -925,6 +1103,22 @@
     </div>
   </div>
 
+  <!-- FLOATING ORDER TRACKER BAR (BOTTOM) -->
+  <div class="cart-bar" id="floatingTrackerBar" style="display: none; background: #0f172a; border-top: 3px solid var(--primary); cursor: pointer;" onclick="abrirModal('successModal')">
+    <div class="cart-bar-inner" style="justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 22px;">🛵</span>
+        <div>
+          <div style="font-size: 11px; color: #fbbf24; font-weight: 800; text-transform: uppercase;">Acompanhe em Tempo Real</div>
+          <div style="font-size: 13.5px; font-weight: 800; color: #ffffff;" id="floatingTrackerText">Pedido em andamento</div>
+        </div>
+      </div>
+      <button style="background: var(--primary); color: #ffffff; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 800; font-size: 12.5px; cursor: pointer;">
+        Ver Status ➔
+      </button>
+    </div>
+  </div>
+
   <!-- MODAL: DETALHES DO ITEM (PERSONALIZAÇÃO) -->
   <div class="modal-overlay" id="itemModal">
     <div class="modal-box">
@@ -1037,21 +1231,38 @@
       <div class="form-group">
         <label class="form-label">WhatsApp com DDD:*</label>
         <input type="tel" class="form-control" id="clienteTelefone" placeholder="(19) 9XXXX-XXXX" required>
+        <small style="display:block; font-size:11.5px; color:#64748b; margin-top:4px;">📲 Enviamos o comprovante e atualizações da entrega no seu WhatsApp.</small>
       </div>
 
-      <div class="form-group">
-        <label class="form-label">Rua e Número:*</label>
-        <input type="text" class="form-control" id="clienteEndereco" placeholder="Ex: Rua Ernani Pereira Lopes, 123" required>
+      <!-- AUTOCOMPLETAR DE ENDEREÇO POR CEP (VIACEP) -->
+      <div class="form-group" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; margin-bottom: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <label class="form-label" style="margin-bottom: 0; color: var(--dark);">🔍 CEP de Entrega (Campinas):*</label>
+          <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank" style="font-size: 11px; color: var(--primary-dark); font-weight: 700; text-decoration: none;">Não sei o CEP</a>
+        </div>
+        <input type="tel" class="form-control" id="clienteCep" placeholder="Digite o CEP (Ex: 13094-000)" maxlength="9" oninput="formatarEConsultarCep(this)" autocomplete="postal-code" style="font-weight: 700; font-size: 15px; letter-spacing: 0.5px; background: #ffffff;">
+        <div id="cepStatus" style="font-size: 12px; margin-top: 5px; font-weight: 600; display: none;"></div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 100px; gap: 10px; margin-bottom: 14px;">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label">Rua / Avenida:*</label>
+          <input type="text" class="form-control" id="clienteRua" placeholder="Preenchido pelo CEP" required>
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label">Número:*</label>
+          <input type="text" class="form-control" id="clienteNumero" placeholder="Ex: 123" required>
+        </div>
       </div>
 
       <div class="form-group">
         <label class="form-label">Bairro (Campinas):*</label>
-        <input type="text" class="form-control" id="clienteBairro" value="" placeholder="Ex: Jardim Tamoio, Taquaral, Swift..." required>
+        <input type="text" class="form-control" id="clienteBairro" placeholder="Preenchido pelo CEP (Ex: Jardim Tamoio, Swift...)" required>
       </div>
 
       <div class="form-group">
-        <label class="form-label">Complemento / Ponto de Referência:</label>
-        <input type="text" class="form-control" id="clienteRef" placeholder="Ex: Casa com portão preto, próximo à praça...">
+        <label class="form-label">Ponto de Referência / Complemento:*</label>
+        <input type="text" class="form-control" id="clienteRef" placeholder="Ex: Apto 22 / Portão marrom, em frente à padaria">
       </div>
 
       <!-- FORMA DE PAGAMENTO (NA ENTREGA) -->
@@ -1082,48 +1293,83 @@
         <input type="text" class="form-control" id="trocoValor" placeholder="Ex: Troco para R$ 50,00 ou Não preciso de troco">
       </div>
 
-      <!-- OPÇÃO DE ACOMPANHAR PELO WHATSAPP -->
-      <label class="check-option" style="cursor: pointer; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 10px; padding: 12px; margin-top: 14px; display: flex; align-items: center; gap: 10px;">
-        <input type="checkbox" id="chkAcompanharWhats" style="width: 18px; height: 18px; accent-color: #16a34a;">
-        <span style="font-size: 13px; font-weight: 700; color: #166534; line-height: 1.35;">
-          📲 Desejo acompanhar a saída do motoboy pelo WhatsApp
-        </span>
-      </label>
-
       <button class="btn-add" style="width: 100%; justify-content: center; padding: 15px; font-size: 16px; margin-top: 16px; background: var(--green); color: #ffffff;" onclick="finalizarPedido()">
         ✓ Confirmar & Enviar Pedido
       </button>
     </div>
   </div>
 
-  <!-- MODAL: SUCESSO -->
+  <!-- MODAL: ACOMPANHAMENTO DO PEDIDO EM TEMPO REAL -->
   <div class="modal-overlay" id="successModal" onclick="if(event.target === this) fecharModal('successModal')">
-    <div class="modal-box">
-      <div style="display: flex; justify-content: flex-end; margin-bottom: 4px;">
+    <div class="modal-box" style="max-width: 600px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span style="font-size: 12px; font-weight: 800; color: var(--primary-dark); text-transform: uppercase; letter-spacing: 0.5px;">⚡ Acompanhe seu Pedido ao Vivo</span>
         <button class="btn-close" onclick="fecharModal('successModal')" title="Fechar">✕</button>
       </div>
-      <div class="success-box" style="padding-top: 0;">
-        <div class="success-icon">🎉</div>
-        <h3 style="font-size: 21px; font-weight: 800; color: var(--dark); margin-bottom: 6px;">Pedido Confirmado & Já em Produção!</h3>
-        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 14px;">Seu pedido <strong id="sucessoNumeroPedido" style="color: var(--primary-dark);">#101</strong> já caiu na tela da nossa cozinha, o alarme já tocou e o preparo já começou!</p>
 
-        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 14px; border-radius: 10px; font-size: 13.5px; text-align: left; margin-bottom: 16px; color: #166534;">
-          <strong>Previsão de Entrega:</strong> 35 a 50 minutos.<br>
-          <strong>Forma de Pagamento:</strong> <span id="sucessoPagto">Pix na Entrega</span>.<br>
-          <strong>Total a Pagar ao Motoboy:</strong> <strong id="sucessoTotal" style="color: #15803d; font-size: 15px;">R$ 0,00</strong>.
+      <div class="tracker-card">
+        <div class="tracker-header">
+          <div>
+            <h3 style="font-size: 21px; font-weight: 900; color: var(--dark); margin: 0;" id="sucessoNumeroPedido">Pedido #101</h3>
+            <span style="font-size: 12px; color: var(--text-muted);" id="sucessoDataHora">Registrado agora</span>
+          </div>
+          <span class="tracker-badge badge-preparo" id="sucessoStatusBadge">🔥 Em Preparo</span>
         </div>
 
-        <div style="background: #fffbeb; border: 1px solid #fde68a; padding: 14px; border-radius: 10px; font-size: 13.5px; color: #92400e; margin-bottom: 16px; text-align: left;">
-          🔔 <strong>Quer saber quando seu pedido sair para entrega?</strong><br>
-          Clique no botão verde abaixo para abrir nossa conversa no WhatsApp. Assim enviamos uma mensagem no seu celular no exato minuto em que o motoboy sair com o seu dogão quentinho! 🔥
+        <!-- TIMELINE COM 4 ETAPAS -->
+        <div class="tracker-timeline" id="trackerTimeline">
+          <div class="tracker-step completed" id="stepRecebido">
+            <div class="step-icon-box">📝</div>
+            <div class="step-label">Recebido</div>
+          </div>
+          <div class="tracker-step active" id="stepPreparo">
+            <div class="step-icon-box">🔥</div>
+            <div class="step-label">Na Cozinha</div>
+          </div>
+          <div class="tracker-step" id="stepSaiu">
+            <div class="step-icon-box">🛵</div>
+            <div class="step-label">Com Motoboy</div>
+          </div>
+          <div class="tracker-step" id="stepEntregue">
+            <div class="step-icon-box">✅</div>
+            <div class="step-label">Entregue</div>
+          </div>
         </div>
 
-        <a href="#" target="_blank" class="btn-whatsapp-send" id="btnWhatsappShare" onclick="ativarOptInWhatsappAposClique()">
-          📲 Acompanhar Saída do Motoboy no WhatsApp
+        <!-- MENSAGEM DINÂMICA DE STATUS -->
+        <div class="tracker-status-box preparo" id="trackerStatusBox">
+          <span style="font-size: 24px;" id="trackerStatusIcon">🔥</span>
+          <div style="font-size: 13.5px; color: var(--text); line-height: 1.45;">
+            <strong id="trackerStatusTitulo" style="color: var(--dark); display: block; margin-bottom: 2px;">Seu pedido está sendo montado com todo capricho!</strong>
+            <span id="trackerStatusDesc">Nossa cozinha já está no preparo dos ingredientes frescos, purê de ouro cremoso e muito queijo derretido no molho caseiro.</span>
+          </div>
+        </div>
+
+        <!-- RESUMO DE ENTREGA E PAGAMENTO -->
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; font-size: 13px; color: var(--text); margin-bottom: 14px;">
+          <div style="margin-bottom: 5px;">
+            <strong>📍 Entregar em:</strong> <span id="sucessoEndereco">Jardim Tamoio</span>
+          </div>
+          <div style="margin-bottom: 5px;">
+            <strong>💵 Pagamento:</strong> <span id="sucessoPagto">Pix na Entrega</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #cbd5e1; padding-top: 6px; margin-top: 6px;">
+            <span style="font-weight: 700;">Total a pagar na entrega:</span>
+            <strong style="color: #15803d; font-size: 16px;" id="sucessoTotal">R$ 0,00</strong>
+          </div>
+        </div>
+
+        <div style="font-size: 11.5px; color: #64748b; text-align: center; margin-bottom: 12px;">
+          ⏱️ <em>Esta tela atualiza automaticamente em tempo real a cada avanço na cozinha.</em>
+        </div>
+
+        <!-- AÇÕES DO CLIENTE -->
+        <a href="#" target="_blank" class="btn-whatsapp-send" id="btnWhatsappShare" style="margin-top: 0; margin-bottom: 8px;">
+          📲 Abrir Comprovante no WhatsApp
         </a>
 
-        <button onclick="fecharModal('successModal')" style="display: block; width: 100%; background: #f1f5f9; color: var(--dark); border: 1px solid #cbd5e1; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 700; margin-top: 10px; cursor: pointer;">
-          ✕ Fechar e Voltar ao Cardápio
+        <button onclick="fecharModal('successModal')" style="display: block; width: 100%; background: #f1f5f9; color: var(--dark); border: 1px solid #cbd5e1; padding: 12px; border-radius: 10px; font-size: 13.5px; font-weight: 700; cursor: pointer;">
+          ✕ Fechar e Continuar Navegando
         </button>
       </div>
     </div>
@@ -1310,6 +1556,7 @@
 
       recalcularPrecoModal();
       abrirModal('itemModal');
+      dispararPixel('ViewContent', { content_name: item.nome, value: item.preco, currency: 'BRL' });
     }
 
     function confirmarAdicaoItem() {
@@ -1358,6 +1605,7 @@
       fecharModal('itemModal');
       atualizarBarraCarrinho();
       mostrarToast(`✓ ${itemSelecionadoTemp.nome} adicionado!`);
+      dispararPixel('AddToCart', { content_name: itemSelecionadoTemp.nome, value: Number(precoCalculado.toFixed(2)), currency: 'BRL' });
     }
 
     function atualizarBarraCarrinho() {
@@ -1371,6 +1619,59 @@
       const total = carrinho.reduce((acc, item) => acc + item.preco, 0);
       document.getElementById('cartCount').innerText = `${carrinho.length} ${carrinho.length === 1 ? 'item' : 'itens'}`;
       document.getElementById('cartTotalBar').innerText = 'R$ ' + total.toFixed(2).replace('.', ',');
+    }
+
+    // Autocompletar de Endereço por CEP (ViaCEP)
+    let timeoutCep = null;
+    async function formatarEConsultarCep(input) {
+      let val = input.value.replace(/\D/g, '');
+      if (val.length > 8) val = val.slice(0, 8);
+      
+      if (val.length > 5) {
+        input.value = val.slice(0, 5) + '-' + val.slice(5);
+      } else {
+        input.value = val;
+      }
+
+      const statusEl = document.getElementById('cepStatus');
+      if (val.length === 8) {
+        statusEl.style.display = 'block';
+        statusEl.innerHTML = '<span class="cep-loading-spinner"></span> Buscando endereço em Campinas...';
+        statusEl.style.color = '#b45309';
+
+        clearTimeout(timeoutCep);
+        timeoutCep = setTimeout(async () => {
+          try {
+            const res = await fetch(`https://viacep.com.br/ws/${val}/json/`);
+            const data = await res.json();
+
+            if (data.erro) {
+              statusEl.innerHTML = '⚠️ CEP não encontrado. Preencha a rua e o bairro manualmente.';
+              statusEl.style.color = '#dc2626';
+              return;
+            }
+
+            if (data.logradouro) {
+              document.getElementById('clienteRua').value = data.logradouro;
+            }
+            if (data.bairro) {
+              document.getElementById('clienteBairro').value = data.bairro;
+            }
+            
+            statusEl.innerHTML = `✓ ${data.bairro ? data.bairro + ', ' : ''}${data.localidade || 'Campinas'}-${data.uf || 'SP'}`;
+            statusEl.style.color = '#16a34a';
+
+            // Pula o foco diretamente para o campo de Número
+            const numEl = document.getElementById('clienteNumero');
+            if (numEl) numEl.focus();
+          } catch (err) {
+            statusEl.innerHTML = '⚠️ Não foi possível consultar o CEP automaticamente. Preencha manualmente.';
+            statusEl.style.color = '#dc2626';
+          }
+        }, 220);
+      } else {
+        statusEl.style.display = 'none';
+      }
     }
 
     function abrirCarrinho() {
@@ -1409,12 +1710,16 @@
           const d = JSON.parse(dadosSalvos);
           const elNome = document.getElementById('clienteNome');
           const elTel = document.getElementById('clienteTelefone');
-          const elEnd = document.getElementById('clienteEndereco');
+          const elCep = document.getElementById('clienteCep');
+          const elRua = document.getElementById('clienteRua');
+          const elNum = document.getElementById('clienteNumero');
           const elBairro = document.getElementById('clienteBairro');
           const elRef = document.getElementById('clienteRef');
           if (!elNome.value && d.nome) elNome.value = d.nome;
           if (!elTel.value && d.telefone) elTel.value = d.telefone;
-          if (!elEnd.value && d.endereco) elEnd.value = d.endereco;
+          if (!elCep.value && d.cep) elCep.value = d.cep;
+          if (!elRua.value && d.rua) elRua.value = d.rua;
+          if (!elNum.value && d.numero) elNum.value = d.numero;
           if (!elBairro.value && d.bairro) elBairro.value = d.bairro;
           if (!elRef.value && d.referencia) elRef.value = d.referencia;
           const aviso = document.getElementById('avisoDadosSalvos');
@@ -1422,6 +1727,7 @@
         }
       } catch (e) {}
 
+      dispararPixel('InitiateCheckout', { value: total, currency: 'BRL', num_items: carrinho.length });
       abrirModal('checkoutModal');
     }
 
@@ -1430,7 +1736,9 @@
         localStorage.removeItem('mordidaco_cliente');
         document.getElementById('clienteNome').value = '';
         document.getElementById('clienteTelefone').value = '';
-        document.getElementById('clienteEndereco').value = '';
+        document.getElementById('clienteCep').value = '';
+        document.getElementById('clienteRua').value = '';
+        document.getElementById('clienteNumero').value = '';
         document.getElementById('clienteBairro').value = '';
         document.getElementById('clienteRef').value = '';
         const aviso = document.getElementById('avisoDadosSalvos');
@@ -1463,17 +1771,177 @@
       }
     }
 
+    // Rastreamento ao Vivo do Pedido
+    let intervalRastreamento = null;
+    let ultimoStatusRastreado = null;
+
+    function atualizarVisualizacaoRastreamento(pedido) {
+      if (!pedido) return;
+      const status = pedido.status || 'Pendente';
+      ultimoStatusRastreado = status;
+
+      document.getElementById('sucessoNumeroPedido').innerText = 'Pedido #' + pedido.numero;
+      document.getElementById('sucessoDataHora').innerText = pedido.dataHora ? 'Registrado em ' + pedido.dataHora : 'Registrado agora';
+      document.getElementById('sucessoPagto').innerText = pedido.pagamento || 'Na Entrega';
+      document.getElementById('sucessoTotal').innerText = 'R$ ' + Number(pedido.total || 0).toFixed(2).replace('.', ',');
+      
+      let endFormatado = 'Balcão / Retirada';
+      if (pedido.entrega && pedido.entrega.endereco && pedido.entrega.endereco !== 'Balcão / Retirada') {
+        endFormatado = `${pedido.entrega.endereco}${pedido.entrega.bairro ? ' - ' + pedido.entrega.bairro : ''}`;
+      }
+      document.getElementById('sucessoEndereco').innerText = endFormatado;
+
+      // Status Badge
+      const badge = document.getElementById('sucessoStatusBadge');
+      badge.className = 'tracker-badge';
+      
+      // Timeline Steps
+      const stepRec = document.getElementById('stepRecebido');
+      const stepPrep = document.getElementById('stepPreparo');
+      const stepSaiu = document.getElementById('stepSaiu');
+      const stepEntr = document.getElementById('stepEntregue');
+
+      [stepRec, stepPrep, stepSaiu, stepEntr].forEach(s => {
+        s.className = 'tracker-step';
+      });
+
+      const box = document.getElementById('trackerStatusBox');
+      box.className = 'tracker-status-box';
+      const icon = document.getElementById('trackerStatusIcon');
+      const titulo = document.getElementById('trackerStatusTitulo');
+      const desc = document.getElementById('trackerStatusDesc');
+
+      const floatingText = document.getElementById('floatingTrackerText');
+
+      if (status === 'Pendente') {
+        badge.classList.add('badge-pendente');
+        badge.innerText = '📝 Pedido Recebido';
+        stepRec.classList.add('active');
+        box.classList.add('pendente');
+        icon.innerText = '📝';
+        titulo.innerText = 'Pedido recebido com sucesso!';
+        desc.innerText = 'O alarme já tocou na cozinha de O Mordidaço e nossa equipe já está conferindo sua comanda.';
+        if (floatingText) floatingText.innerText = `Pedido #${pedido.numero}: Recebido`;
+      } else if (status === 'Em Preparo') {
+        badge.classList.add('badge-preparo');
+        badge.innerText = '🔥 Na Cozinha';
+        stepRec.classList.add('completed');
+        stepPrep.classList.add('active');
+        box.classList.add('preparo');
+        icon.innerText = '🔥';
+        titulo.innerText = 'Seu pedido está sendo montado com todo capricho!';
+        desc.innerText = 'Nossa cozinha já está no preparo dos ingredientes frescos, purê de ouro cremoso e muito queijo derretido no molho caseiro.';
+        if (floatingText) floatingText.innerText = `Pedido #${pedido.numero}: Na Cozinha`;
+      } else if (status === 'Saiu p/ Entrega') {
+        badge.classList.add('badge-saiu');
+        badge.innerText = '🛵 Com o Motoboy';
+        stepRec.classList.add('completed');
+        stepPrep.classList.add('completed');
+        stepSaiu.classList.add('active');
+        box.classList.add('saiu');
+        icon.innerText = '🛵';
+        titulo.innerText = 'O motoboy acabou de sair com sua entrega!';
+        desc.innerText = `Seu hot dog saiu bem quentinho na sacola térmica a caminho de ${endFormatado}. Fique atento(a) à campainha e interfone!`;
+        if (floatingText) floatingText.innerText = `Pedido #${pedido.numero}: Saiu p/ Entrega!`;
+      } else if (status === 'Entregue') {
+        badge.classList.add('badge-entregue');
+        badge.innerText = '✅ Entregue';
+        stepRec.classList.add('completed');
+        stepPrep.classList.add('completed');
+        stepSaiu.classList.add('completed');
+        stepEntr.classList.add('completed');
+        box.classList.add('entregue');
+        icon.innerText = '🎉';
+        titulo.innerText = 'Pedido entregue! Bom apetite!';
+        desc.innerText = 'Esperamos que ame a mordida mais caprichada de Campinas! Se curtir, nos marque no Instagram @omordidaco.lanches ❤️';
+        if (floatingText) floatingText.innerText = `Pedido #${pedido.numero}: Entregue!`;
+      } else if (status === 'Cancelado') {
+        badge.classList.add('badge-pendente');
+        badge.innerText = '❌ Cancelado';
+        icon.innerText = '❌';
+        titulo.innerText = 'Pedido cancelado.';
+        desc.innerText = 'Entre em contato com nossa equipe no WhatsApp se precisar de ajuda.';
+        if (floatingText) floatingText.innerText = `Pedido #${pedido.numero}: Cancelado`;
+      }
+
+      // Link para o WhatsApp com comprovante
+      const telRestaurante = (cardapioGlobal && cardapioGlobal.restaurante && cardapioGlobal.restaurante.whatsapp) ? cardapioGlobal.restaurante.whatsapp : '5519997881550';
+      const trackingUrl = `${window.location.origin}/?pedido=${pedido.id}`;
+      let zapMsg = `Olá! Sou ${pedido.cliente ? pedido.cliente.nome : 'Cliente'}, sobre o meu Pedido #${pedido.numero} no O Mordidaço.\n`;
+      zapMsg += `📍 Rastreamento ao Vivo: ${trackingUrl}`;
+      document.getElementById('btnWhatsappShare').href = `https://wa.me/${telRestaurante}?text=${encodeURIComponent(zapMsg)}`;
+    }
+
+    function tocarSinoNotificacao() {
+      try {
+        if ('vibrate' in navigator) navigator.vibrate([200, 100, 200]);
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+        osc.frequency.setValueAtTime(880, ctx.currentTime + 0.15); // A5
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.6);
+      } catch (e) {}
+    }
+
+    function iniciarRastreamentoAoVivo(pedidoId, dadosIniciais = null) {
+      if (!pedidoId) return;
+      ultimoPedidoCriadoId = pedidoId;
+      try {
+        localStorage.setItem('mordidaco_ultimo_pedido_id', pedidoId);
+      } catch (e) {}
+
+      // Exibe barra flutuante para caso o cliente feche a tela
+      const floatingBar = document.getElementById('floatingTrackerBar');
+      if (floatingBar) floatingBar.style.display = 'flex';
+
+      if (dadosIniciais) {
+        atualizarVisualizacaoRastreamento(dadosIniciais);
+      }
+
+      abrirModal('successModal');
+
+      // Polling a cada 6 segundos
+      if (intervalRastreamento) clearInterval(intervalRastreamento);
+      intervalRastreamento = setInterval(async () => {
+        try {
+          const res = await fetch(`/api/pedidos/${pedidoId}`);
+          if (!res.ok) return;
+          const pedidoAtualizado = await res.json();
+          if (pedidoAtualizado && pedidoAtualizado.status) {
+            if (ultimoStatusRastreado && ultimoStatusRastreado !== pedidoAtualizado.status) {
+              tocarSinoNotificacao();
+            }
+            atualizarVisualizacaoRastreamento(pedidoAtualizado);
+
+            if (pedidoAtualizado.status === 'Entregue' || pedidoAtualizado.status === 'Cancelado') {
+              clearInterval(intervalRastreamento);
+            }
+          }
+        } catch (e) {}
+      }, 6000);
+    }
+
     async function finalizarPedido() {
       const nome = document.getElementById('clienteNome').value.trim();
       const telefone = document.getElementById('clienteTelefone').value.trim();
-      const endereco = document.getElementById('clienteEndereco').value.trim();
+      const cep = document.getElementById('clienteCep').value.trim();
+      const rua = document.getElementById('clienteRua').value.trim();
+      const numero = document.getElementById('clienteNumero').value.trim();
       const bairro = document.getElementById('clienteBairro').value.trim();
       const ref = document.getElementById('clienteRef').value.trim();
 
-      if (!nome || !telefone || !endereco || !bairro) {
-        alert('Por favor, preencha todos os campos obrigatórios de entrega (Nome, Telefone, Endereço e Bairro).');
+      if (!nome || !telefone || !rua || !numero || !bairro) {
+        alert('Por favor, preencha todos os campos obrigatórios de entrega (Nome, Telefone, Rua, Número e Bairro).');
         return;
       }
+
+      const enderecoCompleto = `${rua}, nº ${numero}`;
 
       const subtotal = carrinho.reduce((acc, item) => acc + item.preco, 0);
       const taxa = cardapioGlobal ? cardapioGlobal.restaurante.taxaEntregaPadrao : 5.00;
@@ -1485,17 +1953,15 @@
         if (troco) pagtoDetalhe += ` (${troco})`;
       }
 
-      const querAcompanharWhats = Boolean(document.getElementById('chkAcompanharWhats') ? document.getElementById('chkAcompanharWhats').checked : false);
-
       const pedidoPayload = {
         cliente: { nome, telefone },
-        entrega: { endereco, bairro, referencia: ref },
+        entrega: { endereco: enderecoCompleto, bairro, referencia: ref, cep },
         itens: carrinho,
         pagamento: pagtoDetalhe,
         subtotal,
         taxaEntrega: taxa,
         total,
-        acompanharWhatsapp: querAcompanharWhats
+        acompanharWhatsapp: true
       };
 
       try {
@@ -1511,6 +1977,13 @@
         if (!pedidoCriado.statusAtualizadoEm) {
           pedidoCriado.statusAtualizadoEm = Date.now();
         }
+
+        // Salva dados do cliente no navegador para a próxima compra
+        try {
+          localStorage.setItem('mordidaco_cliente', JSON.stringify({
+            nome, telefone, cep, rua, numero, bairro, referencia: ref
+          }));
+        } catch(e) {}
 
         // 1. Sincroniza pedido no cache local do navegador para a cozinha
         try {
@@ -1543,21 +2016,22 @@
           }).catch(() => {});
         } catch (e) {}
 
+        // Rastreamento Meta Pixel: Compra Concluída
+        dispararPixel('Purchase', { value: pedidoCriado.total, currency: 'BRL', order_id: pedidoCriado.id });
+
         // Limpa carrinho
         carrinho = [];
         atualizarBarraCarrinho();
         fecharModal('checkoutModal');
 
-        // Abre tela de sucesso
-        document.getElementById('sucessoNumeroPedido').innerText = '#' + pedidoCriado.numero;
-        document.getElementById('sucessoPagto').innerText = pedidoCriado.pagamento;
-        document.getElementById('sucessoTotal').innerText = 'R$ ' + pedidoCriado.total.toFixed(2).replace('.', ',');
+        // Inicia o rastreador ao vivo na tela imediatamente
+        iniciarRastreamentoAoVivo(pedidoCriado.id, pedidoCriado);
 
-        // Monta mensagem do WhatsApp
+        // Monta mensagem do WhatsApp com link de rastreamento direto
         let msgWhats = `*NOVO PEDIDO - O MORDIDAÇO (#${pedidoCriado.numero})*\n\n`;
         msgWhats += `*Cliente:* ${nome}\n`;
         msgWhats += `*WhatsApp:* ${telefone}\n`;
-        msgWhats += `*Endereço:* ${endereco} - ${bairro}\n`;
+        msgWhats += `*Endereço:* ${enderecoCompleto} - ${bairro}\n`;
         if (ref) msgWhats += `*Ref:* ${ref}\n`;
         msgWhats += `\n*ITENS DO PEDIDO:*\n`;
         pedidoPayload.itens.forEach(i => {
@@ -1569,41 +2043,54 @@
         msgWhats += `*Taxa Entrega:* R$ ${taxa.toFixed(2)}\n`;
         msgWhats += `*TOTAL A PAGAR AO MOTOBOY:* R$ ${total.toFixed(2)}\n`;
         msgWhats += `*Forma de Pagamento:* ${pagtoDetalhe}\n\n`;
-        msgWhats += `Quero acompanhar a saída do meu pedido! 🌭🔥`;
+        msgWhats += `📍 *Acompanhar Pedido ao Vivo:* ${window.location.origin}/?pedido=${pedidoCriado.id}\n`;
 
         const zapUrl = `https://wa.me/${cardapioGlobal.restaurante.whatsapp}?text=${encodeURIComponent(msgWhats)}`;
         document.getElementById('btnWhatsappShare').href = zapUrl;
-
-        abrirModal('successModal');
       } catch (err) {
         alert('Erro ao enviar pedido para o restaurante. Verifique sua conexão.');
       }
     }
 
-    function ativarOptInWhatsappAposClique() {
-      if (!ultimoPedidoCriadoId) return;
-      try {
-        fetch(`/api/pedidos/${ultimoPedidoCriadoId}/acompanhar-whatsapp`, { method: 'POST' }).catch(() => {});
-      } catch(e) {}
-      try {
-        if ('BroadcastChannel' in window) {
-          const canal = new BroadcastChannel('omordidaco_canal');
-          canal.postMessage({ tipo: 'optin_whatsapp', id: ultimoPedidoCriadoId });
-        }
-      } catch(e) {}
-      try {
-        fetch('https://ntfy.sh/omordidaco_pedidos_tamoio_campinas_live', {
-          method: 'POST',
-          body: JSON.stringify({ tipo: 'optin_whatsapp', id: ultimoPedidoCriadoId })
-        }).catch(() => {});
-      } catch(e) {}
-    }
-
     function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
     function fecharModal(id) { document.getElementById(id).style.display = 'none'; }
 
+    // Verificar se há pedido para rastrear na URL ou no armazenamento local
+    function verificarRastreamentoAoCarregar() {
+      const urlParams = new URLSearchParams(window.location.search);
+      let pedidoId = urlParams.get('pedido') || urlParams.get('acompanhar');
+      if (!pedidoId && window.location.pathname.startsWith('/pedido/')) {
+        pedidoId = window.location.pathname.split('/')[2];
+      }
+      if (!pedidoId) {
+        try {
+          pedidoId = localStorage.getItem('mordidaco_ultimo_pedido_id');
+        } catch(e) {}
+      }
+
+      if (pedidoId) {
+        fetch(`/api/pedidos/${pedidoId}`)
+          .then(r => r.ok ? r.json() : null)
+          .then(ped => {
+            if (ped && ped.status) {
+              const floatingBar = document.getElementById('floatingTrackerBar');
+              if (floatingBar) floatingBar.style.display = 'flex';
+              const floatingText = document.getElementById('floatingTrackerText');
+              if (floatingText) floatingText.innerText = `Pedido #${ped.numero}: ${ped.status}`;
+              
+              // Se veio explicitamente pelo link de pedido na URL, abre o modal direto
+              if (urlParams.get('pedido') || urlParams.get('acompanhar') || window.location.pathname.startsWith('/pedido/')) {
+                iniciarRastreamentoAoVivo(ped.id, ped);
+              }
+            }
+          })
+          .catch(() => {});
+      }
+    }
+
     // Iniciar
     carregarCardapio();
+    verificarRastreamentoAoCarregar();
   </script>
 </body>
 </html>

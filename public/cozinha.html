@@ -1321,15 +1321,9 @@
               <button class="btn-action btn-print" onclick="imprimirComanda('${p.id}')">
                 🖨️ IMPRIMIR COMANDA TÉRMICA
               </button>
-              ${p.acompanharWhatsapp ? `
-                <button class="btn-action btn-whatsapp-aviso" onclick="abrirWhatsAppAviso('${p.id}')">
-                  📲 Avisar Cliente no WhatsApp
-                </button>
-              ` : `
-                <div style="font-size: 11.5px; color: #94a3b8; text-align: center; padding: 6px; background: #f8fafc; border-radius: 6px; border: 1px dashed #cbd5e1;">
-                  🔕 Cliente não optou por acompanhar no WhatsApp
-                </div>
-              `}
+              <button class="btn-action btn-whatsapp-aviso" onclick="abrirWhatsAppAviso('${p.id}')">
+                📲 Avisar Cliente no WhatsApp
+              </button>
             </div>
           </div>
         `;
@@ -1422,12 +1416,6 @@
       const p = pedidosLocais.find(item => item.id === id);
       if (!p) return;
 
-      if (!p.acompanharWhatsapp) {
-        if (!confirm('Este cliente não optou por acompanhar o pedido no WhatsApp. Deseja abrir a conversa mesmo assim?')) {
-          return;
-        }
-      }
-
       let tel = String((p.cliente && p.cliente.telefone) ? p.cliente.telefone : '').replace(/\D/g, '');
       if (!tel) {
         alert('⚠️ Este pedido não possui telefone/WhatsApp do cliente cadastrado.');
@@ -1475,7 +1463,7 @@
     let toastTimeout = null;
     function exibirToastWhatsApp(id, novoStatus) {
       const p = pedidosLocais.find(item => item.id === id);
-      if (!p || !p.acompanharWhatsapp) return; // REGRA: Só exibe toast se o cliente optou por acompanhar no WhatsApp!
+      if (!p || !p.cliente || !p.cliente.telefone) return;
 
       const toast = document.getElementById('toastAvisoWhatsApp');
       const toastTexto = document.getElementById('toastAvisoTexto');

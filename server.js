@@ -665,6 +665,26 @@ async function obterProximoNumeroPedido() {
   return maxLocal + 1;
 }
 
+// Buscar Detalhes de um Pedido Específico (para Acompanhamento em Tempo Real)
+app.get(['/api/pedidos/:id', '/pedidos/:id'], async (req, res) => {
+  recarregarPedidosDoDisco();
+  if (KV_URL && KV_TOKEN) {
+    await carregarPedidosNuvem();
+  }
+  const { id } = req.params;
+  const pedido = pedidos.find(p => p.id === id || String(p.numero) === String(id));
+  if (!pedido) {
+    return res.status(404).json({ error: 'Pedido não encontrado.' });
+  }
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.json(pedido);
+});
+
+// Rota de visualização direta do rastreamento no navegador
+app.get(['/pedido/:id', '/acompanhar/:id'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 // Receber Novo Pedido
 app.post(['/api/pedidos', '/pedidos'], async (req, res) => {
   recarregarPedidosDoDisco();
@@ -689,7 +709,7 @@ app.post(['/api/pedidos', '/pedidos'], async (req, res) => {
       dataHora: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
       status: 'Pendente',
       statusAtualizadoEm: agora,
-      acompanharWhatsapp: Boolean(acompanharWhatsapp),
+      acompanharWhatsapp: acompanharWhatsapp !== undefined ? Boolean(acompanharWhatsapp) : true,
       cliente,
       itens,
       entrega: entrega || { endereco: 'Balcão / Retirada', bairro: 'Jardim Tamoio' },
