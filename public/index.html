@@ -77,268 +77,140 @@
     }
 
     /* HEADER & HERO SECTION (ELEVATED DESKTOP & MOBILE) */
+    /* HEADER COMPACTO & MINIMALISTA */
     header {
       background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 100%);
       color: #ffffff;
-      border-bottom: 4px solid var(--primary);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 32px 20px 28px 20px;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 24px;
-      align-items: center;
+      border-bottom: 3px solid var(--primary);
+      padding: 24px 20px 20px 20px;
       text-align: center;
     }
 
-    @media (min-width: 900px) {
-      .hero-grid {
-        grid-template-columns: 1.25fr 0.75fr;
-        text-align: left;
-        gap: 40px;
-      }
+    .header-content {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
     }
 
     .brand-logo-img {
-      width: 110px;
-      height: 110px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       object-fit: cover;
-      margin: 0 auto 12px auto;
-      display: block;
-      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
       border: 3px solid #f59e0b;
       background: #ffffff;
     }
 
-    @media (min-width: 900px) {
-      .brand-logo-img {
-        margin: 0 0 16px 0;
-      }
-    }
-
-    .brand-badge {
-      display: inline-block;
-      background: rgba(245, 158, 11, 0.18);
-      color: #fbbf24;
-      border: 1px solid rgba(245, 158, 11, 0.4);
-      padding: 5px 14px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      margin-bottom: 8px;
-    }
-
     header h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 900;
       color: #ffffff;
       letter-spacing: -0.5px;
-      margin-bottom: 6px;
+      margin: 0;
       line-height: 1.15;
     }
 
-    @media (min-width: 900px) {
-      header h1 {
-        font-size: 42px;
-      }
-    }
-
     header p.slogan {
-      font-size: 15px;
+      font-size: 13.5px;
       font-weight: 700;
       color: #fde68a;
-      margin-bottom: 10px;
+      margin: 0;
     }
 
-    header p.hero-description {
-      font-size: 14px;
-      color: #cbd5e1;
-      max-width: 600px;
-      margin: 0 auto 16px auto;
-      line-height: 1.5;
-    }
-
-    @media (min-width: 900px) {
-      header p.hero-description {
-        margin: 0 0 18px 0;
-      }
-    }
-
-    .hero-actions {
+    .header-badges {
       display: flex;
-      align-items: center;
-      gap: 12px;
-      justify-content: center;
-      margin-bottom: 16px;
       flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
     }
 
-    @media (min-width: 900px) {
-      .hero-actions {
-        justify-content: flex-start;
-      }
+    .header-chip {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #cbd5e1;
+      padding: 4px 12px;
+      border-radius: 14px;
+      font-size: 11.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
 
-    .btn-hero-order {
-      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-      color: #ffffff;
-      padding: 10px 22px;
-      border-radius: 24px;
-      font-size: 13.5px;
-      font-weight: 800;
-      text-decoration: none;
-      box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .btn-hero-order:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(217, 119, 6, 0.5);
-    }
-
-    /* INSTAGRAM BADGE */
     .instagram-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
       color: #ffffff;
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-size: 12px;
+      padding: 4px 14px;
+      border-radius: 14px;
+      font-size: 11.5px;
       font-weight: 700;
       text-decoration: none;
-      box-shadow: 0 2px 10px rgba(220, 39, 67, 0.25);
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.15s;
     }
 
     .instagram-btn:hover {
       transform: scale(1.03);
-      box-shadow: 0 4px 15px rgba(220, 39, 67, 0.4);
     }
 
-    .info-bar {
+    /* SEGMENTED CONTROL / ABAS PRINCIPAIS */
+    .main-nav-sticky {
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    }
+
+    .main-nav-inner {
+      max-width: 420px;
+      margin: 0 auto;
       display: flex;
-      justify-content: center;
-      gap: 10px;
-      font-size: 12px;
-      color: #cbd5e1;
-      flex-wrap: wrap;
+      padding: 8px 16px;
+      gap: 8px;
     }
 
-    @media (min-width: 900px) {
-      .info-bar {
-        justify-content: flex-start;
-      }
-    }
-
-    .info-pill {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      padding: 5px 12px;
+    .main-tab-btn {
+      flex: 1;
+      padding: 10px 18px;
       border-radius: 12px;
+      font-size: 13.5px;
+      font-weight: 800;
+      border: 1px solid transparent;
+      cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 5px;
-    }
-
-    .info-pill.status-open {
-      color: #4ade80;
-      font-weight: 800;
-    }
-
-    /* HERO FEATURED CARD (DESKTOP) */
-    .hero-featured-card {
-      background: linear-gradient(145deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
-      border: 2px solid rgba(245, 158, 11, 0.4);
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
-      display: none;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      background: #f1f5f9;
+      color: #64748b;
       position: relative;
     }
 
-    @media (min-width: 900px) {
-      .hero-featured-card {
-        display: block;
-      }
-    }
-
-    .hero-featured-tag {
-      position: absolute;
-      top: -12px;
-      right: 20px;
-      background: #ea580c;
+    .main-tab-btn.active {
+      background: var(--primary);
       color: #ffffff;
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      box-shadow: 0 2px 8px rgba(234, 88, 12, 0.4);
+      box-shadow: 0 2px 8px rgba(217, 119, 6, 0.25);
     }
 
-    /* BARRA DE PILARES & GARANTIAS DA CASA */
-    .pillars-bar {
-      background: #ffffff;
-      border-bottom: 1px solid var(--card-border);
-      padding: 18px 0;
-    }
-
-    .pillars-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-    }
-
-    .pillar-card {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 12px 16px;
-      background: #f8fafc;
-      border-radius: 14px;
-      border: 1px solid #e2e8f0;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .pillar-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    }
-
-    .pillar-icon {
-      font-size: 28px;
-      flex-shrink: 0;
-    }
-
-    .pillar-title {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--dark);
-      display: block;
-    }
-
-    .pillar-desc {
-      font-size: 12px;
-      color: var(--text-muted);
-      line-height: 1.35;
-      display: block;
+    .tab-badge {
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 10px;
+      font-weight: 900;
     }
 
     /* CATEGORY NAV CLEAN */
@@ -956,107 +828,36 @@
     🚀 AMBIENTE DE TESTES & DESENVOLVIMENTO • Inauguração Oficial em <strong>Dezembro de 2026</strong>!
   </div>
 
-  <!-- HEADER ELEVADO COM HERO DESKTOP -->
+  <!-- HEADER COMPACTO & ELEGANTE -->
   <header>
-    <div class="hero-container">
-      <div class="hero-grid">
-        <!-- LADO ESQUERDO: APRESENTAÇÃO DE AUTORIDADE -->
-        <div class="hero-left">
-          <img src="assets/logo.png" alt="O Mordidaço" class="brand-logo-img">
-          <div class="brand-badge">Hot-Dogueria Artesanal • Campinas/SP</div>
-          <h1>O MORDIDAÇO</h1>
-          <p class="slogan">A mordida mais caprichada de Campinas !</p>
-          <p class="hero-description">
-            Cachorros-quentes fartos montados no pão de rua selado ou na marmitinha térmica 500ml com dobro de muçarela derretida no molho caseiro, purê de ouro e chuva de parmesão fresco.
-          </p>
+    <div class="header-content">
+      <img src="assets/logo.png" alt="O Mordidaço" class="brand-logo-img">
+      <div>
+        <h1>O MORDIDAÇO</h1>
+        <p class="slogan">Hot-Dogueria Artesanal • Jardim Tamoio, Campinas</p>
+      </div>
 
-          <div class="hero-actions">
-            <a href="#menuContainer" class="btn-hero-order" onclick="trocarAbaPrincipal('cardapio')">🌭 Ver Cardápio & Pedir</a>
-            <a href="https://instagram.com/omordidaco.dogs" target="_blank" class="instagram-btn">
-              📸 @omordidaco.dogs
-            </a>
-          </div>
-
-          <div class="info-bar">
-            <div class="info-pill" style="background: #fef3c7; color: #b45309; border: 1.5px solid #fde68a; font-weight: 800;">🚧 Pré-Inauguração • Dezembro/2026</div>
-            <div class="info-pill">📍 Jardim Tamoio</div>
-            <div class="info-pill">🛵 35 - 50 min</div>
-            <div class="info-pill">💳 Pagto na Entrega</div>
-          </div>
-        </div>
-
-        <!-- LADO DIREITO (DESKTOP): CARD SHOWCASE DO COMBO CAMPEÃO -->
-        <div class="hero-right">
-          <div class="hero-featured-card">
-            <div class="hero-featured-tag">🔥 O CAMPEÃO DO TAMOIO</div>
-            <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 12px;">
-              <img src="assets/logo.png" style="width: 70px; height: 70px; border-radius: 12px; object-fit: cover; border: 2px solid #f59e0b;">
-              <div>
-                <strong style="color: #ffffff; font-size: 16px; display: block;">Combo Casal do Mordidaço</strong>
-                <span style="color: #fde68a; font-size: 13px; font-weight: 700;">2 Dogs Duplos + 2 Refris + 2 Maioneses</span>
-              </div>
-            </div>
-            <p style="font-size: 12.5px; color: #94a3b8; line-height: 1.4; margin-bottom: 14px;">
-              Dois dogs com o dobro real de muçarela derretida no calor do molho caseiro, purê artesanal, coroado com parmesão ralado na hora!
-            </p>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <div>
-                <span style="font-size: 11px; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Apenas</span>
-                <div style="color: #22c55e; font-size: 22px; font-weight: 900;">R$ 52,00</div>
-              </div>
-              <button onclick="tratarAdicionarItem('combos', 'combo-casal')" style="background: #f59e0b; color: #0f172a; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; transition: transform 0.2s;">
-                + Pedir Esse Combo
-              </button>
-            </div>
-          </div>
-        </div>
+      <div class="header-badges">
+        <a href="https://instagram.com/omordidaco.dogs" target="_blank" class="instagram-btn">
+          📸 @omordidaco.dogs
+        </a>
+        <div class="header-chip">📍 Jardim Tamoio</div>
+        <div class="header-chip">⏱️ 35 - 50 min</div>
+        <div class="header-chip">🛵 Entrega R$ 5,00</div>
+        <div class="header-chip">💳 Pagto na Entrega</div>
       </div>
     </div>
   </header>
 
-  <!-- FAIXA DE PILARES & GARANTIAS ARTESANAIS -->
-  <div class="pillars-bar">
-    <div class="pillars-inner">
-      <div class="pillar-card">
-        <span class="pillar-icon">🥖</span>
-        <div>
-          <span class="pillar-title">Pão Macio & Selado</span>
-          <span class="pillar-desc">Pão de rua farto que abraça o recheio até a borda</span>
-        </div>
-      </div>
-      <div class="pillar-card">
-        <span class="pillar-icon">🥔</span>
-        <div>
-          <span class="pillar-title">Purê de Ouro Artesanal</span>
-          <span class="pillar-desc">Receita caseira da família, cremoso e amanteigado</span>
-        </div>
-      </div>
-      <div class="pillar-card">
-        <span class="pillar-icon">🧀</span>
-        <div>
-          <span class="pillar-title">Dobro de Muçarela</span>
-          <span class="pillar-desc">Fatias generosas derretidas no calor do molho</span>
-        </div>
-      </div>
-      <div class="pillar-card">
-        <span class="pillar-icon">👑</span>
-        <div>
-          <span class="pillar-title">Chuva de Parmesão</span>
-          <span class="pillar-desc">Coroado com queijo fresco ralado na hora</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- BARRA DE NAVEGAÇÃO PRINCIPAL (CARDÁPIO vs MEUS PEDIDOS) -->
-  <div style="background: #ffffff; border-bottom: 2px solid #e2e8f0; position: sticky; top: 0; z-index: 90; box-shadow: 0 2px 10px rgba(0,0,0,0.04);">
-    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: center; gap: 12px; padding: 10px 16px;">
-      <button id="btnTabCardapio" onclick="trocarAbaPrincipal('cardapio')" style="padding: 10px 24px; border-radius: 25px; border: none; font-weight: 800; font-size: 14px; cursor: pointer; background: var(--primary); color: #ffffff; transition: all 0.2s; box-shadow: 0 2px 8px rgba(217, 119, 6, 0.3);">
+  <!-- NAVEGAÇÃO PRINCIPAL (CARDÁPIO vs MEUS PEDIDOS) -->
+  <div class="main-nav-sticky">
+    <div class="main-nav-inner">
+      <button id="btnTabCardapio" class="main-tab-btn active" onclick="trocarAbaPrincipal('cardapio')">
         🌭 Cardápio
       </button>
-      <button id="btnTabPedidos" onclick="trocarAbaPrincipal('pedidos')" style="padding: 10px 24px; border-radius: 25px; border: 1.5px solid #cbd5e1; font-weight: 800; font-size: 14px; cursor: pointer; background: #f8fafc; color: var(--dark); position: relative; transition: all 0.2s;">
+      <button id="btnTabPedidos" class="main-tab-btn" onclick="trocarAbaPrincipal('pedidos')">
         🛍️ Meus Pedidos
-        <span id="badgePedidosAtivos" style="display: none; position: absolute; top: -5px; right: -5px; background: #dc2626; color: #ffffff; font-size: 11px; padding: 2px 7px; border-radius: 12px; font-weight: 900; box-shadow: 0 2px 6px rgba(220,38,38,0.4);">1</span>
+        <span id="badgePedidosAtivos" class="tab-badge" style="display: none;">1</span>
       </button>
     </div>
   </div>
@@ -2221,30 +2022,16 @@
       const viewPedidos = document.getElementById('viewPedidos');
 
       if (aba === 'pedidos') {
-        btnCardapio.style.background = '#f8fafc';
-        btnCardapio.style.color = 'var(--dark)';
-        btnCardapio.style.border = '1.5px solid #cbd5e1';
-        btnCardapio.style.boxShadow = 'none';
-
-        btnPedidos.style.background = 'var(--primary)';
-        btnPedidos.style.color = '#ffffff';
-        btnPedidos.style.border = 'none';
-        btnPedidos.style.boxShadow = '0 2px 8px rgba(217, 119, 6, 0.3)';
+        btnCardapio.classList.remove('active');
+        btnPedidos.classList.add('active');
 
         viewCardapio.style.display = 'none';
         viewPedidos.style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
         renderizarAbaMeusPedidos();
       } else {
-        btnCardapio.style.background = 'var(--primary)';
-        btnCardapio.style.color = '#ffffff';
-        btnCardapio.style.border = 'none';
-        btnCardapio.style.boxShadow = '0 2px 8px rgba(217, 119, 6, 0.3)';
-
-        btnPedidos.style.background = '#f8fafc';
-        btnPedidos.style.color = 'var(--dark)';
-        btnPedidos.style.border = '1.5px solid #cbd5e1';
-        btnPedidos.style.boxShadow = 'none';
+        btnPedidos.classList.remove('active');
+        btnCardapio.classList.add('active');
 
         viewCardapio.style.display = 'block';
         viewPedidos.style.display = 'none';
