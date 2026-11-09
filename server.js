@@ -652,6 +652,15 @@ async function obterProximoNumeroPedido() {
   return max + 1;
 }
 
+// Listar Histórico de Pedidos Anteriores (DEVE vir ANTES de :id para não ser interceptado como ID)
+app.get(['/api/pedidos/historico', '/pedidos/historico'], (req, res) => {
+  recarregarHistoricoDoDisco();
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  res.json(historicoPedidos);
+});
+
 // Buscar Detalhes de um Pedido Específico (para Acompanhamento em Tempo Real)
 app.get(['/api/pedidos/:id', '/pedidos/:id'], async (req, res) => {
   recarregarPedidosDoDisco();
@@ -781,6 +790,10 @@ app.patch(['/api/pedidos/:id/status', '/pedidos/:id/status'], async (req, res) =
   const { id } = req.params;
   const { status, statusAtualizadoEm, pedidoCompleto } = req.body || {};
 
+  if (id === 'historico' || id === 'stream' || id === 'reset' || id === 'reset-total') {
+    return res.status(400).json({ error: 'ID de pedido reservado/inválido.' });
+  }
+
   const timestampAtualizacao = Number(statusAtualizadoEm) || Date.now();
 
   let pedido = pedidos.find(p => p.id === id);
@@ -792,21 +805,17 @@ app.patch(['/api/pedidos/:id/status', '/pedidos/:id/status'], async (req, res) =
   }
 
   if (!pedido) {
-    // Se o pedido não estava em memória, hidrata com o pedidoCompleto enviado pela cozinha
-    if (pedidoCompleto && pedidoCompleto.id) {
+    // Se o pedido não estava em memória, só aceita se vier o pedidoCompleto com número válido
+    if (pedidoCompleto && pedidoCompleto.id && pedidoCompleto.numero) {
       pedido = {
         ...pedidoCompleto,
         status: status || pedidoCompleto.status || 'Pendente',
         statusAtualizadoEm: timestampAtualizacao
       };
+      pedidos.unshift(pedido);
     } else {
-      pedido = {
-        id,
-        status: status || 'Pendente',
-        statusAtualizadoEm: timestampAtualizacao
-      };
+      return res.status(404).json({ error: 'Pedido não encontrado.' });
     }
-    pedidos.unshift(pedido);
   } else {
     // Se o pedido já existia mas faltavam dados essenciais (como número ou itens)
     if (pedidoCompleto && (!pedido.numero || !pedido.itens || !pedido.total)) {
@@ -835,15 +844,6 @@ app.patch(['/api/pedidos/:id/status', '/pedidos/:id/status'], async (req, res) =
   });
 
   res.json(pedido);
-});
-
-// Listar Histórico de Pedidos Anteriores
-app.get(['/api/pedidos/historico', '/pedidos/historico'], (req, res) => {
-  recarregarHistoricoDoDisco();
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
-  res.json(historicoPedidos);
 });
 
 // Fechar Caixa / Resetar Pedidos do Dia (Arquiva no histórico e limpa o painel da cozinha)
