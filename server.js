@@ -624,54 +624,22 @@ app.get(['/api/pedidos', '/pedidos'], async (req, res) => {
   res.json(pedidos);
 });
 
-// Gerador de número de pedido sequencial compartilhado (Vercel KV / Cloud Counter)
-const COUNTER_STORE_ID = 'ff808181a09d98f701a1b34dd88057e1';
-
+// Gerador de número de pedido sequencial limpo e determinístico
 async function obterProximoNumeroPedido() {
-  // 1. Se Vercel KV / Redis estiver configurado no painel da Vercel
-  if (KV_URL && KV_TOKEN) {
-    try {
-      const res = await fetch(`${KV_URL}/incr/omordidaco_order_counter`, {
-        headers: { Authorization: `Bearer ${KV_TOKEN}` }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data && data.result) return Number(data.result);
-      }
-    } catch (e) {}
-  }
+  recarregarPedidosDoDisco();
+  recarregarHistoricoDoDisco();
 
-  // 2. Contador Cloud Persistente (compartilhado entre todas as lambdas e celulares)
-  try {
-    const res = await fetch(`https://api.restful-api.dev/objects/${COUNTER_STORE_ID}`);
-    if (res.ok) {
-      const doc = await res.json();
-      let current = (doc.data && doc.data.current) ? Number(doc.data.current) : 104;
+  let max = 100;
+  pedidos.forEach(p => {
+    const n = Number(p.numero);
+    if (!isNaN(n) && n > max) max = n;
+  });
+  historicoPedidos.forEach(h => {
+    const n = Number(h.numero);
+    if (!isNaN(n) && n > max) max = n;
+  });
 
-      const maxMemoria = pedidos.length > 0 ? Math.max(...pedidos.map(p => Number(p.numero) || 0)) : 102;
-      current = Math.max(current, maxMemoria);
-
-      const next = current + 1;
-
-      // Atualiza o contador na nuvem para o próximo pedido
-      fetch(`https://api.restful-api.dev/objects/${COUNTER_STORE_ID}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: 'omordidaco_order_counter',
-          data: { current: next, lastUpdated: Date.now() }
-        })
-      }).catch(() => {});
-
-      return next;
-    }
-  } catch (e) {
-    console.warn('Aviso: Falha ao consultar contador em nuvem:', e.message);
-  }
-
-  // 3. Fallback determinístico caso a nuvem esteja temporariamente offline
-  const maxLocal = pedidos.length > 0 ? Math.max(...pedidos.map(p => Number(p.numero) || 0)) : 104;
-  return maxLocal + 1;
+  return max + 1;
 }
 
 // Buscar Detalhes de um Pedido Específico (para Acompanhamento em Tempo Real)
@@ -930,6 +898,48 @@ app.post(['/api/pedidos/fechar-dia', '/api/pedidos/reset', '/pedidos/fechar-dia'
     message: 'Expediente encerrado com sucesso! Pedidos arquivados no histórico.',
     arquivados: arquivadosCount,
     totalHistorico: historicoPedidos.length
+  });
+});
+
+// Reset Total do Sistema (Limpa Pedidos Ativos, Histórico e Clientes, e reinicia em #101)
+app.post(['/api/pedidos/reset-total', '/pedidos/reset-total'], async (req, res) => {
+  pedidos = [];
+  historicoPedidos = [];
+  clientes = [];
+
+  salvarPedidos();
+  salvarHistorico();
+  salvarClientes();
+
+  if (KV_URL && KV_TOKEN) {
+    try {
+      await fetch(`${KV_URL}/set/omordidaco_pedidos`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${KV_TOKEN}` },
+        body: JSON.stringify([])
+      });
+      await fetch(`${KV_URL}/set/omordidaco_historico`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${KV_TOKEN}` },
+        body: JSON.stringify([])
+      });
+      await fetch(`${KV_URL}/set/omordidaco_clientes`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${KV_TOKEN}` },
+        body: JSON.stringify([])
+      });
+    } catch (e) {}
+  }
+
+  notificarCozinha({
+    tipo: 'pedidos_resetados',
+    resetTotal: true,
+    timestamp: Date.now()
+  });
+
+  res.json({
+    success: true,
+    message: 'Todos os pedidos e histórico foram completamente resetados! Próximo pedido iniciará no #101.'
   });
 });
 

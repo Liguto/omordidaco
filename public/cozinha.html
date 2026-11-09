@@ -570,6 +570,7 @@
       </label>
       <button class="btn-top" onclick="testarAlarme()">🔔 Testar Som</button>
       <button class="btn-top" onclick="carregarPedidos()">🔄 Atualizar</button>
+      <button class="btn-top" style="background: #dc2626;" onclick="resetarTudoSistema()">🗑️ Zerar Tudo (Reset)</button>
     </div>
   </div>
 
@@ -1082,25 +1083,16 @@
       alert('Som do alarme acionado com sucesso!');
     }
 
-    let ultimoIdPedidoConhecido = null;
-
-    // Cache local e persistência em navegador
+    // Persistência de cache e sincronização direta
     function carregarCacheLocalPedidos() {
       try {
         const salvo = localStorage.getItem('mordidaco_pedidos_cache');
         if (salvo) {
-          let arr = JSON.parse(salvo);
+          const arr = JSON.parse(salvo);
           if (Array.isArray(arr) && arr.length > 0) {
-            // Expurga definitivamente pedidos de teste legados (101 e 102) do painel ativo
-            arr = arr.filter(p => p.id !== 'PED-1793903889661' && p.id !== 'PED-1793903211585' && Number(p.numero) !== 101 && Number(p.numero) !== 102);
-            localStorage.setItem('mordidaco_pedidos_cache', JSON.stringify(arr));
-            arr.forEach(p => {
-              if (!p.statusAtualizadoEm) {
-                const tsFromId = Number((p.id || '').replace('PED-', '').split('-')[0]);
-                p.statusAtualizadoEm = !isNaN(tsFromId) && tsFromId > 0 ? tsFromId : 0;
-              }
-            });
-            mesclarPedidos(arr, false);
+            pedidosLocais = arr;
+            renderizarPedidos();
+            atualizarEstatisticas();
           }
         }
       } catch (e) {}
@@ -1108,80 +1100,47 @@
 
     function salvarCacheLocalPedidos() {
       try {
-        localStorage.setItem('mordidaco_pedidos_cache', JSON.stringify(pedidosLocais.slice(0, 100)));
+        localStorage.setItem('mordidaco_pedidos_cache', JSON.stringify(pedidosLocais));
       } catch (e) {}
     }
 
-    function mesclarPedidos(novos, alertarSeNovo = true) {
-      if (!Array.isArray(novos)) return;
-      let houveNovo = false;
-      let pedidoParaImprimir = null;
+    // Carregar pedidos do backend com sincronização direta e detecção de novidades
+    async function carregarPedidos() {
+      try {
+        const res = await fetch('/api/pedidos?_t=' + Date.now(), { cache: 'no-store' });
+        if (res.ok) {
+          const listaServidor = await res.json();
+          if (Array.isArray(listaServidor)) {
+            // Detecta se entrou novo pedido pendente para tocar alarme sonoro
+            let houveNovo = false;
+            let pedidoParaImprimir = null;
 
-      novos.forEach(novo => {
-        if (!novo || !novo.id) return;
-        // Identificação estrita por ID único do pedido (nunca sobrescreve pedidos diferentes)
-        const idx = pedidosLocais.findIndex(p => p.id === novo.id);
-        if (idx >= 0) {
-          const local = pedidosLocais[idx];
-          
-          let statusFinal = local.status;
-          let timestampFinal = Number(local.statusAtualizadoEm) || 0;
+            listaServidor.forEach(pNovo => {
+              if (pNovo && pNovo.status === 'Pendente') {
+                const jaTinha = pedidosLocais.some(pVelho => pVelho.id === pNovo.id);
+                if (!jaTinha) {
+                  houveNovo = true;
+                  pedidoParaImprimir = pNovo;
+                }
+              }
+            });
 
-          const localTravadoEm = Number(local.statusTravadoLocalmenteEm) || 0;
-          const tempoDesdeTrava = Date.now() - localTravadoEm;
+            pedidosLocais = listaServidor;
+            pedidosLocais.sort((a, b) => (b.numero || 0) - (a.numero || 0));
+            salvarCacheLocalPedidos();
+            renderizarPedidos();
+            atualizarEstatisticas();
 
-          // REGRA DE OURO DA COZINHA:
-          // Se o operador da cozinha alterou o status (ou nos últimos 5 minutos),
-          // o status local da tela é a AUTORIDADE MÁXIMA e NUNCA é revertido pelo polling do servidor!
-          if (localTravadoEm > 0 && tempoDesdeTrava < 300000 && local.status) {
-            statusFinal = local.status;
-          } else {
-            const novoTime = Number(novo.statusAtualizadoEm) || 0;
-            // Só aceita status vindo de fora se for comprovadamente mais recente (diferença de mais de 1s para evitar clock skew)
-            if (novoTime > timestampFinal + 1000) {
-              statusFinal = novo.status;
-              timestampFinal = novoTime;
+            if (houveNovo) {
+              tocarAlarmeSonoro();
+              if (pedidoParaImprimir && document.getElementById('chkAutoPrint').checked) {
+                setTimeout(() => imprimirComanda(pedidoParaImprimir.id), 600);
+              }
             }
           }
-
-          pedidosLocais[idx] = {
-            ...local,
-            ...novo,
-            status: statusFinal,
-            statusAtualizadoEm: timestampFinal,
-            statusTravadoLocalmenteEm: local.statusTravadoLocalmenteEm || localTravadoEm
-          };
-        } else {
-          // Se for um novo pedido e coincidentemente houver outro pedido com mesmo número, desambigua
-          const colidiuNumero = pedidosLocais.some(p => p.id !== novo.id && String(p.numero) === String(novo.numero));
-          if (colidiuNumero) {
-            novo.numero = novo.numero + '-B';
-          }
-
-          if (!novo.statusAtualizadoEm) {
-            const tsFromId = Number((novo.id || '').replace('PED-', '').split('-')[0]);
-            novo.statusAtualizadoEm = !isNaN(tsFromId) && tsFromId > 0 ? tsFromId : Date.now();
-          }
-          pedidosLocais.push(novo);
-          if (alertarSeNovo && novo.status === 'Pendente') {
-            houveNovo = true;
-            pedidoParaImprimir = novo;
-          }
         }
-      });
-
-      // Ordena decrescente por número do pedido
-      pedidosLocais.sort((a, b) => (b.numero || 0) - (a.numero || 0));
-      salvarCacheLocalPedidos();
-      consolidarClientesLocais();
-      renderizarPedidos();
-      atualizarEstatisticas();
-
-      if (houveNovo) {
-        tocarAlarmeSonoro();
-        if (pedidoParaImprimir && document.getElementById('chkAutoPrint').checked) {
-          setTimeout(() => imprimirComanda(pedidoParaImprimir.id), 600);
-        }
+      } catch (err) {
+        console.warn('Aviso: Falha ao carregar pedidos do servidor:', err.message);
       }
     }
 
@@ -1190,27 +1149,42 @@
       const jaExiste = pedidosLocais.some(p => p.id === novoPedido.id);
       if (!jaExiste) {
         tocarAlarmeSonoro();
-        mesclarPedidos([novoPedido], false);
+        pedidosLocais.unshift(novoPedido);
+        pedidosLocais.sort((a, b) => (b.numero || 0) - (a.numero || 0));
+        salvarCacheLocalPedidos();
+        renderizarPedidos();
+        atualizarEstatisticas();
         if (document.getElementById('chkAutoPrint').checked) {
           setTimeout(() => imprimirComanda(novoPedido.id), 600);
         }
       } else {
-        mesclarPedidos([novoPedido], false);
+        const idx = pedidosLocais.findIndex(p => p.id === novoPedido.id);
+        pedidosLocais[idx] = novoPedido;
+        salvarCacheLocalPedidos();
+        renderizarPedidos();
       }
     }
 
-    // Carregar pedidos do backend com mesclagem inteligente
-    async function carregarPedidos() {
+    async function resetarTudoSistema() {
+      if (!confirm('⚠️ ATENÇÃO: Deseja apagar TODOS os pedidos ativos, histórico e clientes da base de dados e começar o dia limpo a partir do pedido #101?')) {
+        return;
+      }
       try {
-        const res = await fetch('/api/pedidos?_t=' + Date.now(), { cache: 'no-store' });
+        const res = await fetch('/api/pedidos/reset-total', { method: 'POST' });
         if (res.ok) {
-          const lista = await res.json();
-          if (Array.isArray(lista) && lista.length > 0) {
-            mesclarPedidos(lista, true);
-          }
+          pedidosLocais = [];
+          localStorage.removeItem('mordidaco_pedidos_cache');
+          localStorage.setItem('mordidaco_pedidos_cache', '[]');
+          renderizarPedidos();
+          atualizarEstatisticas();
+          carregarHistorico();
+          carregarClientes();
+          alert('✓ Sistema completamente zerado! Próximo pedido será o #101.');
+        } else {
+          alert('Erro ao resetar pedidos no servidor.');
         }
-      } catch (err) {
-        console.warn('Aviso: Não foi possível obter pedidos do backend neste ciclo:', err.message);
+      } catch (e) {
+        alert('Erro de conexão ao resetar.');
       }
     }
 
@@ -1897,11 +1871,8 @@
         };
 
         eventSource.onerror = () => {
-          errosConsecutivos++;
-          // Em ambientes Serverless sem suporte a SSE contínuo, fecha após 3 tentativas
-          if (errosConsecutivos > 2) {
-            eventSource.close();
-          }
+          try { eventSource.close(); } catch(e) {}
+          setTimeout(conectarServidorSSE, 4000);
         };
       } catch (e) {}
     }
@@ -1916,10 +1887,10 @@
     conectarCanalNuvem();
     conectarServidorSSE();
 
-    // Auto-sync a cada 3 segundos com o backend para consolidar pedidos
+    // Auto-sync a cada 2 segundos com o backend para receber pedidos de celulares na hora
     setInterval(() => {
       carregarPedidos();
-    }, 3000);
+    }, 2000);
 
     // Consulta periódica de clientes VIP a cada 30 segundos em segundo plano
     setInterval(() => {

@@ -1887,7 +1887,24 @@
     let intervalSincronizacao = null;
 
     function processarAtualizacaoPedido(dados) {
-      if (!dados || (!dados.id && !dados.numero)) return;
+      if (!dados) return;
+
+      if (dados.tipo === 'pedidos_resetados' || dados.resetTotal) {
+        try {
+          localStorage.removeItem('mordidaco_ultimo_pedido_id');
+          localStorage.setItem('mordidaco_meus_pedidos', '[]');
+        } catch(e) {}
+        ultimoPedidoCriadoId = null;
+        if (intervalSincronizacao) clearInterval(intervalSincronizacao);
+        const floatingBar = document.getElementById('floatingTrackerBar');
+        if (floatingBar) floatingBar.style.display = 'none';
+        fecharModal('successModal');
+        atualizarBadgeMeusPedidos();
+        renderizarAbaMeusPedidos();
+        return;
+      }
+
+      if (!dados.id && !dados.numero) return;
       const ts = Number(dados.statusAtualizadoEm) || 0;
 
       // Mescla com os dados salvos no navegador para NUNCA exibir undefined ou R$ 0,00
@@ -1954,7 +1971,7 @@
       const floatingBar = document.getElementById('floatingTrackerBar');
       if (floatingBar) floatingBar.style.display = 'flex';
 
-      // Polling contínuo ativo a cada 2.5 segundos com quebra de cache anti-304
+      // Polling contínuo ativo a cada 2.0 segundos com quebra de cache anti-304
       if (intervalSincronizacao) clearInterval(intervalSincronizacao);
       intervalSincronizacao = setInterval(async () => {
         try {
@@ -1969,7 +1986,7 @@
             }
           }
         } catch (e) {}
-      }, 2500);
+      }, 2000);
     }
 
     function iniciarRastreamentoAoVivo(pedidoId, dadosIniciais = null) {
@@ -2369,6 +2386,10 @@
             const envelope = JSON.parse(event.data);
             if (envelope.event === 'message' && envelope.message) {
               const dados = JSON.parse(envelope.message);
+              if (dados.tipo === 'pedidos_resetados') {
+                processarAtualizacaoPedido(dados);
+                return;
+              }
               if (dados.tipo === 'status_atualizado' && (dados.id || dados.numero)) {
                 let meus = JSON.parse(localStorage.getItem('mordidaco_meus_pedidos') || '[]');
                 const ehMeu = (ultimoPedidoCriadoId && (dados.id === ultimoPedidoCriadoId || String(dados.numero) === String(ultimoPedidoCriadoId))) ||
@@ -2381,6 +2402,32 @@
           } catch(err) {}
         };
       } catch (e) {}
+
+      // 4. Conexão direta com o servidor Node.js SSE (/api/pedidos/stream)
+      try {
+        if (window.serverSse) {
+          try { window.serverSse.close(); } catch(e) {}
+        }
+        window.serverSse = new EventSource('/api/pedidos/stream');
+        window.serverSse.onmessage = (ev) => {
+          if (!ev.data) return;
+          try {
+            const data = JSON.parse(ev.data);
+            if (data.tipo === 'pedidos_resetados') {
+              processarAtualizacaoPedido(data);
+              return;
+            }
+            if (data && (data.tipo === 'status_atualizado' || data.id)) {
+              let meus = JSON.parse(localStorage.getItem('mordidaco_meus_pedidos') || '[]');
+              const ehMeu = (ultimoPedidoCriadoId && (data.id === ultimoPedidoCriadoId || String(data.numero) === String(ultimoPedidoCriadoId))) ||
+                            meus.some(x => x.id === data.id || (x.numero && data.numero && String(x.numero) === String(data.numero)));
+              if (ehMeu) {
+                processarAtualizacaoPedido(data);
+              }
+            }
+          } catch(e) {}
+        };
+      } catch(e) {}
     }
 
     // Verificar se há pedido para rastrear na URL ou no armazenamento local
