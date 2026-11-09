@@ -542,7 +542,7 @@
         left: 0;
         top: 0;
         width: 54mm; /* Largura imprimível ideal para bobina 58mm */
-        padding: 8mm 2mm 12mm 2mm; /* 8mm no topo garante que a guilhotina/serrilha NUNCA corte o título! */
+        padding: 10mm 2mm 14mm 2mm; /* 10mm no topo garante que a serrilha NUNCA corte o logotipo nem o título! */
         font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
         font-size: 9pt;
         line-height: 1.25;
@@ -551,11 +551,12 @@
       }
 
       .ticket-logo {
-        width: 44px;
-        height: 44px;
-        margin: 0 auto 4px auto;
+        width: 36mm;
+        max-width: 135px;
+        height: auto;
+        margin: 0 auto 6px auto;
         display: block;
-        filter: grayscale(100%) contrast(150%); /* Alto contraste monocromático para cabeçote térmico */
+        filter: grayscale(100%) contrast(180%); /* Alto contraste monocromático para cabeçote térmico */
       }
 
       .ticket-center { text-align: center; }
@@ -1726,8 +1727,8 @@
       const printArea = document.getElementById('printReceipt');
       
       let html = `
-        <div class="ticket-center" style="margin-bottom: 4px;">
-          <img src="assets/logo.png" class="ticket-logo" alt="O Mordidaço">
+        <div class="ticket-center" style="margin-bottom: 6px;">
+          <img src="assets/logo_carimbo_termica.jpg" class="ticket-logo" alt="O Mordidaço">
         </div>
         <div class="ticket-center ticket-large ticket-bold" style="letter-spacing: 0.5px; padding-top: 2px;">O MORDIDAÇO</div>
         <div class="ticket-center" style="font-size: 8.5pt;">Hot-Dogueria Artesanal</div>
