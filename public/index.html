@@ -1206,6 +1206,18 @@
   </div>
 
   <script>
+    // PURGA AUTOMÁTICA DE CACHES LOCAIS LEGADOS PARA AMBIENTE 100% LIMPO
+    const AMBIENTE_VERSAO = '20261109_clean_reset_v2';
+    try {
+      if (localStorage.getItem('mordidaco_versao_limpa') !== AMBIENTE_VERSAO) {
+        localStorage.removeItem('mordidaco_pedidos_cache');
+        localStorage.removeItem('mordidaco_meus_pedidos');
+        localStorage.removeItem('mordidaco_ultimo_pedido_id');
+        localStorage.setItem('mordidaco_meus_pedidos', '[]');
+        localStorage.setItem('mordidaco_versao_limpa', AMBIENTE_VERSAO);
+      }
+    } catch(e) {}
+
     let cardapioGlobal = null;
     let carrinho = [];
     let itemSelecionadoTemp = null;
