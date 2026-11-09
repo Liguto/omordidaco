@@ -516,33 +516,39 @@
     }
 
     @page {
-      size: 58mm auto; /* Formato contínuo para bobinas térmicas */
-      margin: 0mm;      /* Remove margens brutas do A4 */
+      size: 58mm auto; /* Formato contínuo de bobina */
+      margin: 0mm;      /* Sem margens de folha A4 */
     }
 
     @media print {
+      /* Oculta tudo que não for a comanda física para eliminar a 2ª página em branco */
+      body > *:not(#printReceipt) {
+        display: none !important;
+      }
+
       html, body {
         width: 58mm !important;
+        max-width: 58mm !important;
         margin: 0 !important;
         padding: 0 !important;
         background: #ffffff !important;
-      }
-
-      body * {
-        visibility: hidden;
-      }
-
-      #printReceipt, #printReceipt * {
-        visibility: visible;
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: visible !important;
       }
 
       #printReceipt {
         display: block !important;
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 54mm; /* Largura imprimível ideal para bobina 58mm */
-        padding: 10mm 2mm 14mm 2mm; /* 10mm no topo garante que a serrilha NUNCA corte o logotipo nem o título! */
+        visibility: visible !important;
+        position: static !important; /* Altura exata pelo fluxo real */
+        width: 100% !important;
+        max-width: 54mm !important;
+        margin: 0 auto !important;
+        padding: 4mm 1.5mm 4mm 1.5mm !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        page-break-after: avoid !important;
+        break-after: avoid !important;
         font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
         font-size: 9pt;
         line-height: 1.25;
@@ -550,9 +556,13 @@
         background: #ffffff;
       }
 
+      #printReceipt * {
+        visibility: visible !important;
+      }
+
       .ticket-logo {
-        width: 36mm;
-        max-width: 135px;
+        width: 32mm;
+        max-width: 125px;
         height: auto;
         margin: 0 auto 6px auto;
         display: block;
@@ -1727,10 +1737,11 @@
       const printArea = document.getElementById('printReceipt');
       
       let html = `
-        <div class="ticket-center" style="margin-bottom: 6px;">
+        <div style="height: 6mm;"></div>
+        <div class="ticket-center" style="margin-bottom: 4px;">
           <img src="assets/logo_carimbo_termica.jpg" class="ticket-logo" alt="O Mordidaço">
         </div>
-        <div class="ticket-center ticket-large ticket-bold" style="letter-spacing: 0.5px; padding-top: 2px;">O MORDIDAÇO</div>
+        <div class="ticket-center ticket-large ticket-bold" style="letter-spacing: 0.5px;">O MORDIDAÇO</div>
         <div class="ticket-center" style="font-size: 8.5pt;">Hot-Dogueria Artesanal</div>
         <div class="ticket-center" style="font-size: 8pt; color: #333;">Jardim Tamoio - Campinas/SP</div>
         <div class="ticket-divider"></div>
@@ -1773,11 +1784,11 @@
         <div class="ticket-bold" style="font-size: 11pt;">${p.pagamento}</div>
         
         <div class="ticket-divider"></div>
-        <div class="ticket-center" style="font-size: 8pt; margin-top: 6px;">
+        <div class="ticket-center" style="font-size: 8pt; margin-top: 4px;">
           Feito com amor de nossa família para a sua!<br>
           Instagram: @omordidaco.dogs
         </div>
-        <br><br>
+        <div style="height: 6mm;"></div>
       `;
 
       printArea.innerHTML = html;
