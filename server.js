@@ -497,20 +497,29 @@ const CARDAPIO = {
         {
           id: "combo-casal",
           nome: "Combo Casal do Mordidaço",
-          descricao: "2 Dogs Duplos Especiais (à sua escolha: Tradicional no Pão ou No Prato) + 2 Refrigerantes Lata (ou 1 Guaraná 2L) + 2 Potes de Maionese Verde Secreta da Casa (50ml). A janta perfeita para dois!",
+          descricao: "2 Dogs Duplos Especiais (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata (ou 1 Guaraná 2L) + 2 Potes de Maionese Verde Secreta da Casa (50ml). A janta perfeita para dois!",
           preco: 49.90,
-          adicionalPrato: 0.00,
+          adicionalPrato: 2.00,
           permiteFormato: true,
+          lanchesCombo: [
+            { label: "1º Dog Duplo Especial" },
+            { label: "2º Dog Duplo Especial" }
+          ],
           destaque: true,
           isLanche: true
         },
         {
           id: "combo-familia",
           nome: "Combo Família do Tamoio",
-          descricao: "2 Dogs Duplos Especiais + 1 Dog Tradicional + 1 Guaraná Antarctica 2 Litros + 2 Potes de Maionese Verde da Casa. Fartura garantida para toda a família!",
+          descricao: "2 Dogs Duplos Especiais + 1 Dog Tradicional (escolha individual no Pão ou no Prato para cada um) + 1 Guaraná Antarctica 2 Litros + 2 Potes de Maionese Verde da Casa. Fartura garantida para toda a família!",
           preco: 62.00,
-          adicionalPrato: 0.00,
+          adicionalPrato: 2.00,
           permiteFormato: true,
+          lanchesCombo: [
+            { label: "1º Dog Duplo Especial" },
+            { label: "2º Dog Duplo Especial" },
+            { label: "3º Dog Tradicional" }
+          ],
           destaque: false,
           isLanche: true
         }
