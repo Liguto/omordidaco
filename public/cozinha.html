@@ -515,33 +515,55 @@
       display: none;
     }
 
+    @page {
+      size: 58mm auto; /* Formato contínuo para bobinas térmicas */
+      margin: 0mm;      /* Remove margens brutas do A4 */
+    }
+
     @media print {
+      html, body {
+        width: 58mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+      }
+
       body * {
         visibility: hidden;
       }
+
       #printReceipt, #printReceipt * {
         visibility: visible;
       }
+
       #printReceipt {
         display: block !important;
         position: absolute;
         left: 0;
         top: 0;
-        width: 58mm; /* Padrão bobina térmica compacta */
-        padding: 2mm 3mm;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 10pt;
+        width: 54mm; /* Largura imprimível ideal para bobina 58mm */
+        padding: 8mm 2mm 12mm 2mm; /* 8mm no topo garante que a guilhotina/serrilha NUNCA corte o título! */
+        font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
+        font-size: 9pt;
         line-height: 1.25;
         color: #000000;
         background: #ffffff;
+      }
+
+      .ticket-logo {
+        width: 44px;
+        height: 44px;
+        margin: 0 auto 4px auto;
+        display: block;
+        filter: grayscale(100%) contrast(150%); /* Alto contraste monocromático para cabeçote térmico */
       }
 
       .ticket-center { text-align: center; }
       .ticket-divider { border-bottom: 1px dashed #000000; margin: 4px 0; }
       .ticket-double-divider { border-bottom: 2px solid #000000; margin: 6px 0; }
       .ticket-bold { font-weight: bold; }
-      .ticket-large { font-size: 14pt; }
-      .ticket-item { margin-bottom: 4px; }
+      .ticket-large { font-size: 13pt; }
+      .ticket-item { margin-bottom: 5px; }
       .ticket-right { text-align: right; }
     }
   </style>
@@ -1704,12 +1726,15 @@
       const printArea = document.getElementById('printReceipt');
       
       let html = `
-        <div class="ticket-center ticket-large ticket-bold">O MORDIDAÇO</div>
-        <div class="ticket-center">Hot-Dogueria Artesanal</div>
-        <div class="ticket-center">Jardim Tamoio - Campinas/SP</div>
+        <div class="ticket-center" style="margin-bottom: 4px;">
+          <img src="assets/logo.png" class="ticket-logo" alt="O Mordidaço">
+        </div>
+        <div class="ticket-center ticket-large ticket-bold" style="letter-spacing: 0.5px; padding-top: 2px;">O MORDIDAÇO</div>
+        <div class="ticket-center" style="font-size: 8.5pt;">Hot-Dogueria Artesanal</div>
+        <div class="ticket-center" style="font-size: 8pt; color: #333;">Jardim Tamoio - Campinas/SP</div>
         <div class="ticket-divider"></div>
         <div class="ticket-center ticket-large ticket-bold">PEDIDO #${p.numero}</div>
-        <div class="ticket-center">${p.dataHora}</div>
+        <div class="ticket-center" style="font-size: 8.5pt;">${p.dataHora}</div>
         <div class="ticket-divider"></div>
         
         <div><span class="ticket-bold">CLIENTE:</span> ${p.cliente.nome}</div>
