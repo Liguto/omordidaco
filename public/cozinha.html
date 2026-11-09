@@ -1366,9 +1366,11 @@
 
       // 1. Notifica abas locais no mesmo navegador
       try {
-        if ('BroadcastChannel' in window) {
-          const canal = new BroadcastChannel('omordidaco_canal');
-          canal.postMessage({
+        if (!window.canalComunicacaoLocal && 'BroadcastChannel' in window) {
+          window.canalComunicacaoLocal = new BroadcastChannel('omordidaco_canal');
+        }
+        if (window.canalComunicacaoLocal) {
+          window.canalComunicacaoLocal.postMessage({
             tipo: 'status_atualizado',
             id,
             status: novoStatus,
@@ -1744,12 +1746,12 @@
       window.print();
     }
 
-    // 1. CANAL LOCAL / MESMO NAVEGADOR (BroadcastChannel)
+    // 1. CANAL LOCAL / MESMO NAVEGADOR (BroadcastChannel Persistente)
     function conectarCanalLocal() {
       try {
         if ('BroadcastChannel' in window) {
-          const canal = new BroadcastChannel('omordidaco_canal');
-          canal.onmessage = (ev) => {
+          window.canalComunicacaoLocal = new BroadcastChannel('omordidaco_canal');
+          window.canalComunicacaoLocal.onmessage = (ev) => {
             if (!ev.data) return;
             if (ev.data.tipo === 'status_atualizado') {
               const p = pedidosLocais.find(x => x.id === ev.data.id);

@@ -1887,7 +1887,7 @@
     let intervalSincronizacao = null;
 
     function processarAtualizacaoPedido(dados) {
-      if (!dados || !dados.id) return;
+      if (!dados || (!dados.id && !dados.numero)) return;
       const ts = Number(dados.statusAtualizadoEm) || 0;
 
       // Mescla com os dados salvos no navegador para NUNCA exibir undefined ou R$ 0,00
@@ -1896,13 +1896,14 @@
         meusPedidos = JSON.parse(localStorage.getItem('mordidaco_meus_pedidos') || '[]');
       } catch(e) {}
 
-      const idx = meusPedidos.findIndex(p => p.id === dados.id);
+      // Busca por ID ou número
+      const idx = meusPedidos.findIndex(p => p.id === dados.id || (p.numero && dados.numero && String(p.numero) === String(dados.numero)));
       const local = idx >= 0 ? meusPedidos[idx] : null;
 
       // Se o status mudou (cozinha avançou para Preparo, Saiu p/ Entrega ou Entregue), SEMPRE ACEITA!
-      const statusMudou = local && local.status && dados.status && (local.status !== dados.status);
+      const statusMudou = !local || (local.status && dados.status && local.status !== dados.status);
 
-      // Descarta apenas se for o mesmo status E tiver timestamp estritamente mais antigo (eco de rede atrasado)
+      // Descarta apenas se for exatamente o mesmo status E tiver timestamp estritamente mais antigo
       if (!statusMudou && ts > 0 && ultimoStatusAtualizadoEm > 0 && ts < ultimoStatusAtualizadoEm) {
         return;
       }
@@ -1916,6 +1917,7 @@
         pedidoMesclado = {
           ...local,
           ...dados,
+          status: dados.status || local.status,
           numero: dados.numero || local.numero,
           cliente: dados.cliente || local.cliente,
           entrega: dados.entrega || local.entrega,
@@ -1938,11 +1940,7 @@
 
       atualizarVisualizacaoRastreamento(pedidoMesclado);
       atualizarBadgeMeusPedidos();
-
-      const viewPedidos = document.getElementById('viewPedidos');
-      if (viewPedidos && viewPedidos.style.display === 'block') {
-        renderizarAbaMeusPedidos();
-      }
+      renderizarAbaMeusPedidos();
     }
 
     // LOOP CONTÍNUO DE SINCRONIZAÇÃO EM SEGUNDO PLANO
@@ -1956,11 +1954,11 @@
       const floatingBar = document.getElementById('floatingTrackerBar');
       if (floatingBar) floatingBar.style.display = 'flex';
 
-      // Polling contínuo ativo a cada 3.5 segundos
+      // Polling contínuo ativo a cada 2.5 segundos com quebra de cache anti-304
       if (intervalSincronizacao) clearInterval(intervalSincronizacao);
       intervalSincronizacao = setInterval(async () => {
         try {
-          const res = await fetch(`/api/pedidos/${pedidoId}`);
+          const res = await fetch(`/api/pedidos/${pedidoId}?_t=${Date.now()}`, { cache: 'no-store' });
           if (!res.ok) return;
           const pedidoAtualizado = await res.json();
           if (pedidoAtualizado && pedidoAtualizado.status) {
@@ -1971,7 +1969,7 @@
             }
           }
         } catch (e) {}
-      }, 3500);
+      }, 2500);
     }
 
     function iniciarRastreamentoAoVivo(pedidoId, dadosIniciais = null) {
@@ -2317,42 +2315,35 @@
     function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
     function fecharModal(id) { document.getElementById(id).style.display = 'none'; }
 
-    // Conexão direta à Nuvem SSE (ntfy.sh) para sincronização em tempo real entre diferentes aparelhos
-    function conectarCanalNuvemCliente() {
-      try {
-        const cloudSource = new EventSource('https://ntfy.sh/omordidaco_pedidos_tamoio_campinas_live/sse');
-        
-        cloudSource.onmessage = (event) => {
-          if (!event.data) return;
+    // CANAIS PERSISTENTES DE SINCRONIZAÇÃO EM TEMPO REAL
+    window.canalComunicacaoLocal = null;
+    window.nuvemEventSource = null;
+
+    function conectarCanaisTempoReal() {
+      // 1. HTML5 Storage Event: Sincronização 100% infalível em 0ms entre abas do mesmo domínio
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'mordidaco_pedidos_cache' && e.newValue) {
           try {
-            const envelope = JSON.parse(event.data);
-            if (envelope.event === 'message' && envelope.message) {
-              const dados = JSON.parse(envelope.message);
-              if (dados.tipo === 'status_atualizado' && dados.id) {
-                let meusPedidos = [];
-                try {
-                  meusPedidos = JSON.parse(localStorage.getItem('mordidaco_meus_pedidos') || '[]');
-                } catch(e) {}
-                const ehMeu = meusPedidos.some(p => p.id === dados.id) || (ultimoPedidoCriadoId === dados.id);
+            const listaCozinha = JSON.parse(e.newValue);
+            if (Array.isArray(listaCozinha)) {
+              let meus = JSON.parse(localStorage.getItem('mordidaco_meus_pedidos') || '[]');
+              listaCozinha.forEach(pCozinha => {
+                const ehMeu = (ultimoPedidoCriadoId && (pCozinha.id === ultimoPedidoCriadoId || String(pCozinha.numero) === String(ultimoPedidoCriadoId))) ||
+                              meus.some(x => x.id === pCozinha.id || (x.numero && pCozinha.numero && String(x.numero) === String(pCozinha.numero)));
                 if (ehMeu) {
-                  processarAtualizacaoPedido(dados.pedido || dados);
+                  processarAtualizacaoPedido(pCozinha);
                 }
-              }
+              });
             }
-          } catch (err) {}
-        };
-      } catch (e) {}
-    }
+          } catch(err) {}
+        }
+      });
 
-    // Verificar se há pedido para rastrear na URL ou no armazenamento local
-    function verificarRastreamentoAoCarregar() {
-      atualizarBadgeMeusPedidos();
-
-      // 1. Canal Local (BroadcastChannel - 0ms entre abas do mesmo navegador)
+      // 2. BroadcastChannel persistente no objeto window
       try {
         if ('BroadcastChannel' in window) {
-          const canal = new BroadcastChannel('omordidaco_canal');
-          canal.onmessage = (ev) => {
+          window.canalComunicacaoLocal = new BroadcastChannel('omordidaco_canal');
+          window.canalComunicacaoLocal.onmessage = (ev) => {
             if (ev.data && (ev.data.tipo === 'status_atualizado' || ev.data.tipo === 'novo_pedido')) {
               const p = ev.data.pedido || {
                 id: ev.data.id,
@@ -2366,10 +2357,40 @@
         }
       } catch(e) {}
 
-      // 2. Canal Nuvem (ntfy.sh SSE - tempo real em redes e celulares diferentes)
-      conectarCanalNuvemCliente();
+      // 3. Nuvem SSE persistente (ntfy.sh) para sincronização entre aparelhos e redes diferentes
+      try {
+        if (window.nuvemEventSource) {
+          try { window.nuvemEventSource.close(); } catch(e) {}
+        }
+        window.nuvemEventSource = new EventSource('https://ntfy.sh/omordidaco_pedidos_tamoio_campinas_live/sse');
+        window.nuvemEventSource.onmessage = (event) => {
+          if (!event.data) return;
+          try {
+            const envelope = JSON.parse(event.data);
+            if (envelope.event === 'message' && envelope.message) {
+              const dados = JSON.parse(envelope.message);
+              if (dados.tipo === 'status_atualizado' && (dados.id || dados.numero)) {
+                let meus = JSON.parse(localStorage.getItem('mordidaco_meus_pedidos') || '[]');
+                const ehMeu = (ultimoPedidoCriadoId && (dados.id === ultimoPedidoCriadoId || String(dados.numero) === String(ultimoPedidoCriadoId))) ||
+                              meus.some(x => x.id === dados.id || (x.numero && dados.numero && String(x.numero) === String(dados.numero)));
+                if (ehMeu) {
+                  processarAtualizacaoPedido(dados.pedido || dados);
+                }
+              }
+            }
+          } catch(err) {}
+        };
+      } catch (e) {}
+    }
 
-      // 3. Localiza pedido em andamento e inicia sincronização automática
+    // Verificar se há pedido para rastrear na URL ou no armazenamento local
+    function verificarRastreamentoAoCarregar() {
+      atualizarBadgeMeusPedidos();
+
+      // Ativa todos os canais de tempo real
+      conectarCanaisTempoReal();
+
+      // Localiza pedido em andamento e inicia sincronização automática
       const urlParams = new URLSearchParams(window.location.search);
       let pedidoId = urlParams.get('pedido') || urlParams.get('acompanhar');
       if (!pedidoId && window.location.pathname.startsWith('/pedido/')) {
@@ -2389,8 +2410,8 @@
       }
 
       if (pedidoId) {
-        // Dispara busca inicial
-        fetch(`/api/pedidos/${pedidoId}`)
+        // Dispara busca inicial com quebra de cache
+        fetch(`/api/pedidos/${pedidoId}?_t=${Date.now()}`, { cache: 'no-store' })
           .then(r => r.ok ? r.json() : null)
           .then(ped => {
             if (ped && ped.status) {
