@@ -1971,6 +1971,17 @@
     setInterval(() => {
       carregarClientes();
     }, 30000);
+
+    // Reativação imediata ao voltar para a aba ou janela da cozinha
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        carregarPedidos();
+        carregarClientes();
+      }
+    });
+    window.addEventListener('focus', () => {
+      carregarPedidos();
+    });
   </script>
 </body>
 </html>

@@ -2569,6 +2569,16 @@
     // Iniciar
     carregarCardapio();
     verificarRastreamentoAoCarregar();
+
+    // Reativação imediata ao destravar celular ou voltar à aba (Anti-Sleep mobile)
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        verificarRastreamentoAoCarregar();
+      }
+    });
+    window.addEventListener('focus', () => {
+      verificarRastreamentoAoCarregar();
+    });
   </script>
 </body>
 </html>
