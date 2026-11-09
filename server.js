@@ -136,13 +136,23 @@ function salvarPedidos() {
 function recarregarPedidosDoDisco() {
   if (fs.existsSync(DB_FILE)) {
     try {
-      pedidos = JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+      const emDisco = JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+      if (Array.isArray(emDisco)) {
+        if (emDisco.length === 0 && pedidos.length > 0) {
+          salvarPedidos();
+        } else {
+          pedidos = emDisco;
+        }
+      }
     } catch (e) {
       console.warn('Aviso: Erro ao reler DB_FILE:', e.message);
     }
   } else if (isServerless && fs.existsSync(path.join(__dirname, 'pedidos.json'))) {
     try {
-      pedidos = JSON.parse(fs.readFileSync(path.join(__dirname, 'pedidos.json'), 'utf8'));
+      const arq = JSON.parse(fs.readFileSync(path.join(__dirname, 'pedidos.json'), 'utf8'));
+      if (Array.isArray(arq) && arq.length > 0) {
+        pedidos = arq;
+      }
     } catch (e) {}
   }
 }

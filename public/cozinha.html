@@ -1104,13 +1104,26 @@
       } catch (e) {}
     }
 
-    // Carregar pedidos do backend com sincronização direta e detecção de novidades
+    let ultimoHashPedidos = '';
+
+    function gerarHashPedidos(lista, filtro) {
+      if (!Array.isArray(lista)) return '';
+      return `${filtro}::` + lista.map(p => `${p.id}:${p.status}:${p.statusAtualizadoEm || 0}:${p.numero}:${p.total}`).join('|');
+    }
+
+    // Carregar pedidos do backend com sincronização direta, detecção de novidades e proteção anti-flickering
     async function carregarPedidos() {
       try {
         const res = await fetch('/api/pedidos?_t=' + Date.now(), { cache: 'no-store' });
         if (res.ok) {
           const listaServidor = await res.json();
           if (Array.isArray(listaServidor)) {
+            // REGRA ANTI-SUMIÇO: Se o servidor retornou vazio temporariamente mas temos pedidos em tela,
+            // não descarta para evitar que o pedido suma entre ciclos de workers
+            if (listaServidor.length === 0 && pedidosLocais.length > 0) {
+              return;
+            }
+
             // Detecta se entrou novo pedido pendente para tocar alarme sonoro
             let houveNovo = false;
             let pedidoParaImprimir = null;
@@ -1128,8 +1141,14 @@
             pedidosLocais = listaServidor;
             pedidosLocais.sort((a, b) => (b.numero || 0) - (a.numero || 0));
             salvarCacheLocalPedidos();
-            renderizarPedidos();
-            atualizarEstatisticas();
+
+            // DIFFING ANTI-PISCAR: Só reconstrói o DOM se houver mudança real de dados ou status!
+            const novoHash = gerarHashPedidos(pedidosLocais, filtroAtual);
+            if (novoHash !== ultimoHashPedidos) {
+              ultimoHashPedidos = novoHash;
+              renderizarPedidos();
+              atualizarEstatisticas();
+            }
 
             if (houveNovo) {
               tocarAlarmeSonoro();
@@ -1152,6 +1171,7 @@
         pedidosLocais.unshift(novoPedido);
         pedidosLocais.sort((a, b) => (b.numero || 0) - (a.numero || 0));
         salvarCacheLocalPedidos();
+        ultimoHashPedidos = '';
         renderizarPedidos();
         atualizarEstatisticas();
         if (document.getElementById('chkAutoPrint').checked) {
@@ -1161,6 +1181,7 @@
         const idx = pedidosLocais.findIndex(p => p.id === novoPedido.id);
         pedidosLocais[idx] = novoPedido;
         salvarCacheLocalPedidos();
+        ultimoHashPedidos = '';
         renderizarPedidos();
       }
     }
@@ -1173,6 +1194,7 @@
         const res = await fetch('/api/pedidos/reset-total', { method: 'POST' });
         if (res.ok) {
           pedidosLocais = [];
+          ultimoHashPedidos = '';
           localStorage.removeItem('mordidaco_pedidos_cache');
           localStorage.setItem('mordidaco_pedidos_cache', '[]');
           renderizarPedidos();
@@ -1194,6 +1216,7 @@
       filtroAtual = filtro;
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       elementoBtn.classList.add('active');
+      ultimoHashPedidos = ''; // Força re-render para o novo filtro
       renderizarPedidos();
     }
 
@@ -1210,7 +1233,8 @@
         return;
       }
 
-      grid.innerHTML = '';
+      // Constrói HTML em memória para injeção atômica única (zero flickering)
+      let gridHtml = '';
 
       pedidosFiltrados.forEach(p => {
         let ribbonClass = 'ribbon-pendente';
@@ -1232,7 +1256,7 @@
         }
 
         let itensHtml = '';
-        p.itens.forEach(i => {
+        (p.itens || []).forEach(i => {
           itensHtml += `
             <li class="order-item-row" style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;">
               <div style="font-size: 15px; font-weight: 800; color: #0f172a;">
@@ -1245,64 +1269,65 @@
           `;
         });
 
-        const card = document.createElement('div');
-        card.className = `order-card ${cardStatusClass}`;
-        card.innerHTML = `
-          <!-- FAIXA SUPERIOR COLORIDA E VIBRANTE (VISÍVEL DE LONGE) -->
-          <div class="card-top-ribbon ${ribbonClass}">
-            <span>${ribbonText}</span>
-            <span style="background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 6px; font-size: 14px;">#${p.numero}</span>
-          </div>
-
-          <div class="card-body">
-            <!-- CABEÇALHO DO PEDIDO 100% CENTRALIZADO -->
-            <div style="text-align: center; padding: 6px 0 12px 0; border-bottom: 2px solid #e2e8f0; margin-bottom: 12px;">
-              <span class="order-num-large" style="display: block; font-size: 36px; font-weight: 900; color: #0f172a; letter-spacing: -1px; line-height: 1.1;">#${p.numero}</span>
-              <div class="order-time-large" style="font-size: 13px; font-weight: 700; color: #64748b; margin-top: 4px;">⏰ ${p.dataHora}</div>
-              <div style="font-size: 20px; font-weight: 900; color: #15803d; margin-top: 4px;">R$ ${p.total.toFixed(2).replace('.', ',')}</div>
+        gridHtml += `
+          <div class="order-card ${cardStatusClass}">
+            <!-- FAIXA SUPERIOR COLORIDA E VIBRANTE (VISÍVEL DE LONGE) -->
+            <div class="card-top-ribbon ${ribbonClass}">
+              <span>${ribbonText}</span>
+              <span style="background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 6px; font-size: 14px;">#${p.numero}</span>
             </div>
 
-            <div class="client-info" style="border-left: 4px solid #0f172a; padding: 10px 12px; margin-bottom: 12px;">
-              <div style="font-size: 15px; font-weight: 800; color: #0f172a;">👤 ${p.cliente.nome}</div>
-              <div style="font-size: 13.5px; font-weight: 700; color: #1e293b; margin-top: 3px;">📍 ${p.entrega.endereco} - ${p.entrega.bairro}</div>
-              ${p.entrega.referencia ? `<div style="font-size: 12px; color: #64748b; margin-top: 2px;"><em>Ref: ${p.entrega.referencia}</em></div>` : ''}
-              <div style="font-size: 13px; color: #2563eb; font-weight: 700; margin-top: 3px;">📞 ${p.cliente.telefone}</div>
-            </div>
+            <div class="card-body">
+              <!-- CABEÇALHO DO PEDIDO 100% CENTRALIZADO -->
+              <div style="text-align: center; padding: 6px 0 12px 0; border-bottom: 2px solid #e2e8f0; margin-bottom: 12px;">
+                <span class="order-num-large" style="display: block; font-size: 36px; font-weight: 900; color: #0f172a; letter-spacing: -1px; line-height: 1.1;">#${p.numero}</span>
+                <div class="order-time-large" style="font-size: 13px; font-weight: 700; color: #64748b; margin-top: 4px;">⏰ ${p.dataHora}</div>
+                <div style="font-size: 20px; font-weight: 900; color: #15803d; margin-top: 4px;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</div>
+              </div>
 
-            <ul class="order-items" style="list-style: none; margin-bottom: 14px;">
-              ${itensHtml}
-            </ul>
+              <div class="client-info" style="border-left: 4px solid #0f172a; padding: 10px 12px; margin-bottom: 12px;">
+                <div style="font-size: 15px; font-weight: 800; color: #0f172a;">👤 ${p.cliente ? p.cliente.nome : 'Cliente'}</div>
+                <div style="font-size: 13.5px; font-weight: 700; color: #1e293b; margin-top: 3px;">📍 ${p.entrega ? p.entrega.endereco : 'Balcão'} - ${p.entrega ? p.entrega.bairro : ''}</div>
+                ${p.entrega && p.entrega.referencia ? `<div style="font-size: 12px; color: #64748b; margin-top: 2px;"><em>Ref: ${p.entrega.referencia}</em></div>` : ''}
+                <div style="font-size: 13px; color: #2563eb; font-weight: 700; margin-top: 3px;">📞 ${p.cliente ? p.cliente.telefone : ''}</div>
+              </div>
 
-            <div class="order-payment-box" style="font-size: 13px; padding: 10px 12px; margin-bottom: 12px;">
-              <strong style="color: #92400e;">💵 FORMA DE PAGTO:</strong> <span style="font-weight: 800; color: #b45309;">${p.pagamento}</span><br>
-              <strong>TOTAL A COBRAR:</strong> <span style="font-size: 16px; font-weight: 900; color: #0f172a;">R$ ${p.total.toFixed(2).replace('.', ',')}</span>
-            </div>
+              <ul class="order-items" style="list-style: none; margin-bottom: 14px;">
+                ${itensHtml}
+              </ul>
 
-            <!-- SELETOR DE STATUS REVERSÍVEL (EVITA MISS-CLICK) -->
-            <div style="background: #f8fafc; border: 2px solid #cbd5e1; padding: 10px 12px; border-radius: 8px; margin-bottom: 12px;">
-              <label style="font-size: 11px; font-weight: 900; color: #334155; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">
-                🔄 STATUS DO PEDIDO (ALTERE LIVREMENTE):
-              </label>
-              <select onchange="alterarStatus('${p.id}', this.value)" style="width: 100%; padding: 8px 12px; border-radius: 6px; font-size: 14px; font-weight: 800; border: 2px solid #0f172a; background: #ffffff; cursor: pointer; color: #0f172a;">
-                <option value="Pendente" ${p.status === 'Pendente' ? 'selected' : ''}>⏳ A FAZER / PENDENTE</option>
-                <option value="Em Preparo" ${p.status === 'Em Preparo' ? 'selected' : ''}>🔥 NA BANCADA / EM PREPARO</option>
-                <option value="Saiu p/ Entrega" ${p.status === 'Saiu p/ Entrega' ? 'selected' : ''}>🛵 COM MOTOBOY / NA RUA</option>
-                <option value="Entregue" ${p.status === 'Entregue' ? 'selected' : ''}>✅ ENTREGUE / CONCLUÍDO</option>
-              </select>
-            </div>
+              <div class="order-payment-box" style="font-size: 13px; padding: 10px 12px; margin-bottom: 12px;">
+                <strong style="color: #92400e;">💵 FORMA DE PAGTO:</strong> <span style="font-weight: 800; color: #b45309;">${p.pagamento || 'Na Entrega'}</span><br>
+                <strong>TOTAL A COBRAR:</strong> <span style="font-size: 16px; font-weight: 900; color: #0f172a;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</span>
+              </div>
 
-            <div class="order-actions">
-              <button class="btn-action btn-print" onclick="imprimirComanda('${p.id}')">
-                🖨️ IMPRIMIR COMANDA TÉRMICA
-              </button>
-              <button class="btn-action btn-whatsapp-aviso" onclick="abrirWhatsAppAviso('${p.id}')">
-                📲 Avisar Cliente no WhatsApp
-              </button>
+              <!-- SELETOR DE STATUS REVERSÍVEL (EVITA MISS-CLICK) -->
+              <div style="background: #f8fafc; border: 2px solid #cbd5e1; padding: 10px 12px; border-radius: 8px; margin-bottom: 12px;">
+                <label style="font-size: 11px; font-weight: 900; color: #334155; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">
+                  🔄 STATUS DO PEDIDO (ALTERE LIVREMENTE):
+                </label>
+                <select onchange="alterarStatus('${p.id}', this.value)" style="width: 100%; padding: 8px 12px; border-radius: 6px; font-size: 14px; font-weight: 800; border: 2px solid #0f172a; background: #ffffff; cursor: pointer; color: #0f172a;">
+                  <option value="Pendente" ${p.status === 'Pendente' ? 'selected' : ''}>⏳ A FAZER / PENDENTE</option>
+                  <option value="Em Preparo" ${p.status === 'Em Preparo' ? 'selected' : ''}>🔥 NA BANCADA / EM PREPARO</option>
+                  <option value="Saiu p/ Entrega" ${p.status === 'Saiu p/ Entrega' ? 'selected' : ''}>🛵 COM MOTOBOY / NA RUA</option>
+                  <option value="Entregue" ${p.status === 'Entregue' ? 'selected' : ''}>✅ ENTREGUE / CONCLUÍDO</option>
+                </select>
+              </div>
+
+              <div class="order-actions">
+                <button class="btn-action btn-print" onclick="imprimirComanda('${p.id}')">
+                  🖨️ IMPRIMIR COMANDA TÉRMICA
+                </button>
+                <button class="btn-action btn-whatsapp-aviso" onclick="abrirWhatsAppAviso('${p.id}')">
+                  📲 Avisar Cliente no WhatsApp
+                </button>
+              </div>
             </div>
           </div>
         `;
-        grid.appendChild(card);
       });
+
+      grid.innerHTML = gridHtml;
     }
 
     function atualizarEstatisticas() {
@@ -1310,7 +1335,7 @@
       const preparo = pedidosLocais.filter(p => p.status === 'Em Preparo').length;
       const saiu = pedidosLocais.filter(p => p.status === 'Saiu p/ Entrega').length;
       const entregues = pedidosLocais.filter(p => p.status === 'Entregue').length;
-      const faturamento = pedidosLocais.reduce((acc, p) => acc + p.total, 0);
+      const faturamento = pedidosLocais.reduce((acc, p) => acc + (p.total || 0), 0);
 
       document.getElementById('statPendentes').innerText = pendentes;
       document.getElementById('statPreparo').innerText = preparo;
@@ -1331,8 +1356,8 @@
       if (p) {
         p.status = novoStatus;
         p.statusAtualizadoEm = agora;
-        p.statusTravadoLocalmenteEm = agora;
         salvarCacheLocalPedidos();
+        ultimoHashPedidos = ''; // Força re-render imediato
         renderizarPedidos();
         atualizarEstatisticas();
         exibirToastWhatsApp(id, novoStatus);
