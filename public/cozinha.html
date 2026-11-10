@@ -1512,6 +1512,41 @@
         `;
       }
 
+      // DIFERENCIAÇÃO: Se for pedido CANCELADO, vai para o quadro de Concluídos com estilo vermelho suave
+      if (p.status === 'Cancelado') {
+        return `
+          <div class="order-card status-Cancelado" style="border: 2px solid #fca5a5 !important; background: #fef2f2 !important; opacity: 0.88;">
+            <div style="background: #fee2e2; border-bottom: 1px solid #fca5a5; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 900; color: #991b1b; font-size: 14.5px;">#${p.numero}</span>
+              <span style="font-size: 11px; font-weight: 800; color: #991b1b; background: #ffffff; padding: 2px 8px; border-radius: 10px; border: 1px solid #fca5a5;">❌ Cancelado</span>
+            </div>
+            <div class="card-body" style="padding: 10px 12px;">
+              <div style="background: #fee2e2; border: 1px solid #f87171; color: #991b1b; font-weight: 800; font-size: 12px; padding: 6px; border-radius: 6px; text-align: center; margin-bottom: 8px;">
+                ❌ Pedido Cancelado pelo Cliente
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-size: 13.5px; font-weight: 800; color: #0f172a;">👤 ${p.cliente ? p.cliente.nome : 'Cliente'}</span>
+                <span style="font-size: 14px; font-weight: 900; color: #64748b; text-decoration: line-through;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</span>
+              </div>
+              <div style="font-size: 12px; color: #64748b; margin-bottom: 8px;">
+                📍 ${p.entrega ? p.entrega.endereco : 'Balcão'} (${p.entrega ? p.entrega.bairro : ''})
+              </div>
+              <ul style="list-style: none; margin-bottom: 8px; font-size: 12px; color: #64748b; line-height: 1.35;">
+                ${(p.itens || []).map(i => `<li>• 1x ${i.nome}</li>`).join('')}
+              </ul>
+              <div style="display: flex; gap: 6px; border-top: 1px dashed #fca5a5; padding-top: 8px;">
+                <button type="button" onclick="imprimirComanda('${p.id}')" style="flex: 1; background: #ffffff; color: #991b1b; border: 1.5px solid #fca5a5; padding: 6px; font-weight: 800; border-radius: 6px; font-size: 11.5px; cursor: pointer;">
+                  🖨️ Comanda
+                </button>
+                <button type="button" onclick="alterarStatus('${p.id}', 'Em Preparo')" title="Reabrir pedido se foi cancelado por engano" style="background: none; border: 1px dashed #94a3b8; color: #64748b; padding: 6px 10px; border-radius: 6px; font-size: 11px; cursor: pointer;">
+                  ↩️ Reabrir
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
       // Botões de Ação do Fluxo Kanban iFood
       let acoesFluxoHtml = '';
       if (p.status === 'Pendente') {
@@ -1625,7 +1660,7 @@
         const pendentes = pedidosValidos.filter(p => p.status === 'Pendente');
         const preparo = pedidosValidos.filter(p => p.status === 'Em Preparo');
         const rota = pedidosValidos.filter(p => p.status === 'Saiu p/ Entrega');
-        const concluidos = pedidosValidos.filter(p => p.status === 'Entregue');
+        const concluidos = pedidosValidos.filter(p => p.status === 'Entregue' || p.status === 'Cancelado');
 
         document.getElementById('cardsKanbanPendentes').innerHTML = pendentes.length ? pendentes.map(p => gerarHtmlCardPedido(p, 'kanban')).join('') : '<div class="kanban-empty-msg">Nenhum pedido pendente</div>';
         document.getElementById('cardsKanbanPreparo').innerHTML = preparo.length ? preparo.map(p => gerarHtmlCardPedido(p, 'kanban')).join('') : '<div class="kanban-empty-msg">Nenhum na bancada</div>';
@@ -1661,7 +1696,8 @@
       const preparo = pedidosLocais.filter(p => p.status === 'Em Preparo').length;
       const saiu = pedidosLocais.filter(p => p.status === 'Saiu p/ Entrega').length;
       const entregues = pedidosLocais.filter(p => p.status === 'Entregue').length;
-      const faturamento = pedidosLocais.reduce((acc, p) => acc + (p.total || 0), 0);
+      const cancelados = pedidosLocais.filter(p => p.status === 'Cancelado').length;
+      const faturamento = pedidosLocais.filter(p => p.status !== 'Cancelado').reduce((acc, p) => acc + (p.total || 0), 0);
 
       document.getElementById('statPendentes').innerText = pendentes;
       document.getElementById('statPreparo').innerText = preparo;
@@ -1688,7 +1724,7 @@
       if (bPend) bPend.innerText = pendentes;
       if (bPrep) bPrep.innerText = preparo;
       if (bRota) bRota.innerText = saiu;
-      if (bConc) bConc.innerText = entregues;
+      if (bConc) bConc.innerText = entregues + cancelados;
     }
 
     async function alterarStatus(id, novoStatus) {
@@ -2132,6 +2168,8 @@
 
                   if (ev.data.origem === 'cliente' && ev.data.status === 'Entregue') {
                     exibirToastWhatsApp(p.id, 'Entregue (Confirmado pelo Cliente 🎉)');
+                  } else if (ev.data.status === 'Cancelado') {
+                    mostrarToastAviso(`❌ Pedido #${p.numero} foi CANCELADO pelo cliente!`, 'alerta');
                   }
                 }
               }
@@ -2239,6 +2277,10 @@
                   salvarCacheLocalPedidos();
                   renderizarPedidos();
                   atualizarEstatisticas();
+
+                  if (data.status === 'Cancelado') {
+                    mostrarToastAviso(`❌ Pedido #${p.numero} foi CANCELADO pelo cliente!`, 'alerta');
+                  }
                 }
               }
             } else if (data.tipo === 'optin_whatsapp') {

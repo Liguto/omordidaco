@@ -1608,20 +1608,42 @@
       mostrarToast('Sacola esvaziada.');
     }
 
-    function limparRastreamentoCliente(pedidoId) {
-      if (!confirm('Deseja limpar o rastreamento deste pedido e liberar para novos pedidos?')) {
-        return;
-      }
+    async function limparRastreamentoCliente(pedidoId) {
+      const idAlvo = pedidoId || ultimoPedidoCriadoId || pedidoSelecionadoId;
 
       let meus = [];
       try {
         meus = JSON.parse(localStorage.getItem('mordidaco_meus_pedidos') || '[]');
       } catch(e) {}
 
-      if (pedidoId) {
-        meus = meus.filter(p => p.id !== pedidoId && String(p.numero) !== String(pedidoId));
-      } else if (ultimoPedidoCriadoId) {
-        meus = meus.filter(p => p.id !== ultimoPedidoCriadoId);
+      const pedidoAlvo = meus.find(p => p.id === idAlvo || String(p.numero) === String(idAlvo));
+      const isAtivo = pedidoAlvo && (pedidoAlvo.status === 'Pendente' || pedidoAlvo.status === 'Em Preparo' || pedidoAlvo.status === 'Saiu p/ Entrega');
+
+      const msgConfirmacao = isAtivo
+        ? 'Deseja realmente CANCELAR este pedido? Essa ação avisará a cozinha e liberará sua tela para novos pedidos.'
+        : 'Deseja remover este pedido da sua tela?';
+
+      if (!confirm(msgConfirmacao)) {
+        return;
+      }
+
+      // Se o pedido estava ativo, avisa o servidor que foi cancelado pelo cliente
+      if (isAtivo && idAlvo) {
+        try {
+          fetch(`/api/pedidos/${idAlvo}/status`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              status: 'Cancelado',
+              statusAtualizadoEm: Date.now(),
+              origem: 'cliente'
+            })
+          }).catch(() => {});
+        } catch(e) {}
+      }
+
+      if (idAlvo) {
+        meus = meus.filter(p => p.id !== idAlvo && String(p.numero) !== String(idAlvo));
       } else {
         meus = [];
       }
@@ -1632,6 +1654,9 @@
       } catch(e) {}
 
       ultimoPedidoCriadoId = null;
+      if (pedidoSelecionadoId === idAlvo) {
+        pedidoSelecionadoId = meus.length > 0 ? meus[0].id : null;
+      }
 
       if (intervalSincronizacao) {
         clearInterval(intervalSincronizacao);
@@ -1644,7 +1669,7 @@
       atualizarBadgeMeusPedidos();
       renderizarAbaMeusPedidos();
       atualizarBarraCarrinho();
-      mostrarToast('✓ Pedido limpo com sucesso! Você já pode fazer novos pedidos.');
+      mostrarToast(isAtivo ? '✓ Pedido cancelado e tela liberada para novos pedidos.' : '✓ Pedido removido da tela.');
     }
 
     // LISTA DE BAIRROS ATENDIDOS NO RAIO DE 2.5KM DO JARDIM TAMOIO (CAMPINAS)
@@ -2237,6 +2262,7 @@
       }
 
       const enderecoCompleto = isRetiradaBalcao ? 'Retirada no Balcão' : `${rua}, nº ${numero}`;
+      const subtotal = carrinho.reduce((acc, item) => acc + item.preco, 0);
       const taxa = isRetiradaBalcao ? 0.00 : (cardapioGlobal ? cardapioGlobal.restaurante.taxaEntregaPadrao : 5.00);
       const total = subtotal + taxa;
 
