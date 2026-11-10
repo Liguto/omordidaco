@@ -1093,6 +1093,23 @@ app.post(['/api/ifood/simular-teste', '/ifood/simular-teste'], (req, res) => {
   res.json({ success: true, message: 'Pedido simulado do iFood gerado com sucesso!', pedido: pedidoSimulado });
 });
 
+// Cancelar Pedido no iFood e Consultar Motivos
+app.post(['/api/ifood/pedidos/:id/cancelar', '/ifood/pedidos/:id/cancelar'], async (req, res) => {
+  const orderId = req.params.id.replace('ifood_', '');
+  const { code = '501', reason = 'Problemas de sistema na loja' } = req.body || {};
+  try {
+    const motivos = await integracaoIFood.obterMotivosCancelamento(orderId);
+    const cancelado = await integracaoIFood.cancelarPedidoIFood(orderId, code, reason);
+    if (cancelado) {
+      res.json({ success: true, motivos, message: `Pedido #${orderId} cancelado no iFood com sucesso.` });
+    } else {
+      res.status(400).json({ success: false, error: 'Falha ao cancelar pedido no iFood' });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // ====================================================
 // ROTAS DE INTEGRAÇÃO OFICIAL COM A 99FOOD (99APP)
 // ====================================================
