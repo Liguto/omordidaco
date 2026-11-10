@@ -1,1 +1,33 @@
-[]
+[
+  {
+    "id": "ifood_4bfd41b3-7b7a-456c-94ab-4039e561975a",
+    "ifoodOrderId": "4bfd41b3-7b7a-456c-94ab-4039e561975a",
+    "origem": "iFood",
+    "numero": "9098",
+    "cliente": {
+      "nome": "Luiz Augusto (Cliente de Testes iFood)",
+      "telefone": "0800 705 3040 (PIN/Ramal: 11140437)"
+    },
+    "entrega": {
+      "endereco": "Rua TESTE, nº 999999 - Complemento TESTE",
+      "bairro": "Bairro TESTE - Campinas",
+      "referencia": ""
+    },
+    "itens": [
+      {
+        "nome": "Dog Bacon Supreme",
+        "quantidade": 1,
+        "preco": 29.9,
+        "formato": "Tradicional no Pão Macio",
+        "observacoes": ""
+      }
+    ],
+    "subtotal": 29.9,
+    "taxaEntrega": 8.9,
+    "total": 39.79,
+    "pagamento": "CREDIT (Pagar na Entrega)",
+    "status": "Entregue",
+    "dataHora": "10/11/2026, 08:46:04",
+    "statusAtualizadoEm": 1794311903782
+  }
+]

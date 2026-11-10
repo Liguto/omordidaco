@@ -1087,17 +1087,38 @@ try {
         });
       }
     },
-    onAtualizacaoStatus: (pedidoId, novoStatus) => {
+    onAtualizacaoStatus: async (pedidoId, novoStatus) => {
       recarregarPedidosDoDisco();
-      const p = pedidos.find(item => item.id === pedidoId);
+      let p = pedidos.find(item => item.id === pedidoId);
+
+      // Se o pedido não estava em memória (ex: servidor reiniciou recentemente), busca na API do iFood
+      if (!p && pedidoId && pedidoId.startsWith('ifood_')) {
+        try {
+          const ifoodOrderId = pedidoId.replace('ifood_', '');
+          const detalhes = await integracaoIFood.buscarDetalhesPedido(ifoodOrderId);
+          if (detalhes) {
+            p = integracaoIFood.converterPedidoIFoodParaInterno(detalhes);
+            if (p) {
+              p.status = novoStatus;
+              p.statusAtualizadoEm = Date.now();
+              pedidos.unshift(p);
+              salvarPedidos();
+            }
+          }
+        } catch (e) {}
+      }
+
       if (p) {
         p.status = novoStatus;
         p.statusAtualizadoEm = Date.now();
         salvarPedidos();
         notificarCozinha({
           tipo: 'status_atualizado',
-          id: pedidoId,
-          status: novoStatus
+          id: p.id,
+          numero: p.numero,
+          status: novoStatus,
+          statusAtualizadoEm: p.statusAtualizadoEm,
+          pedido: p
         });
       }
     }

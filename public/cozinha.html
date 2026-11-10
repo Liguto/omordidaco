@@ -2374,23 +2374,21 @@
           window.canalComunicacaoLocal.onmessage = (ev) => {
             if (!ev.data) return;
             if (ev.data.tipo === 'status_atualizado') {
-              const p = pedidosLocais.find(x => x.id === ev.data.id);
+              const p = pedidosLocais.find(x => x.id === ev.data.id || (ev.data.numero && x.numero && String(x.numero) === String(ev.data.numero)));
               if (p) {
-                const msgTime = Number(ev.data.statusAtualizadoEm) || 0;
-                const localTime = Number(p.statusAtualizadoEm) || 0;
-                if (msgTime >= localTime) {
-                  p.status = ev.data.status;
-                  p.statusAtualizadoEm = msgTime || Date.now();
-                  p.statusTravadoLocalmenteEm = Date.now();
-                  salvarCacheLocalPedidos();
-                  renderizarPedidos();
-                  atualizarEstatisticas();
+                p.status = ev.data.status;
+                p.statusAtualizadoEm = Number(ev.data.statusAtualizadoEm) || Date.now();
+                salvarCacheLocalPedidos();
+                ultimoHashPedidos = ''; // Força recriação visual imediata
+                renderizarPedidos();
+                atualizarEstatisticas();
 
-                  if (ev.data.origem === 'cliente' && ev.data.status === 'Entregue') {
-                    exibirToastWhatsApp(p.id, 'Entregue (Confirmado pelo Cliente 🎉)');
-                  } else if (ev.data.status === 'Cancelado') {
-                    mostrarToastAviso(`❌ Pedido #${p.numero} foi CANCELADO pelo cliente!`, 'alerta');
-                  }
+                if (ev.data.origem === 'cliente' && ev.data.status === 'Entregue') {
+                  exibirToastWhatsApp(p.id, 'Entregue (Confirmado pelo Cliente 🎉)');
+                } else if (ev.data.status === 'Cancelado') {
+                  mostrarToastAviso(`❌ Pedido #${p.numero} foi CANCELADO pelo cliente!`, 'alerta');
+                } else if (ev.data.status === 'Entregue') {
+                  mostrarToastAviso(`✅ Pedido #${p.numero} marcado como ENTREGUE!`, 'sucesso');
                 }
               }
             } else if (ev.data.tipo === 'novo_pedido' && ev.data.pedido) {
@@ -2405,6 +2403,7 @@
             } else if (ev.data.tipo === 'pedidos_resetados') {
               pedidosLocais = [];
               localStorage.setItem('mordidaco_pedidos_cache', '[]');
+              ultimoHashPedidos = '';
               renderizarPedidos();
               atualizarEstatisticas();
               carregarHistorico();
@@ -2436,18 +2435,14 @@
             if (envelope.event === 'message' && envelope.message) {
               const dados = JSON.parse(envelope.message);
               if (dados.tipo === 'status_atualizado') {
-                const p = pedidosLocais.find(x => x.id === dados.id);
+                const p = pedidosLocais.find(x => x.id === dados.id || (dados.numero && x.numero && String(x.numero) === String(dados.numero)));
                 if (p) {
-                  const msgTime = Number(dados.statusAtualizadoEm) || 0;
-                  const localTime = Number(p.statusAtualizadoEm) || 0;
-                  if (msgTime >= localTime) {
-                    p.status = dados.status;
-                    p.statusAtualizadoEm = msgTime || Date.now();
-                    p.statusTravadoLocalmenteEm = Date.now();
-                    salvarCacheLocalPedidos();
-                    renderizarPedidos();
-                    atualizarEstatisticas();
-                  }
+                  p.status = dados.status;
+                  p.statusAtualizadoEm = Number(dados.statusAtualizadoEm) || Date.now();
+                  salvarCacheLocalPedidos();
+                  ultimoHashPedidos = '';
+                  renderizarPedidos();
+                  atualizarEstatisticas();
                 }
               } else if (dados.tipo === 'optin_whatsapp') {
                 const p = pedidosLocais.find(x => x.id === dados.id);
@@ -2459,6 +2454,7 @@
               } else if (dados.tipo === 'pedidos_resetados') {
                 pedidosLocais = [];
                 localStorage.setItem('mordidaco_pedidos_cache', '[]');
+                ultimoHashPedidos = '';
                 renderizarPedidos();
                 atualizarEstatisticas();
                 carregarHistorico();
@@ -2486,21 +2482,19 @@
           try {
             const data = JSON.parse(event.data);
             if (data.tipo === 'status_atualizado') {
-              const p = pedidosLocais.find(x => x.id === data.id);
+              const p = pedidosLocais.find(x => x.id === data.id || (data.numero && x.numero && String(x.numero) === String(data.numero)));
               if (p) {
-                const msgTime = Number(data.statusAtualizadoEm) || 0;
-                const localTime = Number(p.statusAtualizadoEm) || 0;
-                if (msgTime >= localTime) {
-                  p.status = data.status;
-                  p.statusAtualizadoEm = msgTime || Date.now();
-                  p.statusTravadoLocalmenteEm = Date.now();
-                  salvarCacheLocalPedidos();
-                  renderizarPedidos();
-                  atualizarEstatisticas();
+                p.status = data.status;
+                p.statusAtualizadoEm = Number(data.statusAtualizadoEm) || Date.now();
+                salvarCacheLocalPedidos();
+                ultimoHashPedidos = '';
+                renderizarPedidos();
+                atualizarEstatisticas();
 
-                  if (data.status === 'Cancelado') {
-                    mostrarToastAviso(`❌ Pedido #${p.numero} foi CANCELADO pelo cliente!`, 'alerta');
-                  }
+                if (data.status === 'Cancelado') {
+                  mostrarToastAviso(`❌ Pedido #${p.numero} foi CANCELADO pelo cliente!`, 'alerta');
+                } else if (data.status === 'Entregue') {
+                  mostrarToastAviso(`✅ Pedido #${p.numero} entregue e concluído!`, 'sucesso');
                 }
               }
             } else if (data.tipo === 'optin_whatsapp') {
@@ -2513,6 +2507,7 @@
             } else if (data.tipo === 'pedidos_resetados') {
               pedidosLocais = [];
               localStorage.setItem('mordidaco_pedidos_cache', '[]');
+              ultimoHashPedidos = '';
               renderizarPedidos();
               atualizarEstatisticas();
               carregarHistorico();
