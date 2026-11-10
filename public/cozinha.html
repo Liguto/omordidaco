@@ -190,6 +190,11 @@
     .ribbon-preparo { background: #1d4ed8; }
     .ribbon-entrega { background: #6d28d9; }
     .ribbon-entregue { background: #15803d; }
+    .ribbon-ifood { background: #ea1d2c !important; }
+
+    .order-card.origem-ifood {
+      border: 3px solid #ea1d2c !important;
+    }
 
     .card-body {
       padding: 14px 16px;
@@ -692,6 +697,7 @@
         <span>🖨️ Auto-imprimir ao receber</span>
       </label>
       <button class="btn-top" onclick="testarAlarme()">🔔 Testar Som</button>
+      <button class="btn-top" style="background: #ea1d2c; color: #ffffff;" onclick="simularPedidoIFood()" title="Testar recebimento de pedido do iFood">🔴 Simular iFood</button>
       <button class="btn-top" onclick="carregarPedidos()">🔄 Atualizar</button>
       <button class="btn-top" style="background: #dc2626;" onclick="resetarTudoSistema()">🗑️ Zerar Tudo (Reset)</button>
     </div>
@@ -1441,22 +1447,23 @@
     }
 
     function gerarHtmlCardPedido(p, modo = 'kanban') {
-      let ribbonClass = 'ribbon-pendente';
-      let ribbonText = '⏳ A FAZER • PENDENTE';
-      let cardStatusClass = 'status-Pendente';
+      const isIFood = p.origem === 'iFood';
+      let ribbonClass = isIFood ? 'ribbon-ifood' : 'ribbon-pendente';
+      let ribbonText = isIFood ? `🔴 IFOOD • #${p.numero}` : '⏳ A FAZER • PENDENTE';
+      let cardStatusClass = isIFood ? 'status-Pendente origem-ifood' : 'status-Pendente';
 
       if (p.status === 'Em Preparo') {
-        ribbonClass = 'ribbon-preparo';
-        ribbonText = '🔥 NA BANCADA • EM PREPARO';
-        cardStatusClass = 'status-EmPreparo';
+        ribbonClass = isIFood ? 'ribbon-ifood' : 'ribbon-preparo';
+        ribbonText = isIFood ? `🔴 IFOOD (BANCADA) • #${p.numero}` : '🔥 NA BANCADA • EM PREPARO';
+        cardStatusClass = isIFood ? 'status-EmPreparo origem-ifood' : 'status-EmPreparo';
       } else if (p.status === 'Saiu p/ Entrega') {
-        ribbonClass = 'ribbon-entrega';
-        ribbonText = '🛵 COM MOTOBOY • NA RUA';
-        cardStatusClass = 'status-SaiupEntrega';
+        ribbonClass = isIFood ? 'ribbon-ifood' : 'ribbon-entrega';
+        ribbonText = isIFood ? `🔴 IFOOD (MOTOBOY) • #${p.numero}` : '🛵 COM MOTOBOY • NA RUA';
+        cardStatusClass = isIFood ? 'status-SaiupEntrega origem-ifood' : 'status-SaiupEntrega';
       } else if (p.status === 'Entregue') {
         ribbonClass = 'ribbon-entregue';
-        ribbonText = '✅ CONCLUÍDO • ENTREGUE';
-        cardStatusClass = 'status-Entregue';
+        ribbonText = isIFood ? `✅ IFOOD CONCLUÍDO • #${p.numero}` : '✅ CONCLUÍDO • ENTREGUE';
+        cardStatusClass = isIFood ? 'status-Entregue origem-ifood' : 'status-Entregue';
       }
 
       let itensHtml = '';
@@ -2035,6 +2042,11 @@
         <div class="ticket-divider"></div>
         <div class="ticket-center ticket-large ticket-bold">PEDIDO #${p.numero}</div>
         <div class="ticket-center" style="font-size: 8.5pt;">${p.dataHora}</div>
+        ${p.origem === 'iFood' ? `
+          <div class="ticket-center ticket-bold" style="background: #000000; color: #ffffff; padding: 3px 0; margin: 4px 0; font-size: 10.5pt; letter-spacing: 0.5px;">
+            *** CANAL: IFOOD MARKETPLACE ***
+          </div>
+        ` : ''}
         <div class="ticket-divider"></div>
         
         <div><span class="ticket-bold">CLIENTE:</span> ${p.cliente.nome}</div>
@@ -2081,6 +2093,21 @@
 
       printArea.innerHTML = html;
       window.print();
+    }
+
+    // SIMULAR PEDIDO DO IFOOD (TESTE RÁPIDO DO KANBAN & IMPRESSÃO)
+    async function simularPedidoIFood() {
+      try {
+        const res = await fetch('/api/ifood/simular-teste', { method: 'POST' });
+        if (res.ok) {
+          const data = await res.json();
+          mostrarToastAviso('🔴 Pedido de teste do iFood recebido com sucesso!', 'sucesso');
+        } else {
+          alert('Erro ao disparar simulação do iFood.');
+        }
+      } catch (err) {
+        alert('Erro de conexão ao simular pedido do iFood.');
+      }
     }
 
     // 1. CANAL LOCAL / MESMO NAVEGADOR (BroadcastChannel Persistente)

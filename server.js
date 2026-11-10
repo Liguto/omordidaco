@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const integracaoIFood = require('./integracao_ifood');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -834,6 +835,15 @@ app.patch(['/api/pedidos/:id/status', '/pedidos/:id/status'], async (req, res) =
     await salvarPedidosNuvem();
   }
 
+  // Notifica o iFood quando o status avançar na cozinha
+  if (pedido.ifoodOrderId) {
+    if (status === 'Em Preparo') {
+      integracaoIFood.iniciarPreparoNoIFood(pedido.ifoodOrderId).catch(() => {});
+    } else if (status === 'Saiu p/ Entrega') {
+      integracaoIFood.despacharPedidoNoIFood(pedido.ifoodOrderId).catch(() => {});
+    }
+  }
+
   // Notifica painel da cozinha com versão temporal
   notificarCozinha({
     tipo: 'status_atualizado',
@@ -952,6 +962,106 @@ app.post(['/api/pedidos/reset-total', '/pedidos/reset-total'], async (req, res) 
     message: 'Todos os pedidos e histórico foram completamente resetados! Próximo pedido iniciará no #101.'
   });
 });
+
+// ====================================================
+// ROTAS DE INTEGRAÇÃO OFICIAL COM O IFOOD
+// ====================================================
+
+// Forçar sincronização imediata com iFood
+app.post(['/api/ifood/sincronizar', '/ifood/sincronizar'], async (req, res) => {
+  try {
+    const eventos = await integracaoIFood.buscarEventosIFood();
+    res.json({ success: true, eventosDetectados: eventos.length });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Simular Pedido de Teste do iFood (Para testes rápidos de KDS e Impressora)
+app.post(['/api/ifood/simular-teste', '/ifood/simular-teste'], (req, res) => {
+  recarregarPedidosDoDisco();
+  const agora = new Date();
+  const displayId = String(Math.floor(1000 + Math.random() * 9000));
+  const pedidoSimulado = {
+    id: `ifood_teste_${Date.now()}`,
+    origem: 'iFood',
+    numero: displayId,
+    cliente: {
+      nome: 'Cliente Teste iFood',
+      telefone: '(19) 99788-1550'
+    },
+    entrega: {
+      endereco: 'Av. Washington Luiz, nº 1500',
+      bairro: 'Swift',
+      referencia: 'Condomínio Spazio Di Fiori - Portaria 2'
+    },
+    itens: [
+      {
+        nome: '1x Dog Duplo Especial do Mordidaço',
+        preco: 27.90,
+        formato: 'No Pão Macio + Dobro de Muçarela',
+        observacoes: 'Sem milho, caprichar no parmesão ralado na hora por favor!'
+      },
+      {
+        nome: '1x Refrigerante Coca-Cola Original (Lata 350ml)',
+        preco: 7.50,
+        formato: 'Lata 350ml Gelada',
+        observacoes: ''
+      }
+    ],
+    subtotal: 35.40,
+    taxaEntrega: 5.90,
+    total: 41.30,
+    pagamento: 'Pago Online via App iFood (Pix)',
+    status: 'Pendente',
+    dataHora: agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+    statusAtualizadoEm: Date.now()
+  };
+
+  pedidos.unshift(pedidoSimulado);
+  salvarPedidos();
+  notificarCozinha({
+    tipo: 'novo_pedido',
+    pedido: pedidoSimulado
+  });
+
+  res.json({ success: true, message: 'Pedido simulado do iFood gerado com sucesso!', pedido: pedidoSimulado });
+});
+
+// INICIALIZADOR DO RADAR OFICIAL DO IFOOD
+try {
+  integracaoIFood.iniciarRadarIFood({
+    onNovoPedido: (pedidoIFood) => {
+      console.log(`🔔 [iFood] Novo pedido oficial recebido da plataforma: #${pedidoIFood.numero}`);
+      recarregarPedidosDoDisco();
+      const jaExiste = pedidos.some(p => p.id === pedidoIFood.id);
+      if (!jaExiste) {
+        pedidos.unshift(pedidoIFood);
+        salvarPedidos();
+        notificarCozinha({
+          tipo: 'novo_pedido',
+          pedido: pedidoIFood
+        });
+      }
+    },
+    onAtualizacaoStatus: (pedidoId, novoStatus) => {
+      recarregarPedidosDoDisco();
+      const p = pedidos.find(item => item.id === pedidoId);
+      if (p) {
+        p.status = novoStatus;
+        p.statusAtualizadoEm = Date.now();
+        salvarPedidos();
+        notificarCozinha({
+          tipo: 'status_atualizado',
+          id: pedidoId,
+          status: novoStatus
+        });
+      }
+    }
+  });
+} catch (err) {
+  console.warn('⚠️ [iFood] Não foi possível iniciar radar:', err.message);
+}
 
 // Exporta o app para o Vercel Serverless
 module.exports = app;
