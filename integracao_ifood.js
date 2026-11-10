@@ -360,8 +360,11 @@ function iniciarRadarIFood({ onNovoPedido, onAtualizacaoStatus }) {
 
         registrarLog('EVENTO', `Evento [${code} (full: ${ev.fullCode || ev.code})] recebido para pedido ID: ${orderId}`);
 
-        const isNovo = code === 'PLACED' || code === 'PLC' || code === 'CONFIRMED' || code === 'CFM' || code === 'CON' || code === 'INTEGRATED' || code === 'INT';
+        const isNovo = code === 'PLACED' || code === 'PLC' || code === 'CONFIRMED' || code === 'CFM' || code === 'INTEGRATED' || code === 'INT';
+        const isConcluido = code === 'CONCLUDED' || code === 'CON' || code === 'DELIVERED' || code === 'DLV';
         const isCancelado = code === 'CANCELLED' || code === 'CAN';
+        const isDespachado = code === 'DISPATCHED' || code === 'DSP';
+        const isPreparo = code === 'PREPARATION_STARTED' || code === 'PRS' || code === 'READY_TO_PICKUP' || code === 'RTP';
 
         if (isNovo) {
           // Pedido criado ou já confirmado pelo cliente/sandbox
@@ -391,7 +394,7 @@ function iniciarRadarIFood({ onNovoPedido, onAtualizacaoStatus }) {
               },
               itens: [
                 {
-                  nome: '1x Dog Duplo Especial do Mordidaço (Teste iFood)',
+                  nome: 'Dog Duplo Especial do Mordidaço',
                   preco: 27.90,
                   formato: 'No Pão Macio + Dobro de Muçarela',
                   observacoes: 'Pedido de teste oficial do portal iFood Developer'
@@ -417,10 +420,25 @@ function iniciarRadarIFood({ onNovoPedido, onAtualizacaoStatus }) {
             await confirmarPedidoIFood(orderId);
             registrarLog('CONFIRM', `Confirmação de aceite enviada ao iFood para pedido ${orderId}`);
           }
+        } else if (isConcluido) {
+          if (onAtualizacaoStatus) {
+            onAtualizacaoStatus(`ifood_${orderId}`, 'Entregue');
+            registrarLog('CONCLUIDO', `✅ Pedido ${orderId} marcado como ENTREGUE/CONCLUÍDO pelo iFood!`);
+          }
         } else if (isCancelado) {
           if (onAtualizacaoStatus) {
             onAtualizacaoStatus(`ifood_${orderId}`, 'Cancelado');
             registrarLog('CANCEL', `Pedido ${orderId} cancelado pelo iFood.`);
+          }
+        } else if (isDespachado) {
+          if (onAtualizacaoStatus) {
+            onAtualizacaoStatus(`ifood_${orderId}`, 'Saiu p/ Entrega');
+            registrarLog('ROTA', `Pedido ${orderId} marcado como EM ROTA/MOTOBOY pelo iFood.`);
+          }
+        } else if (isPreparo) {
+          if (onAtualizacaoStatus) {
+            onAtualizacaoStatus(`ifood_${orderId}`, 'Em Preparo');
+            registrarLog('PREPARO', `Pedido ${orderId} marcado como EM PREPARO pelo iFood.`);
           }
         }
       }
