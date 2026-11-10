@@ -2266,9 +2266,11 @@
       document.getElementById('modalHistorico').style.display = 'none';
     }
 
+    const GOOGLE_REVIEW_LINK_PADRAO = 'https://g.page/r/CYlsHKSBQvTzEBI/review';
+
     function configurarLinkGoogleReview() {
-      const atual = localStorage.getItem('mordidaco_google_review_url') || 'https://search.google.com/local/writereview?placeid=ChIJm089Vv3PyJQRq0yHn1hWzE4';
-      const novo = prompt('Insira o link oficial do Google Meu Negócio para avaliação (ex: https://g.page/r/.../review):', atual);
+      const atual = localStorage.getItem('mordidaco_google_review_url') || GOOGLE_REVIEW_LINK_PADRAO;
+      const novo = prompt('Insira o link oficial do Google Meu Negócio para avaliação:', atual);
       if (novo !== null && novo.trim() !== '') {
         localStorage.setItem('mordidaco_google_review_url', novo.trim());
         mostrarToastAviso('✓ Link do QR Code de avaliação salvo com sucesso!', 'sucesso');
@@ -2283,20 +2285,22 @@
       const printArea = document.getElementById('printReceipt');
       
       // Link oficial de avaliação do Google Meu Negócio
-      const googleReviewUrl = localStorage.getItem('mordidaco_google_review_url') || 'https://search.google.com/local/writereview?placeid=ChIJm089Vv3PyJQRq0yHn1hWzE4';
+      const googleReviewUrl = localStorage.getItem('mordidaco_google_review_url') || GOOGLE_REVIEW_LINK_PADRAO;
       
-      // Gera QR Code nítido em base64 DataURL (100% local e instantâneo)
-      let qrCodeDataUrl = '';
-      try {
-        if (typeof QRCode !== 'undefined' && QRCode.toDataURL) {
-          qrCodeDataUrl = await QRCode.toDataURL(googleReviewUrl, {
-            width: 130,
-            margin: 1,
-            color: { dark: '#000000', light: '#ffffff' }
-          });
+      // Utiliza a imagem oficial gerada pelo Google ou gera dinamicamente se link for customizado
+      let qrCodeImgSrc = 'assets/qrcode_google.png';
+      if (googleReviewUrl !== GOOGLE_REVIEW_LINK_PADRAO) {
+        try {
+          if (typeof QRCode !== 'undefined' && QRCode.toDataURL) {
+            qrCodeImgSrc = await QRCode.toDataURL(googleReviewUrl, {
+              width: 140,
+              margin: 1,
+              color: { dark: '#000000', light: '#ffffff' }
+            });
+          }
+        } catch (e) {
+          console.warn('Erro ao gerar QRCode customizado:', e);
         }
-      } catch (e) {
-        console.warn('Erro ao gerar QRCode local:', e);
       }
 
       let html = `
@@ -2356,12 +2360,9 @@
         <div class="ticket-center" style="margin: 6px 0;">
           <div class="ticket-bold" style="font-size: 9pt; letter-spacing: 0.3px;">⭐ GOSTOU? AVALIE NO GOOGLE! ⭐</div>
           <div style="font-size: 7.5pt; margin-top: 2px;">Sua nota 5 estrelas ajuda muito nossa família!</div>
-          ${qrCodeDataUrl ? `
-            <img src="${qrCodeDataUrl}" class="ticket-qr" alt="QR Code Google Reviews">
-          ` : `
-            <div style="font-size: 8pt; margin: 4px 0; font-weight: bold;">g.page/omordidaco/review</div>
-          `}
-          <div style="font-size: 7pt; font-weight: bold; letter-spacing: 0.2px;">Aponte a câmera do celular para avaliar</div>
+          <img src="${qrCodeImgSrc}" class="ticket-qr" alt="QR Code Google Reviews">
+          <div style="font-size: 7.5pt; font-weight: bold; letter-spacing: 0.2px; margin-top: 2px;">g.page/r/CYlsHKSBQvTzEBI/review</div>
+          <div style="font-size: 7pt; margin-top: 2px;">Aponte a câmera do celular para avaliar</div>
         </div>
 
         <div class="ticket-divider"></div>
