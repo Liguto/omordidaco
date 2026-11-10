@@ -977,6 +977,17 @@ app.post(['/api/ifood/sincronizar', '/ifood/sincronizar'], async (req, res) => {
   }
 });
 
+// Obter Logs em Tempo Real do Radar iFood
+app.get(['/api/ifood/logs', '/ifood/logs'], (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.json({
+    status: 'CONECTADO',
+    merchantId: '1c6a85ea-2063-4bb9-a2ab-a198c2d9946b',
+    totalLogs: integracaoIFood.obterLogs().length,
+    logs: integracaoIFood.obterLogs()
+  });
+});
+
 // Simular Pedido de Teste do iFood (Para testes rápidos de KDS e Impressora)
 app.post(['/api/ifood/simular-teste', '/ifood/simular-teste'], (req, res) => {
   recarregarPedidosDoDisco();

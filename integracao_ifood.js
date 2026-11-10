@@ -14,6 +14,26 @@ const BASE_URL_ORDER = 'https://merchant-api.ifood.com.br/order/v1.0';
 let tokenEmCache = null;
 let tokenExpiraEm = 0;
 
+// BUFFER DE LOGS EM MEMÓRIA PARA VISUALIZAÇÃO AO VIVO NA COZINHA
+const logsRadar = [];
+
+function registrarLog(tipo, mensagem, detalhes = null) {
+  const agora = new Date().toLocaleTimeString('pt-BR');
+  const item = {
+    hora: agora,
+    tipo,
+    mensagem,
+    detalhes: detalhes ? (typeof detalhes === 'object' ? JSON.stringify(detalhes) : String(detalhes)) : null
+  };
+  logsRadar.unshift(item);
+  if (logsRadar.length > 60) logsRadar.pop();
+  console.log(`[iFood ${tipo}] ${mensagem}`);
+}
+
+function obterLogs() {
+  return logsRadar;
+}
+
 /**
  * Obtém ou renova o Token de Autenticação OAuth2 do iFood
  */
@@ -37,17 +57,17 @@ async function obterTokenAcesso() {
 
     if (!res.ok) {
       const errText = await res.text();
+      registrarLog('ERRO', `Falha na autenticação OAuth (${res.status}): ${errText}`);
       throw new Error(`Falha auth iFood (${res.status}): ${errText}`);
     }
 
     const data = await res.json();
     tokenEmCache = data.accessToken;
-    // Expira em data.expiresIn segundos (geralmente 6 horas)
     tokenExpiraEm = agora + ((data.expiresIn || 3600) * 1000);
-    console.log('🔑 [iFood API] Token OAuth renovado com sucesso. Válido por', Math.round(data.expiresIn / 60), 'minutos.');
+    registrarLog('AUTH', `Token OAuth renovado com sucesso! Válido por ${Math.round(data.expiresIn / 60)} min.`);
     return tokenEmCache;
   } catch (err) {
-    console.error('❌ [iFood API] Erro ao autenticar no iFood:', err.message);
+    registrarLog('ERRO', `Erro de conexão na autenticação: ${err.message}`);
     throw err;
   }
 }
@@ -66,19 +86,22 @@ async function buscarEventosIFood() {
     });
 
     if (res.status === 204) {
+      registrarLog('POLL', 'Consulta de eventos: 204 (fila vazia)');
       return []; // Fila vazia sem novos eventos
     }
 
     if (res.status === 200) {
       const eventos = await res.json();
-      return Array.isArray(eventos) ? eventos : [];
+      const lista = Array.isArray(eventos) ? eventos : [];
+      registrarLog('EVENTOS', `Consulta de eventos: 200 (${lista.length} evento(s) recebidos!)`, lista);
+      return lista;
     }
 
     const err = await res.text();
-    console.warn(`⚠️ [iFood API] Polling retornou status ${res.status}:`, err);
+    registrarLog('AVISO', `Polling retornou status ${res.status}: ${err}`);
     return [];
   } catch (err) {
-    console.error('❌ [iFood API] Falha na consulta de eventos:', err.message);
+    registrarLog('ERRO', `Falha na consulta de eventos: ${err.message}`);
     return [];
   }
 }
@@ -281,7 +304,7 @@ function iniciarRadarIFood({ onNovoPedido, onAtualizacaoStatus }) {
         const orderId = ev.orderId;
         const code = ev.code; // PLACED, CONFIRMED, INTEGRATED, CANCELLED, etc.
 
-        console.log(`ℹ️ [iFood Evento] Pedido: ${orderId} | Evento: ${code}`);
+        registrarLog('EVENTO', `Evento [${code}] recebido para pedido ID: ${orderId}`);
 
         if (code === 'PLACED' || code === 'CONFIRMED') {
           // Pedido criado ou já confirmado pelo cliente/sandbox
@@ -289,9 +312,11 @@ function iniciarRadarIFood({ onNovoPedido, onAtualizacaoStatus }) {
           let pedidoFormatado = null;
 
           if (detalhes) {
+            registrarLog('INFO', `Detalhes completos obtidos da API para pedido ${orderId}`);
             pedidoFormatado = converterPedidoIFoodParaInterno(detalhes);
           } else {
             // Fallback resiliente para pedidos de teste do Sandbox onde o iFood não retorna os detalhes completos
+            registrarLog('AVISO', `Usando fallback estruturado para o pedido sandbox ${orderId}`);
             const numCurto = String(orderId).slice(-4).toUpperCase();
             pedidoFormatado = {
               id: `ifood_${orderId}`,
@@ -327,23 +352,27 @@ function iniciarRadarIFood({ onNovoPedido, onAtualizacaoStatus }) {
 
           if (pedidoFormatado && onNovoPedido) {
             onNovoPedido(pedidoFormatado);
+            registrarLog('PEDIDO', `✅ Pedido iFood #${pedidoFormatado.numero} INJETADO com sucesso na cozinha!`);
           }
 
           // Se for PLACED, confirma no iFood para aceitar o pedido
           if (code === 'PLACED') {
             await confirmarPedidoIFood(orderId);
+            registrarLog('CONFIRM', `Confirmação de aceite enviada ao iFood para pedido ${orderId}`);
           }
         } else if (code === 'CANCELLED') {
           if (onAtualizacaoStatus) {
             onAtualizacaoStatus(`ifood_${orderId}`, 'Cancelado');
+            registrarLog('CANCEL', `Pedido ${orderId} cancelado pelo iFood.`);
           }
         }
       }
 
       // Envia confirmação (ACK) para o iFood limpar a fila de eventos
       await confirmarEventosIFood(eventos);
+      registrarLog('ACK', `Confirmação de leitura (ACK) enviada ao iFood para ${eventos.length} evento(s).`);
     } catch (err) {
-      console.error('❌ [iFood Radar] Erro durante ciclo do radar:', err.message);
+      registrarLog('ERRO', `Erro durante ciclo do radar: ${err.message}`);
     }
   };
 
@@ -362,5 +391,7 @@ module.exports = {
   iniciarPreparoNoIFood,
   despacharPedidoNoIFood,
   converterPedidoIFoodParaInterno,
-  iniciarRadarIFood
+  iniciarRadarIFood,
+  obterLogs,
+  registrarLog
 };

@@ -698,6 +698,7 @@
       </label>
       <button class="btn-top" onclick="testarAlarme()">🔔 Testar Som</button>
       <button class="btn-top" style="background: #ea1d2c; color: #ffffff;" onclick="simularPedidoIFood()" title="Testar recebimento de pedido do iFood">🔴 Simular iFood</button>
+      <button class="btn-top" style="background: #059669; color: #ffffff;" onclick="abrirModalLogsIFood()" title="Ver logs em tempo real do radar do iFood">📡 Logs iFood</button>
       <button class="btn-top" onclick="carregarPedidos()">🔄 Atualizar</button>
       <button class="btn-top" style="background: #dc2626;" onclick="resetarTudoSistema()">🗑️ Zerar Tudo (Reset)</button>
     </div>
@@ -919,6 +920,42 @@
             <tr><td colspan="6" style="padding: 20px; text-align: center; color: #94a3b8;">Carregando clientes...</td></tr>
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: LOGS DO RADAR IFOOD EM TEMPO REAL -->
+  <div id="modalLogsIFood" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.75); z-index: 100; justify-content: center; align-items: center; padding: 16px;">
+    <div style="background: #ffffff; width: 100%; max-width: 850px; border-radius: 14px; padding: 22px; max-height: 88vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.25);">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 24px;">📡</span>
+          <div>
+            <h3 style="font-size: 18px; font-weight: 800; color: var(--dark); margin: 0;">Logs do Radar iFood Developer (Tempo Real)</h3>
+            <span style="font-size: 12px; color: #64748b;">Loja vinculada: <strong>1c6a85ea-2063-4bb9-a2ab-a198c2d9946b</strong></span>
+          </div>
+        </div>
+        <button onclick="fecharModalLogsIFood()" style="background:#f1f5f9; border:none; width:32px; height:32px; border-radius:50%; font-size:16px; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="display: inline-block; width: 10px; height: 10px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px #22c55e;"></span>
+          <span style="font-size: 13px; font-weight: 800; color: #166534;">Radar Ativo (Polling a cada 20s)</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button onclick="forcarSincronizacaoIFood()" style="background: #2563eb; color: #ffffff; border: none; padding: 7px 14px; border-radius: 8px; font-weight: 800; font-size: 12.5px; cursor: pointer;">
+            🔄 Forçar Polling Agora
+          </button>
+          <button onclick="simularPedidoIFood()" style="background: #ea1d2c; color: #ffffff; border: none; padding: 7px 14px; border-radius: 8px; font-weight: 800; font-size: 12.5px; cursor: pointer;">
+            🔴 Simular Pedido Teste
+          </button>
+        </div>
+      </div>
+
+      <!-- TERMINAL DE LOGS -->
+      <div id="terminalLogsIFood" style="background: #0f172a; color: #f8fafc; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 14px; border-radius: 10px; max-height: 400px; overflow-y: auto; line-height: 1.5;">
+        <p style="color: #64748b;">Carregando logs do radar...</p>
       </div>
     </div>
   </div>
@@ -2143,6 +2180,74 @@
         }
       } catch (err) {
         alert('Erro de conexão ao simular pedido do iFood.');
+      }
+    }
+
+    // MODAL DE LOGS DO RADAR IFOOD EM TEMPO REAL
+    let intervalLogsIFood = null;
+
+    function abrirModalLogsIFood() {
+      document.getElementById('modalLogsIFood').style.display = 'flex';
+      carregarLogsIFood();
+      if (intervalLogsIFood) clearInterval(intervalLogsIFood);
+      intervalLogsIFood = setInterval(carregarLogsIFood, 3000);
+    }
+
+    function fecharModalLogsIFood() {
+      document.getElementById('modalLogsIFood').style.display = 'none';
+      if (intervalLogsIFood) clearInterval(intervalLogsIFood);
+    }
+
+    async function carregarLogsIFood() {
+      const terminal = document.getElementById('terminalLogsIFood');
+      if (!terminal) return;
+      try {
+        const res = await fetch('/api/ifood/logs?_t=' + Date.now(), { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          const logs = data.logs || [];
+          if (logs.length === 0) {
+            terminal.innerHTML = '<p style="color: #64748b;">Nenhum evento registrado ainda. O radar roda a cada 20 segundos.</p>';
+            return;
+          }
+          let html = '';
+          logs.forEach(l => {
+            let corTipo = '#38bdf8'; // azul claro
+            if (l.tipo === 'ERRO') corTipo = '#ef4444'; // vermelho
+            else if (l.tipo === 'PEDIDO') corTipo = '#22c55e'; // verde
+            else if (l.tipo === 'EVENTO' || l.tipo === 'EVENTOS') corTipo = '#f59e0b'; // laranja
+            else if (l.tipo === 'POLL') corTipo = '#94a3b8'; // cinza
+
+            html += `
+              <div style="margin-bottom: 6px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 4px;">
+                <span style="color: #64748b;">[${l.hora}]</span>
+                <strong style="color: ${corTipo}; margin: 0 4px;">[${l.tipo}]</strong>
+                <span>${l.mensagem}</span>
+                ${l.detalhes ? `<pre style="margin: 4px 0 0 20px; color: #cbd5e1; font-size: 11px; white-space: pre-wrap;">${l.detalhes}</pre>` : ''}
+              </div>
+            `;
+          });
+          terminal.innerHTML = html;
+        }
+      } catch (e) {
+        terminal.innerHTML = '<p style="color: #ef4444;">Erro ao consultar logs do servidor.</p>';
+      }
+    }
+
+    async function forcarSincronizacaoIFood() {
+      try {
+        mostrarToastAviso('Consultando fila de eventos do iFood...', 'info');
+        const res = await fetch('/api/ifood/sincronizar', { method: 'POST' });
+        const data = await res.json();
+        carregarLogsIFood();
+        if (data.eventosDetectados > 0) {
+          mostrarToastAviso(`✓ ${data.eventosDetectados} evento(s) detectado(s)!`, 'sucesso');
+          carregarPedidos();
+        } else {
+          mostrarToastAviso('Fila do iFood vazia (204). Nenhum novo evento.', 'info');
+        }
+      } catch(e) {
+        alert('Erro ao forçar sincronização');
       }
     }
 
