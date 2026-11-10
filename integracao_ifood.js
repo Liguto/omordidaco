@@ -302,17 +302,21 @@ function iniciarRadarIFood({ onNovoPedido, onAtualizacaoStatus }) {
 
       for (const ev of eventos) {
         const orderId = ev.orderId;
-        const code = ev.code; // PLACED, CONFIRMED, INTEGRATED, CANCELLED, etc.
+        const rawCode = ev.fullCode || ev.code || '';
+        const code = String(rawCode).toUpperCase();
 
-        registrarLog('EVENTO', `Evento [${code}] recebido para pedido ID: ${orderId}`);
+        registrarLog('EVENTO', `Evento [${code} (full: ${ev.fullCode || ev.code})] recebido para pedido ID: ${orderId}`);
 
-        if (code === 'PLACED' || code === 'CONFIRMED') {
+        const isNovo = code === 'PLACED' || code === 'PLC' || code === 'CONFIRMED' || code === 'CFM' || code === 'CON' || code === 'INTEGRATED' || code === 'INT';
+        const isCancelado = code === 'CANCELLED' || code === 'CAN';
+
+        if (isNovo) {
           // Pedido criado ou já confirmado pelo cliente/sandbox
           let detalhes = await buscarDetalhesPedido(orderId);
           let pedidoFormatado = null;
 
           if (detalhes) {
-            registrarLog('INFO', `Detalhes completos obtidos da API para pedido ${orderId}`);
+            registrarLog('INFO', `Detalhes completos obtidos da API para pedido #${detalhes.displayId || orderId}`);
             pedidoFormatado = converterPedidoIFoodParaInterno(detalhes);
           } else {
             // Fallback resiliente para pedidos de teste do Sandbox onde o iFood não retorna os detalhes completos
@@ -355,12 +359,12 @@ function iniciarRadarIFood({ onNovoPedido, onAtualizacaoStatus }) {
             registrarLog('PEDIDO', `✅ Pedido iFood #${pedidoFormatado.numero} INJETADO com sucesso na cozinha!`);
           }
 
-          // Se for PLACED, confirma no iFood para aceitar o pedido
-          if (code === 'PLACED') {
+          // Se for PLACED ou PLC, confirma no iFood para aceitar o pedido
+          if (code === 'PLACED' || code === 'PLC') {
             await confirmarPedidoIFood(orderId);
             registrarLog('CONFIRM', `Confirmação de aceite enviada ao iFood para pedido ${orderId}`);
           }
-        } else if (code === 'CANCELLED') {
+        } else if (isCancelado) {
           if (onAtualizacaoStatus) {
             onAtualizacaoStatus(`ifood_${orderId}`, 'Cancelado');
             registrarLog('CANCEL', `Pedido ${orderId} cancelado pelo iFood.`);
