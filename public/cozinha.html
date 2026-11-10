@@ -1415,7 +1415,26 @@
               }
             });
 
-            pedidosLocais = listaServidor;
+            // MESCLAGEM INTELIGENTE ANTI-PERDA:
+            // Combina os pedidos locais existentes com a lista do servidor, garantindo que
+            // pedidos concluídos/entregues no dia NUNCA sumam da tela se o servidor reiniciar!
+            const mapa = new Map();
+            pedidosLocais.forEach(p => {
+              if (p && p.id) mapa.set(p.id, p);
+            });
+
+            listaServidor.forEach(pServidor => {
+              if (pServidor && pServidor.id) {
+                const local = mapa.get(pServidor.id);
+                if (local) {
+                  mapa.set(pServidor.id, { ...local, ...pServidor });
+                } else {
+                  mapa.set(pServidor.id, pServidor);
+                }
+              }
+            });
+
+            pedidosLocais = Array.from(mapa.values());
             pedidosLocais.sort((a, b) => (b.numero || 0) - (a.numero || 0));
             salvarCacheLocalPedidos();
 
@@ -1886,6 +1905,20 @@
         p.status = novoStatus;
         p.statusAtualizadoEm = agora;
         salvarCacheLocalPedidos();
+
+        // AUTO-ARQUIVAMENTO NO HISTÓRICO LOCAL: Pedido entregue nunca se perde
+        if (novoStatus === 'Entregue' || novoStatus === 'Concluído') {
+          try {
+            const histLocal = JSON.parse(localStorage.getItem('mordidaco_historico_cache') || '[]');
+            if (!histLocal.some(h => h.id === p.id)) {
+              histLocal.unshift({ ...p, status: 'Entregue' });
+              localStorage.setItem('mordidaco_historico_cache', JSON.stringify(histLocal));
+              const badge = document.getElementById('totalHistoricoBadge');
+              if (badge) badge.innerText = histLocal.length;
+            }
+          } catch(e) {}
+        }
+
         ultimoHashPedidos = ''; // Força re-render imediato
         renderizarPedidos();
         atualizarEstatisticas();
@@ -2109,6 +2142,18 @@
             localStorage.setItem('mordidaco_historico_cache', JSON.stringify(historicoLocais));
           }
         }
+      } catch (e) {}
+
+      // 3. Inclui automaticamente no histórico qualquer pedido entregue que esteja na tela local
+      pedidosLocais.forEach(p => {
+        if (p && p.id && (p.status === 'Entregue' || p.status === 'Concluído')) {
+          if (!historicoLocais.some(h => h.id === p.id)) {
+            historicoLocais.unshift(p);
+          }
+        }
+      });
+      try {
+        localStorage.setItem('mordidaco_historico_cache', JSON.stringify(historicoLocais));
       } catch (e) {}
 
       const badge = document.getElementById('totalHistoricoBadge');

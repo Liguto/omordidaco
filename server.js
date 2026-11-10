@@ -859,7 +859,16 @@ app.patch(['/api/pedidos/:id/status', '/pedidos/:id/status'], async (req, res) =
   }
 
   salvarPedidos();
-  if (encontradoNoHistorico) {
+
+  // AUTO-ARQUIVAMENTO: Sempre que um pedido for marcado como ENTREGUE, arquiva no histórico imediatamente!
+  if (status === 'Entregue' || status === 'Concluído') {
+    recarregarHistoricoDoDisco();
+    const jaTem = historicoPedidos.some(h => h.id === pedido.id);
+    if (!jaTem) {
+      historicoPedidos.unshift({ ...pedido, status: 'Entregue' });
+      salvarHistorico();
+    }
+  } else if (encontradoNoHistorico) {
     salvarHistorico();
   }
 
@@ -1112,6 +1121,17 @@ try {
         p.status = novoStatus;
         p.statusAtualizadoEm = Date.now();
         salvarPedidos();
+
+        // AUTO-ARQUIVAMENTO: Quando o iFood conclui a entrega, arquiva no histórico imediatamente
+        if (novoStatus === 'Entregue' || novoStatus === 'Concluído') {
+          recarregarHistoricoDoDisco();
+          const jaTem = historicoPedidos.some(h => h.id === p.id);
+          if (!jaTem) {
+            historicoPedidos.unshift({ ...p, status: 'Entregue' });
+            salvarHistorico();
+          }
+        }
+
         notificarCozinha({
           tipo: 'status_atualizado',
           id: p.id,
