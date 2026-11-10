@@ -211,6 +211,96 @@
       color: #475569;
     }
 
+    /* ==================================================== */
+    /* LAYOUT KANBAN (QUADROS ESTILO GESTOR IFOOD)          */
+    /* ==================================================== */
+    .kanban-board {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(290px, 1fr));
+      gap: 16px;
+      align-items: flex-start;
+      overflow-x: auto;
+      padding-bottom: 24px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    @media (max-width: 1250px) {
+      .kanban-board {
+        grid-template-columns: repeat(4, 320px);
+      }
+    }
+
+    .kanban-column {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      min-height: 520px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+
+    .kanban-column-header {
+      padding: 12px 14px;
+      border-radius: 12px 12px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 900;
+      font-size: 13.5px;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+
+    .kanban-column-header.pendente { background: #ea580c; }
+    .kanban-column-header.preparo { background: #2563eb; }
+    .kanban-column-header.rota { background: #7c3aed; }
+    .kanban-column-header.concluido { background: #15803d; }
+
+    .kanban-badge {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      padding: 3px 9px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .kanban-column-cards {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex-grow: 1;
+    }
+
+    .kanban-empty-msg {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 40px 10px;
+    }
+
+    /* CARD ENTREGUE (DIFERENCIADO E COMPACTO) */
+    .order-card.status-Entregue {
+      border: 2px solid #86efac !important;
+      background: #f0fdf4 !important;
+      opacity: 0.92;
+      box-shadow: none !important;
+    }
+    .order-card.status-Entregue .card-body {
+      padding: 10px 14px;
+    }
+    .order-card.status-Entregue .order-num-large {
+      font-size: 26px !important;
+      color: #166534 !important;
+    }
+
     /* FILTROS RÁPIDOS */
     .filter-bar {
       display: flex;
@@ -642,15 +732,70 @@
       </div>
     </div>
 
-    <!-- ORDERS LIST & FILTERS -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
-      <h2 style="font-size: 18px; font-weight: 800; color: var(--dark);">
-        Comandas Ativas na Cozinha
+    <!-- BARRA SUPERIOR DO GESTOR DE PEDIDOS: TÍTULO + ALTERNADOR DE MODO KANBAN / GRADE -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+      <h2 style="font-size: 19px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 8px;">
+        <span>📊</span> <span>Gestor de Pedidos da Cozinha</span>
       </h2>
+      <div style="display: flex; gap: 6px; background: #e2e8f0; padding: 4px; border-radius: 10px;">
+        <button id="btnModoKanban" type="button" onclick="alternarModoVisualizacao('kanban')" style="border: none; padding: 7px 14px; border-radius: 8px; font-weight: 800; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; background: var(--dark); color: #ffffff;">
+          📊 Quadros Kanban (iFood)
+        </button>
+        <button id="btnModoGrade" type="button" onclick="alternarModoVisualizacao('grade')" style="border: none; padding: 7px 14px; border-radius: 8px; font-weight: 800; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; background: transparent; color: #475569;">
+          📋 Grade Única
+        </button>
+      </div>
     </div>
 
-    <!-- BARRA DE FILTROS RÁPIDOS DE ALTO CONTRASTE -->
-    <div class="filter-bar" id="filterBar">
+    <!-- 1. QUADROS KANBAN (ESTILO GESTOR IFOOD) - PADRÃO -->
+    <div class="kanban-board" id="kanbanBoard">
+      <!-- COLUNA 1: PENDENTES -->
+      <div class="kanban-column" id="kanbanColPendentes">
+        <div class="kanban-column-header pendente">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span>⏳</span> <span>A FAZER / PENDENTES</span>
+          </div>
+          <span class="kanban-badge" id="badgeKanbanPendentes">0</span>
+        </div>
+        <div class="kanban-column-cards" id="cardsKanbanPendentes"></div>
+      </div>
+
+      <!-- COLUNA 2: EM PREPARO -->
+      <div class="kanban-column" id="kanbanColPreparo">
+        <div class="kanban-column-header preparo">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span>🔥</span> <span>BANCADA / EM PREPARO</span>
+          </div>
+          <span class="kanban-badge" id="badgeKanbanPreparo">0</span>
+        </div>
+        <div class="kanban-column-cards" id="cardsKanbanPreparo"></div>
+      </div>
+
+      <!-- COLUNA 3: COM MOTOBOY -->
+      <div class="kanban-column" id="kanbanColRota">
+        <div class="kanban-column-header rota">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span>🛵</span> <span>EM ROTA / MOTOBOY</span>
+          </div>
+          <span class="kanban-badge" id="badgeKanbanRota">0</span>
+        </div>
+        <div class="kanban-column-cards" id="cardsKanbanRota"></div>
+      </div>
+
+      <!-- COLUNA 4: ENTREGUES / CONCLUÍDOS -->
+      <div class="kanban-column" id="kanbanColConcluidos">
+        <div class="kanban-column-header concluido">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span>✅</span> <span>CONCLUÍDOS / ENTREGUES</span>
+          </div>
+          <span class="kanban-badge" id="badgeKanbanConcluidos">0</span>
+        </div>
+        <div class="kanban-column-cards" id="cardsKanbanConcluidos"></div>
+      </div>
+    </div>
+
+    <!-- 2. MODO GRADE ÚNICA COM BARRA DE FILTROS (OPCIONAL) -->
+    <div class="filter-bar" id="filterBar" style="display: none;">
       <button class="filter-btn active" data-filter="todos" onclick="filtrarStatus('todos', this)">
         📋 TODOS (<span id="countFiltroTodos">0</span>)
       </button>
@@ -668,7 +813,7 @@
       </button>
     </div>
 
-    <div class="orders-grid" id="ordersGrid">
+    <div class="orders-grid" id="ordersGrid" style="display: none;">
       <p style="color: #94a3b8;">Aguardando novos pedidos...</p>
     </div>
 
@@ -1256,124 +1401,252 @@
     }
 
     let filtroAtual = 'todos';
+    let modoVisualizacao = 'kanban';
+
+    function alternarModoVisualizacao(modo) {
+      modoVisualizacao = modo;
+      const btnKanban = document.getElementById('btnModoKanban');
+      const btnGrade = document.getElementById('btnModoGrade');
+      const kanbanBoard = document.getElementById('kanbanBoard');
+      const filterBar = document.getElementById('filterBar');
+      const ordersGrid = document.getElementById('ordersGrid');
+
+      if (modo === 'kanban') {
+        btnKanban.style.background = 'var(--dark)';
+        btnKanban.style.color = '#ffffff';
+        btnGrade.style.background = 'transparent';
+        btnGrade.style.color = '#475569';
+        kanbanBoard.style.display = 'grid';
+        filterBar.style.display = 'none';
+        ordersGrid.style.display = 'none';
+      } else {
+        btnGrade.style.background = 'var(--dark)';
+        btnGrade.style.color = '#ffffff';
+        btnKanban.style.background = 'transparent';
+        btnKanban.style.color = '#475569';
+        kanbanBoard.style.display = 'none';
+        filterBar.style.display = 'flex';
+        ordersGrid.style.display = 'grid';
+      }
+      ultimoHashPedidos = ''; // Força re-render
+      renderizarPedidos();
+    }
 
     function filtrarStatus(filtro, elementoBtn) {
       filtroAtual = filtro;
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       elementoBtn.classList.add('active');
-      ultimoHashPedidos = ''; // Força re-render para o novo filtro
+      ultimoHashPedidos = '';
       renderizarPedidos();
     }
 
-    function renderizarPedidos() {
-      const grid = document.getElementById('ordersGrid');
-      
-      const pedidosFiltrados = pedidosLocais.filter(p => {
-        if (!p || !p.id || !p.numero || p.id === 'historico') return false;
-        if (filtroAtual === 'todos') return true;
-        return p.status === filtroAtual;
-      });
+    function gerarHtmlCardPedido(p, modo = 'kanban') {
+      let ribbonClass = 'ribbon-pendente';
+      let ribbonText = '⏳ A FAZER • PENDENTE';
+      let cardStatusClass = 'status-Pendente';
 
-      if (pedidosFiltrados.length === 0) {
-        grid.innerHTML = `<div style="grid-column: 1/-1; background:#ffffff; padding:40px; text-align:center; border-radius:12px; border:2px dashed var(--border); color:#64748b; font-size:16px; font-weight:700;">Nenhum pedido com status '${filtroAtual}' no momento.</div>`;
-        return;
+      if (p.status === 'Em Preparo') {
+        ribbonClass = 'ribbon-preparo';
+        ribbonText = '🔥 NA BANCADA • EM PREPARO';
+        cardStatusClass = 'status-EmPreparo';
+      } else if (p.status === 'Saiu p/ Entrega') {
+        ribbonClass = 'ribbon-entrega';
+        ribbonText = '🛵 COM MOTOBOY • NA RUA';
+        cardStatusClass = 'status-SaiupEntrega';
+      } else if (p.status === 'Entregue') {
+        ribbonClass = 'ribbon-entregue';
+        ribbonText = '✅ CONCLUÍDO • ENTREGUE';
+        cardStatusClass = 'status-Entregue';
       }
 
-      // Constrói HTML em memória para injeção atômica única (zero flickering)
-      let gridHtml = '';
+      let itensHtml = '';
+      (p.itens || []).forEach(i => {
+        itensHtml += `
+          <li class="order-item-row" style="padding: 6px 0; border-bottom: 1px dashed #e2e8f0;">
+            <div style="font-size: 14.5px; font-weight: 800; color: #0f172a;">
+              <span style="background: #0f172a; color: #ffffff; padding: 2px 7px; border-radius: 6px; font-size: 12.5px; margin-right: 4px;">1x</span>
+              ${i.nome}
+            </div>
+            ${i.formato ? `<div style="font-size: 12px; font-weight: 700; color: #2563eb; margin: 2px 0 0 28px;">👉 ${i.formato}</div>` : ''}
+            ${i.observacoes ? `<div style="background: #fee2e2; border-left: 4px solid #ef4444; padding: 4px 8px; border-radius: 4px; margin: 4px 0 0 28px; color: #991b1b; font-size: 12px; font-weight: 800;">⚠️ OBS: ${i.observacoes}</div>` : ''}
+          </li>
+        `;
+      });
 
-      pedidosFiltrados.forEach(p => {
-        let ribbonClass = 'ribbon-pendente';
-        let ribbonText = '⏳ A FAZER • PENDENTE';
-        let cardStatusClass = 'status-Pendente';
-
-        if (p.status === 'Em Preparo') {
-          ribbonClass = 'ribbon-preparo';
-          ribbonText = '🔥 NA BANCADA • EM PREPARO';
-          cardStatusClass = 'status-EmPreparo';
-        } else if (p.status === 'Saiu p/ Entrega') {
-          ribbonClass = 'ribbon-entrega';
-          ribbonText = '🛵 COM MOTOBOY • NA RUA';
-          cardStatusClass = 'status-SaiupEntrega';
-        } else if (p.status === 'Entregue') {
-          ribbonClass = 'ribbon-entregue';
-          ribbonText = '✅ CONCLUÍDO • ENTREGUE';
-          cardStatusClass = 'status-Entregue';
-        }
-
-        let itensHtml = '';
-        (p.itens || []).forEach(i => {
-          itensHtml += `
-            <li class="order-item-row" style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;">
-              <div style="font-size: 15px; font-weight: 800; color: #0f172a;">
-                <span style="background: #0f172a; color: #ffffff; padding: 2px 7px; border-radius: 6px; font-size: 13px; margin-right: 4px;">1x</span>
-                ${i.nome}
+      // DIFERENCIAÇÃO: Se for pedido Concluído/Entregue, faz um card compacto e destacado em verde
+      if (p.status === 'Entregue' && modo === 'kanban') {
+        return `
+          <div class="order-card status-Entregue">
+            <div style="background: #dcfce7; border-bottom: 1px solid #bbf7d0; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 900; color: #166534; font-size: 14.5px;">#${p.numero}</span>
+              <span style="font-size: 11px; font-weight: 800; color: #15803d; background: #ffffff; padding: 2px 8px; border-radius: 10px; border: 1px solid #86efac;">✅ Entregue</span>
+            </div>
+            <div class="card-body" style="padding: 10px 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-size: 13.5px; font-weight: 800; color: #0f172a;">👤 ${p.cliente ? p.cliente.nome : 'Cliente'}</span>
+                <span style="font-size: 14.5px; font-weight: 900; color: #15803d;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</span>
               </div>
-              ${i.formato ? `<div style="font-size: 12.5px; font-weight: 700; color: #2563eb; margin: 2px 0 0 28px;">👉 ${i.formato}</div>` : ''}
-              ${i.observacoes ? `<div style="background: #fee2e2; border-left: 4px solid #ef4444; padding: 4px 8px; border-radius: 4px; margin: 4px 0 0 28px; color: #991b1b; font-size: 12.5px; font-weight: 800;">⚠️ OBS: ${i.observacoes}</div>` : ''}
-            </li>
-          `;
-        });
+              <div style="font-size: 12px; color: #475569; margin-bottom: 8px;">
+                📍 ${p.entrega ? p.entrega.endereco : 'Balcão'} (${p.entrega ? p.entrega.bairro : ''})
+              </div>
+              <ul style="list-style: none; margin-bottom: 8px; font-size: 12px; color: #334155; line-height: 1.35;">
+                ${(p.itens || []).map(i => `<li>• 1x ${i.nome} ${i.formato ? `[${i.formato}]` : ''}</li>`).join('')}
+              </ul>
+              <div style="display: flex; gap: 6px; border-top: 1px dashed #bbf7d0; padding-top: 8px;">
+                <button type="button" onclick="imprimirComanda('${p.id}')" style="flex: 1; background: #ffffff; color: #15803d; border: 1.5px solid #86efac; padding: 6px; font-weight: 800; border-radius: 6px; font-size: 11.5px; cursor: pointer;">
+                  🖨️ Comanda
+                </button>
+                <button type="button" onclick="alterarStatus('${p.id}', 'Em Preparo')" title="Reabrir pedido se marcado por engano" style="background: none; border: 1px dashed #94a3b8; color: #64748b; padding: 6px 10px; border-radius: 6px; font-size: 11px; cursor: pointer;">
+                  ↩️ Reabrir
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
 
-        gridHtml += `
-          <div class="order-card ${cardStatusClass}">
-            <!-- FAIXA SUPERIOR COLORIDA E VIBRANTE (VISÍVEL DE LONGE) -->
-            <div class="card-top-ribbon ${ribbonClass}">
-              <span>${ribbonText}</span>
-              <span style="background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 6px; font-size: 14px;">#${p.numero}</span>
+      // Botões de Ação do Fluxo Kanban iFood
+      let acoesFluxoHtml = '';
+      if (p.status === 'Pendente') {
+        acoesFluxoHtml = `
+          <button type="button" onclick="alterarStatus('${p.id}', 'Em Preparo')" style="width: 100%; background: #2563eb; color: #ffffff; padding: 12px; font-weight: 900; border-radius: 8px; border: none; cursor: pointer; font-size: 13.5px; margin-bottom: 6px; box-shadow: 0 4px 12px rgba(37,99,235,0.25); display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span>🔥 Iniciar Preparo</span> ➔
+          </button>
+          <button type="button" onclick="imprimirComanda('${p.id}')" style="width: 100%; background: #0f172a; color: #ffffff; padding: 9px; font-weight: 800; border-radius: 8px; border: none; cursor: pointer; font-size: 12.5px;">
+            🖨️ Imprimir Comanda
+          </button>
+        `;
+      } else if (p.status === 'Em Preparo') {
+        acoesFluxoHtml = `
+          <button type="button" onclick="alterarStatus('${p.id}', 'Saiu p/ Entrega')" style="width: 100%; background: #7c3aed; color: #ffffff; padding: 12px; font-weight: 900; border-radius: 8px; border: none; cursor: pointer; font-size: 13.5px; margin-bottom: 6px; box-shadow: 0 4px 12px rgba(124,58,237,0.25); display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span>🛵 Despachar (Com Motoboy)</span> ➔
+          </button>
+          <div style="display: flex; gap: 6px;">
+            <button type="button" onclick="imprimirComanda('${p.id}')" style="flex: 1; background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1; padding: 8px; font-weight: 700; border-radius: 6px; cursor: pointer; font-size: 12px;">
+              🖨️ Re-imprimir
+            </button>
+            <button type="button" onclick="alterarStatus('${p.id}', 'Pendente')" style="background: none; border: 1px dashed #cbd5e1; color: #64748b; padding: 8px 10px; font-size: 11px; border-radius: 6px; cursor: pointer;">
+              ↩️ Voltar
+            </button>
+          </div>
+        `;
+      } else if (p.status === 'Saiu p/ Entrega') {
+        acoesFluxoHtml = `
+          <button type="button" onclick="alterarStatus('${p.id}', 'Entregue')" style="width: 100%; background: #16a34a; color: #ffffff; padding: 12px; font-weight: 900; border-radius: 8px; border: none; cursor: pointer; font-size: 13.5px; margin-bottom: 6px; box-shadow: 0 4px 12px rgba(22,163,74,0.25); display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span>✅ Concluir (Marcar Entregue)</span> ➔
+          </button>
+          <div style="display: flex; gap: 6px;">
+            <button type="button" onclick="abrirWhatsAppAviso('${p.id}')" style="flex: 1; background: #25d366; color: #ffffff; border: none; padding: 8px; font-weight: 800; border-radius: 6px; cursor: pointer; font-size: 12px;">
+              📲 Avisar no Zap
+            </button>
+            <button type="button" onclick="imprimirComanda('${p.id}')" style="background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1; padding: 8px; border-radius: 6px; cursor: pointer; font-size: 12px;" title="Imprimir">
+              🖨️
+            </button>
+            <button type="button" onclick="alterarStatus('${p.id}', 'Em Preparo')" style="background: none; border: 1px dashed #cbd5e1; color: #64748b; padding: 8px; font-size: 11px; border-radius: 6px; cursor: pointer;" title="Voltar para preparo">
+              ↩️
+            </button>
+          </div>
+        `;
+      } else if (p.status === 'Entregue') {
+        acoesFluxoHtml = `
+          <div style="display: flex; gap: 6px;">
+            <button type="button" onclick="imprimirComanda('${p.id}')" style="flex: 1; background: #ffffff; color: #15803d; border: 1.5px solid #86efac; padding: 8px; font-weight: 800; border-radius: 6px; font-size: 12px; cursor: pointer;">
+              🖨️ Comanda
+            </button>
+            <button type="button" onclick="alterarStatus('${p.id}', 'Em Preparo')" style="background: none; border: 1px dashed #cbd5e1; color: #64748b; padding: 8px 10px; font-size: 11px; border-radius: 6px; cursor: pointer;">
+              ↩️ Reabrir
+            </button>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="order-card ${cardStatusClass}">
+          <div class="card-top-ribbon ${ribbonClass}">
+            <span>${ribbonText}</span>
+            <span style="background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 6px; font-size: 13px;">#${p.numero}</span>
+          </div>
+
+          <div class="card-body">
+            <div style="text-align: center; padding: 4px 0 10px 0; border-bottom: 2px solid #e2e8f0; margin-bottom: 10px;">
+              <span class="order-num-large" style="display: block; font-size: 32px; font-weight: 900; color: #0f172a; letter-spacing: -1px; line-height: 1.1;">#${p.numero}</span>
+              <div class="order-time-large" style="font-size: 12.5px; font-weight: 700; color: #64748b; margin-top: 3px;">⏰ ${p.dataHora}</div>
+              <div style="font-size: 18px; font-weight: 900; color: #15803d; margin-top: 3px;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</div>
             </div>
 
-            <div class="card-body">
-              <!-- CABEÇALHO DO PEDIDO 100% CENTRALIZADO -->
-              <div style="text-align: center; padding: 6px 0 12px 0; border-bottom: 2px solid #e2e8f0; margin-bottom: 12px;">
-                <span class="order-num-large" style="display: block; font-size: 36px; font-weight: 900; color: #0f172a; letter-spacing: -1px; line-height: 1.1;">#${p.numero}</span>
-                <div class="order-time-large" style="font-size: 13px; font-weight: 700; color: #64748b; margin-top: 4px;">⏰ ${p.dataHora}</div>
-                <div style="font-size: 20px; font-weight: 900; color: #15803d; margin-top: 4px;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</div>
-              </div>
+            <div class="client-info" style="border-left: 4px solid #0f172a; padding: 8px 10px; margin-bottom: 10px;">
+              <div style="font-size: 14.5px; font-weight: 800; color: #0f172a;">👤 ${p.cliente ? p.cliente.nome : 'Cliente'}</div>
+              <div style="font-size: 13px; font-weight: 700; color: #1e293b; margin-top: 2px;">📍 ${p.entrega ? p.entrega.endereco : 'Balcão'} - ${p.entrega ? p.entrega.bairro : ''}</div>
+              ${p.entrega && p.entrega.referencia ? `<div style="font-size: 11.5px; color: #64748b; margin-top: 2px;"><em>Ref: ${p.entrega.referencia}</em></div>` : ''}
+              <div style="font-size: 12.5px; color: #2563eb; font-weight: 700; margin-top: 2px;">📞 ${p.cliente ? p.cliente.telefone : ''}</div>
+            </div>
 
-              <div class="client-info" style="border-left: 4px solid #0f172a; padding: 10px 12px; margin-bottom: 12px;">
-                <div style="font-size: 15px; font-weight: 800; color: #0f172a;">👤 ${p.cliente ? p.cliente.nome : 'Cliente'}</div>
-                <div style="font-size: 13.5px; font-weight: 700; color: #1e293b; margin-top: 3px;">📍 ${p.entrega ? p.entrega.endereco : 'Balcão'} - ${p.entrega ? p.entrega.bairro : ''}</div>
-                ${p.entrega && p.entrega.referencia ? `<div style="font-size: 12px; color: #64748b; margin-top: 2px;"><em>Ref: ${p.entrega.referencia}</em></div>` : ''}
-                <div style="font-size: 13px; color: #2563eb; font-weight: 700; margin-top: 3px;">📞 ${p.cliente ? p.cliente.telefone : ''}</div>
-              </div>
+            <ul class="order-items" style="list-style: none; margin-bottom: 12px;">
+              ${itensHtml}
+            </ul>
 
-              <ul class="order-items" style="list-style: none; margin-bottom: 14px;">
-                ${itensHtml}
-              </ul>
+            <div class="order-payment-box" style="font-size: 12.5px; padding: 8px 10px; margin-bottom: 10px;">
+              <strong style="color: #92400e;">💵 PAGTO:</strong> <span style="font-weight: 800; color: #b45309;">${p.pagamento || 'Na Entrega'}</span>
+            </div>
 
-              <div class="order-payment-box" style="font-size: 13px; padding: 10px 12px; margin-bottom: 12px;">
-                <strong style="color: #92400e;">💵 FORMA DE PAGTO:</strong> <span style="font-weight: 800; color: #b45309;">${p.pagamento || 'Na Entrega'}</span><br>
-                <strong>TOTAL A COBRAR:</strong> <span style="font-size: 16px; font-weight: 900; color: #0f172a;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</span>
-              </div>
-
-              <!-- SELETOR DE STATUS REVERSÍVEL (EVITA MISS-CLICK) -->
-              <div style="background: #f8fafc; border: 2px solid #cbd5e1; padding: 10px 12px; border-radius: 8px; margin-bottom: 12px;">
-                <label style="font-size: 11px; font-weight: 900; color: #334155; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">
-                  🔄 STATUS DO PEDIDO (ALTERE LIVREMENTE):
+            ${modo === 'grade' ? `
+              <div style="background: #f8fafc; border: 2px solid #cbd5e1; padding: 8px 10px; border-radius: 8px; margin-bottom: 10px;">
+                <label style="font-size: 10.5px; font-weight: 900; color: #334155; display: block; margin-bottom: 3px; text-transform: uppercase;">
+                  🔄 ALTERAR STATUS:
                 </label>
-                <select onchange="alterarStatus('${p.id}', this.value)" style="width: 100%; padding: 8px 12px; border-radius: 6px; font-size: 14px; font-weight: 800; border: 2px solid #0f172a; background: #ffffff; cursor: pointer; color: #0f172a;">
+                <select onchange="alterarStatus('${p.id}', this.value)" style="width: 100%; padding: 6px 10px; border-radius: 6px; font-size: 13px; font-weight: 800; border: 1.5px solid #0f172a; background: #ffffff; cursor: pointer;">
                   <option value="Pendente" ${p.status === 'Pendente' ? 'selected' : ''}>⏳ A FAZER / PENDENTE</option>
                   <option value="Em Preparo" ${p.status === 'Em Preparo' ? 'selected' : ''}>🔥 NA BANCADA / EM PREPARO</option>
                   <option value="Saiu p/ Entrega" ${p.status === 'Saiu p/ Entrega' ? 'selected' : ''}>🛵 COM MOTOBOY / NA RUA</option>
                   <option value="Entregue" ${p.status === 'Entregue' ? 'selected' : ''}>✅ ENTREGUE / CONCLUÍDO</option>
                 </select>
               </div>
+            ` : ''}
 
-              <div class="order-actions">
-                <button class="btn-action btn-print" onclick="imprimirComanda('${p.id}')">
-                  🖨️ IMPRIMIR COMANDA TÉRMICA
-                </button>
-                <button class="btn-action btn-whatsapp-aviso" onclick="abrirWhatsAppAviso('${p.id}')">
-                  📲 Avisar Cliente no WhatsApp
-                </button>
-              </div>
+            <div class="order-actions">
+              ${acoesFluxoHtml}
             </div>
           </div>
-        `;
-      });
+        </div>
+      `;
+    }
 
-      grid.innerHTML = gridHtml;
+    function renderizarPedidos() {
+      const pedidosValidos = pedidosLocais.filter(p => p && p.id && p.numero && p.id !== 'historico');
+
+      if (modoVisualizacao === 'kanban') {
+        const pendentes = pedidosValidos.filter(p => p.status === 'Pendente');
+        const preparo = pedidosValidos.filter(p => p.status === 'Em Preparo');
+        const rota = pedidosValidos.filter(p => p.status === 'Saiu p/ Entrega');
+        const concluidos = pedidosValidos.filter(p => p.status === 'Entregue');
+
+        document.getElementById('cardsKanbanPendentes').innerHTML = pendentes.length ? pendentes.map(p => gerarHtmlCardPedido(p, 'kanban')).join('') : '<div class="kanban-empty-msg">Nenhum pedido pendente</div>';
+        document.getElementById('cardsKanbanPreparo').innerHTML = preparo.length ? preparo.map(p => gerarHtmlCardPedido(p, 'kanban')).join('') : '<div class="kanban-empty-msg">Nenhum na bancada</div>';
+        document.getElementById('cardsKanbanRota').innerHTML = rota.length ? rota.map(p => gerarHtmlCardPedido(p, 'kanban')).join('') : '<div class="kanban-empty-msg">Nenhum em rota</div>';
+        document.getElementById('cardsKanbanConcluidos').innerHTML = concluidos.length ? concluidos.map(p => gerarHtmlCardPedido(p, 'kanban')).join('') : '<div class="kanban-empty-msg">Nenhum entregue hoje</div>';
+
+        const bPend = document.getElementById('badgeKanbanPendentes');
+        const bPrep = document.getElementById('badgeKanbanPreparo');
+        const bRota = document.getElementById('badgeKanbanRota');
+        const bConc = document.getElementById('badgeKanbanConcluidos');
+        if (bPend) bPend.innerText = pendentes.length;
+        if (bPrep) bPrep.innerText = preparo.length;
+        if (bRota) bRota.innerText = rota.length;
+        if (bConc) bConc.innerText = concluidos.length;
+      } else {
+        const grid = document.getElementById('ordersGrid');
+        const pedidosFiltrados = pedidosValidos.filter(p => {
+          if (filtroAtual === 'todos') return true;
+          return p.status === filtroAtual;
+        });
+
+        if (pedidosFiltrados.length === 0) {
+          grid.innerHTML = `<div style="grid-column: 1/-1; background:#ffffff; padding:40px; text-align:center; border-radius:12px; border:2px dashed var(--border); color:#64748b; font-size:16px; font-weight:700;">Nenhum pedido com status '${filtroAtual}' no momento.</div>`;
+          return;
+        }
+
+        grid.innerHTML = pedidosFiltrados.map(p => gerarHtmlCardPedido(p, 'grade')).join('');
+      }
     }
 
     function atualizarEstatisticas() {
@@ -1389,11 +1662,26 @@
       document.getElementById('statFaturamento').innerText = 'R$ ' + faturamento.toFixed(2).replace('.', ',');
 
       // Atualiza contadores na barra de filtros
-      document.getElementById('countFiltroTodos').innerText = pedidosLocais.length;
-      document.getElementById('countFiltroPendentes').innerText = pendentes;
-      document.getElementById('countFiltroPreparo').innerText = preparo;
-      document.getElementById('countFiltroSaiu').innerText = saiu;
-      document.getElementById('countFiltroEntregues').innerText = entregues;
+      const cTodos = document.getElementById('countFiltroTodos');
+      const cPend = document.getElementById('countFiltroPendentes');
+      const cPrep = document.getElementById('countFiltroPreparo');
+      const cSaiu = document.getElementById('countFiltroSaiu');
+      const cEntr = document.getElementById('countFiltroEntregues');
+      if (cTodos) cTodos.innerText = pedidosLocais.length;
+      if (cPend) cPend.innerText = pendentes;
+      if (cPrep) cPrep.innerText = preparo;
+      if (cSaiu) cSaiu.innerText = saiu;
+      if (cEntr) cEntr.innerText = entregues;
+
+      // Atualiza badges das colunas do Kanban
+      const bPend = document.getElementById('badgeKanbanPendentes');
+      const bPrep = document.getElementById('badgeKanbanPreparo');
+      const bRota = document.getElementById('badgeKanbanRota');
+      const bConc = document.getElementById('badgeKanbanConcluidos');
+      if (bPend) bPend.innerText = pendentes;
+      if (bPrep) bPrep.innerText = preparo;
+      if (bRota) bRota.innerText = saiu;
+      if (bConc) bConc.innerText = entregues;
     }
 
     async function alterarStatus(id, novoStatus) {

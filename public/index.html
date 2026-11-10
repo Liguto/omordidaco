@@ -1124,7 +1124,27 @@
         <input type="text" class="form-control" id="trocoValor" placeholder="Ex: Troco para R$ 50,00 ou Não preciso de troco">
       </div>
 
-      <button class="btn-add" style="width: 100%; justify-content: center; padding: 15px; font-size: 16px; margin-top: 16px; background: var(--green); color: #ffffff;" onclick="finalizarPedido()">
+      <!-- ALERTA DE BAIRRO FORA DO RAIO DE 2.5KM -->
+      <div id="alertaRaioDistante" style="display: none; background: #fffbeb; border: 2px solid #f59e0b; border-radius: 12px; padding: 14px; margin-top: 14px; color: #92400e;">
+        <div style="font-weight: 800; font-size: 14px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+          <span style="font-size: 18px;">📍</span> <span>Endereço Fora do Raio de Entrega Direta (2,5km)</span>
+        </div>
+        <p style="font-size: 12.5px; line-height: 1.45; margin-bottom: 12px; color: #78350f;">
+          No momento, nossas entregas diretas de carro são exclusivas para o raio de até 2,5km do <strong>Jardim Tamoio</strong> (Tamoio, Swift, São Gabriel, Santa Eudóxia, Jambeiro, etc.) para garantir que seu cachorro-quente chegue pelando de quente!
+          <br><br>
+          Para o seu bairro (<strong id="nomeBairroDistante" style="text-decoration: underline;"></strong>), peça agora mesmo pelo nosso <strong>iFood Oficial</strong> com entrega expressa por motoboy parceiro!
+        </p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <a href="https://www.ifood.com.br" target="_blank" style="flex: 1; min-width: 160px; background: #ea1d2c; color: #ffffff; text-align: center; padding: 11px 14px; border-radius: 8px; font-weight: 800; font-size: 13px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 3px 8px rgba(234, 29, 44, 0.3);">
+            🔴 Pedir pelo iFood Oficial
+          </a>
+          <button type="button" onclick="selecionarRetiradaBalcao()" style="background: #ffffff; color: #0f172a; border: 1.5px solid #cbd5e1; padding: 11px 14px; border-radius: 8px; font-weight: 700; font-size: 12.5px; cursor: pointer;">
+            🚶 Vou Retirar no Balcão
+          </button>
+        </div>
+      </div>
+
+      <button id="btnConfirmarPedidoCheckout" class="btn-add" style="width: 100%; justify-content: center; padding: 15px; font-size: 16px; margin-top: 16px; background: var(--green); color: #ffffff;" onclick="finalizarPedido()">
         ✓ Confirmar & Enviar Pedido
       </button>
     </div>
@@ -1627,6 +1647,69 @@
       mostrarToast('✓ Pedido limpo com sucesso! Você já pode fazer novos pedidos.');
     }
 
+    // LISTA DE BAIRROS ATENDIDOS NO RAIO DE 2.5KM DO JARDIM TAMOIO (CAMPINAS)
+    const BAIRROS_PERMITIDOS_RAIO_2KM = [
+      'tamoio', 'jardim tamoio', 'jd tamoio', 'jd. tamoio',
+      'cura d\'ars', 'cura dars', 'vila cura d\'ars', 'vila cura dars', 'cura d ars',
+      'santa eudoxia', 'jardim santa eudoxia', 'jd santa eudoxia', 'jd. santa eudoxia',
+      'sao gabriel', 'jardim sao gabriel', 'jd sao gabriel', 'jd. sao gabriel',
+      'swift', 'parque da figueira', 'pq da figueira',
+      'vila lemos', 'lemos',
+      'georgina', 'vila georgina',
+      'jambeiro', 'parque jambeiro', 'pq jambeiro', 'pq. jambeiro',
+      'nova europa', 'jardim nova europa', 'jd nova europa', 'jd. nova europa',
+      'parque prado', 'pq prado', 'pq. prado', 'prado',
+      'balcao', 'retirada'
+    ];
+
+    function normalizarTexto(txt) {
+      if (!txt) return '';
+      return txt.toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]/g, ' ')
+        .trim();
+    }
+
+    function ehBairroPermitido(bairroNome) {
+      if (!bairroNome) return true;
+      const norm = normalizarTexto(bairroNome);
+      if (norm.includes('balcao') || norm.includes('retirada')) return true;
+      return BAIRROS_PERMITIDOS_RAIO_2KM.some(b => {
+        const bNorm = normalizarTexto(b);
+        return norm.includes(bNorm) || bNorm.includes(norm);
+      });
+    }
+
+    let isRetiradaBalcao = false;
+
+    function selecionarRetiradaBalcao() {
+      isRetiradaBalcao = true;
+      document.getElementById('clienteRua').value = 'Retirada no Balcão';
+      document.getElementById('clienteNumero').value = 'S/N';
+      document.getElementById('clienteBairro').value = 'Jardim Tamoio';
+      document.getElementById('clienteCep').value = '13101-259';
+
+      const alerta = document.getElementById('alertaRaioDistante');
+      if (alerta) alerta.style.display = 'none';
+
+      const btnConfirmar = document.getElementById('btnConfirmarPedidoCheckout');
+      if (btnConfirmar) btnConfirmar.style.display = 'flex';
+
+      const statusEl = document.getElementById('cepStatus');
+      if (statusEl) {
+        statusEl.style.display = 'block';
+        statusEl.innerHTML = '✓ Opção selecionada: Retirada no Balcão (Jardim Tamoio)';
+        statusEl.style.color = '#16a34a';
+      }
+
+      // Zera taxa de entrega
+      document.getElementById('resumoTaxa').innerText = 'R$ 0,00 (Grátis)';
+      const subtotal = carrinho.reduce((acc, item) => acc + item.preco, 0);
+      document.getElementById('resumoTotal').innerText = 'R$ ' + subtotal.toFixed(2).replace('.', ',');
+
+      mostrarToast('✓ Retirada no Balcão selecionada!');
+    }
+
     // Autocompletar de Endereço por CEP (ViaCEP)
     let timeoutCep = null;
     async function formatarEConsultarCep(input) {
@@ -1664,8 +1747,30 @@
               document.getElementById('clienteBairro').value = data.bairro;
             }
             
-            statusEl.innerHTML = `✓ ${data.bairro ? data.bairro + ', ' : ''}${data.localidade || 'Campinas'}-${data.uf || 'SP'}`;
-            statusEl.style.color = '#16a34a';
+            const permitido = ehBairroPermitido(data.bairro);
+            const alerta = document.getElementById('alertaRaioDistante');
+            const btnConfirmar = document.getElementById('btnConfirmarPedidoCheckout');
+
+            if (permitido) {
+              if (alerta) alerta.style.display = 'none';
+              if (btnConfirmar) btnConfirmar.style.display = 'flex';
+              statusEl.innerHTML = `✓ ${data.bairro ? data.bairro + ' ' : ''}(Dentro do raio de entrega direta!)`;
+              statusEl.style.color = '#16a34a';
+              isRetiradaBalcao = false;
+
+              // Restaura taxa padrão
+              const taxa = cardapioGlobal ? cardapioGlobal.restaurante.taxaEntregaPadrao : 5.00;
+              document.getElementById('resumoTaxa').innerText = 'R$ ' + taxa.toFixed(2).replace('.', ',');
+              const subtotal = carrinho.reduce((acc, item) => acc + item.preco, 0);
+              document.getElementById('resumoTotal').innerText = 'R$ ' + (subtotal + taxa).toFixed(2).replace('.', ',');
+            } else {
+              if (alerta) alerta.style.display = 'block';
+              const nomeBairroEl = document.getElementById('nomeBairroDistante');
+              if (nomeBairroEl) nomeBairroEl.innerText = data.bairro || 'seu endereço';
+              if (btnConfirmar) btnConfirmar.style.display = 'none';
+              statusEl.innerHTML = `⚠️ ${data.bairro}: fora do raio de 2,5km. Peça pelo iFood ou Retire no Balcão.`;
+              statusEl.style.color = '#d97706';
+            }
 
             // Pula o foco diretamente para o campo de Número
             const numEl = document.getElementById('clienteNumero');
@@ -2126,10 +2231,13 @@
         return;
       }
 
-      const enderecoCompleto = `${rua}, nº ${numero}`;
+      if (!isRetiradaBalcao && !ehBairroPermitido(bairro)) {
+        alert('No momento, nossas entregas diretas de carro são exclusivas para o raio de até 2,5km do Jardim Tamoio. Por favor, opte por "Vou Retirar no Balcão" ou faça seu pedido através do nosso iFood oficial!');
+        return;
+      }
 
-      const subtotal = carrinho.reduce((acc, item) => acc + item.preco, 0);
-      const taxa = cardapioGlobal ? cardapioGlobal.restaurante.taxaEntregaPadrao : 5.00;
+      const enderecoCompleto = isRetiradaBalcao ? 'Retirada no Balcão' : `${rua}, nº ${numero}`;
+      const taxa = isRetiradaBalcao ? 0.00 : (cardapioGlobal ? cardapioGlobal.restaurante.taxaEntregaPadrao : 5.00);
       const total = subtotal + taxa;
 
       let pagtoDetalhe = formaPagtoSelecionada;
@@ -2468,24 +2576,26 @@
       meusPedidos.forEach(p => {
         let itensTexto = (p.itens || []).map(i => `${i.nome}${i.formato ? ' (' + i.formato + ')' : ''}`).join(', ');
         const isSendoVisto = p.id === pedidoAtual.id;
+        const isEntregue = p.status === 'Entregue';
+
         histHtml += `
-          <div style="background: #ffffff; border: ${isSendoVisto ? '2px solid var(--primary)' : '1px solid #e2e8f0'}; border-radius: 14px; padding: 16px; margin-bottom: 12px; transition: box-shadow 0.2s; box-shadow: ${isSendoVisto ? '0 4px 15px rgba(217, 119, 6, 0.15)' : 'none'};">
+          <div style="background: ${isEntregue ? '#f0fdf4' : '#ffffff'}; border: ${isSendoVisto ? '2px solid var(--primary)' : (isEntregue ? '1.5px solid #86efac' : '1px solid #e2e8f0')}; border-left: 6px solid ${isEntregue ? '#16a34a' : (p.status === 'Saiu p/ Entrega' ? '#7c3aed' : '#ea580c')}; border-radius: 14px; padding: 16px; margin-bottom: 12px; transition: box-shadow 0.2s; box-shadow: ${isSendoVisto ? '0 4px 15px rgba(217, 119, 6, 0.15)' : 'none'};">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
               <div>
                 <strong style="color: var(--dark); font-size: 15px;">Pedido #${p.numero || '...'}</strong>
                 <span style="font-size: 12px; color: #64748b; margin-left: 8px;">${p.dataHora || ''}</span>
               </div>
-              <span class="tracker-badge ${p.status === 'Entregue' ? 'badge-entregue' : (p.status === 'Saiu p/ Entrega' ? 'badge-saiu' : 'badge-preparo')}">
-                ${p.status}
+              <span class="tracker-badge ${isEntregue ? 'badge-entregue' : (p.status === 'Saiu p/ Entrega' ? 'badge-saiu' : 'badge-preparo')}">
+                ${isEntregue ? '✅ Entregue com Sucesso' : p.status}
               </span>
             </div>
             <p style="font-size: 13px; color: #475569; margin-bottom: 10px; line-height: 1.4;">
               ${itensTexto || 'Hot Dog Artesanal'}
             </p>
-            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #e2e8f0; padding-top: 10px;">
-              <strong style="color: var(--dark); font-size: 15px;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</strong>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed ${isEntregue ? '#bbf7d0' : '#e2e8f0'}; padding-top: 10px;">
+              <strong style="color: ${isEntregue ? '#15803d' : 'var(--dark)'}; font-size: 15px;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</strong>
               <div style="display: flex; gap: 8px;">
-                <button type="button" onclick="selecionarPedidoParaRastreio('${p.id}')" style="background: ${isSendoVisto ? 'var(--dark)' : '#f1f5f9'}; color: ${isSendoVisto ? '#ffffff' : 'var(--dark)'}; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer;">
+                <button type="button" onclick="selecionarPedidoParaRastreio('${p.id}')" style="background: ${isSendoVisto ? 'var(--dark)' : '#ffffff'}; color: ${isSendoVisto ? '#ffffff' : 'var(--dark)'}; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer;">
                   ${isSendoVisto ? '👁️ Acompanhando' : '👁️ Ver Rastreio'}
                 </button>
                 <button type="button" onclick="repetirPedido('${p.id}')" style="background: #ffffff; color: var(--primary-dark); border: 1px solid var(--primary); padding: 6px 12px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer;">
