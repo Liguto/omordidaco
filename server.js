@@ -1093,6 +1093,17 @@ app.post(['/api/ifood/simular-teste', '/ifood/simular-teste'], (req, res) => {
   res.json({ success: true, message: 'Pedido simulado do iFood gerado com sucesso!', pedido: pedidoSimulado });
 });
 
+// Consultar Motivos Oficiais de Cancelamento no iFood
+app.get(['/api/ifood/pedidos/:id/motivos', '/ifood/pedidos/:id/motivos'], async (req, res) => {
+  const orderId = req.params.id.replace('ifood_', '');
+  try {
+    const motivos = await integracaoIFood.obterMotivosCancelamento(orderId);
+    res.json({ success: true, motivos });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // Cancelar Pedido no iFood e Consultar Motivos
 app.post(['/api/ifood/pedidos/:id/cancelar', '/ifood/pedidos/:id/cancelar'], async (req, res) => {
   const orderId = req.params.id.replace('ifood_', '');

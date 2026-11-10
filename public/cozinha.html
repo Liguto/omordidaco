@@ -2388,7 +2388,7 @@
     }
 
     // MODAL DE CANCELAMENTO COM MOTIVOS OFICIAIS DO IFOOD
-    function abrirModalCancelar(id) {
+    async function abrirModalCancelar(id) {
       const p = pedidosLocais.find(item => item.id === id);
       if (!p) return;
       document.getElementById('cancelarPedidoId').value = id;
@@ -2396,6 +2396,26 @@
       document.getElementById('modalCancelarSubtitulo').innerText = `Canal: ${p.origem || 'Site'} • Cliente: ${p.cliente ? p.cliente.nome : ''}`;
       document.getElementById('textoMotivoCancelamento').value = '';
       document.getElementById('modalCancelarPedido').style.display = 'flex';
+
+      // Se for pedido do iFood, consulta motivos oficiais em tempo real na API do iFood
+      if (p.origem === 'iFood') {
+        try {
+          const res = await fetch(`/api/ifood/pedidos/${id}/motivos`);
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data.motivos) && data.motivos.length > 0) {
+              const select = document.getElementById('selectMotivoCancelamento');
+              select.innerHTML = '';
+              data.motivos.forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = m.cancelCodeId || m.id;
+                opt.innerText = `${m.cancelCodeId || m.id} - ${m.description || m.name}`;
+                select.appendChild(opt);
+              });
+            }
+          }
+        } catch(e) {}
+      }
     }
 
     function fecharModalCancelar() {
