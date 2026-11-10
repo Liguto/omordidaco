@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const integracaoIFood = require('./integracao_ifood');
+const integracao99Food = require('./integracao_99food');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -885,6 +886,18 @@ app.patch(['/api/pedidos/:id/status', '/pedidos/:id/status'], async (req, res) =
     }
   }
 
+  // Notifica a 99Food quando o status avançar na cozinha
+  if (pedido.origem === '99Food' || String(id).startsWith('99_')) {
+    const raw99Id = String(id).replace('99_', '');
+    if (status === 'Em Preparo') {
+      integracao99Food.confirmarPedido99(raw99Id).catch(() => {});
+    } else if (status === 'Saiu p/ Entrega') {
+      integracao99Food.marcarPedidoPronto99(raw99Id).catch(() => {});
+    } else if (status === 'Entregue' && pedido.deliveryType === 2) {
+      integracao99Food.marcarPedidoEntregue99(raw99Id).catch(() => {});
+    }
+  }
+
   // Notifica painel da cozinha com versão temporal
   notificarCozinha({
     tipo: 'status_atualizado',
@@ -1078,6 +1091,85 @@ app.post(['/api/ifood/simular-teste', '/ifood/simular-teste'], (req, res) => {
   });
 
   res.json({ success: true, message: 'Pedido simulado do iFood gerado com sucesso!', pedido: pedidoSimulado });
+});
+
+// ====================================================
+// ROTAS DE INTEGRAÇÃO OFICIAL COM A 99FOOD (99APP)
+// ====================================================
+
+// Webhook oficial da 99Food (Callback URL)
+app.post(['/api/99food/webhook', '/99food/webhook'], (req, res) => {
+  // A 99Food EXIGE retorno imediato { "errno": 0, "errmsg": "ok" }
+  res.json({ errno: 0, errmsg: "ok" });
+
+  try {
+    const payload = req.body || {};
+    const eventType = payload.event || payload.eventType || (payload.order ? 'orderNew' : 'desconhecido');
+    integracao99Food.registrarLog99('INFO', `Webhook 99Food recebido: ${eventType}`);
+
+    if (payload.order || payload.order_items || eventType === 'orderNew') {
+      const orderData = payload.order || payload;
+      const novoPedido = integracao99Food.converterPedido99ParaInterno(orderData);
+
+      recarregarPedidosDoDisco();
+      const jaExiste = pedidos.some(p => p.id === novoPedido.id);
+      if (!jaExiste) {
+        pedidos.unshift(novoPedido);
+        salvarPedidos();
+        salvarPedidosNuvem();
+
+        notificarCozinha({
+          tipo: 'novo_pedido',
+          pedido: novoPedido
+        });
+        integracao99Food.registrarLog99('SUCESSO', `Novo pedido 99Food #${novoPedido.numero} adicionado ao KDS!`);
+      }
+    } else if (eventType === 'orderCancel') {
+      const orderId = payload.order_id || (payload.order && payload.order.order_id);
+      if (orderId) {
+        recarregarPedidosDoDisco();
+        const p = pedidos.find(item => item.id === `99_${orderId}` || item.id === String(orderId));
+        if (p) {
+          p.status = 'Cancelado';
+          p.statusAtualizadoEm = Date.now();
+          salvarPedidos();
+          salvarPedidosNuvem();
+          notificarCozinha({ tipo: 'status_atualizado', id: p.id, status: 'Cancelado', numero: p.numero });
+          integracao99Food.registrarLog99('AVISO', `Pedido 99Food #${orderId} cancelado pelo cliente/plataforma.`);
+        }
+      }
+    }
+  } catch (err) {
+    integracao99Food.registrarLog99('ERRO', `Erro no processamento do webhook 99Food: ${err.message}`);
+  }
+});
+
+// Simular Pedido de Teste da 99Food (Para KDS e Impressora)
+app.post(['/api/99food/simular-teste', '/99food/simular-teste'], (req, res) => {
+  recarregarPedidosDoDisco();
+  const pedidoSimulado = integracao99Food.criarPedidoSimulado99Food();
+
+  pedidos.unshift(pedidoSimulado);
+  salvarPedidos();
+  salvarPedidosNuvem();
+
+  notificarCozinha({
+    tipo: 'novo_pedido',
+    pedido: pedidoSimulado
+  });
+
+  integracao99Food.registrarLog99('SUCESSO', `Simulação 99Food gerada: #${pedidoSimulado.numero}`);
+  res.json({ success: true, message: 'Pedido simulado da 99Food gerado com sucesso!', pedido: pedidoSimulado });
+});
+
+// Obter Logs em Tempo Real da 99Food
+app.get(['/api/99food/logs', '/99food/logs'], (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.json({
+    status: 'CONECTADO',
+    totalLogs: integracao99Food.obterLogs99().length,
+    logs: integracao99Food.obterLogs99()
+  });
 });
 
 // INICIALIZADOR DO RADAR OFICIAL DO IFOOD

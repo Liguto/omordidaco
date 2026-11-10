@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "id": "CLI-1794333485477-190",
+    "nome": "Luiz Augusto (Cliente de Testes iFood)",
+    "telefone": "0800 705 3040 (PIN/Ramal: 11140437)",
+    "endereco": "Rua TESTE, nº 999999 - Complemento TESTE",
+    "bairro": "Bairro TESTE - Campinas",
+    "totalPedidos": 1,
+    "totalGasto": 39.79,
+    "primeiroPedido": "10/11/2026, 08:46:04",
+    "ultimoPedido": "10/11/2026, 08:46:04"
+  }
+]

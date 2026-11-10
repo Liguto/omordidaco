@@ -291,6 +291,35 @@
       box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
     }
 
+    /* 🟡 MOLDURA 99FOOD (AMARELO VIBRANTE / 99APP) */
+    .order-card.moldura-99food {
+      border: 3.5px solid #f59e0b !important;
+      background: #ffffff !important;
+      box-shadow: 0 6px 22px rgba(245, 158, 11, 0.22) !important;
+    }
+
+    .order-card.moldura-99food.status-Pendente {
+      animation: pulseAlert99Food 2.2s infinite !important;
+    }
+
+    @keyframes pulseAlert99Food {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.5), 0 8px 25px rgba(245, 158, 11, 0.25); }
+      50% { box-shadow: 0 0 0 9px rgba(245, 158, 11, 0.15), 0 4px 15px rgba(245, 158, 11, 0.1); }
+    }
+
+    .ribbon-99food-header {
+      background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%) !important;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #0f172a;
+      font-weight: 950;
+      font-size: 13.5px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 3px 10px rgba(245, 158, 11, 0.35);
+    }
+
     /* CARD ENTREGUE (DIFERENCIADO E COMPACTO) */
     .order-card.status-Entregue {
       border: 2px solid #86efac !important;
@@ -734,6 +763,7 @@
       <button class="btn-top" style="background: #475569;" onclick="configurarLinkGoogleReview()" title="Configurar link do QR Code de avaliação no Google">⭐ QR Google</button>
       <button class="btn-top" onclick="testarAlarme()">🔔 Testar Som</button>
       <button class="btn-top" style="background: #ea1d2c; color: #ffffff;" onclick="simularPedidoIFood()" title="Testar recebimento de pedido do iFood">🔴 Simular iFood</button>
+      <button class="btn-top" style="background: #f59e0b; color: #0f172a; font-weight: 900;" onclick="simularPedido99Food()" title="Testar recebimento de pedido da 99Food">🟡 Simular 99Food</button>
       <button class="btn-top" style="background: #059669; color: #ffffff;" onclick="abrirModalLogsIFood()" title="Ver logs em tempo real do radar do iFood">📡 Logs iFood</button>
       <button class="btn-top" onclick="carregarPedidos()">🔄 Atualizar</button>
       <button class="btn-top" style="background: #dc2626;" onclick="resetarTudoSistema()">🗑️ Zerar Tudo (Reset)</button>
@@ -1580,18 +1610,20 @@
 
     function gerarHtmlCardPedido(p, modo = 'kanban') {
       const isIFood = p.origem === 'iFood';
-      const molduraClass = isIFood ? 'moldura-ifood' : 'moldura-site';
+      const is99Food = p.origem === '99Food';
+      const molduraClass = isIFood ? 'moldura-ifood' : (is99Food ? 'moldura-99food' : 'moldura-site');
+      const canalBadgeText = isIFood ? '🔴 iFood' : (is99Food ? '🟡 99Food' : '🌭 Site');
 
-      let ribbonClass = isIFood ? 'ribbon-ifood' : 'ribbon-pendente';
+      let ribbonClass = isIFood ? 'ribbon-ifood' : (is99Food ? 'ribbon-99food-header' : 'ribbon-pendente');
       let ribbonText = 'A FAZER • PENDENTE';
       let cardStatusClass = 'status-Pendente';
 
       if (p.status === 'Em Preparo') {
-        ribbonClass = isIFood ? 'ribbon-ifood' : 'ribbon-preparo';
+        ribbonClass = isIFood ? 'ribbon-ifood' : (is99Food ? 'ribbon-99food-header' : 'ribbon-preparo');
         ribbonText = 'NA BANCADA • EM PREPARO';
         cardStatusClass = 'status-EmPreparo';
       } else if (p.status === 'Saiu p/ Entrega') {
-        ribbonClass = isIFood ? 'ribbon-ifood' : 'ribbon-entrega';
+        ribbonClass = isIFood ? 'ribbon-ifood' : (is99Food ? 'ribbon-99food-header' : 'ribbon-entrega');
         ribbonText = 'COM MOTOBOY • EM ROTA';
         cardStatusClass = 'status-SaiupEntrega';
       } else if (p.status === 'Entregue') {
@@ -1616,7 +1648,7 @@
         itensHtml += `
           <li class="order-item-row" style="padding: 8px 0; border-bottom: 1px dashed #e2e8f0;">
             <div style="font-size: 15.5px; font-weight: 850; color: #0f172a; line-height: 1.3;">
-              <span style="background: ${isIFood ? '#ea1d2c' : '#0f172a'}; color: #ffffff; padding: 2px 8px; border-radius: 6px; font-size: 13px; font-weight: 900; margin-right: 6px;">${qtd}x</span>
+              <span style="background: ${isIFood ? '#ea1d2c' : (is99Food ? '#d97706' : '#0f172a')}; color: #ffffff; padding: 2px 8px; border-radius: 6px; font-size: 13px; font-weight: 900; margin-right: 6px;">${qtd}x</span>
               ${nomeLimpo}
             </div>
             ${i.formato ? `<div style="font-size: 13px; font-weight: 800; color: #2563eb; margin: 3px 0 0 32px;">👉 ${i.formato}</div>` : ''}
@@ -1627,12 +1659,15 @@
 
       // DIFERENCIAÇÃO: Se for pedido Concluído/Entregue, faz um card compacto e destacado
       if (p.status === 'Entregue' && modo === 'kanban') {
+        const topoBg = isIFood ? '#fee2e2' : (is99Food ? '#fef3c7' : '#dcfce7');
+        const topoBorder = isIFood ? '#fca5a5' : (is99Food ? '#fde68a' : '#bbf7d0');
+        const topoTxt = isIFood ? '#991b1b' : (is99Food ? '#92400e' : '#166534');
         return `
           <div class="order-card ${molduraClass} status-Entregue">
-            <div style="background: ${isIFood ? '#fee2e2' : '#dcfce7'}; border-bottom: 1.5px solid ${isIFood ? '#fca5a5' : '#bbf7d0'}; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="background: ${topoBg}; border-bottom: 1.5px solid ${topoBorder}; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-weight: 950; color: ${isIFood ? '#991b1b' : '#166534'}; font-size: 16px;">#${p.numero}</span>
-                <span style="font-size: 11px; font-weight: 900; color: ${isIFood ? '#ea1d2c' : '#15803d'}; background: #ffffff; padding: 2px 8px; border-radius: 6px; border: 1px solid ${isIFood ? '#fca5a5' : '#86efac'};">${isIFood ? '🔴 iFood' : '🌭 Site'}</span>
+                <span style="font-weight: 950; color: ${topoTxt}; font-size: 16px;">#${p.numero}</span>
+                <span style="font-size: 11px; font-weight: 900; color: ${topoTxt}; background: #ffffff; padding: 2px 8px; border-radius: 6px; border: 1px solid ${topoBorder};">${canalBadgeText}</span>
               </div>
               <span style="font-size: 11.5px; font-weight: 900; color: #15803d; background: #ffffff; padding: 3px 9px; border-radius: 12px; border: 1.5px solid #86efac;">✅ Entregue</span>
             </div>
@@ -1667,7 +1702,7 @@
             <div style="background: #fee2e2; border-bottom: 1.5px solid #fca5a5; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
               <div style="display: flex; align-items: center; gap: 8px;">
                 <span style="font-weight: 950; color: #991b1b; font-size: 16px;">#${p.numero}</span>
-                <span style="font-size: 11px; font-weight: 900; color: #991b1b; background: #ffffff; padding: 2px 8px; border-radius: 6px; border: 1px solid #fca5a5;">${isIFood ? '🔴 iFood' : '🌭 Site'}</span>
+                <span style="font-size: 11px; font-weight: 900; color: #991b1b; background: #ffffff; padding: 2px 8px; border-radius: 6px; border: 1px solid #fca5a5;">${canalBadgeText}</span>
               </div>
               <span style="font-size: 11.5px; font-weight: 900; color: #991b1b; background: #ffffff; padding: 3px 9px; border-radius: 12px; border: 1.5px solid #fca5a5;">❌ Cancelado</span>
             </div>
@@ -1762,6 +1797,14 @@
           </div>
           <span style="background: rgba(0,0,0,0.25); padding: 3px 9px; border-radius: 6px; font-size: 12px; font-weight: 800;">⏰ ${p.dataHora ? p.dataHora.split(',')[1] || p.dataHora : ''}</span>
         </div>
+      ` : (is99Food ? `
+        <div class="ribbon-99food-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="background: #0f172a; color: #f59e0b; font-size: 11px; font-weight: 950; padding: 3px 8px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.25);">🟡 99FOOD</span>
+            <span style="font-size: 13px; font-weight: 950; letter-spacing: 0.5px; color: #0f172a;">${ribbonText}</span>
+          </div>
+          <span style="background: rgba(15,23,42,0.15); padding: 3px 9px; border-radius: 6px; font-size: 12px; font-weight: 900; color: #0f172a;">⏰ ${p.dataHora ? p.dataHora.split(',')[1] || p.dataHora : ''}</span>
+        </div>
       ` : `
         <div class="ribbon-site-header">
           <div style="display: flex; align-items: center; gap: 8px;">
@@ -1770,7 +1813,7 @@
           </div>
           <span style="background: rgba(255,255,255,0.15); padding: 3px 9px; border-radius: 6px; font-size: 12px; font-weight: 800; color: #f59e0b;">⏰ ${p.dataHora ? p.dataHora.split(',')[1] || p.dataHora : ''}</span>
         </div>
-      `;
+      `);
 
       return `
         <div class="order-card ${molduraClass} ${cardStatusClass}">
@@ -1778,25 +1821,29 @@
 
           <div class="card-body">
             <div style="text-align: center; padding: 6px 0 14px 0; border-bottom: 2px solid #e2e8f0; margin-bottom: 12px;">
-              <span class="order-num-large" style="display: block; font-size: 42px; font-weight: 950; color: ${isIFood ? '#ea1d2c' : '#0f172a'}; letter-spacing: -1.5px; line-height: 1;">#${p.numero}</span>
+              <span class="order-num-large" style="display: block; font-size: 42px; font-weight: 950; color: ${isIFood ? '#ea1d2c' : (is99Food ? '#d97706' : '#0f172a')}; letter-spacing: -1.5px; line-height: 1;">#${p.numero}</span>
               
               <div style="margin-top: 6px;">
                 ${isIFood ? `
                   <span style="background: #fee2e2; color: #dc2626; border: 1.5px solid #fca5a5; font-size: 12px; font-weight: 900; padding: 3px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px;">
                     🔴 iFood Marketplace
                   </span>
+                ` : (is99Food ? `
+                  <span style="background: #fef3c7; color: #b45309; border: 1.5px solid #fde68a; font-size: 12px; font-weight: 950; padding: 3px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px;">
+                    🟡 99Food Marketplace
+                  </span>
                 ` : `
                   <span style="background: #fef3c7; color: #92400e; border: 1.5px solid #fde68a; font-size: 12px; font-weight: 900; padding: 3px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px;">
                     🌭 Site Oficial • Direto
                   </span>
-                `}
+                `)}
               </div>
 
               <div class="order-time-large" style="font-size: 13.5px; font-weight: 700; color: #64748b; margin-top: 6px;">⏰ ${p.dataHora}</div>
-              <div style="font-size: 22px; font-weight: 950; color: ${isIFood ? '#dc2626' : '#15803d'}; margin-top: 4px;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</div>
+              <div style="font-size: 22px; font-weight: 950; color: ${isIFood ? '#dc2626' : (is99Food ? '#d97706' : '#15803d')}; margin-top: 4px;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</div>
             </div>
 
-            <div class="client-info" style="border-left: 5px solid ${isIFood ? '#ea1d2c' : '#0f172a'}; padding: 10px 12px; margin-bottom: 12px; background: ${isIFood ? '#fff8f8' : '#f8fafc'}; border-radius: 0 8px 8px 0;">
+            <div class="client-info" style="border-left: 5px solid ${isIFood ? '#ea1d2c' : (is99Food ? '#f59e0b' : '#0f172a')}; padding: 10px 12px; margin-bottom: 12px; background: ${isIFood ? '#fff8f8' : (is99Food ? '#fffdf7' : '#f8fafc')}; border-radius: 0 8px 8px 0;">
               <div style="font-size: 15.5px; font-weight: 900; color: #0f172a;">👤 ${(p.cliente && p.cliente.nome) ? (p.cliente.nome.includes('PEDIDO DE TESTE') ? 'Luiz Augusto (Cliente de Testes iFood)' : p.cliente.nome) : 'Cliente'}</div>
               <div style="font-size: 14px; font-weight: 700; color: #1e293b; margin-top: 3px;">📍 ${p.entrega ? p.entrega.endereco : 'Balcão'} - <strong>${p.entrega ? p.entrega.bairro : ''}</strong></div>
               ${p.entrega && p.entrega.referencia ? `<div style="font-size: 12px; color: #64748b; margin-top: 2px;"><em>Ref: ${p.entrega.referencia}</em></div>` : ''}
@@ -2318,7 +2365,11 @@
           <div class="ticket-center ticket-bold" style="background: #000000; color: #ffffff; padding: 3px 0; margin: 4px 0; font-size: 10.5pt; letter-spacing: 0.5px;">
             *** CANAL: IFOOD MARKETPLACE ***
           </div>
-        ` : ''}
+        ` : (p.origem === '99Food' ? `
+          <div class="ticket-center ticket-bold" style="background: #000000; color: #ffffff; padding: 3px 0; margin: 4px 0; font-size: 10.5pt; letter-spacing: 0.5px;">
+            *** CANAL: 99FOOD MARKETPLACE ***
+          </div>
+        ` : '')}
         <div class="ticket-divider"></div>
         
         <div><span class="ticket-bold">CLIENTE:</span> ${p.cliente.nome}</div>
@@ -2389,6 +2440,21 @@
         }
       } catch (err) {
         alert('Erro de conexão ao simular pedido do iFood.');
+      }
+    }
+
+    // SIMULAR PEDIDO DA 99FOOD (TESTE RÁPIDO DO KANBAN & IMPRESSÃO)
+    async function simularPedido99Food() {
+      try {
+        const res = await fetch('/api/99food/simular-teste', { method: 'POST' });
+        if (res.ok) {
+          const data = await res.json();
+          mostrarToastAviso('🟡 Pedido de teste da 99Food recebido com sucesso!', 'sucesso');
+        } else {
+          alert('Erro ao disparar simulação da 99Food.');
+        }
+      } catch (err) {
+        alert('Erro de conexão ao simular pedido da 99Food.');
       }
     }
 
