@@ -231,11 +231,12 @@
       transition: transform 0.15s, box-shadow 0.15s;
     }
 
-    /* 🔴 MOLDURA IFOOD (VERMELHO IMPACTANTE / MARKETPLACE) */
+    /* 🔴 MOLDURA IFOOD (INSPIRADA NA MOLDURA OFICIAL) */
     .order-card.moldura-ifood {
-      border: 3.5px solid #ea1d2c !important;
+      border: 3.5px solid #e81b2f !important;
+      border-radius: 20px !important;
       background: #ffffff !important;
-      box-shadow: 0 6px 22px rgba(234, 29, 44, 0.18) !important;
+      box-shadow: 0 8px 24px rgba(232, 27, 47, 0.22) !important;
     }
 
     .order-card.moldura-ifood.status-Pendente {
@@ -243,28 +244,29 @@
     }
 
     @keyframes pulseAlertIfood {
-      0%, 100% { box-shadow: 0 0 0 4px rgba(234, 29, 44, 0.45), 0 8px 25px rgba(234, 29, 44, 0.22); }
-      50% { box-shadow: 0 0 0 9px rgba(234, 29, 44, 0.12), 0 4px 15px rgba(234, 29, 44, 0.1); }
+      0%, 100% { box-shadow: 0 0 0 4px rgba(232, 27, 47, 0.5), 0 8px 25px rgba(232, 27, 47, 0.25); }
+      50% { box-shadow: 0 0 0 9px rgba(232, 27, 47, 0.15), 0 4px 15px rgba(232, 27, 47, 0.1); }
     }
 
     .ribbon-ifood-header {
-      background: linear-gradient(135deg, #ea1d2c 0%, #b91c1c 100%) !important;
+      background: linear-gradient(180deg, #f02237 0%, #e2182c 100%) !important;
       padding: 12px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       color: #ffffff;
-      font-weight: 900;
-      font-size: 13.5px;
-      letter-spacing: 0.5px;
-      box-shadow: 0 3px 10px rgba(234, 29, 44, 0.35);
+      font-weight: 950;
+      font-size: 14px;
+      letter-spacing: -0.2px;
+      box-shadow: 0 3px 10px rgba(232, 27, 47, 0.35);
     }
 
     /* ⚫ MOLDURA SITE PRÓPRIO (PRETO ÔNIX ELEGANTE / LUXO) */
     .order-card.moldura-site {
       border: 3.5px solid #0f172a !important;
+      border-radius: 20px !important;
       background: #ffffff !important;
-      box-shadow: 0 6px 22px rgba(15, 23, 42, 0.14) !important;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.16) !important;
       position: relative;
     }
 
@@ -278,7 +280,7 @@
     }
 
     .ribbon-site-header {
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
       border-top: 3.5px solid #f59e0b;
       padding: 12px 16px;
       display: flex;
@@ -291,11 +293,12 @@
       box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
     }
 
-    /* 🟡 MOLDURA 99FOOD (AMARELO VIBRANTE / 99APP) */
+    /* 🟡 MOLDURA 99FOOD (INSPIRADA NA MOLDURA OFICIAL) */
     .order-card.moldura-99food {
-      border: 3.5px solid #f59e0b !important;
+      border: 3.5px solid #ffc700 !important;
+      border-radius: 20px !important;
       background: #ffffff !important;
-      box-shadow: 0 6px 22px rgba(245, 158, 11, 0.22) !important;
+      box-shadow: 0 8px 24px rgba(255, 199, 0, 0.25) !important;
     }
 
     .order-card.moldura-99food.status-Pendente {
@@ -303,21 +306,21 @@
     }
 
     @keyframes pulseAlert99Food {
-      0%, 100% { box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.5), 0 8px 25px rgba(245, 158, 11, 0.25); }
-      50% { box-shadow: 0 0 0 9px rgba(245, 158, 11, 0.15), 0 4px 15px rgba(245, 158, 11, 0.1); }
+      0%, 100% { box-shadow: 0 0 0 4px rgba(255, 199, 0, 0.55), 0 8px 25px rgba(255, 199, 0, 0.3); }
+      50% { box-shadow: 0 0 0 9px rgba(255, 199, 0, 0.15), 0 4px 15px rgba(255, 199, 0, 0.1); }
     }
 
     .ribbon-99food-header {
-      background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%) !important;
+      background: linear-gradient(180deg, #ffc700 0%, #fab005 100%) !important;
       padding: 12px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       color: #0f172a;
       font-weight: 950;
-      font-size: 13.5px;
-      letter-spacing: 0.5px;
-      box-shadow: 0 3px 10px rgba(245, 158, 11, 0.35);
+      font-size: 14px;
+      letter-spacing: -0.2px;
+      box-shadow: 0 3px 10px rgba(255, 199, 0, 0.35);
     }
 
     /* CARD ENTREGUE (DIFERENCIADO E COMPACTO) */
@@ -1615,16 +1618,16 @@
       const canalBadgeText = isIFood ? '🔴 iFood' : (is99Food ? '🟡 99Food' : '🌭 Site');
 
       let ribbonClass = isIFood ? 'ribbon-ifood' : (is99Food ? 'ribbon-99food-header' : 'ribbon-pendente');
-      let ribbonText = 'A FAZER • PENDENTE';
+      let ribbonText = (isIFood || is99Food) ? 'NOVO PEDIDO' : 'A FAZER • PENDENTE';
       let cardStatusClass = 'status-Pendente';
 
       if (p.status === 'Em Preparo') {
         ribbonClass = isIFood ? 'ribbon-ifood' : (is99Food ? 'ribbon-99food-header' : 'ribbon-preparo');
-        ribbonText = 'NA BANCADA • EM PREPARO';
+        ribbonText = (isIFood || is99Food) ? 'EM PREPARO' : 'NA BANCADA • EM PREPARO';
         cardStatusClass = 'status-EmPreparo';
       } else if (p.status === 'Saiu p/ Entrega') {
         ribbonClass = isIFood ? 'ribbon-ifood' : (is99Food ? 'ribbon-99food-header' : 'ribbon-entrega');
-        ribbonText = 'COM MOTOBOY • EM ROTA';
+        ribbonText = (isIFood || is99Food) ? 'COM MOTOBOY' : 'COM MOTOBOY • EM ROTA';
         cardStatusClass = 'status-SaiupEntrega';
       } else if (p.status === 'Entregue') {
         ribbonClass = 'ribbon-entregue';
@@ -1788,22 +1791,32 @@
         `;
       }
 
-      // Ribbon e Cabeçalho Estilizado conforme a Origem
+      // Ribbon e Cabeçalho Estilizado conforme a Origem (Fiel às Molduras)
       const ribbonHeaderHtml = isIFood ? `
-        <div class="ribbon-ifood-header">
+        <div class="ribbon-ifood-header" style="background: linear-gradient(180deg, #f02237 0%, #e2182c 100%); padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
           <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="background: #ffffff; color: #ea1d2c; font-size: 11px; font-weight: 900; padding: 3px 8px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">🔴 IFOOD</span>
-            <span style="font-size: 13px; font-weight: 900; letter-spacing: 0.5px;">${ribbonText}</span>
+            <div style="background: #ffffff; border-radius: 6px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">
+              <span style="color: #e81b2f; font-weight: 950; font-style: italic; font-size: 13px; letter-spacing: -0.5px;">ifood</span>
+            </div>
+            <span style="font-size: 15px; font-weight: 950; color: #ffffff; letter-spacing: -0.2px;">PEDIDO IFOOD</span>
           </div>
-          <span style="background: rgba(0,0,0,0.25); padding: 3px 9px; border-radius: 6px; font-size: 12px; font-weight: 800;">⏰ ${p.dataHora ? p.dataHora.split(',')[1] || p.dataHora : ''}</span>
+          <div style="background: rgba(0, 0, 0, 0.28); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; padding: 4px 10px; border-radius: 20px; font-weight: 900; font-size: 11px; display: flex; align-items: center; gap: 5px;">
+            <span style="width: 7px; height: 7px; background: #ffffff; border-radius: 50%; display: inline-block;"></span>
+            <span>${ribbonText}</span>
+          </div>
         </div>
       ` : (is99Food ? `
-        <div class="ribbon-99food-header">
+        <div class="ribbon-99food-header" style="background: linear-gradient(180deg, #ffc700 0%, #fab005 100%); padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
           <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="background: #0f172a; color: #f59e0b; font-size: 11px; font-weight: 950; padding: 3px 8px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.25);">🟡 99FOOD</span>
-            <span style="font-size: 13px; font-weight: 950; letter-spacing: 0.5px; color: #0f172a;">${ribbonText}</span>
+            <div style="background: #000000; border-radius: 6px; width: 32px; height: 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">
+              <span style="color: #ffc700; font-weight: 950; font-size: 13px; line-height: 1;">99</span>
+              <span style="color: #ffffff; font-weight: 800; font-size: 7px; text-transform: lowercase; line-height: 1;">Food</span>
+            </div>
+            <span style="font-size: 16px; font-weight: 950; color: #000000; letter-spacing: -0.3px;">99FOOD</span>
           </div>
-          <span style="background: rgba(15,23,42,0.15); padding: 3px 9px; border-radius: 6px; font-size: 12px; font-weight: 900; color: #0f172a;">⏰ ${p.dataHora ? p.dataHora.split(',')[1] || p.dataHora : ''}</span>
+          <div style="background: rgba(180, 83, 9, 0.25); border: 1px solid rgba(180, 83, 9, 0.35); color: #000000; padding: 4px 10px; border-radius: 20px; font-weight: 900; font-size: 11px; display: flex; align-items: center; gap: 4px;">
+            <span>🔔</span> <span>${ribbonText}</span>
+          </div>
         </div>
       ` : `
         <div class="ribbon-site-header">
