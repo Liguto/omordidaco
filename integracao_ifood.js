@@ -222,8 +222,9 @@ function converterPedidoIFoodParaInterno(ifoodOrder) {
     }
 
     return {
-      nome: `${item.quantity}x ${item.name}`,
-      preco: Number(item.totalPrice || (item.unitPrice * item.quantity)) || 0,
+      nome: item.name, // Mantém o nome puro sem prefixar quantidade duplicada
+      quantidade: item.quantity || 1,
+      preco: Number(item.totalPrice || (item.unitPrice * (item.quantity || 1))) || 0,
       formato: formatoExtra || 'Tradicional',
       observacoes: item.observations || ''
     };
@@ -248,10 +249,15 @@ function converterPedidoIFoodParaInterno(ifoodOrder) {
     }
   }
 
-  // Pagamento
+  // Pagamento (com desduplicação de registros)
   let pagamentoStr = 'Pago via iFood';
   if (ifoodOrder.payments && Array.isArray(ifoodOrder.payments.methods) && ifoodOrder.payments.methods.length > 0) {
-    pagamentoStr = ifoodOrder.payments.methods.map(m => `${m.name || m.method || 'Online'} (${m.type === 'PREPAID' ? 'Pago Online no App' : 'Pagar na Entrega'})`).join(', ');
+    const metodosFormatados = ifoodOrder.payments.methods.map(m => {
+      const metodoNome = m.name || m.method || 'Cartão';
+      const tipoPagto = m.type === 'PREPAID' ? 'Pago Online no App' : 'Pagar na Entrega';
+      return `${metodoNome} (${tipoPagto})`;
+    });
+    pagamentoStr = [...new Set(metodosFormatados)].join(', ');
   }
 
   const subtotal = Number(ifoodOrder.total?.subTotal || ifoodOrder.total?.orderAmount || 0);
