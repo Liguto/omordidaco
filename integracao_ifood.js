@@ -282,10 +282,17 @@ function converterPedidoIFoodParaInterno(ifoodOrder) {
     refStr = '🛵 Entrega Parceira iFood (Motoboy da plataforma busca no local)';
   }
 
-  if (addr.formattedAddress) {
-    enderecoStr = `${addr.streetName || 'Rua'}, nº ${addr.streetNumber || 'S/N'}${addr.complement ? ' - ' + addr.complement : ''}`;
-    bairroStr = addr.neighborhood || 'Campinas';
-    if (addr.reference) {
+  if (addr.formattedAddress || addr.streetName) {
+    const rua = addr.streetName || 'Rua';
+    const num = addr.streetNumber || 'S/N';
+    const comp = addr.complement ? ` - ${addr.complement}` : '';
+    const bairro = addr.neighborhood || 'Jardim Tamoio';
+    const cidade = (addr.city && addr.city !== 'XX' && addr.city !== 'TESTE') ? addr.city : 'Campinas';
+    const cep = (addr.postalCode && addr.postalCode !== '99999999') ? ` (CEP ${addr.postalCode})` : '';
+
+    enderecoStr = `${rua}, nº ${num}${comp}`;
+    bairroStr = `${bairro} - ${cidade}${cep}`;
+    if (addr.reference && addr.reference !== 'TESTE') {
       refStr = refStr ? `${refStr} | Ref: ${addr.reference}` : addr.reference;
     }
   }
@@ -294,6 +301,25 @@ function converterPedidoIFoodParaInterno(ifoodOrder) {
   let nomeCliente = ifoodOrder.customer?.name || 'Cliente iFood';
   if (nomeCliente.includes('PEDIDO DE TESTE') || nomeCliente.includes('CLIENTE DE TESTE')) {
     nomeCliente = 'Luiz Augusto (Cliente de Testes iFood)';
+  }
+
+  // Telefone do cliente (suporte oficial ao sistema de Localizador / 0800 do iFood sob LGPD)
+  let telefoneStr = '(Via App iFood)';
+  const phoneObj = ifoodOrder.customer?.phone;
+  if (phoneObj && phoneObj.number) {
+    const rawNum = String(phoneObj.number).trim();
+    if (rawNum.startsWith('0800') || rawNum.startsWith('4003') || rawNum.startsWith('0300')) {
+      telefoneStr = `${rawNum}${phoneObj.localizer ? ` (PIN/Ramal: ${phoneObj.localizer})` : ''}`;
+    } else {
+      const digitos = rawNum.replace(/\D/g, '');
+      if (digitos.length === 11) {
+        telefoneStr = `(${digitos.slice(0,2)}) ${digitos.slice(2,7)}-${digitos.slice(7)}`;
+      } else if (digitos.length === 10) {
+        telefoneStr = `(${digitos.slice(0,2)}) ${digitos.slice(2,6)}-${digitos.slice(6)}`;
+      } else {
+        telefoneStr = rawNum;
+      }
+    }
   }
 
   // Pagamento (com desduplicação de registros)
@@ -318,7 +344,7 @@ function converterPedidoIFoodParaInterno(ifoodOrder) {
     numero: ifoodOrder.displayId || String(ifoodOrder.id).slice(-4),
     cliente: {
       nome: nomeCliente,
-      telefone: ifoodOrder.customer?.phone?.number ? `(19) ${ifoodOrder.customer.phone.number}` : '(Via App iFood)'
+      telefone: telefoneStr
     },
     entrega: {
       endereco: enderecoStr,
