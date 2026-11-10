@@ -555,6 +555,35 @@
 
     .check-option:hover { background: #f1f5f9; border-color: #cbd5e1; }
 
+    .chip-checkbox {
+      cursor: pointer;
+      margin: 0;
+      display: inline-flex;
+      align-items: center;
+    }
+    .chip-checkbox input {
+      display: none;
+    }
+    .chip-checkbox span {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #475569;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      padding: 5px 11px;
+      border-radius: 16px;
+      transition: all 0.15s ease-in-out;
+      user-select: none;
+      display: inline-block;
+    }
+    .chip-checkbox input:checked + span {
+      background: #fee2e2;
+      color: #dc2626;
+      border-color: #f87171;
+      font-weight: 800;
+      text-decoration: line-through;
+    }
+
     .payment-badge {
       display: block;
       background: #f8fafc;
@@ -1022,7 +1051,7 @@
       </div>
 
       <!-- Observações / Retirar ingredientes -->
-      <div class="form-group">
+      <div class="form-group" id="retirarGroup">
         <label class="form-label">Deseja retirar algum ingrediente?</label>
         <label class="check-option"><input type="checkbox" id="semVinagrete"> <span>Sem vinagrete</span></label>
         <label class="check-option"><input type="checkbox" id="semMilho"> <span>Sem milho</span></label>
@@ -1423,28 +1452,31 @@
       if (!itemSelecionadoTemp) return;
       let total = itemSelecionadoTemp.preco || 0;
 
-      // Adicional embutido do formato No Prato (Combo vs Individual)
-      if (itemSelecionadoTemp.permiteFormato) {
-        if (itemSelecionadoTemp.lanchesCombo && Array.isArray(itemSelecionadoTemp.lanchesCombo) && itemSelecionadoTemp.lanchesCombo.length > 0) {
-          const adicPrato = itemSelecionadoTemp.adicionalPrato !== undefined ? itemSelecionadoTemp.adicionalPrato : 2.00;
-          itemSelecionadoTemp.lanchesCombo.forEach((_, idx) => {
-            const radioPrato = document.querySelector(`input[name="comboLanche_${idx}"][value="No Prato"]:checked`);
-            if (radioPrato) {
-              total += adicPrato;
-            }
-          });
-        } else {
+      // Adicional embutido do formato No Prato e Adicionais por Dog (Combo vs Individual)
+      if (itemSelecionadoTemp.lanchesCombo && Array.isArray(itemSelecionadoTemp.lanchesCombo) && itemSelecionadoTemp.lanchesCombo.length > 0) {
+        const adicPrato = itemSelecionadoTemp.adicionalPrato !== undefined ? itemSelecionadoTemp.adicionalPrato : 2.00;
+        itemSelecionadoTemp.lanchesCombo.forEach((_, idx) => {
+          const radioPrato = document.querySelector(`input[name="comboLanche_${idx}"][value="No Prato"]:checked`);
+          if (radioPrato) {
+            total += adicPrato;
+          }
+        });
+        // Soma adicionais específicos de cada dog do combo
+        document.querySelectorAll('.check-adicional-combo:checked').forEach(chk => {
+          total += Number(chk.dataset.preco) || 0;
+        });
+      } else {
+        if (itemSelecionadoTemp.permiteFormato) {
           const radioPrato = document.querySelector('input[name="itemFormatoSingle"][value="No Prato (Sem Pão)"]:checked');
           if (radioPrato) {
             total += (itemSelecionadoTemp.adicionalPrato || 0);
           }
         }
+        // Soma adicionais selecionados no modal individual
+        document.querySelectorAll('.check-adicional:checked').forEach(chk => {
+          total += Number(chk.dataset.preco) || 0;
+        });
       }
-
-      // Soma adicionais selecionados no modal
-      document.querySelectorAll('.check-adicional:checked').forEach(chk => {
-        total += Number(chk.dataset.preco) || 0;
-      });
 
       document.getElementById('modalItemPrice').innerText = 'R$ ' + total.toFixed(2).replace('.', ',');
     }
@@ -1458,44 +1490,49 @@
       document.getElementById('semMilho').checked = false;
       document.getElementById('semBatataPalha').checked = false;
 
-      // Desmarca todos os adicionais extras
+      // Desmarca todos os adicionais extras individuais
       document.querySelectorAll('.check-adicional').forEach(chk => chk.checked = false);
 
-      // Configura os formatos disponíveis e valores embutidos
       const formatoGroup = document.getElementById('formatoGroup');
+      const adicionaisGroup = document.getElementById('adicionaisGroup');
+      const retirarGroup = document.getElementById('retirarGroup');
 
-      if (item.permiteFormato) {
+      // SE FOR COMBO COM MÚLTIPLOS LANCHES (PERSONALIZAÇÃO COMPLETA POR DOG)
+      if (item.lanchesCombo && Array.isArray(item.lanchesCombo) && item.lanchesCombo.length > 0) {
         formatoGroup.style.display = 'block';
+        if (adicionaisGroup) adicionaisGroup.style.display = 'none';
+        if (retirarGroup) retirarGroup.style.display = 'none';
 
-        // SE FOR COMBO COM MÚLTIPLOS LANCHES (ESCOLHA INDIVIDUAL DE CADA UM)
-        if (item.lanchesCombo && Array.isArray(item.lanchesCombo) && item.lanchesCombo.length > 0) {
-          const adicPrato = item.adicionalPrato !== undefined ? item.adicionalPrato : 2.00;
-          let html = `
-            <div style="margin-bottom: 8px;">
-              <label class="form-label" style="font-size: 13.5px; font-weight: 800; color: var(--dark); margin-bottom: 2px;">
-                🌭 Escolha o Formato de Cada Lanche do Combo:
-              </label>
-              <span style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 8px;">
-                Você pode escolher cada um no pão macio ou na marmitinha térmica de 500ml:
-              </span>
-            </div>
-          `;
+        const adicPrato = item.adicionalPrato !== undefined ? item.adicionalPrato : 2.00;
+        let html = `
+          <div style="margin-bottom: 12px;">
+            <label class="form-label" style="font-size: 14px; font-weight: 900; color: var(--dark); margin-bottom: 2px;">
+              🌭 Personalize Cada Lanche do Combo:
+            </label>
+            <span style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 8px;">
+              Escolha formato, retire ingredientes ou adicione extras para cada dog individualmente:
+            </span>
+          </div>
+        `;
 
-          item.lanchesCombo.forEach((lanche, idx) => {
-            const lancheNome = typeof lanche === 'string' ? lanche : (lanche.label || `${idx + 1}º Hot Dog`);
-            html += `
-              <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 10px 12px; margin-bottom: 8px;">
-                <div style="font-size: 13px; font-weight: 800; color: var(--dark); margin-bottom: 6px;">
-                  👉 ${lancheNome}:
-                </div>
+        item.lanchesCombo.forEach((lanche, idx) => {
+          const lancheNome = typeof lanche === 'string' ? lanche : (lanche.label || `${idx + 1}º Hot Dog`);
+          html += `
+            <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 14px; padding: 14px; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #f1f5f9; padding-bottom: 8px; margin-bottom: 10px;">
+                <span style="font-size: 14.5px; font-weight: 950; color: #0f172a;">👉 ${lancheNome}</span>
+                <span style="font-size: 11px; background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 6px; font-weight: 800;">Dog ${idx + 1}</span>
+              </div>
+
+              <!-- 1. ESCOLHA DO FORMATO -->
+              <div style="margin-bottom: 10px;">
+                <label style="font-size: 11px; font-weight: 900; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 4px;">Formato:</label>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                  <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; border-radius: 8px; background: #ffffff;">
+                  <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; border-radius: 8px; background: #f8fafc; border: 1.5px solid #cbd5e1;">
                     <input type="radio" name="comboLanche_${idx}" value="No Pão" checked onchange="recalcularPrecoModal()">
-                    <span style="font-size: 12.5px;">
-                      <strong>🥖 No Pão</strong>
-                    </span>
+                    <span style="font-size: 12.5px;"><strong>🥖 No Pão</strong></span>
                   </label>
-                  <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; border-radius: 8px; background: #ffffff;">
+                  <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; border-radius: 8px; background: #f8fafc; border: 1.5px solid #cbd5e1;">
                     <input type="radio" name="comboLanche_${idx}" value="No Prato" onchange="recalcularPrecoModal()">
                     <span style="font-size: 12.5px;">
                       <strong>🥣 No Prato</strong><br>
@@ -1504,12 +1541,68 @@
                   </label>
                 </div>
               </div>
-            `;
-          });
 
-          formatoGroup.innerHTML = html;
-        } else {
-          // HOT DOG INDIVIDUAL
+              <!-- 2. RETIRAR INGREDIENTES DESTE DOG -->
+              <div style="margin-bottom: 10px;">
+                <label style="font-size: 11px; font-weight: 900; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 4px;">Deseja retirar algo deste dog?</label>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                  <label class="chip-checkbox">
+                    <input type="checkbox" class="check-remover-combo" data-dog="${idx}" data-item="milho">
+                    <span>Sem milho</span>
+                  </label>
+                  <label class="chip-checkbox">
+                    <input type="checkbox" class="check-remover-combo" data-dog="${idx}" data-item="vinagrete">
+                    <span>Sem vinagrete</span>
+                  </label>
+                  <label class="chip-checkbox">
+                    <input type="checkbox" class="check-remover-combo" data-dog="${idx}" data-item="batata palha">
+                    <span>Sem batata palha</span>
+                  </label>
+                  <label class="chip-checkbox">
+                    <input type="checkbox" class="check-remover-combo" data-dog="${idx}" data-item="purê">
+                    <span>Sem purê</span>
+                  </label>
+                  <label class="chip-checkbox">
+                    <input type="checkbox" class="check-remover-combo" data-dog="${idx}" data-item="maionese">
+                    <span>Sem maionese</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- 3. ADICIONAIS EXTRAS PARA ESTE DOG -->
+              <div>
+                <label style="font-size: 11px; font-weight: 900; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 4px;">Turbinar com adicionais?</label>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 4px;">
+                  <label class="check-option" style="cursor: pointer; margin: 0; padding: 6px 10px; font-size: 12px; border-radius: 6px; background: #f8fafc;">
+                    <input type="checkbox" class="check-adicional-combo" data-dog="${idx}" data-nome="Bacon Crocante Extra" data-preco="4.50" onchange="recalcularPrecoModal()">
+                    <span>+ Bacon Crocante em Cubos • <strong style="color: #15803d;">+ R$ 4,50</strong></span>
+                  </label>
+                  <label class="check-option" style="cursor: pointer; margin: 0; padding: 6px 10px; font-size: 12px; border-radius: 6px; background: #f8fafc;">
+                    <input type="checkbox" class="check-adicional-combo" data-dog="${idx}" data-nome="Catupiry Original Extra" data-preco="4.00" onchange="recalcularPrecoModal()">
+                    <span>+ Legítimo Catupiry® Original • <strong style="color: #15803d;">+ R$ 4,00</strong></span>
+                  </label>
+                  <label class="check-option" style="cursor: pointer; margin: 0; padding: 6px 10px; font-size: 12px; border-radius: 6px; background: #f8fafc;">
+                    <input type="checkbox" class="check-adicional-combo" data-dog="${idx}" data-nome="Dobro de Muçarela" data-preco="3.50" onchange="recalcularPrecoModal()">
+                    <span>+ Dobro de Muçarela Derretida • <strong style="color: #15803d;">+ R$ 3,50</strong></span>
+                  </label>
+                  <label class="check-option" style="cursor: pointer; margin: 0; padding: 6px 10px; font-size: 12px; border-radius: 6px; background: #f8fafc;">
+                    <input type="checkbox" class="check-adicional-combo" data-dog="${idx}" data-nome="Batata Palha Extra" data-preco="2.50" onchange="recalcularPrecoModal()">
+                    <span>+ Batata Palha Crocante Extra • <strong style="color: #15803d;">+ R$ 2,50</strong></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        formatoGroup.innerHTML = html;
+      } else {
+        // HOT DOG INDIVIDUAL
+        if (adicionaisGroup) adicionaisGroup.style.display = 'block';
+        if (retirarGroup) retirarGroup.style.display = 'block';
+
+        if (item.permiteFormato) {
+          formatoGroup.style.display = 'block';
           const precoPao = item.preco;
           const precoPrato = item.preco + (item.adicionalPrato || 0);
 
@@ -1530,10 +1623,10 @@
               </span>
             </label>
           `;
+        } else {
+          formatoGroup.style.display = 'none';
+          formatoGroup.innerHTML = '';
         }
-      } else {
-        formatoGroup.style.display = 'none';
-        formatoGroup.innerHTML = '';
       }
 
       recalcularPrecoModal();
@@ -1543,33 +1636,57 @@
 
     function confirmarAdicaoItem() {
       let observacoes = [];
-      if (document.getElementById('semVinagrete').checked) observacoes.push('Sem vinagrete');
-      if (document.getElementById('semMilho').checked) observacoes.push('Sem milho');
-      if (document.getElementById('semBatataPalha').checked) observacoes.push('Sem batata palha');
-      const obsTexto = document.getElementById('itemObs').value.trim();
-      if (obsTexto) observacoes.push(obsTexto);
-
       let formato = '';
       let precoCalculado = itemSelecionadoTemp.preco;
 
-      if (itemSelecionadoTemp.permiteFormato) {
-        if (itemSelecionadoTemp.lanchesCombo && Array.isArray(itemSelecionadoTemp.lanchesCombo) && itemSelecionadoTemp.lanchesCombo.length > 0) {
-          const formatosEscolhidos = [];
-          const adicPrato = itemSelecionadoTemp.adicionalPrato !== undefined ? itemSelecionadoTemp.adicionalPrato : 2.00;
+      if (itemSelecionadoTemp.lanchesCombo && Array.isArray(itemSelecionadoTemp.lanchesCombo) && itemSelecionadoTemp.lanchesCombo.length > 0) {
+        // COMBO COM PERSONALIZAÇÃO INDIVIDUAL POR DOG
+        const adicPrato = itemSelecionadoTemp.adicionalPrato !== undefined ? itemSelecionadoTemp.adicionalPrato : 2.00;
+        const detalhesPorDog = [];
 
-          itemSelecionadoTemp.lanchesCombo.forEach((lanche, idx) => {
-            const radio = document.querySelector(`input[name="comboLanche_${idx}"]:checked`);
-            const val = radio ? radio.value : 'No Pão';
-            if (val === 'No Prato') {
-              precoCalculado += adicPrato;
-              formatosEscolhidos.push(`${idx + 1}º: No Prato (Marmitinha)`);
-            } else {
-              formatosEscolhidos.push(`${idx + 1}º: No Pão`);
-            }
+        itemSelecionadoTemp.lanchesCombo.forEach((lanche, idx) => {
+          const lancheNome = typeof lanche === 'string' ? lanche : (lanche.label || `${idx + 1}º Dog`);
+          const radio = document.querySelector(`input[name="comboLanche_${idx}"]:checked`);
+          const formatoEscolhido = radio ? radio.value : 'No Pão';
+          if (formatoEscolhido === 'No Prato') {
+            precoCalculado += adicPrato;
+          }
+
+          // Itens retirados deste lanche
+          const removidos = [];
+          document.querySelectorAll(`.check-remover-combo[data-dog="${idx}"]:checked`).forEach(chk => {
+            removidos.push(`Sem ${chk.dataset.item}`);
           });
 
-          formato = formatosEscolhidos.join(' | ');
-        } else {
+          // Adicionais extras deste lanche
+          const adicionais = [];
+          document.querySelectorAll(`.check-adicional-combo[data-dog="${idx}"]:checked`).forEach(chk => {
+            precoCalculado += Number(chk.dataset.preco) || 0;
+            adicionais.push(`+ ${chk.dataset.nome}`);
+          });
+
+          let dogStr = `${lancheNome} (${formatoEscolhido})`;
+          const customizacoes = [...removidos, ...adicionais];
+          if (customizacoes.length > 0) {
+            dogStr += ` [${customizacoes.join(', ')}]`;
+          }
+          detalhesPorDog.push(dogStr);
+        });
+
+        formato = detalhesPorDog.join(' • ');
+
+        const obsTexto = document.getElementById('itemObs').value.trim();
+        if (obsTexto) observacoes.push(obsTexto);
+
+      } else {
+        // HOT DOG INDIVIDUAL
+        if (document.getElementById('semVinagrete').checked) observacoes.push('Sem vinagrete');
+        if (document.getElementById('semMilho').checked) observacoes.push('Sem milho');
+        if (document.getElementById('semBatataPalha').checked) observacoes.push('Sem batata palha');
+        const obsTexto = document.getElementById('itemObs').value.trim();
+        if (obsTexto) observacoes.push(obsTexto);
+
+        if (itemSelecionadoTemp.permiteFormato) {
           const radio = document.querySelector('input[name="itemFormatoSingle"]:checked');
           if (radio) {
             formato = radio.value;
@@ -1580,18 +1697,18 @@
             formato = 'Tradicional no Pão';
           }
         }
-      }
 
-      // Adicionais extras selecionados no modal
-      let adicionaisEscolhidos = [];
-      document.querySelectorAll('.check-adicional:checked').forEach(chk => {
-        const pAdd = Number(chk.dataset.preco) || 0;
-        precoCalculado += pAdd;
-        adicionaisEscolhidos.push(chk.dataset.nome);
-      });
+        // Adicionais extras selecionados no modal individual
+        let adicionaisEscolhidos = [];
+        document.querySelectorAll('.check-adicional:checked').forEach(chk => {
+          const pAdd = Number(chk.dataset.preco) || 0;
+          precoCalculado += pAdd;
+          adicionaisEscolhidos.push(chk.dataset.nome);
+        });
 
-      if (adicionaisEscolhidos.length > 0) {
-        observacoes.push('Adicionais: ' + adicionaisEscolhidos.join(', '));
+        if (adicionaisEscolhidos.length > 0) {
+          observacoes.push('Adicionais: ' + adicionaisEscolhidos.join(', '));
+        }
       }
 
       carrinho.push({
