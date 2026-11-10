@@ -227,6 +227,57 @@ async function despacharPedidoNoIFood(orderId) {
 }
 
 /**
+ * Consulta motivos de cancelamento disponíveis para um pedido no iFood
+ */
+async function obterMotivosCancelamento(orderId) {
+  const token = await obterTokenAcesso();
+  try {
+    const res = await fetch(`${BASE_URL_ORDER}/orders/${orderId}/cancellationReasons`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      registrarLog('INFO', `Motivos de cancelamento obtidos para o pedido #${orderId}`, data);
+      return data;
+    }
+  } catch (e) {
+    registrarLog('ERRO', `Erro ao buscar motivos de cancelamento: ${e.message}`);
+  }
+  return [];
+}
+
+/**
+ * Solicita cancelamento de pedido no iFood
+ */
+async function cancelarPedidoIFood(orderId, cancellationCode = '501', reason = 'Problemas operacionais na cozinha') {
+  const token = await obterTokenAcesso();
+  try {
+    const res = await fetch(`${BASE_URL_ORDER}/orders/${orderId}/requestCancellation`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        cancellationCode,
+        reason
+      })
+    });
+    if (res.ok) {
+      registrarLog('SUCESSO', `Pedido #${orderId} cancelado com sucesso no iFood.`);
+      return true;
+    } else {
+      const err = await res.text();
+      registrarLog('ERRO', `Falha ao cancelar pedido #${orderId} (${res.status}): ${err}`);
+      return false;
+    }
+  } catch (e) {
+    registrarLog('ERRO', `Erro ao cancelar pedido #${orderId}: ${e.message}`);
+    return false;
+  }
+}
+
+/**
  * Converte o pedido recebido do iFood para o formato interno de O Mordidaço
  */
 function converterPedidoIFoodParaInterno(ifoodOrder) {
@@ -492,6 +543,8 @@ module.exports = {
   iniciarPreparoNoIFood,
   prontoParaColetaNoIFood,
   despacharPedidoNoIFood,
+  obterMotivosCancelamento,
+  cancelarPedidoIFood,
   converterPedidoIFoodParaInterno,
   iniciarRadarIFood,
   obterLogs,
