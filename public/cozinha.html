@@ -83,42 +83,44 @@
       cursor: pointer;
     }
 
-    /* MAIN CONTAINER */
+    /* MAIN CONTAINER - FULL WIDTH FLUID DASHBOARD */
     .dashboard {
-      max-width: 1200px;
-      margin: 20px auto;
-      padding: 0 16px;
+      max-width: 100%;
+      width: 100%;
+      margin: 16px 0;
+      padding: 0 20px;
+      box-sizing: border-box;
     }
 
     /* STATS BAR CLEAN */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
       margin-bottom: 20px;
     }
 
     .stat-card {
       background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     }
 
     .stat-card strong {
-      font-size: 26px;
-      font-weight: 900;
+      font-size: 28px;
+      font-weight: 950;
       color: var(--dark);
       line-height: 1.1;
       display: block;
     }
 
     .stat-card span {
-      font-size: 11px;
+      font-size: 11.5px;
       color: #64748b;
       text-transform: uppercase;
       font-weight: 800;
@@ -126,133 +128,54 @@
       display: block;
     }
 
-    /* ORDERS GRID */
-    .orders-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-      gap: 18px;
-    }
-
-    .order-card {
-      background: #ffffff;
-      border-radius: 14px;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
-    /* BORDAS E FUNDOS VIBRANTES DE ALTO CONTRASTE */
-    .order-card.status-Pendente {
-      border: 4px solid #ea580c;
-      background: #fffcf5;
-      animation: pulseAlert 2.5s infinite;
-    }
-
-    .order-card.status-EmPreparo {
-      border: 4px solid #2563eb;
-      background: #f8fbff;
-    }
-
-    .order-card.status-SaiupEntrega {
-      border: 4px solid #7c3aed;
-      background: #faf8ff;
-    }
-
-    .order-card.status-Entregue {
-      border: 4px solid #16a34a;
-      background: #f0fdf4;
-      opacity: 0.88;
-    }
-
-    @keyframes pulseAlert {
-      0%, 100% { box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.4); }
-      50% { box-shadow: 0 0 0 8px rgba(234, 88, 12, 0.12); }
-    }
-
-    /* FAIXA SUPERIOR DE STATUS EM CORES SÓLIDAS */
-    .card-top-ribbon {
-      padding: 10px 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #ffffff;
-      font-weight: 800;
-      font-size: 13.5px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-
-    .ribbon-pendente { background: #ea580c; }
-    .ribbon-preparo { background: #1d4ed8; }
-    .ribbon-entrega { background: #6d28d9; }
-    .ribbon-entregue { background: #15803d; }
-    .ribbon-ifood { background: #ea1d2c !important; }
-
-    .order-card.origem-ifood {
-      border: 3px solid #ea1d2c !important;
-    }
-
-    .card-body {
-      padding: 14px 16px;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-    }
-
-    .order-num-large {
-      font-size: 26px;
-      font-weight: 900;
-      color: var(--dark);
-      letter-spacing: -0.5px;
-    }
-
-    .order-time-large {
-      font-size: 13px;
-      font-weight: 700;
-      color: #475569;
-    }
-
     /* ==================================================== */
     /* LAYOUT KANBAN (QUADROS ESTILO GESTOR IFOOD)          */
     /* ==================================================== */
     .kanban-board {
       display: grid;
-      grid-template-columns: repeat(4, minmax(290px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(4, minmax(380px, 1fr)); /* Padrão Grande e Imersivo */
+      gap: 20px;
       align-items: flex-start;
       overflow-x: auto;
-      padding-bottom: 24px;
+      padding-bottom: 30px;
       -webkit-overflow-scrolling: touch;
+      transition: all 0.2s ease-in-out;
     }
 
-    @media (max-width: 1250px) {
-      .kanban-board {
-        grid-template-columns: repeat(4, 320px);
-      }
+    /* AJUSTE DE TAMANHO / ZOOM DOS QUADROS */
+    .kanban-board.tam-normal {
+      grid-template-columns: repeat(4, minmax(320px, 1fr));
+      gap: 16px;
+    }
+
+    .kanban-board.tam-grande {
+      grid-template-columns: repeat(4, minmax(390px, 1fr));
+      gap: 20px;
+    }
+
+    .kanban-board.tam-extragrande {
+      grid-template-columns: repeat(4, minmax(460px, 1fr));
+      gap: 24px;
     }
 
     .kanban-column {
       background: #f8fafc;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 14px;
+      border: 2px solid #cbd5e1;
+      border-radius: 16px;
       display: flex;
       flex-direction: column;
-      min-height: 520px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      min-height: 560px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
     }
 
     .kanban-column-header {
-      padding: 12px 14px;
-      border-radius: 12px 12px 0 0;
+      padding: 14px 16px;
+      border-radius: 14px 14px 0 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-weight: 900;
-      font-size: 13.5px;
+      font-size: 14px;
       color: #ffffff;
       letter-spacing: 0.5px;
       text-transform: uppercase;
@@ -267,28 +190,104 @@
     .kanban-column-header.concluido { background: #15803d; }
 
     .kanban-badge {
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.28);
       color: #ffffff;
-      padding: 3px 9px;
+      padding: 4px 11px;
       border-radius: 12px;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 900;
     }
 
     .kanban-column-cards {
-      padding: 12px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
       flex-grow: 1;
     }
 
     .kanban-empty-msg {
       text-align: center;
       color: #94a3b8;
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 700;
-      padding: 40px 10px;
+      padding: 50px 10px;
+    }
+
+    /* ==================================================== */
+    /* MOLDURAS ESTILIZADAS PREMIUM: IFOOD vs SITE          */
+    /* ==================================================== */
+
+    .order-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    /* 🔴 MOLDURA IFOOD (VERMELHO IMPACTANTE / MARKETPLACE) */
+    .order-card.moldura-ifood {
+      border: 3.5px solid #ea1d2c !important;
+      background: #ffffff !important;
+      box-shadow: 0 6px 22px rgba(234, 29, 44, 0.18) !important;
+    }
+
+    .order-card.moldura-ifood.status-Pendente {
+      animation: pulseAlertIfood 2.2s infinite !important;
+    }
+
+    @keyframes pulseAlertIfood {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(234, 29, 44, 0.45), 0 8px 25px rgba(234, 29, 44, 0.22); }
+      50% { box-shadow: 0 0 0 9px rgba(234, 29, 44, 0.12), 0 4px 15px rgba(234, 29, 44, 0.1); }
+    }
+
+    .ribbon-ifood-header {
+      background: linear-gradient(135deg, #ea1d2c 0%, #b91c1c 100%) !important;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 13.5px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 3px 10px rgba(234, 29, 44, 0.35);
+    }
+
+    /* ⚫ MOLDURA SITE PRÓPRIO (PRETO ÔNIX ELEGANTE / LUXO) */
+    .order-card.moldura-site {
+      border: 3.5px solid #0f172a !important;
+      background: #ffffff !important;
+      box-shadow: 0 6px 22px rgba(15, 23, 42, 0.14) !important;
+      position: relative;
+    }
+
+    .order-card.moldura-site.status-Pendente {
+      animation: pulseAlertSite 2.2s infinite !important;
+    }
+
+    @keyframes pulseAlertSite {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.45), 0 8px 25px rgba(15, 23, 42, 0.22); }
+      50% { box-shadow: 0 0 0 9px rgba(217, 119, 6, 0.12), 0 4px 15px rgba(15, 23, 42, 0.1); }
+    }
+
+    .ribbon-site-header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+      border-top: 3.5px solid #f59e0b;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 13.5px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
     }
 
     /* CARD ENTREGUE (DIFERENCIADO E COMPACTO) */
@@ -298,12 +297,40 @@
       opacity: 0.92;
       box-shadow: none !important;
     }
-    .order-card.status-Entregue .card-body {
-      padding: 10px 14px;
+    .order-card.status-Entregue.moldura-ifood {
+      border: 2px solid #fca5a5 !important;
+      background: #fff8f8 !important;
     }
-    .order-card.status-Entregue .order-num-large {
-      font-size: 26px !important;
-      color: #166534 !important;
+    .order-card.status-Entregue .card-body {
+      padding: 12px 14px;
+    }
+
+    .card-body {
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .order-num-large {
+      font-size: 38px;
+      font-weight: 950;
+      color: var(--dark);
+      letter-spacing: -1.5px;
+      line-height: 1;
+    }
+
+    .order-time-large {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    /* ORDERS GRID (MODO GRADE) */
+    .orders-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 20px;
     }
 
     /* FILTROS RÁPIDOS */
@@ -739,18 +766,35 @@
       </div>
     </div>
 
-    <!-- BARRA SUPERIOR DO GESTOR DE PEDIDOS: TÍTULO + ALTERNADOR DE MODO KANBAN / GRADE -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
-      <h2 style="font-size: 19px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 8px;">
-        <span>📊</span> <span>Gestor de Pedidos da Cozinha</span>
-      </h2>
-      <div style="display: flex; gap: 6px; background: #e2e8f0; padding: 4px; border-radius: 10px;">
-        <button id="btnModoKanban" type="button" onclick="alternarModoVisualizacao('kanban')" style="border: none; padding: 7px 14px; border-radius: 8px; font-weight: 800; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; background: var(--dark); color: #ffffff;">
-          📊 Quadros Kanban (iFood)
-        </button>
-        <button id="btnModoGrade" type="button" onclick="alternarModoVisualizacao('grade')" style="border: none; padding: 7px 14px; border-radius: 8px; font-weight: 800; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; background: transparent; color: #475569;">
-          📋 Grade Única
-        </button>
+    <!-- BARRA SUPERIOR DO GESTOR DE PEDIDOS: TÍTULO + CONTROLE DE ZOOM + ALTERNADOR DE MODO -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; background: #ffffff; padding: 12px 18px; border-radius: 14px; border: 1.5px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <h2 style="font-size: 20px; font-weight: 950; color: var(--dark); display: flex; align-items: center; gap: 8px; margin: 0;">
+          <span>📊</span> <span>Gestor de Pedidos da Cozinha</span>
+        </h2>
+        <span style="background: #f1f5f9; color: #475569; font-size: 11.5px; font-weight: 800; padding: 4px 10px; border-radius: 20px; border: 1px solid #cbd5e1;">
+          🔴 iFood + 🌭 Site Direto
+        </span>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <!-- CONTROLE DE TAMANHO / ZOOM DOS QUADROS -->
+        <div style="display: flex; align-items: center; gap: 4px; background: #f8fafc; padding: 4px; border-radius: 10px; border: 1.5px solid #cbd5e1;">
+          <span style="font-size: 11px; font-weight: 900; color: #64748b; padding: 0 6px; text-transform: uppercase;">🔍 Zoom:</span>
+          <button id="btnTamNormal" type="button" onclick="definirTamanhoKanban('normal')" class="btn-tam-kanban" style="padding: 6px 10px; border-radius: 6px; font-weight: 800; font-size: 11.5px; border: none; cursor: pointer; background: transparent; color: #475569;">Padrão</button>
+          <button id="btnTamGrande" type="button" onclick="definirTamanhoKanban('grande')" class="btn-tam-kanban" style="padding: 6px 12px; border-radius: 6px; font-weight: 800; font-size: 11.5px; border: none; cursor: pointer; background: var(--dark); color: #ffffff;">Grande (TV/Tablet)</button>
+          <button id="btnTamExtra" type="button" onclick="definirTamanhoKanban('extragrande')" class="btn-tam-kanban" style="padding: 6px 10px; border-radius: 6px; font-weight: 800; font-size: 11.5px; border: none; cursor: pointer; background: transparent; color: #475569;">Extra Grande</button>
+        </div>
+
+        <!-- MODO DE VISUALIZAÇÃO KANBAN / GRADE -->
+        <div style="display: flex; gap: 4px; background: #f8fafc; padding: 4px; border-radius: 10px; border: 1.5px solid #cbd5e1;">
+          <button id="btnModoKanban" type="button" onclick="alternarModoVisualizacao('kanban')" style="border: none; padding: 6px 12px; border-radius: 6px; font-weight: 800; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; background: var(--dark); color: #ffffff;">
+            📊 Quadros Kanban
+          </button>
+          <button id="btnModoGrade" type="button" onclick="alternarModoVisualizacao('grade')" style="border: none; padding: 6px 12px; border-radius: 6px; font-weight: 800; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; background: transparent; color: #475569;">
+            📋 Grade Única
+          </button>
+        </div>
       </div>
     </div>
 
@@ -1483,64 +1527,92 @@
       renderizarPedidos();
     }
 
+    function definirTamanhoKanban(tam) {
+      const board = document.getElementById('kanbanBoard');
+      if (!board) return;
+      board.classList.remove('tam-normal', 'tam-grande', 'tam-extragrande');
+      board.classList.add('tam-' + tam);
+
+      document.querySelectorAll('.btn-tam-kanban').forEach(b => {
+        b.style.background = 'transparent';
+        b.style.color = '#475569';
+      });
+
+      const btnId = tam === 'normal' ? 'btnTamNormal' : (tam === 'grande' ? 'btnTamGrande' : 'btnTamExtra');
+      const btnAtivo = document.getElementById(btnId);
+      if (btnAtivo) {
+        btnAtivo.style.background = 'var(--dark)';
+        btnAtivo.style.color = '#ffffff';
+      }
+
+      try {
+        localStorage.setItem('mordidaco_kanban_tamanho', tam);
+      } catch(e) {}
+    }
+
     function gerarHtmlCardPedido(p, modo = 'kanban') {
       const isIFood = p.origem === 'iFood';
+      const molduraClass = isIFood ? 'moldura-ifood' : 'moldura-site';
+
       let ribbonClass = isIFood ? 'ribbon-ifood' : 'ribbon-pendente';
-      let ribbonText = isIFood ? `🔴 IFOOD • #${p.numero}` : '⏳ A FAZER • PENDENTE';
-      let cardStatusClass = isIFood ? 'status-Pendente origem-ifood' : 'status-Pendente';
+      let ribbonText = 'A FAZER • PENDENTE';
+      let cardStatusClass = 'status-Pendente';
 
       if (p.status === 'Em Preparo') {
         ribbonClass = isIFood ? 'ribbon-ifood' : 'ribbon-preparo';
-        ribbonText = isIFood ? `🔴 IFOOD (BANCADA) • #${p.numero}` : '🔥 NA BANCADA • EM PREPARO';
-        cardStatusClass = isIFood ? 'status-EmPreparo origem-ifood' : 'status-EmPreparo';
+        ribbonText = 'NA BANCADA • EM PREPARO';
+        cardStatusClass = 'status-EmPreparo';
       } else if (p.status === 'Saiu p/ Entrega') {
         ribbonClass = isIFood ? 'ribbon-ifood' : 'ribbon-entrega';
-        ribbonText = isIFood ? `🔴 IFOOD (MOTOBOY) • #${p.numero}` : '🛵 COM MOTOBOY • NA RUA';
-        cardStatusClass = isIFood ? 'status-SaiupEntrega origem-ifood' : 'status-SaiupEntrega';
+        ribbonText = 'COM MOTOBOY • EM ROTA';
+        cardStatusClass = 'status-SaiupEntrega';
       } else if (p.status === 'Entregue') {
         ribbonClass = 'ribbon-entregue';
-        ribbonText = isIFood ? `✅ IFOOD CONCLUÍDO • #${p.numero}` : '✅ CONCLUÍDO • ENTREGUE';
-        cardStatusClass = isIFood ? 'status-Entregue origem-ifood' : 'status-Entregue';
+        ribbonText = 'CONCLUÍDO • ENTREGUE';
+        cardStatusClass = 'status-Entregue';
       }
 
       let itensHtml = '';
       (p.itens || []).forEach(i => {
         itensHtml += `
-          <li class="order-item-row" style="padding: 6px 0; border-bottom: 1px dashed #e2e8f0;">
-            <div style="font-size: 14.5px; font-weight: 800; color: #0f172a;">
-              <span style="background: #0f172a; color: #ffffff; padding: 2px 7px; border-radius: 6px; font-size: 12.5px; margin-right: 4px;">1x</span>
+          <li class="order-item-row" style="padding: 8px 0; border-bottom: 1px dashed #e2e8f0;">
+            <div style="font-size: 15.5px; font-weight: 850; color: #0f172a; line-height: 1.3;">
+              <span style="background: ${isIFood ? '#ea1d2c' : '#0f172a'}; color: #ffffff; padding: 2px 8px; border-radius: 6px; font-size: 13px; font-weight: 900; margin-right: 6px;">1x</span>
               ${i.nome}
             </div>
-            ${i.formato ? `<div style="font-size: 12px; font-weight: 700; color: #2563eb; margin: 2px 0 0 28px;">👉 ${i.formato}</div>` : ''}
-            ${i.observacoes ? `<div style="background: #fee2e2; border-left: 4px solid #ef4444; padding: 4px 8px; border-radius: 4px; margin: 4px 0 0 28px; color: #991b1b; font-size: 12px; font-weight: 800;">⚠️ OBS: ${i.observacoes}</div>` : ''}
+            ${i.formato ? `<div style="font-size: 13px; font-weight: 800; color: #2563eb; margin: 3px 0 0 32px;">👉 ${i.formato}</div>` : ''}
+            ${i.observacoes ? `<div style="background: #fee2e2; border-left: 4px solid #ef4444; padding: 5px 9px; border-radius: 6px; margin: 4px 0 0 32px; color: #991b1b; font-size: 12.5px; font-weight: 800;">⚠️ OBS: ${i.observacoes}</div>` : ''}
           </li>
         `;
       });
 
-      // DIFERENCIAÇÃO: Se for pedido Concluído/Entregue, faz um card compacto e destacado em verde
+      // DIFERENCIAÇÃO: Se for pedido Concluído/Entregue, faz um card compacto e destacado
       if (p.status === 'Entregue' && modo === 'kanban') {
         return `
-          <div class="order-card status-Entregue">
-            <div style="background: #dcfce7; border-bottom: 1px solid #bbf7d0; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-weight: 900; color: #166534; font-size: 14.5px;">#${p.numero}</span>
-              <span style="font-size: 11px; font-weight: 800; color: #15803d; background: #ffffff; padding: 2px 8px; border-radius: 10px; border: 1px solid #86efac;">✅ Entregue</span>
-            </div>
-            <div class="card-body" style="padding: 10px 12px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-size: 13.5px; font-weight: 800; color: #0f172a;">👤 ${p.cliente ? p.cliente.nome : 'Cliente'}</span>
-                <span style="font-size: 14.5px; font-weight: 900; color: #15803d;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</span>
+          <div class="order-card ${molduraClass} status-Entregue">
+            <div style="background: ${isIFood ? '#fee2e2' : '#dcfce7'}; border-bottom: 1.5px solid ${isIFood ? '#fca5a5' : '#bbf7d0'}; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-weight: 950; color: ${isIFood ? '#991b1b' : '#166534'}; font-size: 16px;">#${p.numero}</span>
+                <span style="font-size: 11px; font-weight: 900; color: ${isIFood ? '#ea1d2c' : '#15803d'}; background: #ffffff; padding: 2px 8px; border-radius: 6px; border: 1px solid ${isIFood ? '#fca5a5' : '#86efac'};">${isIFood ? '🔴 iFood' : '🌭 Site'}</span>
               </div>
-              <div style="font-size: 12px; color: #475569; margin-bottom: 8px;">
+              <span style="font-size: 11.5px; font-weight: 900; color: #15803d; background: #ffffff; padding: 3px 9px; border-radius: 12px; border: 1.5px solid #86efac;">✅ Entregue</span>
+            </div>
+            <div class="card-body" style="padding: 12px 14px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-size: 14.5px; font-weight: 800; color: #0f172a;">👤 ${p.cliente ? p.cliente.nome : 'Cliente'}</span>
+                <span style="font-size: 16px; font-weight: 950; color: #15803d;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</span>
+              </div>
+              <div style="font-size: 12.5px; color: #475569; margin-bottom: 10px;">
                 📍 ${p.entrega ? p.entrega.endereco : 'Balcão'} (${p.entrega ? p.entrega.bairro : ''})
               </div>
-              <ul style="list-style: none; margin-bottom: 8px; font-size: 12px; color: #334155; line-height: 1.35;">
+              <ul style="list-style: none; margin-bottom: 10px; font-size: 12.5px; color: #334155; line-height: 1.4;">
                 ${(p.itens || []).map(i => `<li>• 1x ${i.nome} ${i.formato ? `[${i.formato}]` : ''}</li>`).join('')}
               </ul>
-              <div style="display: flex; gap: 6px; border-top: 1px dashed #bbf7d0; padding-top: 8px;">
-                <button type="button" onclick="imprimirComanda('${p.id}')" style="flex: 1; background: #ffffff; color: #15803d; border: 1.5px solid #86efac; padding: 6px; font-weight: 800; border-radius: 6px; font-size: 11.5px; cursor: pointer;">
+              <div style="display: flex; gap: 6px; border-top: 1px dashed #cbd5e1; padding-top: 10px;">
+                <button type="button" onclick="imprimirComanda('${p.id}')" style="flex: 1; background: #ffffff; color: #15803d; border: 1.5px solid #86efac; padding: 8px; font-weight: 800; border-radius: 8px; font-size: 12.5px; cursor: pointer;">
                   🖨️ Comanda
                 </button>
-                <button type="button" onclick="alterarStatus('${p.id}', 'Em Preparo')" title="Reabrir pedido se marcado por engano" style="background: none; border: 1px dashed #94a3b8; color: #64748b; padding: 6px 10px; border-radius: 6px; font-size: 11px; cursor: pointer;">
+                <button type="button" onclick="alterarStatus('${p.id}', 'Em Preparo')" title="Reabrir pedido se marcado por engano" style="background: none; border: 1.5px dashed #94a3b8; color: #64748b; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;">
                   ↩️ Reabrir
                 </button>
               </div>
@@ -1549,33 +1621,36 @@
         `;
       }
 
-      // DIFERENCIAÇÃO: Se for pedido CANCELADO, vai para o quadro de Concluídos com estilo vermelho suave
+      // DIFERENCIAÇÃO: Se for pedido CANCELADO, vai para o quadro de Concluídos
       if (p.status === 'Cancelado') {
         return `
-          <div class="order-card status-Cancelado" style="border: 2px solid #fca5a5 !important; background: #fef2f2 !important; opacity: 0.88;">
-            <div style="background: #fee2e2; border-bottom: 1px solid #fca5a5; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-weight: 900; color: #991b1b; font-size: 14.5px;">#${p.numero}</span>
-              <span style="font-size: 11px; font-weight: 800; color: #991b1b; background: #ffffff; padding: 2px 8px; border-radius: 10px; border: 1px solid #fca5a5;">❌ Cancelado</span>
+          <div class="order-card ${molduraClass} status-Cancelado" style="border: 2.5px solid #fca5a5 !important; background: #fef2f2 !important; opacity: 0.9;">
+            <div style="background: #fee2e2; border-bottom: 1.5px solid #fca5a5; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-weight: 950; color: #991b1b; font-size: 16px;">#${p.numero}</span>
+                <span style="font-size: 11px; font-weight: 900; color: #991b1b; background: #ffffff; padding: 2px 8px; border-radius: 6px; border: 1px solid #fca5a5;">${isIFood ? '🔴 iFood' : '🌭 Site'}</span>
+              </div>
+              <span style="font-size: 11.5px; font-weight: 900; color: #991b1b; background: #ffffff; padding: 3px 9px; border-radius: 12px; border: 1.5px solid #fca5a5;">❌ Cancelado</span>
             </div>
-            <div class="card-body" style="padding: 10px 12px;">
-              <div style="background: #fee2e2; border: 1px solid #f87171; color: #991b1b; font-weight: 800; font-size: 12px; padding: 6px; border-radius: 6px; text-align: center; margin-bottom: 8px;">
-                ❌ Pedido Cancelado pelo Cliente
+            <div class="card-body" style="padding: 12px 14px;">
+              <div style="background: #fee2e2; border: 1.5px solid #f87171; color: #991b1b; font-weight: 900; font-size: 12.5px; padding: 7px; border-radius: 8px; text-align: center; margin-bottom: 10px;">
+                ❌ Pedido Cancelado
               </div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-size: 13.5px; font-weight: 800; color: #0f172a;">👤 ${p.cliente ? p.cliente.nome : 'Cliente'}</span>
-                <span style="font-size: 14px; font-weight: 900; color: #64748b; text-decoration: line-through;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</span>
+                <span style="font-size: 14.5px; font-weight: 800; color: #0f172a;">👤 ${p.cliente ? p.cliente.nome : 'Cliente'}</span>
+                <span style="font-size: 15px; font-weight: 900; color: #64748b; text-decoration: line-through;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</span>
               </div>
-              <div style="font-size: 12px; color: #64748b; margin-bottom: 8px;">
+              <div style="font-size: 12.5px; color: #64748b; margin-bottom: 10px;">
                 📍 ${p.entrega ? p.entrega.endereco : 'Balcão'} (${p.entrega ? p.entrega.bairro : ''})
               </div>
-              <ul style="list-style: none; margin-bottom: 8px; font-size: 12px; color: #64748b; line-height: 1.35;">
+              <ul style="list-style: none; margin-bottom: 10px; font-size: 12.5px; color: #64748b; line-height: 1.4;">
                 ${(p.itens || []).map(i => `<li>• 1x ${i.nome}</li>`).join('')}
               </ul>
-              <div style="display: flex; gap: 6px; border-top: 1px dashed #fca5a5; padding-top: 8px;">
-                <button type="button" onclick="imprimirComanda('${p.id}')" style="flex: 1; background: #ffffff; color: #991b1b; border: 1.5px solid #fca5a5; padding: 6px; font-weight: 800; border-radius: 6px; font-size: 11.5px; cursor: pointer;">
+              <div style="display: flex; gap: 6px; border-top: 1px dashed #fca5a5; padding-top: 10px;">
+                <button type="button" onclick="imprimirComanda('${p.id}')" style="flex: 1; background: #ffffff; color: #991b1b; border: 1.5px solid #fca5a5; padding: 8px; font-weight: 800; border-radius: 8px; font-size: 12.5px; cursor: pointer;">
                   🖨️ Comanda
                 </button>
-                <button type="button" onclick="alterarStatus('${p.id}', 'Em Preparo')" title="Reabrir pedido se foi cancelado por engano" style="background: none; border: 1px dashed #94a3b8; color: #64748b; padding: 6px 10px; border-radius: 6px; font-size: 11px; cursor: pointer;">
+                <button type="button" onclick="alterarStatus('${p.id}', 'Em Preparo')" title="Reabrir pedido se foi cancelado por engano" style="background: none; border: 1.5px dashed #94a3b8; color: #64748b; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;">
                   ↩️ Reabrir
                 </button>
               </div>
@@ -1588,83 +1663,112 @@
       let acoesFluxoHtml = '';
       if (p.status === 'Pendente') {
         acoesFluxoHtml = `
-          <button type="button" onclick="alterarStatus('${p.id}', 'Em Preparo')" style="width: 100%; background: #2563eb; color: #ffffff; padding: 12px; font-weight: 900; border-radius: 8px; border: none; cursor: pointer; font-size: 13.5px; margin-bottom: 6px; box-shadow: 0 4px 12px rgba(37,99,235,0.25); display: flex; align-items: center; justify-content: center; gap: 6px;">
+          <button type="button" onclick="alterarStatus('${p.id}', 'Em Preparo')" style="width: 100%; background: #2563eb; color: #ffffff; padding: 14px; font-weight: 900; border-radius: 10px; border: none; cursor: pointer; font-size: 15px; margin-bottom: 8px; box-shadow: 0 4px 14px rgba(37,99,235,0.3); display: flex; align-items: center; justify-content: center; gap: 8px;">
             <span>🔥 Iniciar Preparo</span> ➔
           </button>
-          <button type="button" onclick="imprimirComanda('${p.id}')" style="width: 100%; background: #0f172a; color: #ffffff; padding: 9px; font-weight: 800; border-radius: 8px; border: none; cursor: pointer; font-size: 12.5px;">
+          <button type="button" onclick="imprimirComanda('${p.id}')" style="width: 100%; background: #0f172a; color: #ffffff; padding: 11px; font-weight: 800; border-radius: 10px; border: none; cursor: pointer; font-size: 13.5px;">
             🖨️ Imprimir Comanda
           </button>
         `;
       } else if (p.status === 'Em Preparo') {
         acoesFluxoHtml = `
-          <button type="button" onclick="alterarStatus('${p.id}', 'Saiu p/ Entrega')" style="width: 100%; background: #7c3aed; color: #ffffff; padding: 12px; font-weight: 900; border-radius: 8px; border: none; cursor: pointer; font-size: 13.5px; margin-bottom: 6px; box-shadow: 0 4px 12px rgba(124,58,237,0.25); display: flex; align-items: center; justify-content: center; gap: 6px;">
+          <button type="button" onclick="alterarStatus('${p.id}', 'Saiu p/ Entrega')" style="width: 100%; background: #7c3aed; color: #ffffff; padding: 14px; font-weight: 900; border-radius: 10px; border: none; cursor: pointer; font-size: 15px; margin-bottom: 8px; box-shadow: 0 4px 14px rgba(124,58,237,0.3); display: flex; align-items: center; justify-content: center; gap: 8px;">
             <span>🛵 Despachar (Com Motoboy)</span> ➔
           </button>
-          <div style="display: flex; gap: 6px;">
-            <button type="button" onclick="imprimirComanda('${p.id}')" style="flex: 1; background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1; padding: 8px; font-weight: 700; border-radius: 6px; cursor: pointer; font-size: 12px;">
+          <div style="display: flex; gap: 8px;">
+            <button type="button" onclick="imprimirComanda('${p.id}')" style="flex: 1; background: #f1f5f9; color: #0f172a; border: 1.5px solid #cbd5e1; padding: 10px; font-weight: 800; border-radius: 8px; cursor: pointer; font-size: 13px;">
               🖨️ Re-imprimir
             </button>
-            <button type="button" onclick="alterarStatus('${p.id}', 'Pendente')" style="background: none; border: 1px dashed #cbd5e1; color: #64748b; padding: 8px 10px; font-size: 11px; border-radius: 6px; cursor: pointer;">
+            <button type="button" onclick="alterarStatus('${p.id}', 'Pendente')" style="background: none; border: 1.5px dashed #cbd5e1; color: #64748b; padding: 10px 12px; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer;">
               ↩️ Voltar
             </button>
           </div>
         `;
       } else if (p.status === 'Saiu p/ Entrega') {
         acoesFluxoHtml = `
-          <button type="button" onclick="alterarStatus('${p.id}', 'Entregue')" style="width: 100%; background: #16a34a; color: #ffffff; padding: 12px; font-weight: 900; border-radius: 8px; border: none; cursor: pointer; font-size: 13.5px; margin-bottom: 6px; box-shadow: 0 4px 12px rgba(22,163,74,0.25); display: flex; align-items: center; justify-content: center; gap: 6px;">
+          <button type="button" onclick="alterarStatus('${p.id}', 'Entregue')" style="width: 100%; background: #16a34a; color: #ffffff; padding: 14px; font-weight: 900; border-radius: 10px; border: none; cursor: pointer; font-size: 15px; margin-bottom: 8px; box-shadow: 0 4px 14px rgba(22,163,74,0.3); display: flex; align-items: center; justify-content: center; gap: 8px;">
             <span>✅ Concluir (Marcar Entregue)</span> ➔
           </button>
-          <div style="display: flex; gap: 6px;">
-            <button type="button" onclick="abrirWhatsAppAviso('${p.id}')" style="flex: 1; background: #25d366; color: #ffffff; border: none; padding: 8px; font-weight: 800; border-radius: 6px; cursor: pointer; font-size: 12px;">
+          <div style="display: flex; gap: 8px;">
+            <button type="button" onclick="abrirWhatsAppAviso('${p.id}')" style="flex: 1; background: #25d366; color: #ffffff; border: none; padding: 10px; font-weight: 800; border-radius: 8px; cursor: pointer; font-size: 13px;">
               📲 Avisar no Zap
             </button>
-            <button type="button" onclick="imprimirComanda('${p.id}')" style="background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1; padding: 8px; border-radius: 6px; cursor: pointer; font-size: 12px;" title="Imprimir">
+            <button type="button" onclick="imprimirComanda('${p.id}')" style="background: #f1f5f9; color: #0f172a; border: 1.5px solid #cbd5e1; padding: 10px 14px; border-radius: 8px; cursor: pointer; font-size: 13px;" title="Imprimir">
               🖨️
             </button>
-            <button type="button" onclick="alterarStatus('${p.id}', 'Em Preparo')" style="background: none; border: 1px dashed #cbd5e1; color: #64748b; padding: 8px; font-size: 11px; border-radius: 6px; cursor: pointer;" title="Voltar para preparo">
+            <button type="button" onclick="alterarStatus('${p.id}', 'Em Preparo')" style="background: none; border: 1.5px dashed #cbd5e1; color: #64748b; padding: 10px 12px; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer;" title="Voltar para preparo">
               ↩️
             </button>
           </div>
         `;
       } else if (p.status === 'Entregue') {
         acoesFluxoHtml = `
-          <div style="display: flex; gap: 6px;">
-            <button type="button" onclick="imprimirComanda('${p.id}')" style="flex: 1; background: #ffffff; color: #15803d; border: 1.5px solid #86efac; padding: 8px; font-weight: 800; border-radius: 6px; font-size: 12px; cursor: pointer;">
+          <div style="display: flex; gap: 8px;">
+            <button type="button" onclick="imprimirComanda('${p.id}')" style="flex: 1; background: #ffffff; color: #15803d; border: 1.5px solid #86efac; padding: 10px; font-weight: 800; border-radius: 8px; font-size: 13px; cursor: pointer;">
               🖨️ Comanda
             </button>
-            <button type="button" onclick="alterarStatus('${p.id}', 'Em Preparo')" style="background: none; border: 1px dashed #cbd5e1; color: #64748b; padding: 8px 10px; font-size: 11px; border-radius: 6px; cursor: pointer;">
+            <button type="button" onclick="alterarStatus('${p.id}', 'Em Preparo')" style="background: none; border: 1.5px dashed #cbd5e1; color: #64748b; padding: 10px 12px; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer;">
               ↩️ Reabrir
             </button>
           </div>
         `;
       }
 
-      return `
-        <div class="order-card ${cardStatusClass}">
-          <div class="card-top-ribbon ${ribbonClass}">
-            <span>${ribbonText}</span>
-            <span style="background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 6px; font-size: 13px;">#${p.numero}</span>
+      // Ribbon e Cabeçalho Estilizado conforme a Origem
+      const ribbonHeaderHtml = isIFood ? `
+        <div class="ribbon-ifood-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="background: #ffffff; color: #ea1d2c; font-size: 11.5px; font-weight: 900; padding: 3px 8px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">🔴 IFOOD</span>
+            <span style="font-size: 13.5px; font-weight: 900; letter-spacing: 0.5px;">${ribbonText}</span>
           </div>
+          <span style="background: rgba(0,0,0,0.3); padding: 3px 10px; border-radius: 8px; font-size: 16px; font-weight: 950;">#${p.numero}</span>
+        </div>
+      ` : `
+        <div class="ribbon-site-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="background: #f59e0b; color: #0f172a; font-size: 11.5px; font-weight: 900; padding: 3px 8px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.25);">🌭 SITE OFICIAL</span>
+            <span style="font-size: 13.5px; font-weight: 900; letter-spacing: 0.5px;">${ribbonText}</span>
+          </div>
+          <span style="background: rgba(255,255,255,0.15); padding: 3px 10px; border-radius: 8px; font-size: 16px; font-weight: 950; color: #f59e0b;">#${p.numero}</span>
+        </div>
+      `;
+
+      return `
+        <div class="order-card ${molduraClass} ${cardStatusClass}">
+          ${ribbonHeaderHtml}
 
           <div class="card-body">
-            <div style="text-align: center; padding: 4px 0 10px 0; border-bottom: 2px solid #e2e8f0; margin-bottom: 10px;">
-              <span class="order-num-large" style="display: block; font-size: 32px; font-weight: 900; color: #0f172a; letter-spacing: -1px; line-height: 1.1;">#${p.numero}</span>
-              <div class="order-time-large" style="font-size: 12.5px; font-weight: 700; color: #64748b; margin-top: 3px;">⏰ ${p.dataHora}</div>
-              <div style="font-size: 18px; font-weight: 900; color: #15803d; margin-top: 3px;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</div>
+            <div style="text-align: center; padding: 6px 0 14px 0; border-bottom: 2px solid #e2e8f0; margin-bottom: 12px;">
+              <span class="order-num-large" style="display: block; font-size: 42px; font-weight: 950; color: ${isIFood ? '#ea1d2c' : '#0f172a'}; letter-spacing: -1.5px; line-height: 1;">#${p.numero}</span>
+              
+              <div style="margin-top: 6px;">
+                ${isIFood ? `
+                  <span style="background: #fee2e2; color: #dc2626; border: 1.5px solid #fca5a5; font-size: 12px; font-weight: 900; padding: 3px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px;">
+                    🔴 iFood Marketplace
+                  </span>
+                ` : `
+                  <span style="background: #fef3c7; color: #92400e; border: 1.5px solid #fde68a; font-size: 12px; font-weight: 900; padding: 3px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px;">
+                    🌭 Site Oficial • Direto
+                  </span>
+                `}
+              </div>
+
+              <div class="order-time-large" style="font-size: 13.5px; font-weight: 700; color: #64748b; margin-top: 6px;">⏰ ${p.dataHora}</div>
+              <div style="font-size: 22px; font-weight: 950; color: ${isIFood ? '#dc2626' : '#15803d'}; margin-top: 4px;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</div>
             </div>
 
-            <div class="client-info" style="border-left: 4px solid #0f172a; padding: 8px 10px; margin-bottom: 10px;">
-              <div style="font-size: 14.5px; font-weight: 800; color: #0f172a;">👤 ${p.cliente ? p.cliente.nome : 'Cliente'}</div>
-              <div style="font-size: 13px; font-weight: 700; color: #1e293b; margin-top: 2px;">📍 ${p.entrega ? p.entrega.endereco : 'Balcão'} - ${p.entrega ? p.entrega.bairro : ''}</div>
-              ${p.entrega && p.entrega.referencia ? `<div style="font-size: 11.5px; color: #64748b; margin-top: 2px;"><em>Ref: ${p.entrega.referencia}</em></div>` : ''}
-              <div style="font-size: 12.5px; color: #2563eb; font-weight: 700; margin-top: 2px;">📞 ${p.cliente ? p.cliente.telefone : ''}</div>
+            <div class="client-info" style="border-left: 5px solid ${isIFood ? '#ea1d2c' : '#0f172a'}; padding: 10px 12px; margin-bottom: 12px; background: ${isIFood ? '#fff8f8' : '#f8fafc'}; border-radius: 0 8px 8px 0;">
+              <div style="font-size: 15.5px; font-weight: 900; color: #0f172a;">👤 ${p.cliente ? p.cliente.nome : 'Cliente'}</div>
+              <div style="font-size: 14px; font-weight: 700; color: #1e293b; margin-top: 3px;">📍 ${p.entrega ? p.entrega.endereco : 'Balcão'} - <strong>${p.entrega ? p.entrega.bairro : ''}</strong></div>
+              ${p.entrega && p.entrega.referencia ? `<div style="font-size: 12px; color: #64748b; margin-top: 2px;"><em>Ref: ${p.entrega.referencia}</em></div>` : ''}
+              <div style="font-size: 13.5px; color: #2563eb; font-weight: 800; margin-top: 3px;">📞 ${p.cliente ? p.cliente.telefone : ''}</div>
             </div>
 
-            <ul class="order-items" style="list-style: none; margin-bottom: 12px;">
+            <ul class="order-items" style="list-style: none; margin-bottom: 14px;">
               ${itensHtml}
             </ul>
 
-            <div class="order-payment-box" style="font-size: 12.5px; padding: 8px 10px; margin-bottom: 10px;">
+            <div class="order-payment-box" style="font-size: 13px; padding: 10px 12px; margin-bottom: 12px; background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 8px;">
               <strong style="color: #92400e;">💵 PAGTO:</strong> <span style="font-weight: 800; color: #b45309;">${p.pagamento || 'Na Entrega'}</span>
             </div>
 
@@ -1673,7 +1777,7 @@
                 <label style="font-size: 10.5px; font-weight: 900; color: #334155; display: block; margin-bottom: 3px; text-transform: uppercase;">
                   🔄 ALTERAR STATUS:
                 </label>
-                <select onchange="alterarStatus('${p.id}', this.value)" style="width: 100%; padding: 6px 10px; border-radius: 6px; font-size: 13px; font-weight: 800; border: 1.5px solid #0f172a; background: #ffffff; cursor: pointer;">
+                <select onchange="alterarStatus('${p.id}', this.value)" style="width: 100%; padding: 8px 12px; border-radius: 6px; font-size: 13.5px; font-weight: 800; border: 1.5px solid #0f172a; background: #ffffff; cursor: pointer;">
                   <option value="Pendente" ${p.status === 'Pendente' ? 'selected' : ''}>⏳ A FAZER / PENDENTE</option>
                   <option value="Em Preparo" ${p.status === 'Em Preparo' ? 'selected' : ''}>🔥 NA BANCADA / EM PREPARO</option>
                   <option value="Saiu p/ Entrega" ${p.status === 'Saiu p/ Entrega' ? 'selected' : ''}>🛵 COM MOTOBOY / NA RUA</option>
@@ -2415,6 +2519,11 @@
     }
 
     // Inicialização da Cozinha
+    try {
+      const tamSalvo = localStorage.getItem('mordidaco_kanban_tamanho') || 'grande';
+      definirTamanhoKanban(tamSalvo);
+    } catch(e) {}
+
     carregarCacheLocalPedidos();
     carregarCacheLocalClientes();
     carregarPedidos();
