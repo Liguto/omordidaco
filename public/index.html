@@ -995,10 +995,12 @@
     <!-- ============================================== -->
     <aside class="app-sidebar">
       <div>
-        <!-- BRAND & LOGO -->
+        <!-- BRAND & LOGO (CLICÁVEL PARA INÍCIO) -->
         <div class="sidebar-brand">
-          <img src="assets/logo.png" alt="O Mordidaço" class="sidebar-logo-img">
-          <h1>O MORDIDAÇO</h1>
+          <div onclick="irParaInicio()" style="cursor: pointer; display: inline-block; transition: transform 0.15s ease;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" title="Ir para o início do cardápio">
+            <img src="assets/logo.png" alt="O Mordidaço" class="sidebar-logo-img">
+            <h1>O MORDIDAÇO</h1>
+          </div>
           <p class="slogan">Hot-Dogueria Artesanal • Campinas</p>
           <div>
             <span class="sidebar-status-pill">🟢 Aberto • ⏱️ 35-50 min</span>
@@ -1058,7 +1060,7 @@
       <!-- 1. MOBILE HEADER (SOMENTE NO SMARTPHONE / TABLET) -->
       <div class="mobile-only">
         <div class="mobile-header">
-          <div style="display: flex; align-items: center; gap: 10px;">
+          <div onclick="irParaInicio()" style="display: flex; align-items: center; gap: 10px; cursor: pointer;" title="Ir para o início do cardápio">
             <img src="assets/logo.png" alt="O Mordidaço" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #f59e0b;">
             <div>
               <div style="font-weight: 950; font-size: 15px; letter-spacing: -0.3px;">O MORDIDAÇO</div>
@@ -1135,7 +1137,7 @@
       <footer class="site-footer">
         <div class="footer-inner">
           <div class="footer-col">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+            <div onclick="irParaInicio()" style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; cursor: pointer; width: fit-content;" title="Ir para o início do cardápio">
               <img src="assets/logo.png" style="width: 44px; height: 44px; border-radius: 50%; border: 2px solid #f59e0b;">
               <div>
                 <h4 style="margin: 0; color: #ffffff; font-size: 15px;">O MORDIDAÇO</h4>
@@ -2760,6 +2762,11 @@
       } catch (err) {
         alert('Erro ao enviar pedido para o restaurante. Verifique sua conexão.');
       }
+    }
+
+    function irParaInicio() {
+      trocarAbaPrincipal('cardapio');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // NAVEGAÇÃO ENTRE ABAS: CARDÁPIO vs MEUS PEDIDOS
