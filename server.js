@@ -549,7 +549,7 @@ const CARDAPIO = {
           nome: "Dog Tradicional do Mordidaço",
           descricao: "Purê de batata artesanal cremoso, 1 salsicha suculenta no molho caseiro, milho, vinagrete suave, maionese verde da casa, batata palha e queijo parmesão ralado na hora. Escolha no Pão macio ou no Prato (Marmitinha 500ml).",
           preco: 16.00,
-          adicionalPrato: 1.00,
+          adicionalPrato: 2.00,
           permiteFormato: true,
           destaque: false,
           isLanche: true
