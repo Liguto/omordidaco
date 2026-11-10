@@ -16,6 +16,7 @@
   "author": "Luiz Duarte",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.3.0"
+    "express": "^5.3.0",
+    "qrcode": "^1.5.4"
   }
 }
