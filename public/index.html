@@ -78,273 +78,303 @@
 
     /* HEADER & HERO SECTION (ELEVATED DESKTOP & MOBILE) */
     /* ==================================================== */
-    /* TOPBAR MINIMALISTA & MODERNA                         */
+    /* SENIOR UX: APP LAYOUT (DESKTOP SIDEBAR + MOBILE RESP)*/
     /* ==================================================== */
-    .top-announcement-bar {
-      background: #0f172a;
-      color: #94a3b8;
-      font-size: 11.5px;
-      padding: 6px 16px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .top-announcement-inner {
-      max-width: 900px;
-      margin: 0 auto;
+    .app-layout {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 6px;
+      min-height: 100vh;
+      width: 100%;
     }
-    .top-info-item {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      color: #cbd5e1;
-      font-weight: 600;
-    }
-    .top-links-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .top-vip-pill {
-      background: #16a34a;
-      color: #ffffff;
-      padding: 3px 9px;
-      border-radius: 12px;
-      font-weight: 800;
-      font-size: 11px;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      transition: background 0.15s;
-    }
-    .top-vip-pill:hover { background: #15803d; }
-    .top-ig-pill {
-      color: #cbd5e1;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 11px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .top-ig-pill:hover { color: #f59e0b; }
 
-    /* ==================================================== */
-    /* HEADER COMPACTO & CLEAN (ESTILO UBEREATS / GOURMET)  */
-    /* ==================================================== */
-    .clean-header {
-      background: #ffffff;
-      border-bottom: 1px solid #e2e8f0;
-      padding: 16px 20px;
+    /* SIDEBAR (DESKTOP) */
+    .app-sidebar {
+      display: none;
     }
-    .clean-header-inner {
-      max-width: 800px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-    @media (max-width: 600px) {
-      .clean-header-inner {
+
+    @media (min-width: 1024px) {
+      .app-sidebar {
+        display: flex;
         flex-direction: column;
-        text-align: center;
-        gap: 10px;
+        justify-content: space-between;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 320px;
+        background: #ffffff;
+        border-right: 1px solid #e2e8f0;
+        padding: 24px 20px;
+        z-index: 100;
+        overflow-y: auto;
+        box-shadow: 2px 0 16px rgba(0, 0, 0, 0.03);
+      }
+
+      .app-sidebar::-webkit-scrollbar {
+        width: 4px;
+      }
+      .app-sidebar::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+      }
+
+      .app-main {
+        margin-left: 320px;
+        width: calc(100% - 320px);
+        min-height: 100vh;
+        background: #f8fafc;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .mobile-only {
+        display: none !important;
+      }
+
+      .desktop-only {
+        display: block !important;
       }
     }
-    .brand-avatar-box {
-      flex-shrink: 0;
+
+    @media (max-width: 1023px) {
+      .app-main {
+        width: 100%;
+        margin-left: 0;
+      }
+      .desktop-only {
+        display: none !important;
+      }
+      .mobile-only {
+        display: block !important;
+      }
     }
-    .brand-logo-img {
-      width: 72px;
-      height: 72px;
+
+    /* SIDEBAR BRAND HEADER */
+    .sidebar-brand {
+      text-align: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #f1f5f9;
+      margin-bottom: 14px;
+    }
+
+    .sidebar-logo-img {
+      width: 68px;
+      height: 68px;
       border-radius: 50%;
       object-fit: cover;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
       border: 2.5px solid #f59e0b;
-      background: #ffffff;
+      margin: 0 auto 10px auto;
       display: block;
     }
-    .brand-titles-box {
-      flex-grow: 1;
-    }
-    .brand-titles-box h1 {
+
+    .sidebar-brand h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 26px;
+      font-size: 22px;
       font-weight: 950;
       color: #0f172a;
       letter-spacing: -0.5px;
       margin: 0 0 2px 0;
       line-height: 1.15;
     }
-    .brand-titles-box p.slogan {
-      font-size: 13px;
+
+    .sidebar-brand p.slogan {
+      font-size: 12px;
       font-weight: 700;
       color: #64748b;
-      margin: 0 0 8px 0;
-    }
-    .store-status-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      align-items: center;
-    }
-    @media (max-width: 600px) {
-      .store-status-pills {
-        justify-content: center;
-      }
-    }
-    .status-pill {
-      background: #f1f5f9;
-      border: 1px solid #e2e8f0;
-      color: #475569;
-      padding: 3px 10px;
-      border-radius: 12px;
-      font-size: 11.5px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .status-pill.open {
-      background: #f0fdf4;
-      border-color: #bbf7d0;
-      color: #166534;
-      font-weight: 800;
-    }
-    .status-pill.highlight {
-      background: #fffbeb;
-      border-color: #fde68a;
-      color: #92400e;
-      font-weight: 800;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .status-pill.highlight:hover {
-      background: #fef3c7;
+      margin: 0 0 10px 0;
     }
 
-    /* ==================================================== */
-    /* SLIM PROMO STRIP (FAIXA COMPACTA DE CONVERSÃO)       */
-    /* ==================================================== */
-    .slim-promo-ribbon {
-      background: linear-gradient(90deg, #15803d 0%, #16a34a 100%);
-      color: #ffffff;
-      padding: 8px 16px;
-      box-shadow: 0 2px 6px rgba(22, 163, 74, 0.2);
+    .sidebar-status-pill {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
-    .slim-promo-inner {
-      max-width: 900px;
-      margin: 0 auto;
+
+    /* SIDEBAR NAVIGATION ITEMS */
+    .sidebar-nav-section-title {
+      font-size: 11px;
+      font-weight: 900;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin: 14px 0 8px 10px;
+    }
+
+    .sidebar-nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sidebar-nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #334155;
+      font-size: 13.5px;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+      width: 100%;
+    }
+
+    .sidebar-nav-item:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .sidebar-nav-item.active {
+      background: #0f172a;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
+    }
+
+    .sidebar-nav-item.active .sidebar-item-count {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+
+    .sidebar-item-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-grow: 1;
+    }
+
+    .sidebar-item-count {
+      font-size: 11px;
+      font-weight: 800;
+      background: #f1f5f9;
+      color: #64748b;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    /* SIDEBAR FOOTER CARDS */
+    .sidebar-footer {
+      padding-top: 16px;
+      border-top: 1px solid #f1f5f9;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sidebar-radius-card {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #92400e;
+      line-height: 1.35;
+    }
+
+    .sidebar-vip-btn {
+      background: linear-gradient(135deg, #15803d 0%, #16a34a 100%);
+      color: #ffffff;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 12.5px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 2px 8px rgba(22, 163, 74, 0.25);
+      transition: transform 0.15s;
+    }
+    .sidebar-vip-btn:hover {
+      transform: scale(1.02);
+    }
+
+    /* MAIN CONTENT TOPBAR (DESKTOP) */
+    .main-desktop-topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .promo-text-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12.5px;
-      font-weight: 700;
-    }
-    .promo-tag {
+      padding: 16px 32px;
       background: #ffffff;
-      color: #16a34a;
-      font-size: 10.5px;
-      font-weight: 900;
-      padding: 2px 7px;
-      border-radius: 6px;
-      text-transform: uppercase;
-    }
-    .promo-cta-btn {
-      background: #ffffff;
-      color: #15803d;
-      font-size: 12px;
-      font-weight: 900;
-      padding: 4px 12px;
-      border-radius: 6px;
-      text-decoration: none;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
-      transition: transform 0.15s;
-    }
-    .promo-cta-btn:hover {
-      transform: scale(1.04);
-    }
-
-    /* ==================================================== */
-    /* NAVEGAÇÃO STICKY UNIFICADA (ABAS + CATEGORIAS)       */
-    /* ==================================================== */
-    .sticky-nav-wrapper {
+      border-bottom: 1px solid #e2e8f0;
       position: sticky;
       top: 0;
-      z-index: 80;
+      z-index: 50;
+    }
+
+    .main-top-badge-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .main-top-btn {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #0f172a;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+    .main-top-btn:hover {
+      background: #e2e8f0;
+    }
+    .main-top-btn.primary {
+      background: #0f172a;
+      color: #ffffff;
+      border-color: #0f172a;
+    }
+
+    /* MOBILE HEADER COMPACT */
+    .mobile-header {
+      background: #0f172a;
+      color: #ffffff;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #f59e0b;
+    }
+
+    .mobile-cat-nav-sticky {
+      position: sticky;
+      top: 0;
       background: rgba(255, 255, 255, 0.98);
       backdrop-filter: blur(8px);
       border-bottom: 1px solid #e2e8f0;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
-    }
-    .nav-segmented-control {
-      max-width: 400px;
-      margin: 0 auto;
+      z-index: 70;
       display: flex;
-      padding: 8px 16px 4px 16px;
       gap: 8px;
-    }
-    .main-tab-btn {
-      flex: 1;
-      padding: 8px 14px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 800;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: all 0.2s ease;
-      background: #f1f5f9;
-      color: #64748b;
-    }
-    .main-tab-btn.active {
-      background: #0f172a;
-      color: #ffffff;
-      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
-    }
-    .tab-badge {
-      background: #dc2626;
-      color: #ffffff;
-      font-size: 10px;
-      padding: 1px 6px;
-      border-radius: 10px;
-      font-weight: 900;
-    }
-
-    .cat-nav-streamlined {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      padding: 6px 16px 8px 16px;
+      padding: 8px 16px;
       overflow-x: auto;
       white-space: nowrap;
       -webkit-overflow-scrolling: touch;
     }
-    @media (max-width: 768px) {
-      .cat-nav-streamlined {
-        justify-content: flex-start;
-      }
-    }
-    .cat-nav-streamlined::-webkit-scrollbar { display: none; }
+    .mobile-cat-nav-sticky::-webkit-scrollbar { display: none; }
+
     .cat-btn {
-      background: #f8fafc;
+      background: #f1f5f9;
       color: #475569;
       border: 1px solid #e2e8f0;
-      padding: 6px 14px;
+      padding: 7px 16px;
       border-radius: 16px;
       font-size: 12.5px;
       font-weight: 800;
@@ -352,10 +382,10 @@
       transition: all 0.15s;
     }
     .cat-btn.active, .cat-btn:hover {
-      background: #f59e0b;
-      color: #0f172a;
-      border-color: #f59e0b;
-      box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3);
+      background: #0f172a;
+      color: #ffffff;
+      border-color: #0f172a;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
     }
 
     /* CONTAINER AMPLO PARA DESKTOP */
@@ -953,139 +983,195 @@
 </head>
 <body>
 
-  <!-- 1. TOPBAR ELEGANTE & MINIMALISTA -->
-  <div class="top-announcement-bar">
-    <div class="top-announcement-inner">
-      <div class="top-info-item">
-        <span>📍</span> <span>Jardim Tamoio, Campinas • Delivery direto até 2,5km</span>
-      </div>
-      <div class="top-links-group">
-        <a href="https://wa.me/5519997881550?text=Ol%C3%A1!%20Quero%20entrar%20na%20Lista%20VIP%20de%20inaugura%C3%A7%C3%A3o%20do%20Mordida%C3%A7o%20e%20garantir%20meu%20benef%C3%ADcio!" target="_blank" class="top-vip-pill">
-          🎁 Lista VIP WhatsApp
-        </a>
-        <a href="https://instagram.com/omordidaco.dogs" target="_blank" class="top-ig-pill">
-          📸 @omordidaco.dogs
-        </a>
-      </div>
-    </div>
+  <!-- BANNER DISCRETO DE PRÉ-INAUGURAÇÃO (MINIMALISTA) -->
+  <div style="background: #0f172a; color: #fde68a; text-align: center; padding: 6px 14px; font-size: 11.5px; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.08);">
+    🚀 AMBIENTE DE TESTES • Inauguração Oficial de O Mordidaço em Dezembro de 2026!
   </div>
 
-  <!-- 2. HEADER CLEAN & AREJADO (ZERO POLUIÇÃO VISUAL) -->
-  <header class="clean-header">
-    <div class="clean-header-inner">
-      <div class="brand-avatar-box">
-        <img src="assets/logo.png" alt="O Mordidaço" class="brand-logo-img">
-      </div>
-      <div class="brand-titles-box">
-        <h1>O MORDIDAÇO</h1>
-        <p class="slogan">Hot-Dogueria Artesanal • Jardim Tamoio, Campinas</p>
-        <div class="store-status-pills">
-          <span class="status-pill open">🟢 Aberto Agora</span>
-          <span class="status-pill">⏱️ 35 - 50 min</span>
-          <span class="status-pill highlight" onclick="abrirModalRaioEntrega()" title="Clique para ver os bairros atendidos">
-            🛵 Entrega R$ 5,00 (até 2,5km) ℹ️
-          </span>
-          <span class="status-pill">💳 Pagto na Entrega</span>
-        </div>
-      </div>
-    </div>
-  </header>
+  <div class="app-layout">
 
-  <!-- 3. FAIXA SLIM DE PROMOÇÃO & LISTA VIP (SUPER DISCRETA & ELEGANTE) -->
-  <div class="slim-promo-ribbon">
-    <div class="slim-promo-inner">
-      <div class="promo-text-wrap">
-        <span class="promo-tag">🎁 LISTA VIP</span>
-        <span>Entre no WhatsApp e ganhe cupons e benefícios de inauguração!</span>
-      </div>
-      <a href="https://wa.me/5519997881550?text=Ol%C3%A1!%20Quero%20entrar%20na%20Lista%20VIP%20de%20inaugura%C3%A7%C3%A3o%20do%20Mordida%C3%A7o%20e%20garantir%20meu%20benef%C3%ADcio!" target="_blank" class="promo-cta-btn">
-        Quero Cupom ➔
-      </a>
-    </div>
-  </div>
-
-  <!-- 4. NAVEGAÇÃO STICKY UNIFICADA (ABAS + CATEGORIAS) -->
-  <div class="sticky-nav-wrapper">
-    <div class="nav-segmented-control">
-      <button id="btnTabCardapio" class="main-tab-btn active" onclick="trocarAbaPrincipal('cardapio')">
-        🌭 Cardápio
-      </button>
-      <button id="btnTabPedidos" class="main-tab-btn" onclick="trocarAbaPrincipal('pedidos')">
-        🛍️ Meus Pedidos
-        <span id="badgePedidosAtivos" class="tab-badge" style="display: none;">1</span>
-      </button>
-    </div>
-
-    <!-- CATEGORIAS EM CARROSSEL HORIZONTAL SUAVE -->
-    <nav class="cat-nav-streamlined" id="catNav">
-      <!-- Inserido dinamicamente -->
-    </nav>
-  </div>
-
-  <!-- VIEW 1: CARDÁPIO (PRINCIPAL) -->
-  <div id="viewCardapio">
-    <!-- MAIN MENU CONTAINER -->
-    <div class="container" id="menuContainer">
-      <p style="text-align:center; padding: 40px; color: #94a3b8;">Carregando cardápio de hot dogs artesanais...</p>
-    </div>
-  </div>
-
-  <!-- VIEW 2: MEUS PEDIDOS & HISTÓRICO (DEDICADO ESTILO GIGIO'S) -->
-  <div id="viewPedidos" style="display: none; max-width: 680px; margin: 24px auto; padding: 0 16px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <!-- ============================================== -->
+    <!-- MENU LATERAL FIXO (DESKTOP - SENIOR UX)        -->
+    <!-- ============================================== -->
+    <aside class="app-sidebar">
       <div>
-        <h2 style="font-size: 24px; font-weight: 900; color: var(--dark); margin: 0;">🛍️ Meus Pedidos</h2>
-        <span style="font-size: 13px; color: var(--text-muted);">Acompanhe seus pedidos em tempo real e consulte seu histórico.</span>
-      </div>
-      <button onclick="trocarAbaPrincipal('cardapio')" style="background: none; border: 1.5px solid #cbd5e1; padding: 8px 14px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; color: var(--dark);">
-        ← Voltar ao Cardápio
-      </button>
-    </div>
-
-    <!-- SESSÃO DE PEDIDO ATIVO EM ANDAMENTO -->
-    <div id="secaoPedidoAtivo"></div>
-
-    <!-- SESSÃO DE HISTÓRICO DE PEDIDOS ANTERIORES -->
-    <div id="secaoHistoricoPedidos" style="margin-top: 24px;"></div>
-  </div>
-
-  <!-- RODAPÉ INSTITUCIONAL & INFORMAÇÕES DE DELIVERY -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-col">
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-          <img src="assets/logo.png" style="width: 44px; height: 44px; border-radius: 50%; border: 2px solid #f59e0b;">
+        <!-- BRAND & LOGO -->
+        <div class="sidebar-brand">
+          <img src="assets/logo.png" alt="O Mordidaço" class="sidebar-logo-img">
+          <h1>O MORDIDAÇO</h1>
+          <p class="slogan">Hot-Dogueria Artesanal • Campinas</p>
           <div>
-            <h4 style="margin: 0; color: #ffffff; font-size: 15px;">O MORDIDAÇO</h4>
-            <span style="font-size: 11px; color: #fbbf24; font-weight: 700; text-transform: uppercase;">Hot-Dogueria Artesanal</span>
+            <span class="sidebar-status-pill">🟢 Aberto • ⏱️ 35-50 min</span>
           </div>
         </div>
-        <p>A mordida mais caprichada de Campinas! Operação familiar de dark kitchen dedicada 100% a cachorros-quentes artesanais de alta fartura e qualidade.</p>
+
+        <!-- CATEGORIAS DO CARDÁPIO (SIDEBAR NAV) -->
+        <div class="sidebar-nav-section-title">CARDÁPIO ARTESANAL</div>
+        <nav class="sidebar-nav-list" id="sidebarCatNav">
+          <!-- Inserido dinamicamente pelo renderizarCardapio() -->
+        </nav>
+
+        <!-- MINHA CONTA / PEDIDOS -->
+        <div class="sidebar-nav-section-title" style="margin-top: 20px;">MINHA CONTA</div>
+        <button type="button" class="sidebar-nav-item" id="sidebarBtnPedidos" onclick="trocarAbaPrincipal('pedidos')">
+          <span class="sidebar-item-label">
+            <span>🛍️</span> <span>Meus Pedidos</span>
+          </span>
+          <span class="tab-badge" id="badgePedidosSidebar" style="display: none;">0</span>
+        </button>
       </div>
 
-      <div class="footer-col">
-        <h4>📍 Endereço & Entrega</h4>
-        <p>
-          <strong>Localização:</strong> Jardim Tamoio, Campinas - SP<br>
-          <strong>Região Atendida:</strong> Jd. Tamoio, Flamboyant, Proença, Nova Campinas e bairros vizinhos.<br>
-          <strong>Tempo Médio:</strong> 35 a 50 minutos.
-        </p>
+      <!-- SIDEBAR FOOTER: RAIO 2,5KM + LISTA VIP + INSTAGRAM -->
+      <div class="sidebar-footer">
+        <div class="sidebar-radius-card">
+          <div style="font-weight: 800; display: flex; align-items: center; gap: 4px; margin-bottom: 2px;">
+            <span>📍</span> <span>Entrega Direta: até 2,5km</span>
+          </div>
+          <div style="font-size: 11px; opacity: 0.9;">
+            Swift, Tamoio, Nova Europa, Jambeiro... (R$ 5,00)
+          </div>
+          <div style="margin-top: 6px; font-size: 11px; font-weight: 700; color: #b45309;">
+            Mais longe? Peça no:
+            <a href="https://www.ifood.com.br" target="_blank" style="color: #ea1d2c; text-decoration: none; font-weight: 900; margin-left: 2px;">🔴 iFood</a> •
+            <a href="https://food.99app.com" target="_blank" style="color: #b45309; text-decoration: none; font-weight: 900;">🟡 99Food</a>
+          </div>
+        </div>
+
+        <a href="https://wa.me/5519997881550?text=Ol%C3%A1!%20Quero%20entrar%20na%20Lista%20VIP%20de%20inaugura%C3%A7%C3%A3o%20do%20Mordida%C3%A7o%20e%20garantir%20meu%20benef%C3%ADcio!" target="_blank" class="sidebar-vip-btn">
+          <span>🎁</span> <span>Entrar na Lista VIP (Zap)</span>
+        </a>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #64748b; padding: 0 4px;">
+          <a href="https://instagram.com/omordidaco.dogs" target="_blank" style="color: #64748b; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 4px;">
+            📸 @omordidaco.dogs
+          </a>
+          <span>Campinas/SP</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ============================================== -->
+    <!-- ÁREA PRINCIPAL DE CONTEÚDO (MAIN)             -->
+    <!-- ============================================== -->
+    <main class="app-main">
+
+      <!-- 1. MOBILE HEADER (SOMENTE NO SMARTPHONE / TABLET) -->
+      <div class="mobile-only">
+        <div class="mobile-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="assets/logo.png" alt="O Mordidaço" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #f59e0b;">
+            <div>
+              <div style="font-weight: 950; font-size: 15px; letter-spacing: -0.3px;">O MORDIDAÇO</div>
+              <div style="font-size: 11px; color: #fde68a;">Hot-Dogueria Artesanal • Tamoio</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button onclick="trocarAbaPrincipal('pedidos')" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+              🛍️ Pedidos <span id="badgePedidosMobile" class="tab-badge" style="display: none;">0</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- FAIXA VIP NO MOBILE -->
+        <a href="https://wa.me/5519997881550?text=Ol%C3%A1!%20Quero%20entrar%20na%20Lista%20VIP%20de%20inaugura%C3%A7%C3%A3o%20do%20Mordida%C3%A7o%20e%20garantir%20meu%20benef%C3%ADcio!" target="_blank" style="text-decoration: none; display: block; background: #15803d; color: #fff; padding: 7px 16px; font-size: 12px; font-weight: 800; text-align: center;">
+          🎁 Entre na Lista VIP no WhatsApp e garanta cupons! ➔
+        </a>
+
+        <!-- NAVEGAÇÃO HORIZONTAL DE CATEGORIAS (MOBILE) -->
+        <nav class="mobile-cat-nav-sticky" id="catNav">
+          <!-- Inserido dinamicamente -->
+        </nav>
       </div>
 
-      <div class="footer-col">
-        <h4>💳 Pagamento na Entrega</h4>
-        <p>
-          Levamos a maquininha até você com total comodidade:<br>
-          • <strong>Pix na maquininha</strong> (QR Code na hora)<br>
-          • <strong>Cartões de Crédito e Débito</strong><br>
-          • <strong>Dinheiro com troco</strong> garantido
-        </p>
+      <!-- 2. DESKTOP APP BAR (SOMENTE NO COMPUTADOR) -->
+      <div class="desktop-only">
+        <div class="main-desktop-topbar">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 20px;">🌭</span>
+            <div>
+              <div style="font-size: 15px; font-weight: 950; color: #0f172a;">Cardápio Oficial de Hot Dogs Artesanais</div>
+              <div style="font-size: 12px; color: #64748b;">Salsicha Sadia oficial • Legítimo Catupiry® Original • No Pão Bambini ou No Prato</div>
+            </div>
+          </div>
+          <div class="main-top-badge-group">
+            <button type="button" class="main-top-btn" id="btnTabPedidosDesk" onclick="trocarAbaPrincipal('pedidos')">
+              🛍️ Meus Pedidos <span class="tab-badge" id="badgePedidosTop" style="display: none;">0</span>
+            </button>
+            <button type="button" class="main-top-btn primary" onclick="abrirCarrinho()">
+              🛒 Ver Sacola (<span id="cartCountTop">0</span>)
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
-    <div style="max-width: 1200px; margin: 24px auto 0 auto; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); text-align: center; font-size: 11.5px; color: #64748b;">
-      © 2026 O Mordidaço Hot-Dogueria Artesanal • CNPJ: 69.985.669/0001-86 • Campinas/SP • Feito com amor de nossa família para a sua.
-    </div>
-  </footer>
+
+      <!-- VIEW 1: CARDÁPIO (PRINCIPAL) -->
+      <div id="viewCardapio">
+        <!-- MAIN MENU CONTAINER -->
+        <div class="container" id="menuContainer" style="padding-top: 24px;">
+          <p style="text-align:center; padding: 40px; color: #94a3b8;">Carregando cardápio de hot dogs artesanais...</p>
+        </div>
+      </div>
+
+      <!-- VIEW 2: MEUS PEDIDOS & HISTÓRICO (DEDICADO ESTILO GIGIO'S) -->
+      <div id="viewPedidos" style="display: none; max-width: 680px; margin: 24px auto; padding: 0 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div>
+            <h2 style="font-size: 24px; font-weight: 900; color: var(--dark); margin: 0;">🛍️ Meus Pedidos</h2>
+            <span style="font-size: 13px; color: var(--text-muted);">Acompanhe seus pedidos em tempo real e consulte seu histórico.</span>
+          </div>
+          <button onclick="trocarAbaPrincipal('cardapio')" style="background: none; border: 1.5px solid #cbd5e1; padding: 8px 14px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; color: var(--dark);">
+            ← Voltar ao Cardápio
+          </button>
+        </div>
+
+        <!-- SESSÃO DE PEDIDO ATIVO EM ANDAMENTO -->
+        <div id="secaoPedidoAtivo"></div>
+
+        <!-- SESSÃO DE HISTÓRICO DE PEDIDOS ANTERIORES -->
+        <div id="secaoHistoricoPedidos" style="margin-top: 24px;"></div>
+      </div>
+
+      <!-- RODAPÉ INSTITUCIONAL & INFORMAÇÕES DE DELIVERY -->
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <div class="footer-col">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+              <img src="assets/logo.png" style="width: 44px; height: 44px; border-radius: 50%; border: 2px solid #f59e0b;">
+              <div>
+                <h4 style="margin: 0; color: #ffffff; font-size: 15px;">O MORDIDAÇO</h4>
+                <span style="font-size: 11px; color: #fbbf24; font-weight: 700; text-transform: uppercase;">Hot-Dogueria Artesanal</span>
+              </div>
+            </div>
+            <p>A mordida mais caprichada de Campinas! Operação familiar de dark kitchen dedicada 100% a cachorros-quentes artesanais de alta fartura e qualidade.</p>
+          </div>
+
+          <div class="footer-col">
+            <h4>📍 Endereço & Entrega</h4>
+            <p>
+              <strong>Localização:</strong> Jardim Tamoio, Campinas - SP<br>
+              <strong>Região Atendida:</strong> Jd. Tamoio, Swift, São Gabriel, Nova Europa e proximidades (até 2,5km).<br>
+              <strong>Demais bairros:</strong> Peça no iFood ou 99Food!<br>
+              <strong>Tempo Médio:</strong> 35 a 50 minutos.
+            </p>
+          </div>
+
+          <div class="footer-col">
+            <h4>💳 Pagamento na Entrega</h4>
+            <p>
+              Levamos a maquininha até você com total comodidade:<br>
+              • <strong>Pix na maquininha</strong> (QR Code na hora)<br>
+              • <strong>Cartões de Crédito e Débito</strong><br>
+              • <strong>Dinheiro com troco</strong> garantido
+            </p>
+          </div>
+        </div>
+        <div style="max-width: 1200px; margin: 24px auto 0 auto; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); text-align: center; font-size: 11.5px; color: #64748b;">
+          © 2026 O Mordidaço Hot-Dogueria Artesanal • CNPJ: 69.985.669/0001-86 • Campinas/SP • Feito com amor de nossa família para a sua.
+        </div>
+      </footer>
+
+    </main>
+  </div>
 
   <!-- FLOATING CART BAR (BOTTOM - PRIORIDADE ALTA) -->
   <div class="cart-bar" id="cartBar" style="display: none; z-index: 105;">
@@ -1113,26 +1199,6 @@
       <button style="background: var(--primary); color: #ffffff; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 800; font-size: 12.5px; cursor: pointer;">
         Ver Status ➔
       </button>
-    </div>
-  </div>
-
-  <!-- MODAL INFORMATIVO: RAIO DE ENTREGA & DIRECIONAMENTO -->
-  <div class="modal-overlay" id="modalRaioInfo" onclick="if(event.target === this) fecharModal('modalRaioInfo')">
-    <div class="modal-box" style="max-width: 480px; text-align: center; padding: 22px;">
-      <div style="font-size: 38px; margin-bottom: 6px;">🛵</div>
-      <h3 style="font-size: 19px; font-weight: 950; color: #0f172a; margin: 0 0 8px 0;">Área de Entrega Própria</h3>
-      <p style="font-size: 13.5px; color: #475569; line-height: 1.5; margin-bottom: 14px;">
-        Nosso delivery próprio pelo site atende exclusivamente em um <strong>raio de até 2,5km do Jardim Tamoio</strong> (Tamoio, Swift, Nova Europa, São Gabriel, Vila Lemos, Cura D'Ars, Jambeiro, etc.) com taxa fixa de <strong>R$ 5,00</strong>.
-      </p>
-      <div style="background: #fffbeb; border: 1.5px solid #fde68a; padding: 12px; border-radius: 10px; margin-bottom: 16px; font-size: 12.5px; color: #92400e; text-align: left; line-height: 1.4;">
-        <strong>Mora em bairros mais distantes?</strong><br>
-        Você pode fazer seu pedido através do nosso iFood ou 99Food, ou escolher <strong>"Retirada no Balcão"</strong> com frete grátis!
-      </div>
-      <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
-        <a href="https://www.ifood.com.br" target="_blank" style="background: #ea1d2c; color: #fff; padding: 10px 18px; border-radius: 8px; font-weight: 800; font-size: 13px; text-decoration: none; box-shadow: 0 2px 6px rgba(234, 29, 44, 0.25);">🔴 iFood</a>
-        <a href="https://food.99app.com" target="_blank" style="background: #f59e0b; color: #0f172a; padding: 10px 18px; border-radius: 8px; font-weight: 900; font-size: 13px; text-decoration: none; box-shadow: 0 2px 6px rgba(245, 158, 11, 0.25);">🟡 99Food</a>
-        <button type="button" onclick="fecharModal('modalRaioInfo')" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 10px 18px; border-radius: 8px; font-weight: 800; font-size: 13px; cursor: pointer; color: #334155;">Entendido ✓</button>
-      </div>
     </div>
   </div>
 
@@ -1465,22 +1531,61 @@
     }
 
     function renderizarCardapio() {
-      const nav = document.getElementById('catNav');
+      const navMobile = document.getElementById('catNav');
+      const navSidebar = document.getElementById('sidebarCatNav');
       const container = document.getElementById('menuContainer');
-      nav.innerHTML = '';
-      container.innerHTML = '';
+      if (navMobile) navMobile.innerHTML = '';
+      if (navSidebar) navSidebar.innerHTML = '';
+      if (container) container.innerHTML = '';
 
       cardapioGlobal.categorias.forEach((cat, index) => {
-        // Nav button
-        const btn = document.createElement('button');
-        btn.className = `cat-btn ${index === 0 ? 'active' : ''}`;
-        btn.innerText = cat.nome.split(' ')[1] || cat.nome;
-        btn.onclick = () => {
-          document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          document.getElementById(cat.id).scrollIntoView({ behavior: 'smooth' });
-        };
-        nav.appendChild(btn);
+        // 1. Botão Mobile (Carrossel Horizontal)
+        if (navMobile) {
+          const btnMob = document.createElement('button');
+          btnMob.type = 'button';
+          btnMob.className = `cat-btn ${index === 0 ? 'active' : ''}`;
+          btnMob.dataset.cat = cat.id;
+          btnMob.innerText = cat.nome.split(' ')[1] || cat.nome;
+          btnMob.onclick = () => {
+            document.querySelectorAll('.cat-btn, .sidebar-nav-item').forEach(b => b.classList.remove('active'));
+            btnMob.classList.add('active');
+            const sBtn = document.querySelector(`.sidebar-nav-item[data-cat="${cat.id}"]`);
+            if (sBtn) sBtn.classList.add('active');
+            document.getElementById(cat.id)?.scrollIntoView({ behavior: 'smooth' });
+          };
+          navMobile.appendChild(btnMob);
+        }
+
+        // 2. Botão Desktop Sidebar (Menu Lateral)
+        if (navSidebar) {
+          const itemBtn = document.createElement('button');
+          itemBtn.type = 'button';
+          itemBtn.className = `sidebar-nav-item ${index === 0 ? 'active' : ''}`;
+          itemBtn.dataset.cat = cat.id;
+          const parts = cat.nome.trim().split(' ');
+          const emoji = parts[0] || '🌭';
+          const nomeSemEmoji = parts.slice(1).join(' ') || cat.nome;
+          itemBtn.innerHTML = `
+            <span class="sidebar-item-label">
+              <span>${emoji}</span> <span>${nomeSemEmoji}</span>
+            </span>
+            <span class="sidebar-item-count">${(cat.itens || []).length}</span>
+          `;
+          itemBtn.onclick = () => {
+            trocarAbaPrincipal('cardapio');
+            document.querySelectorAll('.cat-btn, .sidebar-nav-item').forEach(b => b.classList.remove('active'));
+            itemBtn.classList.add('active');
+            const mBtn = document.querySelector(`.cat-btn[data-cat="${cat.id}"]`);
+            if (mBtn) mBtn.classList.add('active');
+            const secEl = document.getElementById(cat.id);
+            if (secEl) {
+              const yOffset = -70;
+              const y = secEl.getBoundingClientRect().top + window.pageYOffset + yOffset;
+              window.scrollTo({ top: y, behavior: 'smooth' });
+            }
+          };
+          navSidebar.appendChild(itemBtn);
+        }
 
         // Section
         const sec = document.createElement('div');
@@ -1529,10 +1634,6 @@
         toast.style.opacity = '0';
         setTimeout(() => toast.style.display = 'none', 300);
       }, 2000);
-    }
-
-    function abrirModalRaioEntrega() {
-      abrirModal('modalRaioInfo');
     }
 
     function tratarAdicionarItem(catId, itemId) {
@@ -1865,13 +1966,19 @@
     function atualizarBarraCarrinho() {
       const cartBar = document.getElementById('cartBar');
       const trackerBar = document.getElementById('floatingTrackerBar');
+      const total = carrinho.reduce((acc, item) => acc + item.preco, 0);
+
+      // Atualiza botão do carrinho no Desktop Topbar
+      const cartTopEl = document.getElementById('cartCountTop');
+      if (cartTopEl) {
+        cartTopEl.innerText = carrinho.length > 0 ? `${carrinho.length} • R$ ${total.toFixed(2).replace('.', ',')}` : '0';
+      }
 
       if (carrinho.length > 0) {
         cartBar.style.display = 'flex';
         // PRIORIDADE ABSOLUTA PARA A SACOLA: Se há itens adicionados, esconde a barra de rastreamento para não cobrir a sacola!
         if (trackerBar) trackerBar.style.display = 'none';
 
-        const total = carrinho.reduce((acc, item) => acc + item.preco, 0);
         document.getElementById('cartCount').innerText = `${carrinho.length} ${carrinho.length === 1 ? 'item' : 'itens'}`;
         document.getElementById('cartTotalBar').innerText = 'R$ ' + total.toFixed(2).replace('.', ',');
       } else {
@@ -2659,26 +2766,38 @@
     function trocarAbaPrincipal(aba) {
       const btnCardapio = document.getElementById('btnTabCardapio');
       const btnPedidos = document.getElementById('btnTabPedidos');
+      const btnSidebarPedidos = document.getElementById('sidebarBtnPedidos');
+      const btnDeskPedidos = document.getElementById('btnTabPedidosDesk');
       const viewCardapio = document.getElementById('viewCardapio');
       const viewPedidos = document.getElementById('viewPedidos');
+      const catNavMobile = document.getElementById('catNav');
 
-      const catNav = document.getElementById('catNav');
       if (aba === 'pedidos') {
-        btnCardapio.classList.remove('active');
-        btnPedidos.classList.add('active');
+        if (btnCardapio) btnCardapio.classList.remove('active');
+        if (btnPedidos) btnPedidos.classList.add('active');
+        if (btnSidebarPedidos) btnSidebarPedidos.classList.add('active');
+        if (btnDeskPedidos) btnDeskPedidos.classList.add('primary');
+        document.querySelectorAll('.sidebar-nav-item:not(#sidebarBtnPedidos)').forEach(b => b.classList.remove('active'));
 
-        viewCardapio.style.display = 'none';
-        viewPedidos.style.display = 'block';
-        if (catNav) catNav.style.display = 'none';
+        if (viewCardapio) viewCardapio.style.display = 'none';
+        if (viewPedidos) viewPedidos.style.display = 'block';
+        if (catNavMobile) catNavMobile.style.display = 'none';
+
         window.scrollTo({ top: 0, behavior: 'smooth' });
         renderizarAbaMeusPedidos();
       } else {
-        btnPedidos.classList.remove('active');
-        btnCardapio.classList.add('active');
+        if (btnPedidos) btnPedidos.classList.remove('active');
+        if (btnCardapio) btnCardapio.classList.add('active');
+        if (btnSidebarPedidos) btnSidebarPedidos.classList.remove('active');
+        if (btnDeskPedidos) btnDeskPedidos.classList.remove('primary');
 
-        viewCardapio.style.display = 'block';
-        viewPedidos.style.display = 'none';
-        if (catNav) catNav.style.display = 'flex';
+        if (viewCardapio) viewCardapio.style.display = 'block';
+        if (viewPedidos) viewPedidos.style.display = 'none';
+        if (catNavMobile) catNavMobile.style.display = 'flex';
+
+        // Ativa primeira categoria na sidebar
+        const firstSideItem = document.querySelector('.sidebar-nav-item:not(#sidebarBtnPedidos)');
+        if (firstSideItem) firstSideItem.classList.add('active');
       }
     }
 
@@ -2692,16 +2811,20 @@
       try {
         meusPedidos = JSON.parse(localStorage.getItem('mordidaco_meus_pedidos') || '[]');
       } catch(e) {}
-      const badge = document.getElementById('badgePedidosAtivos');
       const ativos = meusPedidos.filter(p => p.status === 'Pendente' || p.status === 'Em Preparo' || p.status === 'Saiu p/ Entrega');
-      if (badge) {
-        if (ativos.length > 0) {
-          badge.style.display = 'inline-block';
-          badge.innerText = ativos.length;
-        } else {
-          badge.style.display = 'none';
+      const count = ativos.length;
+
+      ['badgePedidosAtivos', 'badgePedidosSidebar', 'badgePedidosTop', 'badgePedidosMobile'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          if (count > 0) {
+            el.style.display = 'inline-block';
+            el.innerText = count;
+          } else {
+            el.style.display = 'none';
+          }
         }
-      }
+      });
     }
 
     let pedidoSelecionadoId = null;
