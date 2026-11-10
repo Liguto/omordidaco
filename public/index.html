@@ -875,7 +875,7 @@
         </a>
         <div class="header-chip">📍 Jardim Tamoio</div>
         <div class="header-chip">⏱️ 35 - 50 min</div>
-        <div class="header-chip">🛵 Entrega R$ 5,00</div>
+        <div class="header-chip" style="font-weight: 800; background: #fffbeb; color: #92400e; border-color: #fde68a;">🛵 Entrega Direta: até 2,5km (R$ 5,00)</div>
         <div class="header-chip">💳 Pagto na Entrega</div>
       </div>
     </div>
@@ -903,6 +903,20 @@
         </div>
       </div>
     </a>
+  </div>
+
+  <!-- BARRA DE AVISO DE RAIO DE ENTREGA & DIRECIONAMENTO IFOOD / 99FOOD -->
+  <div style="max-width: 900px; margin: 4px auto 10px auto; padding: 0 16px;">
+    <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 12px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: #92400e; line-height: 1.35; box-shadow: 0 1px 4px rgba(0,0,0,0.03);">
+      <span style="font-size: 20px; flex-shrink: 0;">📍</span>
+      <div>
+        <strong style="color: #78350f;">Aviso de Entrega Direta (Site):</strong>
+        Nosso delivery próprio pelo site atende exclusivamente em um <strong>raio de até 2,5km do Jardim Tamoio</strong> (Tamoio, Swift, Nova Europa, São Gabriel, Vila Lemos, Cura D'Ars, Jambeiro, etc.).
+        <span style="display: block; margin-top: 3px; color: #b45309;">
+          👉 <em>Mora em bairros mais distantes?</em> Peça pelo nosso <strong>iFood</strong> ou <strong>99Food</strong> (com entrega parceira) ou escolha <strong>"Retirada no Balcão"</strong> com frete grátis!
+        </span>
+      </div>
+    </div>
   </div>
 
   <!-- NAVEGAÇÃO PRINCIPAL (CARDÁPIO vs MEUS PEDIDOS) -->
@@ -1101,6 +1115,15 @@
         </div>
       </div>
 
+      <!-- AVISO DE RAIO DE 2.5KM NO CHECKOUT -->
+      <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 10px; padding: 10px 12px; margin-bottom: 14px; font-size: 12.5px; color: #92400e; display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 20px; flex-shrink: 0;">🛵</span>
+        <div>
+          <strong>Entrega própria de carro exclusiva para até 2,5km do Jardim Tamoio.</strong><br>
+          Se o seu endereço for em bairros mais distantes, peça com entrega parceira pelo <strong>iFood</strong> ou <strong>99Food</strong>, ou retire no balcão com frete grátis!
+        </div>
+      </div>
+
       <!-- DADOS DO CLIENTE E ENTREGA -->
       <h4 style="font-size: 15px; font-weight: 800; margin-bottom: 10px; color: var(--dark);">📍 Dados para Entrega</h4>
       
@@ -1186,16 +1209,19 @@
           <span style="font-size: 18px;">📍</span> <span>Endereço Fora do Raio de Entrega Direta (2,5km)</span>
         </div>
         <p style="font-size: 12.5px; line-height: 1.45; margin-bottom: 12px; color: #78350f;">
-          No momento, nossas entregas diretas de carro são exclusivas para o raio de até 2,5km do <strong>Jardim Tamoio</strong> (Tamoio, Swift, São Gabriel, Santa Eudóxia, Jambeiro, etc.) para garantir que seu cachorro-quente chegue pelando de quente!
+          No momento, nossas entregas diretas de carro são exclusivas para o raio de até 2,5km do <strong>Jardim Tamoio</strong> (Tamoio, Swift, São Gabriel, Santa Eudóxia, Jambeiro, Vila Lemos, etc.) para garantir que seu cachorro-quente chegue pelando de quente!
           <br><br>
-          Para o seu bairro (<strong id="nomeBairroDistante" style="text-decoration: underline;"></strong>), peça agora mesmo pelo nosso <strong>iFood Oficial</strong> com entrega expressa por motoboy parceiro!
+          Para o seu bairro (<strong id="nomeBairroDistante" style="text-decoration: underline;"></strong>), peça agora mesmo com entrega parceira pelo nosso <strong>iFood</strong> ou <strong>99Food</strong>, ou escolha retirar no balcão com frete grátis!
         </p>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-          <a href="https://www.ifood.com.br" target="_blank" style="flex: 1; min-width: 160px; background: #ea1d2c; color: #ffffff; text-align: center; padding: 11px 14px; border-radius: 8px; font-weight: 800; font-size: 13px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 3px 8px rgba(234, 29, 44, 0.3);">
-            🔴 Pedir pelo iFood Oficial
+          <a href="https://www.ifood.com.br" target="_blank" style="flex: 1; min-width: 140px; background: #ea1d2c; color: #ffffff; text-align: center; padding: 11px 14px; border-radius: 8px; font-weight: 800; font-size: 13px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 3px 8px rgba(234, 29, 44, 0.3);">
+            🔴 Pedir pelo iFood
+          </a>
+          <a href="https://food.99app.com" target="_blank" style="flex: 1; min-width: 140px; background: #f59e0b; color: #0f172a; text-align: center; padding: 11px 14px; border-radius: 8px; font-weight: 900; font-size: 13px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 3px 8px rgba(245, 158, 11, 0.3);">
+            🟡 Pedir no 99Food
           </a>
           <button type="button" onclick="selecionarRetiradaBalcao()" style="background: #ffffff; color: #0f172a; border: 1.5px solid #cbd5e1; padding: 11px 14px; border-radius: 8px; font-weight: 700; font-size: 12.5px; cursor: pointer;">
-            🚶 Vou Retirar no Balcão
+            🚶 Retirar no Balcão
           </button>
         </div>
       </div>
@@ -1948,7 +1974,7 @@
               const nomeBairroEl = document.getElementById('nomeBairroDistante');
               if (nomeBairroEl) nomeBairroEl.innerText = data.bairro || 'seu endereço';
               if (btnConfirmar) btnConfirmar.style.display = 'none';
-              statusEl.innerHTML = `⚠️ ${data.bairro}: fora do raio de 2,5km. Peça pelo iFood ou Retire no Balcão.`;
+              statusEl.innerHTML = `⚠️ ${data.bairro}: fora do raio de 2,5km. Peça pelo iFood / 99Food ou Retire no Balcão.`;
               statusEl.style.color = '#d97706';
             }
 
@@ -2418,7 +2444,7 @@
       }
 
       if (!isRetiradaBalcao && !ehBairroPermitido(bairro)) {
-        alert('No momento, nossas entregas diretas de carro são exclusivas para o raio de até 2,5km do Jardim Tamoio. Por favor, opte por "Vou Retirar no Balcão" ou faça seu pedido através do nosso iFood oficial!');
+        alert('No momento, nossas entregas diretas de carro são exclusivas para o raio de até 2,5km do Jardim Tamoio. Para distâncias maiores, faça seu pedido através do iFood ou 99Food com entrega de motoboy parceiro, ou opte por "Vou Retirar no Balcão" com frete grátis!');
         return;
       }
 
