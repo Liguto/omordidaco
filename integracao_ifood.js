@@ -8,6 +8,7 @@ const IFOOD_CLIENT_SECRET = process.env.IFOOD_CLIENT_SECRET || 'n912lea0o0sa1zx1
 const IFOOD_MERCHANT_ID = process.env.IFOOD_MERCHANT_ID || '1c6a85ea-2063-4bb9-a2ab-a198c2d9946b';
 
 const BASE_URL_AUTH = 'https://merchant-api.ifood.com.br/authentication/v1.0';
+const BASE_URL_EVENTS = 'https://merchant-api.ifood.com.br/events/v1.0';
 const BASE_URL_ORDER = 'https://merchant-api.ifood.com.br/order/v1.0';
 
 let tokenEmCache = null;
@@ -57,7 +58,7 @@ async function obterTokenAcesso() {
 async function buscarEventosIFood() {
   const token = await obterTokenAcesso();
   try {
-    const res = await fetch(`${BASE_URL_ORDER}/events:polling`, {
+    const res = await fetch(`${BASE_URL_EVENTS}/events:polling`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'x-polling-merchants': IFOOD_MERCHANT_ID
@@ -91,7 +92,7 @@ async function confirmarEventosIFood(eventos) {
   const payload = eventos.map(e => ({ id: e.id }));
 
   try {
-    const res = await fetch(`${BASE_URL_ORDER}/events/acknowledgment`, {
+    const res = await fetch(`${BASE_URL_EVENTS}/events/acknowledgment`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
