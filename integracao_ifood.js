@@ -192,6 +192,21 @@ async function iniciarPreparoNoIFood(orderId) {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}` }
     });
+    registrarLog('ACTION', `Pedido ${orderId} iniciado preparo no iFood (/startPreparation)`);
+  } catch (e) {}
+}
+
+/**
+ * Notifica iFood que o pedido está pronto para coleta (READY_TO_PICKUP)
+ */
+async function prontoParaColetaNoIFood(orderId) {
+  const token = await obterTokenAcesso();
+  try {
+    await fetch(`${BASE_URL_ORDER}/orders/${orderId}/readyToPickup`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    registrarLog('ACTION', `Pedido ${orderId} pronto para retirada (/readyToPickup)`);
   } catch (e) {}
 }
 
@@ -201,10 +216,13 @@ async function iniciarPreparoNoIFood(orderId) {
 async function despacharPedidoNoIFood(orderId) {
   const token = await obterTokenAcesso();
   try {
+    // Conforme guia oficial iFood, sinaliza readyToPickup antes de despachar
+    await prontoParaColetaNoIFood(orderId);
     await fetch(`${BASE_URL_ORDER}/orders/${orderId}/dispatch`, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}` }
     });
+    registrarLog('ACTION', `Pedido ${orderId} despachado com motoboy (/dispatch)`);
   } catch (e) {}
 }
 
@@ -399,6 +417,7 @@ module.exports = {
   buscarDetalhesPedido,
   confirmarPedidoIFood,
   iniciarPreparoNoIFood,
+  prontoParaColetaNoIFood,
   despacharPedidoNoIFood,
   converterPedidoIFoodParaInterno,
   iniciarRadarIFood,
