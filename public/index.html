@@ -1239,7 +1239,7 @@
 
   <script>
     // PURGA AUTOMÁTICA DE CACHES LOCAIS LEGADOS PARA AMBIENTE 100% LIMPO
-    const AMBIENTE_VERSAO = '20261109_clean_reset_v3';
+    const AMBIENTE_VERSAO = '20261109_clean_reset_v4';
     try {
       if (localStorage.getItem('mordidaco_versao_limpa') !== AMBIENTE_VERSAO) {
         localStorage.removeItem('mordidaco_pedidos_cache');
@@ -1247,6 +1247,17 @@
         localStorage.removeItem('mordidaco_ultimo_pedido_id');
         localStorage.setItem('mordidaco_meus_pedidos', '[]');
         localStorage.setItem('mordidaco_versao_limpa', AMBIENTE_VERSAO);
+      }
+    } catch(e) {}
+
+    // BLINDAGEM: Garante que NENHUM pedido do iFood seja guardado no site do cliente
+    try {
+      let meus = JSON.parse(localStorage.getItem('mordidaco_meus_pedidos') || '[]');
+      meus = meus.filter(p => p && p.id && !String(p.id).startsWith('ifood_') && p.origem !== 'iFood');
+      localStorage.setItem('mordidaco_meus_pedidos', JSON.stringify(meus));
+      const ult = localStorage.getItem('mordidaco_ultimo_pedido_id');
+      if (ult && String(ult).startsWith('ifood_')) {
+        localStorage.removeItem('mordidaco_ultimo_pedido_id');
       }
     } catch(e) {}
 
@@ -2149,6 +2160,12 @@
       }
 
       if (!dados.id && !dados.numero) return;
+
+      // NUNCA PROCESSA PEDIDOS DO IFOOD NO SITE DO CLIENTE
+      if (String(dados.id).startsWith('ifood_') || dados.origem === 'iFood') {
+        return;
+      }
+
       const ts = Number(dados.statusAtualizadoEm) || 0;
 
       // Mescla com os dados salvos no navegador para NUNCA exibir undefined ou R$ 0,00
@@ -2161,8 +2178,13 @@
       const idx = meusPedidos.findIndex(p => p.id === dados.id || (p.numero && dados.numero && String(p.numero) === String(dados.numero)));
       const local = idx >= 0 ? meusPedidos[idx] : null;
 
+      // Se o pedido NÃO pertence a este cliente / este navegador, NUNCA ADICIONA!
+      if (!local) {
+        return;
+      }
+
       // Se o status mudou (cozinha avançou para Preparo, Saiu p/ Entrega ou Entregue), SEMPRE ACEITA!
-      const statusMudou = !local || (local.status && dados.status && local.status !== dados.status);
+      const statusMudou = local.status && dados.status && local.status !== dados.status;
 
       // Descarta apenas se for exatamente o mesmo status E tiver timestamp estritamente mais antigo
       if (!statusMudou && ts > 0 && ultimoStatusAtualizadoEm > 0 && ts < ultimoStatusAtualizadoEm) {
@@ -2173,23 +2195,18 @@
         ultimoStatusAtualizadoEm = Math.max(ultimoStatusAtualizadoEm, ts);
       }
 
-      let pedidoMesclado = dados;
-      if (local) {
-        pedidoMesclado = {
-          ...local,
-          ...dados,
-          status: dados.status || local.status,
-          numero: dados.numero || local.numero,
-          cliente: dados.cliente || local.cliente,
-          entrega: dados.entrega || local.entrega,
-          pagamento: dados.pagamento || local.pagamento,
-          itens: (dados.itens && dados.itens.length > 0) ? dados.itens : (local.itens || []),
-          total: (dados.total && dados.total > 0) ? dados.total : (local.total || 0)
-        };
-        meusPedidos[idx] = pedidoMesclado;
-      } else {
-        meusPedidos.unshift(dados);
-      }
+      const pedidoMesclado = {
+        ...local,
+        ...dados,
+        status: dados.status || local.status,
+        numero: dados.numero || local.numero,
+        cliente: dados.cliente || local.cliente,
+        entrega: dados.entrega || local.entrega,
+        pagamento: dados.pagamento || local.pagamento,
+        itens: (dados.itens && dados.itens.length > 0) ? dados.itens : (local.itens || []),
+        total: (dados.total && dados.total > 0) ? dados.total : (local.total || 0)
+      };
+      meusPedidos[idx] = pedidoMesclado;
 
       try {
         localStorage.setItem('mordidaco_meus_pedidos', JSON.stringify(meusPedidos.slice(0, 30)));
@@ -2686,14 +2703,27 @@
         if ('BroadcastChannel' in window) {
           window.canalComunicacaoLocal = new BroadcastChannel('omordidaco_canal');
           window.canalComunicacaoLocal.onmessage = (ev) => {
-            if (ev.data && (ev.data.tipo === 'status_atualizado' || ev.data.tipo === 'novo_pedido')) {
-              const p = ev.data.pedido || {
-                id: ev.data.id,
-                status: ev.data.status,
-                statusAtualizadoEm: ev.data.statusAtualizadoEm,
-                numero: ev.data.numero
-              };
-              processarAtualizacaoPedido(p);
+            if (!ev.data) return;
+            if (ev.data.tipo === 'pedidos_resetados') {
+              processarAtualizacaoPedido(ev.data);
+              return;
+            }
+            if (ev.data.tipo === 'status_atualizado') {
+              if (String(ev.data.id).startsWith('ifood_')) return;
+              let meus = [];
+              try {
+                meus = JSON.parse(localStorage.getItem('mordidaco_meus_pedidos') || '[]');
+              } catch(e) {}
+              const ehMeu = meus.some(p => p.id === ev.data.id || (p.numero && ev.data.numero && String(p.numero) === String(ev.data.numero)));
+              if (ehMeu) {
+                const p = ev.data.pedido || {
+                  id: ev.data.id,
+                  status: ev.data.status,
+                  statusAtualizadoEm: ev.data.statusAtualizadoEm,
+                  numero: ev.data.numero
+                };
+                processarAtualizacaoPedido(p);
+              }
             }
           };
         }
@@ -2779,6 +2809,14 @@
         try {
           pedidoId = localStorage.getItem('mordidaco_ultimo_pedido_id');
         } catch(e) {}
+      }
+
+      // NUNCA busca pedidos do iFood pelo site do cliente
+      if (pedidoId && String(pedidoId).startsWith('ifood_')) {
+        try {
+          localStorage.removeItem('mordidaco_ultimo_pedido_id');
+        } catch(e) {}
+        pedidoId = null;
       }
 
       if (pedidoId) {
