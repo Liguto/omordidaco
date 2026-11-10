@@ -547,7 +547,7 @@ const CARDAPIO = {
         {
           id: "dog-tradicional",
           nome: "Dog Tradicional do Mordidaço",
-          descricao: "Purê de batata artesanal cremoso, 1 salsicha suculenta no molho caseiro, milho, vinagrete suave, maionese verde da casa, batata palha e queijo parmesão ralado na hora. Escolha no Pão macio ou no Prato (Marmitinha 500ml).",
+          descricao: "Purê artesanal cremoso, 1 salsicha Sadia no molho caseiro refogado, milho, vinagrete suave, maionese verde da casa, batata palha e queijo parmesão fresco ralado na hora.",
           preco: 16.00,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -557,7 +557,7 @@ const CARDAPIO = {
         {
           id: "dog-duplo",
           nome: "Dog Duplo Especial do Mordidaço",
-          descricao: "O campeão de vendas! 2 salsichas, dobro de queijo muçarela (2 fatias generosas derretidas no calor do molho), purê cremoso artesanal, molho caseiro, milho, vinagrete, maionese verde, batata palha e chuva de parmesão ralado.",
+          descricao: "O campeão de vendas! 2 salsichas Sadia, o verdadeiro dobro de queijo muçarela derretida no calor do molho, purê cremoso artesanal, milho, vinagrete, maionese verde e chuva de parmesão ralado fresco.",
           preco: 20.00,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -567,7 +567,7 @@ const CARDAPIO = {
         {
           id: "dog-bacon",
           nome: "Dog Bacon Supreme",
-          descricao: "2 salsichas, muito bacon em cubos dourados e crocantes, queijo muçarela derretido no molho, purê de batata artesanal, molho caseiro e batata palha crocante.",
+          descricao: "2 salsichas Sadia, generosa cobertura de bacon crocante em cubos dourados, muçarela derretida no molho, purê artesanal cremoso e batata palha crocante.",
           preco: 24.00,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -577,7 +577,7 @@ const CARDAPIO = {
         {
           id: "dog-frango",
           nome: "Dog Frango Cremoso c/ Catupiry",
-          descricao: "1 salsicha, peito de frango desfiado artesanal bem temperado, Catupiry original em espiral generosa, purê de batata artesanal e batata palha crocante.",
+          descricao: "1 salsicha Sadia, peito de frango desfiado temperadinho, o Legítimo Catupiry® Original cremoso (sem amido), purê de batata artesanal e batata palha crocante.",
           preco: 25.00,
           adicionalPrato: 2.00,
           permiteFormato: true,
