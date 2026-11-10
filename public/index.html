@@ -1138,6 +1138,9 @@
         <button class="btn-close" onclick="fecharModal('successModal')" title="Fechar">✕</button>
       </div>
 
+      <!-- SELETOR RÁPIDO DE PEDIDOS NO MODAL (SE HOUVER MAIS DE 1) -->
+      <div id="modalOrderSelectorChips" style="display: none; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 12px; -webkit-overflow-scrolling: touch;"></div>
+
       <div class="tracker-card">
         <div class="tracker-header">
           <div>
@@ -1877,6 +1880,34 @@
           btnConfirmar.style.display = 'none';
         }
       }
+
+      // Atualiza seletor de pedidos dentro do modal (se houver mais de 1 pedido)
+      const modalChips = document.getElementById('modalOrderSelectorChips');
+      if (modalChips) {
+        let meus = [];
+        try {
+          meus = JSON.parse(localStorage.getItem('mordidaco_meus_pedidos') || '[]');
+        } catch(e) {}
+
+        if (meus.length > 1) {
+          modalChips.style.display = 'flex';
+          modalChips.innerHTML = meus.map(p => {
+            const isSel = p.id === pedido.id || String(p.numero) === String(pedido.numero);
+            let icone = '📝';
+            if (p.status === 'Em Preparo') icone = '🔥';
+            else if (p.status === 'Saiu p/ Entrega') icone = '🛵';
+            else if (p.status === 'Entregue') icone = '✅';
+            return `
+              <button type="button" onclick="selecionarPedidoParaRastreio('${p.id}')" style="display: flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; border: ${isSel ? '2px solid var(--primary)' : '1px solid #cbd5e1'}; background: ${isSel ? '#fffbeb' : '#ffffff'}; color: ${isSel ? '#92400e' : '#0f172a'}; box-shadow: ${isSel ? '0 2px 6px rgba(217, 119, 6, 0.2)' : 'none'};">
+                <span>${icone} #${p.numero || '...'}</span>
+                <span style="font-size: 10px; opacity: 0.8;">${p.status}</span>
+              </button>
+            `;
+          }).join('');
+        } else {
+          modalChips.style.display = 'none';
+        }
+      }
     }
 
     // CONFIRMAÇÃO DE ENTREGA PELO PRÓPRIO CLIENTE
@@ -2240,6 +2271,32 @@
       }
     }
 
+    let pedidoSelecionadoId = null;
+
+    function selecionarPedidoParaRastreio(id) {
+      pedidoSelecionadoId = id;
+      ultimoPedidoCriadoId = id;
+      try {
+        localStorage.setItem('mordidaco_ultimo_pedido_id', id);
+      } catch(e) {}
+
+      // Reativa polling para o pedido escolhido
+      iniciarLoopSincronizacao(id);
+
+      let meus = [];
+      try {
+        meus = JSON.parse(localStorage.getItem('mordidaco_meus_pedidos') || '[]');
+      } catch(e) {}
+      const p = meus.find(item => item.id === id);
+      if (p) {
+        atualizarVisualizacaoRastreamento(p);
+      }
+
+      renderizarAbaMeusPedidos();
+      const el = document.getElementById('secaoPedidoAtivo');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     function renderizarAbaMeusPedidos() {
       const containerAtivo = document.getElementById('secaoPedidoAtivo');
       const containerHistorico = document.getElementById('secaoHistoricoPedidos');
@@ -2263,115 +2320,156 @@
         return;
       }
 
-      // Procura pedido ativo mais recente
-      const ativo = meusPedidos.find(p => p.status === 'Pendente' || p.status === 'Em Preparo' || p.status === 'Saiu p/ Entrega');
+      // Determina qual pedido exibir no rastreador
+      let pedidoAtual = null;
+      if (pedidoSelecionadoId) {
+        pedidoAtual = meusPedidos.find(p => p.id === pedidoSelecionadoId);
+      }
+      if (!pedidoAtual) {
+        // Tenta achar o primeiro ativo
+        pedidoAtual = meusPedidos.find(p => p.status === 'Pendente' || p.status === 'Em Preparo' || p.status === 'Saiu p/ Entrega');
+      }
+      if (!pedidoAtual) {
+        pedidoAtual = meusPedidos[0];
+      }
+      pedidoSelecionadoId = pedidoAtual.id;
 
-      if (ativo) {
-        let badgeClass = 'badge-preparo';
-        let badgeTxt = '🔥 Na Cozinha';
-        let step1 = 'completed', step2 = 'active', step3 = '', step4 = '';
-        let msgTitulo = 'Seu pedido está sendo montado com todo capricho!';
-        let msgDesc = 'Nossa cozinha já está no preparo dos ingredientes frescos, purê de ouro e muçarela derretida.';
-
-        if (ativo.status === 'Pendente') {
-          badgeClass = 'badge-pendente';
-          badgeTxt = '📝 Pedido Recebido';
-          step1 = 'active'; step2 = '';
-          msgTitulo = 'Pedido recebido com sucesso!';
-          msgDesc = 'O alarme já tocou na cozinha e nossa equipe já está conferindo sua comanda.';
-        } else if (ativo.status === 'Saiu p/ Entrega') {
-          badgeClass = 'badge-saiu';
-          badgeTxt = '🛵 Com o Motoboy';
-          step1 = 'completed'; step2 = 'completed'; step3 = 'active';
-          msgTitulo = 'O motoboy acabou de sair com sua entrega!';
-          msgDesc = `Seu hot dog saiu quentinho na sacola térmica a caminho de ${ativo.entrega ? ativo.entrega.endereco : 'seu endereço'}. Fique atento(a)!`;
-        }
-
-        containerAtivo.innerHTML = `
-          <div class="tracker-card" style="border: 2px solid var(--primary); box-shadow: 0 8px 25px rgba(217, 119, 6, 0.12);">
-            <div class="tracker-header">
-              <div>
-                <span style="font-size: 11px; font-weight: 800; color: var(--primary-dark); text-transform: uppercase;">⚡ Acompanhamento ao Vivo</span>
-                <h3 style="font-size: 20px; font-weight: 900; color: var(--dark); margin: 2px 0;">Pedido #${ativo.numero || '...'}</h3>
-                <span style="font-size: 12px; color: var(--text-muted);">${ativo.dataHora || 'Registrado agora'}</span>
-              </div>
-              <span class="tracker-badge ${badgeClass}">${badgeTxt}</span>
+      // 1. Barra de Seleção de Pedidos (Aparece se houver mais de 1 pedido)
+      let seletorHtml = '';
+      if (meusPedidos.length > 1) {
+        seletorHtml = `
+          <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 12px 14px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+            <div style="font-size: 11.5px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+              <span>📦 SEUS PEDIDOS (${meusPedidos.length}):</span>
+              <span style="color: var(--primary); font-weight: 700; font-size: 11px;">Toque para alternar o status</span>
             </div>
+            <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch;">
+              ${meusPedidos.map(p => {
+                const isSel = p.id === pedidoAtual.id;
+                let icone = '📝';
+                let badgeBg = '#fef3c7';
+                let badgeCor = '#b45309';
+                if (p.status === 'Em Preparo') { icone = '🔥'; badgeBg = '#dbeafe'; badgeCor = '#1d4ed8'; }
+                else if (p.status === 'Saiu p/ Entrega') { icone = '🛵'; badgeBg = '#f3e8ff'; badgeCor = '#6b21a8'; }
+                else if (p.status === 'Entregue') { icone = '✅'; badgeBg = '#dcfce7'; badgeCor = '#15803d'; }
 
-            <div class="tracker-timeline">
-              <div class="tracker-step ${step1}">
-                <div class="step-icon-box">📝</div>
-                <div class="step-label">Recebido</div>
-              </div>
-              <div class="tracker-step ${step2}">
-                <div class="step-icon-box">🔥</div>
-                <div class="step-label">Na Cozinha</div>
-              </div>
-              <div class="tracker-step ${step3}">
-                <div class="step-icon-box">🛵</div>
-                <div class="step-label">Com Motoboy</div>
-              </div>
-              <div class="tracker-step ${step4}">
-                <div class="step-icon-box">✅</div>
-                <div class="step-label">Entregue</div>
-              </div>
+                return `
+                  <button type="button" onclick="selecionarPedidoParaRastreio('${p.id}')" style="display: flex; align-items: center; gap: 7px; padding: 8px 14px; border-radius: 12px; font-size: 12.5px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: all 0.2s; border: ${isSel ? '2px solid var(--primary)' : '1px solid #cbd5e1'}; background: ${isSel ? '#fffbeb' : '#ffffff'}; color: ${isSel ? '#92400e' : '#0f172a'}; box-shadow: ${isSel ? '0 3px 8px rgba(217, 119, 6, 0.2)' : 'none'};">
+                    <span>${icone} Pedido #${p.numero || '...'}</span>
+                    <span style="font-size: 10.5px; padding: 2px 6px; border-radius: 6px; background: ${badgeBg}; color: ${badgeCor}; font-weight: 700;">${p.status}</span>
+                  </button>
+                `;
+              }).join('')}
             </div>
-
-            <div class="tracker-status-box" style="margin-bottom: 14px;">
-              <span style="font-size: 22px;">⚡</span>
-              <div style="font-size: 13px; line-height: 1.4;">
-                <strong style="color: var(--dark); display: block; margin-bottom: 2px;">${msgTitulo}</strong>
-                <span>${msgDesc}</span>
-              </div>
-            </div>
-
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; font-size: 13px; margin-bottom: 12px;">
-              <div style="margin-bottom: 4px;"><strong>📍 Endereço:</strong> ${ativo.entrega ? ativo.entrega.endereco : 'Balcão / Retirada'}</div>
-              <div style="margin-bottom: 4px;"><strong>💵 Pagamento:</strong> ${ativo.pagamento || 'Na Entrega'}</div>
-              <div style="display: flex; justify-content: space-between; border-top: 1px dashed #cbd5e1; padding-top: 6px; margin-top: 6px; font-weight: 700;">
-                <span>Total a pagar:</span>
-                <strong style="color: #15803d; font-size: 15px;">R$ ${Number(ativo.total || 0).toFixed(2).replace('.', ',')}</strong>
-              </div>
-            </div>
-
-            ${(ativo.status === 'Saiu p/ Entrega' || ativo.status === 'Em Preparo') ? `
-              <button onclick="confirmarEntregaPeloCliente('${ativo.id}')" style="display: block; width: 100%; background: #16a34a; color: #ffffff; border: none; padding: 13px; border-radius: 10px; font-size: 14.5px; font-weight: 800; cursor: pointer; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3); transition: transform 0.15s;">
-                ✅ Já Recebi meu Pedido! (Confirmar Entrega)
-              </button>
-            ` : ''}
-
-            <button type="button" onclick="limparRastreamentoCliente('${ativo.id}')" style="display: block; width: 100%; background: none; color: #dc2626; border: 1.5px dashed #fca5a5; padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; margin-bottom: 12px;">
-              🗑️ Cancelar / Limpar este Pedido da Tela
-            </button>
-
-            <div style="text-align: center; font-size: 11.5px; color: #64748b;">
-              🟢 <em>Sincronizado automaticamente em tempo real com a bancada da cozinha.</em>
-            </div>
-          </div>
-        `;
-      } else {
-        containerAtivo.innerHTML = `
-          <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 14px; padding: 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <span style="font-size: 26px;">🎉</span>
-              <div>
-                <strong style="color: #166534; font-size: 14.5px; display: block;">Nenhum pedido em rota no momento</strong>
-                <span style="color: #15803d; font-size: 12.5px;">Seus últimos pedidos foram concluídos com sucesso!</span>
-              </div>
-            </div>
-            <button onclick="trocarAbaPrincipal('cardapio')" style="background: #16a34a; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 800; font-size: 12.5px; cursor: pointer;">
-              Novo Pedido ➔
-            </button>
           </div>
         `;
       }
 
-      // Histórico
+      // 2. Card Principal de Rastreamento
+      let badgeClass = 'badge-preparo';
+      let badgeTxt = '🔥 Na Cozinha';
+      let step1 = 'completed', step2 = 'active', step3 = '', step4 = '';
+      let msgTitulo = 'Seu pedido está sendo montado com todo capricho!';
+      let msgDesc = 'Nossa cozinha já está no preparo dos ingredientes frescos, purê de ouro e muçarela derretida.';
+
+      if (pedidoAtual.status === 'Pendente') {
+        badgeClass = 'badge-pendente';
+        badgeTxt = '📝 Pedido Recebido';
+        step1 = 'active'; step2 = '';
+        msgTitulo = 'Pedido recebido com sucesso!';
+        msgDesc = 'O alarme já tocou na cozinha e nossa equipe já está conferindo sua comanda.';
+      } else if (pedidoAtual.status === 'Saiu p/ Entrega') {
+        badgeClass = 'badge-saiu';
+        badgeTxt = '🛵 Com o Motoboy';
+        step1 = 'completed'; step2 = 'completed'; step3 = 'active';
+        msgTitulo = 'O motoboy acabou de sair com sua entrega!';
+        msgDesc = `Seu hot dog saiu quentinho na sacola térmica a caminho de ${pedidoAtual.entrega ? pedidoAtual.entrega.endereco : 'seu endereço'}. Fique atento(a)!`;
+      } else if (pedidoAtual.status === 'Entregue') {
+        badgeClass = 'badge-entregue';
+        badgeTxt = '✅ Entregue';
+        step1 = 'completed'; step2 = 'completed'; step3 = 'completed'; step4 = 'completed active';
+        msgTitulo = 'Pedido entregue com sucesso!';
+        msgDesc = 'Esperamos que você saboreie cada mordida! Bom apetite!';
+      }
+
+      let cardTrackerHtml = `
+        <div class="tracker-card" style="border: 2px solid var(--primary); box-shadow: 0 8px 25px rgba(217, 119, 6, 0.12);">
+          <div class="tracker-header">
+            <div>
+              <span style="font-size: 11px; font-weight: 800; color: var(--primary-dark); text-transform: uppercase;">⚡ Acompanhamento ao Vivo</span>
+              <h3 style="font-size: 20px; font-weight: 900; color: var(--dark); margin: 2px 0;">Pedido #${pedidoAtual.numero || '...'}</h3>
+              <span style="font-size: 12px; color: var(--text-muted);">${pedidoAtual.dataHora || 'Registrado agora'}</span>
+            </div>
+            <span class="tracker-badge ${badgeClass}">${badgeTxt}</span>
+          </div>
+
+          <div class="tracker-timeline">
+            <div class="tracker-step ${step1}">
+              <div class="step-icon-box">📝</div>
+              <div class="step-label">Recebido</div>
+            </div>
+            <div class="tracker-step ${step2}">
+              <div class="step-icon-box">🔥</div>
+              <div class="step-label">Na Cozinha</div>
+            </div>
+            <div class="tracker-step ${step3}">
+              <div class="step-icon-box">🛵</div>
+              <div class="step-label">Com Motoboy</div>
+            </div>
+            <div class="tracker-step ${step4}">
+              <div class="step-icon-box">✅</div>
+              <div class="step-label">Entregue</div>
+            </div>
+          </div>
+
+          <div class="tracker-status-box ${pedidoAtual.status === 'Entregue' ? 'entregue' : (pedidoAtual.status === 'Saiu p/ Entrega' ? 'saiu' : (pedidoAtual.status === 'Pendente' ? 'pendente' : 'preparo'))}" style="margin-bottom: 14px;">
+            <span style="font-size: 22px;">${pedidoAtual.status === 'Entregue' ? '🎉' : (pedidoAtual.status === 'Saiu p/ Entrega' ? '🛵' : (pedidoAtual.status === 'Pendente' ? '📝' : '🔥'))}</span>
+            <div style="font-size: 13px; line-height: 1.4;">
+              <strong style="color: var(--dark); display: block; margin-bottom: 2px;">${msgTitulo}</strong>
+              <span>${msgDesc}</span>
+            </div>
+          </div>
+
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; font-size: 13px; margin-bottom: 12px;">
+            <div style="margin-bottom: 4px;"><strong>📍 Endereço:</strong> ${pedidoAtual.entrega ? pedidoAtual.entrega.endereco : 'Balcão / Retirada'}</div>
+            <div style="margin-bottom: 4px;"><strong>💵 Pagamento:</strong> ${pedidoAtual.pagamento || 'Na Entrega'}</div>
+            <div style="display: flex; justify-content: space-between; border-top: 1px dashed #cbd5e1; padding-top: 6px; margin-top: 6px; font-weight: 700;">
+              <span>Total a pagar:</span>
+              <strong style="color: #15803d; font-size: 15px;">R$ ${Number(pedidoAtual.total || 0).toFixed(2).replace('.', ',')}</strong>
+            </div>
+          </div>
+
+          ${(pedidoAtual.status === 'Saiu p/ Entrega' || pedidoAtual.status === 'Em Preparo') ? `
+            <button onclick="confirmarEntregaPeloCliente('${pedidoAtual.id}')" style="display: block; width: 100%; background: #16a34a; color: #ffffff; border: none; padding: 13px; border-radius: 10px; font-size: 14.5px; font-weight: 800; cursor: pointer; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3); transition: transform 0.15s;">
+              ✅ Já Recebi meu Pedido! (Confirmar Entrega)
+            </button>
+          ` : ''}
+
+          ${pedidoAtual.status === 'Entregue' ? `
+            <button onclick="repetirPedido('${pedidoAtual.id}')" style="display: block; width: 100%; background: var(--primary); color: #ffffff; border: none; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 800; cursor: pointer; margin-bottom: 8px; box-shadow: 0 3px 10px rgba(217, 119, 6, 0.25);">
+              🔁 Pedir Novamente este Lanche
+            </button>
+          ` : ''}
+
+          <button type="button" onclick="limparRastreamentoCliente('${pedidoAtual.id}')" style="display: block; width: 100%; background: none; color: #dc2626; border: 1.5px dashed #fca5a5; padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; margin-bottom: 8px;">
+            🗑️ Limpar este Pedido da Tela
+          </button>
+
+          <div style="text-align: center; font-size: 11.5px; color: #64748b;">
+            🟢 <em>Sincronizado automaticamente em tempo real com a bancada da cozinha.</em>
+          </div>
+        </div>
+      `;
+
+      containerAtivo.innerHTML = seletorHtml + cardTrackerHtml;
+
+      // 3. Histórico de Pedidos
       let histHtml = '<h3 style="font-size: 17px; font-weight: 900; color: var(--dark); margin-bottom: 12px;">📜 Histórico de Pedidos Anteriores</h3>';
       meusPedidos.forEach(p => {
         let itensTexto = (p.itens || []).map(i => `${i.nome}${i.formato ? ' (' + i.formato + ')' : ''}`).join(', ');
+        const isSendoVisto = p.id === pedidoAtual.id;
         histHtml += `
-          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; margin-bottom: 12px; transition: box-shadow 0.2s;">
+          <div style="background: #ffffff; border: ${isSendoVisto ? '2px solid var(--primary)' : '1px solid #e2e8f0'}; border-radius: 14px; padding: 16px; margin-bottom: 12px; transition: box-shadow 0.2s; box-shadow: ${isSendoVisto ? '0 4px 15px rgba(217, 119, 6, 0.15)' : 'none'};">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
               <div>
                 <strong style="color: var(--dark); font-size: 15px;">Pedido #${p.numero || '...'}</strong>
@@ -2386,14 +2484,18 @@
             </p>
             <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #e2e8f0; padding-top: 10px;">
               <strong style="color: var(--dark); font-size: 15px;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</strong>
-              <button onclick="repetirPedido('${p.id}')" style="background: #f1f5f9; color: var(--dark); border: 1px solid #cbd5e1; padding: 6px 14px; border-radius: 8px; font-weight: 700; font-size: 12.5px; cursor: pointer;">
-                🔁 Pedir Novamente
-              </button>
+              <div style="display: flex; gap: 8px;">
+                <button type="button" onclick="selecionarPedidoParaRastreio('${p.id}')" style="background: ${isSendoVisto ? 'var(--dark)' : '#f1f5f9'}; color: ${isSendoVisto ? '#ffffff' : 'var(--dark)'}; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer;">
+                  ${isSendoVisto ? '👁️ Acompanhando' : '👁️ Ver Rastreio'}
+                </button>
+                <button type="button" onclick="repetirPedido('${p.id}')" style="background: #ffffff; color: var(--primary-dark); border: 1px solid var(--primary); padding: 6px 12px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer;">
+                  🔁 Pedir Novamente
+                </button>
+              </div>
             </div>
           </div>
         `;
       });
-
       containerHistorico.innerHTML = histHtml;
     }
 
