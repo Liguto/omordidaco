@@ -620,18 +620,46 @@ app.get(['/api/cardapio', '/cardapio'], (req, res) => {
   res.json(CARDAPIO);
 });
 
+// Desmascara produtos e cliente de pedidos vindos do Sandbox do iFood
+function desmascararPedidoIFoodSeNecessario(p) {
+  if (!p || p.origem !== 'iFood' || !Array.isArray(p.itens)) return p;
+  const MAPA = {
+    49.90: 'Combo Casal do Mordidaço',
+    69.90: 'Combo Família do Tamoio',
+    27.90: 'Dog Duplo Especial do Mordidaço',
+    21.90: 'Dog Tradicional do Mordidaço',
+    29.90: 'Dog Bacon Supreme',
+    6.00: 'Refrigerante Coca-Cola (Lata 350ml)',
+    12.00: 'Refrigerante Guaraná Antarctica (Garrafa 2L)',
+    14.00: 'Refrigerante Coca-Cola Original (Garrafa 2L)'
+  };
+  p.itens.forEach(i => {
+    if (i.nome && (i.nome.includes('PEDIDO DE TESTE') || i.nome.includes('PRODUTO 1') || i.nome.includes('PRODUTO 2'))) {
+      const precoUnit = Number(i.preco || 0);
+      if (MAPA[precoUnit]) i.nome = MAPA[precoUnit];
+      else if (precoUnit === 31.9 || precoUnit === 29.9) i.nome = 'Dog Bacon Supreme';
+      else if (precoUnit === 51.9 || precoUnit === 49.9) i.nome = 'Combo Casal do Mordidaço';
+    }
+  });
+  if (p.cliente && p.cliente.nome && (p.cliente.nome.includes('PEDIDO DE TESTE') || p.cliente.nome.includes('CLIENTE DE TESTE'))) {
+    p.cliente.nome = 'Luiz Augusto (Cliente de Testes iFood)';
+  }
+  return p;
+}
+
 // Listar Pedidos (para a Cozinha)
 app.get(['/api/pedidos', '/pedidos'], async (req, res) => {
   recarregarPedidosDoDisco();
   if (KV_URL && KV_TOKEN) {
     await carregarPedidosNuvem();
   }
-  // Garante timestamp de atualização em pedidos legados
+  // Garante timestamp de atualização em pedidos legados e desmascara sandbox iFood
   pedidos.forEach(p => {
     if (!p.statusAtualizadoEm) {
       const tsFromId = Number((p.id || '').replace('PED-', ''));
       p.statusAtualizadoEm = !isNaN(tsFromId) && tsFromId > 0 ? tsFromId : 0;
     }
+    desmascararPedidoIFoodSeNecessario(p);
   });
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
   res.setHeader('Pragma', 'no-cache');

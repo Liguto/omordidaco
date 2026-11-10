@@ -232,6 +232,18 @@ async function despacharPedidoNoIFood(orderId) {
 function converterPedidoIFoodParaInterno(ifoodOrder) {
   if (!ifoodOrder) return null;
 
+  // Mapeamento para desmascarar a máscara de segurança "PEDIDO DE TESTE - NÃO ENTREGAR" do Sandbox do iFood
+  const MAPA_PRODUTOS_PRECO = {
+    49.90: 'Combo Casal do Mordidaço',
+    69.90: 'Combo Família do Tamoio',
+    27.90: 'Dog Duplo Especial do Mordidaço',
+    21.90: 'Dog Tradicional do Mordidaço',
+    29.90: 'Dog Bacon Supreme',
+    6.00: 'Refrigerante Coca-Cola (Lata 350ml)',
+    12.00: 'Refrigerante Guaraná Antarctica (Garrafa 2L)',
+    14.00: 'Refrigerante Coca-Cola Original (Garrafa 2L)'
+  };
+
   // Itens do pedido
   const itensFormatados = (ifoodOrder.items || []).map(item => {
     let formatoExtra = '';
@@ -239,8 +251,19 @@ function converterPedidoIFoodParaInterno(ifoodOrder) {
       formatoExtra = item.options.map(opt => `${opt.quantity > 1 ? opt.quantity + 'x ' : ''}${opt.name}`).join(' + ');
     }
 
+    let nomeFinal = item.name;
+    // Se o iFood Sandbox mascarou o nome como "PEDIDO DE TESTE - NÃO ENTREGAR", desmascara com o produto real
+    if (!nomeFinal || nomeFinal.includes('PEDIDO DE TESTE') || nomeFinal.includes('PRODUTO 1') || nomeFinal.includes('PRODUTO 2')) {
+      const precoUnit = Number(item.unitPrice || 0);
+      if (MAPA_PRODUTOS_PRECO[precoUnit]) {
+        nomeFinal = MAPA_PRODUTOS_PRECO[precoUnit];
+      } else if (precoUnit === 29.9) {
+        nomeFinal = 'Dog Bacon Supreme';
+      }
+    }
+
     return {
-      nome: item.name, // Mantém o nome puro sem prefixar quantidade duplicada
+      nome: nomeFinal,
       quantidade: item.quantity || 1,
       preco: Number(item.totalPrice || (item.unitPrice * (item.quantity || 1))) || 0,
       formato: formatoExtra || 'Tradicional',
@@ -267,6 +290,12 @@ function converterPedidoIFoodParaInterno(ifoodOrder) {
     }
   }
 
+  // Nome do cliente
+  let nomeCliente = ifoodOrder.customer?.name || 'Cliente iFood';
+  if (nomeCliente.includes('PEDIDO DE TESTE') || nomeCliente.includes('CLIENTE DE TESTE')) {
+    nomeCliente = 'Luiz Augusto (Cliente de Testes iFood)';
+  }
+
   // Pagamento (com desduplicação de registros)
   let pagamentoStr = 'Pago via iFood';
   if (ifoodOrder.payments && Array.isArray(ifoodOrder.payments.methods) && ifoodOrder.payments.methods.length > 0) {
@@ -288,7 +317,7 @@ function converterPedidoIFoodParaInterno(ifoodOrder) {
     origem: 'iFood',
     numero: ifoodOrder.displayId || String(ifoodOrder.id).slice(-4),
     cliente: {
-      nome: ifoodOrder.customer?.name || 'Cliente iFood',
+      nome: nomeCliente,
       telefone: ifoodOrder.customer?.phone?.number ? `(19) ${ifoodOrder.customer.phone.number}` : '(Via App iFood)'
     },
     entrega: {

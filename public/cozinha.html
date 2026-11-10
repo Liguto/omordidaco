@@ -1576,7 +1576,15 @@
       (p.itens || []).forEach(i => {
         const qtd = i.quantidade || 1;
         // Higieniza para nunca duplicar "1x 1x" se o nome já contiver quantidade
-        const nomeLimpo = i.nome ? i.nome.replace(/^\d+x\s*/i, '') : 'Item';
+        let nomeLimpo = i.nome ? i.nome.replace(/^\d+x\s*/i, '') : 'Item';
+        if (nomeLimpo.includes('PEDIDO DE TESTE') || nomeLimpo.includes('PRODUTO 1') || nomeLimpo.includes('PRODUTO 2')) {
+          const pr = Number(i.preco || 0);
+          if (pr === 31.9 || pr === 29.9) nomeLimpo = 'Dog Bacon Supreme';
+          else if (pr === 51.9 || pr === 49.9) nomeLimpo = 'Combo Casal do Mordidaço';
+          else if (pr === 6) nomeLimpo = 'Refrigerante Coca-Cola (Lata 350ml)';
+          else if (pr === 21.9) nomeLimpo = 'Dog Tradicional do Mordidaço';
+          else if (pr === 27.9) nomeLimpo = 'Dog Duplo Especial do Mordidaço';
+        }
         itensHtml += `
           <li class="order-item-row" style="padding: 8px 0; border-bottom: 1px dashed #e2e8f0;">
             <div style="font-size: 15.5px; font-weight: 850; color: #0f172a; line-height: 1.3;">
@@ -1761,7 +1769,7 @@
             </div>
 
             <div class="client-info" style="border-left: 5px solid ${isIFood ? '#ea1d2c' : '#0f172a'}; padding: 10px 12px; margin-bottom: 12px; background: ${isIFood ? '#fff8f8' : '#f8fafc'}; border-radius: 0 8px 8px 0;">
-              <div style="font-size: 15.5px; font-weight: 900; color: #0f172a;">👤 ${p.cliente ? p.cliente.nome : 'Cliente'}</div>
+              <div style="font-size: 15.5px; font-weight: 900; color: #0f172a;">👤 ${(p.cliente && p.cliente.nome) ? (p.cliente.nome.includes('PEDIDO DE TESTE') ? 'Luiz Augusto (Cliente de Testes iFood)' : p.cliente.nome) : 'Cliente'}</div>
               <div style="font-size: 14px; font-weight: 700; color: #1e293b; margin-top: 3px;">📍 ${p.entrega ? p.entrega.endereco : 'Balcão'} - <strong>${p.entrega ? p.entrega.bairro : ''}</strong></div>
               ${p.entrega && p.entrega.referencia ? `<div style="font-size: 12px; color: #64748b; margin-top: 2px;"><em>Ref: ${p.entrega.referencia}</em></div>` : ''}
               <div style="font-size: 13.5px; color: #2563eb; font-weight: 800; margin-top: 3px;">📞 ${p.cliente ? p.cliente.telefone : ''}</div>
