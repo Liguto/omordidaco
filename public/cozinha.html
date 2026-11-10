@@ -975,6 +975,59 @@
   <!-- CONTAINER DE IMPRESSÃO TÉRMICA (ESCONDIDO NA TELA, VISÍVEL NO PRINT) -->
   <div id="printReceipt"></div>
 
+  <!-- MODAL: CANCELAR PEDIDO COM MOTIVOS OFICIAIS (IFOOD / 99 / SITE) -->
+  <div id="modalCancelarPedido" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.7); z-index: 110; justify-content: center; align-items: center; padding: 16px;">
+    <div style="background: #ffffff; width: 100%; max-width: 520px; border-radius: 16px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 2px solid #fca5a5;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #fee2e2; padding-bottom: 12px; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 26px;">❌</span>
+          <div>
+            <h3 id="modalCancelarTitulo" style="font-size: 18px; font-weight: 900; color: #991b1b; margin: 0;">Cancelar Pedido</h3>
+            <span id="modalCancelarSubtitulo" style="font-size: 12.5px; color: #64748b;">Selecione o motivo oficial de cancelamento</span>
+          </div>
+        </div>
+        <button type="button" onclick="fecharModalCancelar()" style="background:#f1f5f9; border:none; width:32px; height:32px; border-radius:50%; font-size:16px; cursor:pointer; font-weight:bold;">✕</button>
+      </div>
+
+      <input type="hidden" id="cancelarPedidoId" value="">
+
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">
+          Motivo do Cancelamento (Oficial iFood):*
+        </label>
+        <select id="selectMotivoCancelamento" style="width: 100%; padding: 11px 14px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-size: 13.5px; font-weight: 700; color: #0f172a; background: #ffffff;">
+          <option value="501">501 - Problemas de sistema na loja</option>
+          <option value="502">502 - Pedido duplicado</option>
+          <option value="503">503 - Item ou ingrediente indisponível/desatualizado</option>
+          <option value="504">504 - Sem entregadores disponíveis no momento</option>
+          <option value="506">506 - Pedido fora da área de entrega</option>
+          <option value="507">507 - Suspeita de golpe ou trote</option>
+          <option value="508">508 - Pedido fora do horário de funcionamento</option>
+          <option value="509">509 - Dificuldades operacionais internas na cozinha</option>
+          <option value="511">511 - Entrega em área de risco</option>
+          <option value="520">520 - Endereço incompleto e cliente não atende</option>
+          <option value="860">860 - Problema com pagamento do cliente</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">
+          Observação Interna / Justificativa (Opcional):
+        </label>
+        <textarea id="textoMotivoCancelamento" placeholder="Ex: Acabou o estoque de pão Bambini / Cliente ligou solicitando cancelamento..." rows="3" style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-size: 13px; font-family: inherit; resize: none;"></textarea>
+      </div>
+
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button type="button" onclick="fecharModalCancelar()" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 11px 18px; border-radius: 8px; font-weight: 800; font-size: 13px; cursor: pointer;">
+          Voltar
+        </button>
+        <button type="button" id="btnConfirmarCancelar" onclick="confirmarCancelamentoPedidoModal()" style="background: #dc2626; color: #ffffff; border: none; padding: 11px 20px; border-radius: 8px; font-weight: 900; font-size: 13.5px; cursor: pointer; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);">
+          ❌ Confirmar Cancelamento
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL: CLIENTES VIP (INVISÍVEL AOS CLIENTES) -->
   <div id="modalClientes" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.7); z-index: 100; justify-content: center; align-items: center; padding: 16px;">
     <div style="background: #ffffff; width: 100%; max-width: 800px; border-radius: 14px; padding: 20px; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
@@ -1743,9 +1796,14 @@
           <button type="button" onclick="alterarStatus('${p.id}', 'Em Preparo')" style="width: 100%; background: #2563eb; color: #ffffff; padding: 14px; font-weight: 900; border-radius: 10px; border: none; cursor: pointer; font-size: 15px; margin-bottom: 8px; box-shadow: 0 4px 14px rgba(37,99,235,0.3); display: flex; align-items: center; justify-content: center; gap: 8px;">
             <span>🔥 Iniciar Preparo</span> ➔
           </button>
-          <button type="button" onclick="imprimirComanda('${p.id}')" style="width: 100%; background: #0f172a; color: #ffffff; padding: 11px; font-weight: 800; border-radius: 10px; border: none; cursor: pointer; font-size: 13.5px;">
-            🖨️ Imprimir Comanda
-          </button>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" onclick="imprimirComanda('${p.id}')" style="flex: 1; background: #0f172a; color: #ffffff; padding: 11px; font-weight: 800; border-radius: 10px; border: none; cursor: pointer; font-size: 13px;">
+              🖨️ Comanda
+            </button>
+            <button type="button" onclick="abrirModalCancelar('${p.id}')" style="background: #fff1f2; border: 1.5px solid #fca5a5; color: #dc2626; padding: 10px 14px; font-weight: 800; border-radius: 10px; cursor: pointer; font-size: 12.5px; display: flex; align-items: center; gap: 4px;" title="Cancelar Pedido">
+              ❌ Cancelar
+            </button>
+          </div>
         `;
       } else if (p.status === 'Em Preparo') {
         acoesFluxoHtml = `
@@ -1756,8 +1814,11 @@
             <button type="button" onclick="imprimirComanda('${p.id}')" style="flex: 1; background: #f1f5f9; color: #0f172a; border: 1.5px solid #cbd5e1; padding: 10px; font-weight: 800; border-radius: 8px; cursor: pointer; font-size: 13px;">
               🖨️ Re-imprimir
             </button>
-            <button type="button" onclick="alterarStatus('${p.id}', 'Pendente')" style="background: none; border: 1.5px dashed #cbd5e1; color: #64748b; padding: 10px 12px; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer;">
-              ↩️ Voltar
+            <button type="button" onclick="alterarStatus('${p.id}', 'Pendente')" style="background: none; border: 1.5px dashed #cbd5e1; color: #64748b; padding: 10px 12px; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer;" title="Voltar para pendente">
+              ↩️
+            </button>
+            <button type="button" onclick="abrirModalCancelar('${p.id}')" style="background: #fff1f2; border: 1.5px solid #fca5a5; color: #dc2626; padding: 10px 12px; font-weight: 800; border-radius: 8px; cursor: pointer; font-size: 12.5px;" title="Cancelar Pedido">
+              ❌
             </button>
           </div>
         `;
@@ -2324,6 +2385,64 @@
 
     function fecharModalHistorico() {
       document.getElementById('modalHistorico').style.display = 'none';
+    }
+
+    // MODAL DE CANCELAMENTO COM MOTIVOS OFICIAIS DO IFOOD
+    function abrirModalCancelar(id) {
+      const p = pedidosLocais.find(item => item.id === id);
+      if (!p) return;
+      document.getElementById('cancelarPedidoId').value = id;
+      document.getElementById('modalCancelarTitulo').innerText = `Cancelar Pedido #${p.numero}`;
+      document.getElementById('modalCancelarSubtitulo').innerText = `Canal: ${p.origem || 'Site'} • Cliente: ${p.cliente ? p.cliente.nome : ''}`;
+      document.getElementById('textoMotivoCancelamento').value = '';
+      document.getElementById('modalCancelarPedido').style.display = 'flex';
+    }
+
+    function fecharModalCancelar() {
+      document.getElementById('modalCancelarPedido').style.display = 'none';
+    }
+
+    async function confirmarCancelamentoPedidoModal() {
+      const id = document.getElementById('cancelarPedidoId').value;
+      if (!id) return;
+      const select = document.getElementById('selectMotivoCancelamento');
+      const code = select.value;
+      const desc = select.options[select.selectedIndex].text;
+      const obs = document.getElementById('textoMotivoCancelamento').value.trim();
+      const reason = obs ? `${desc} - ${obs}` : desc;
+
+      const p = pedidosLocais.find(item => item.id === id);
+      const btn = document.getElementById('btnConfirmarCancelar');
+      btn.disabled = true;
+      btn.innerText = 'Cancelando...';
+
+      try {
+        if (p && p.origem === 'iFood') {
+          // Envia cancelamento oficial para a API do iFood
+          const res = await fetch(`/api/ifood/pedidos/${id}/cancelar`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code, reason })
+          });
+          const data = await res.json();
+          if (data.success) {
+            mostrarToastAviso(`✓ Pedido #${p.numero} cancelado com sucesso no iFood!`, 'sucesso');
+          } else {
+            alert('Aviso da API iFood: ' + (data.error || 'Erro ao cancelar'));
+          }
+        } else {
+          mostrarToastAviso(`✓ Pedido #${p ? p.numero : id} cancelado!`, 'sucesso');
+        }
+
+        // Atualiza status no servidor para 'Cancelado'
+        await alterarStatus(id, 'Cancelado');
+        fecharModalCancelar();
+      } catch (err) {
+        alert('Erro ao enviar cancelamento: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = '❌ Confirmar Cancelamento';
+      }
     }
 
     const GOOGLE_REVIEW_LINK_PADRAO = 'https://g.page/r/CYlsHKSBQvTzEBI/review';
