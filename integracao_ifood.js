@@ -3,9 +3,21 @@
  * Loja: O Mordidaço - Hot-Dogueria Artesanal
  */
 
-const IFOOD_CLIENT_ID = process.env.IFOOD_CLIENT_ID || 'd543f817-4252-46e3-919b-9280bbb4ed8f';
-const IFOOD_CLIENT_SECRET = process.env.IFOOD_CLIENT_SECRET || 'n912lea0o0sa1zx108s6t0xhxco90p6t97ohlrt7kpkw8fvc9qmpitzkqjuxa4opdqga0s58zbo0av1r2za464lkxu787hsogma';
-const IFOOD_MERCHANT_ID = process.env.IFOOD_MERCHANT_ID || '1c6a85ea-2063-4bb9-a2ab-a198c2d9946b';
+// Credenciais Oficiais de Produção (Homologado 100%)
+const IFOOD_PROD_CLIENT_ID = 'de2af795-14c1-458d-80ea-1dbcc1998674';
+const IFOOD_PROD_CLIENT_SECRET = 'emjsxnia7hctf5k5csqfy16suwtviyrl6h082uofnrjbazhlgq6pnfq7wafng799mwngolyqu4l6ji5ffcwljilxycs6r88kvi6';
+const IFOOD_PROD_MERCHANT_ID = '1aafd9ac-f972-49bd-9a5d-9fec4036132e';
+
+// Credenciais de Teste (Sandbox)
+const IFOOD_TEST_CLIENT_ID = 'd543f817-4252-46e3-919b-9280bbb4ed8f';
+const IFOOD_TEST_CLIENT_SECRET = 'n912lea0o0sa1zx108s6t0xhxco90p6t97ohlrt7kpkw8fvc9qmpitzkqjuxa4opdqga0s58zbo0av1r2za464lkxu787hsogma';
+const IFOOD_TEST_MERCHANT_ID = '1c6a85ea-2063-4bb9-a2ab-a198c2d9946b';
+
+const IS_PROD = process.env.IFOOD_ENV === 'production';
+
+const IFOOD_CLIENT_ID = process.env.IFOOD_CLIENT_ID || (IS_PROD ? IFOOD_PROD_CLIENT_ID : IFOOD_TEST_CLIENT_ID);
+const IFOOD_CLIENT_SECRET = process.env.IFOOD_CLIENT_SECRET || (IS_PROD ? IFOOD_PROD_CLIENT_SECRET : IFOOD_TEST_CLIENT_SECRET);
+const IFOOD_MERCHANT_ID = process.env.IFOOD_MERCHANT_ID || (IS_PROD ? IFOOD_PROD_MERCHANT_ID : IFOOD_TEST_MERCHANT_ID);
 
 const BASE_URL_AUTH = 'https://merchant-api.ifood.com.br/authentication/v1.0';
 const BASE_URL_EVENTS = 'https://merchant-api.ifood.com.br/events/v1.0';
