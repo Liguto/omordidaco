@@ -55,12 +55,14 @@ function deduzirEstoquePorPedido(pedido) {
 
     // 1. ANÁLISE DE COMBOS
     if (isCombo) {
-      if (nome.includes('casal')) {
-        // 2 Dogs Duplos + 2 Refris + 2 Maioneses 50ml + Saco Kraft G
+      if (nome.includes('dupla') || nome.includes('casal') || nome.includes('mordida')) {
+        // 2 Mordidaços Duplos + 2 Refris + 2 Molhos da Casa (50ml) + Saco Kraft G
         totalDogsNoPedido += (2 * qtdItem);
         registrarBaixa('salsicha_sadia', 4 * qtdItem); // 2 dogs com 2 salsichas cada
-        registrarBaixa('queijo_mussarela', 0.076 * qtdItem); // 4 fatias de mussarela
+        registrarBaixa('queijo_mussarela', 0.076 * qtdItem); // 4 fatias de muçarela
+        registrarBaixa('queijo_parmesao', 0.024 * qtdItem);
         registrarBaixa('milho_conserva', 0.040 * qtdItem);
+        registrarBaixa('ervilha_conserva', 0.040 * qtdItem);
         registrarBaixa('batata_palha', 0.040 * qtdItem);
         registrarBaixa('maionese_verde', 0.040 * qtdItem);
         registrarBaixa('pote_maionese_50ml', 2 * qtdItem);
@@ -78,22 +80,23 @@ function deduzirEstoquePorPedido(pedido) {
           registrarBaixa('pote_berco', 2 * qtdItem);
         }
 
-        // Bebidas do Combo Casal
+        // Bebidas do Combo Dupla Mordida
         if (nome.includes('guaraná') || nome.includes('guarana')) {
           registrarBaixa('guarana_lata', 2 * qtdItem);
         } else {
           registrarBaixa('coca_lata', 2 * qtdItem);
         }
       } else if (nome.includes('família') || nome.includes('familia')) {
-        // Combo Família: 2 Duplos + 1 Tradicional + 1 Refri 2L + 2 Maioneses
+        // Combo Família: 2 Mordidaços Duplos + 1 Mordidaço Clássico + 1 Guaraná 2L + 3 Molhos da Casa
         totalDogsNoPedido += (3 * qtdItem);
         registrarBaixa('salsicha_sadia', 5 * qtdItem);
         registrarBaixa('queijo_mussarela', 0.076 * qtdItem);
-        registrarBaixa('queijo_parmesao', 0.012 * qtdItem);
+        registrarBaixa('queijo_parmesao', 0.024 * qtdItem);
         registrarBaixa('milho_conserva', 0.060 * qtdItem);
+        registrarBaixa('ervilha_conserva', 0.060 * qtdItem);
         registrarBaixa('batata_palha', 0.060 * qtdItem);
         registrarBaixa('maionese_verde', 0.060 * qtdItem);
-        registrarBaixa('pote_maionese_50ml', 2 * qtdItem);
+        registrarBaixa('pote_maionese_50ml', 3 * qtdItem);
         registrarBaixa('guarana_2l', 1 * qtdItem);
         registrarBaixa('saco_kraft_g', 1 * qtdItem);
         registrarBaixa('pao_bambini', 3 * qtdItem);
@@ -105,7 +108,7 @@ function deduzirEstoquePorPedido(pedido) {
     }
 
     // 2. ANÁLISE DE DOGS INDIVIDUAIS
-    const isDog = nome.includes('dog') || nome.includes('cachorro');
+    const isDog = nome.includes('mordidaço') || nome.includes('mordidaco') || nome.includes('dog') || nome.includes('cachorro') || nome.includes('clássico') || nome.includes('duplo') || nome.includes('tudão');
     if (isDog) {
       totalDogsNoPedido += qtdItem;
       registrarBaixa('pote_berco', 1 * qtdItem);
@@ -121,49 +124,86 @@ function deduzirEstoquePorPedido(pedido) {
         registrarBaixa('molho_tomate', 0.030 * qtdItem);
       }
 
-      // Recheios por Receita
+      // Recheios Base Comuns
       registrarBaixa('milho_conserva', 0.020 * qtdItem);
       registrarBaixa('batata_palha', 0.020 * qtdItem);
       registrarBaixa('maionese_verde', 0.020 * qtdItem);
 
-      if (nome.includes('duplo')) {
-        registrarBaixa('salsicha_sadia', 2 * qtdItem);
-        registrarBaixa('queijo_mussarela', 0.038 * qtdItem); // 2 fatias dobro
-      } else if (nome.includes('bacon')) {
-        registrarBaixa('salsicha_sadia', 1 * qtdItem);
-        registrarBaixa('bacon_cubos', 0.040 * qtdItem);
-        registrarBaixa('queijo_mussarela', 0.020 * qtdItem);
-      } else if (nome.includes('frango')) {
+      if (nome.includes('tudão') || nome.includes('tudao')) {
+        // Mordidaço Tudão: Salsicha, Frango, Catupiry, Calabresa, Bacon dobro, Muçarela dobro, Parmesão, Ervilha
         registrarBaixa('salsicha_sadia', 1 * qtdItem);
         registrarBaixa('frango_desfiado', 0.050 * qtdItem);
-        registrarBaixa('catupiry_original', 0.040 * qtdItem);
-        registrarBaixa('queijo_mussarela', 0.020 * qtdItem);
-      } else {
-        // Tradicional Simples
-        registrarBaixa('salsicha_sadia', 1 * qtdItem);
+        registrarBaixa('catupiry_original', 0.035 * qtdItem);
+        registrarBaixa('calabresa_fatiada', 0.040 * qtdItem);
+        registrarBaixa('bacon_cubos', 0.060 * qtdItem);
+        registrarBaixa('queijo_mussarela', 0.040 * qtdItem);
+        registrarBaixa('queijo_parmesao', 0.015 * qtdItem);
+        registrarBaixa('ervilha_conserva', 0.020 * qtdItem);
+      } else if (nome.includes('duplo')) {
+        // Mordidaço Duplo: 2 Salsichas, Muçarela dobro, Ervilha, Parmesão
+        registrarBaixa('salsicha_sadia', 2 * qtdItem);
+        registrarBaixa('queijo_mussarela', 0.038 * qtdItem);
         registrarBaixa('queijo_parmesao', 0.012 * qtdItem);
+        registrarBaixa('ervilha_conserva', 0.020 * qtdItem);
+      } else if (nome.includes('bacon')) {
+        // Mordidaço Bacon: 2 Salsichas, Bacon, Muçarela, Ervilha, Parmesão
+        registrarBaixa('salsicha_sadia', 2 * qtdItem);
+        registrarBaixa('bacon_cubos', 0.040 * qtdItem);
+        registrarBaixa('queijo_mussarela', 0.020 * qtdItem);
+        registrarBaixa('queijo_parmesao', 0.012 * qtdItem);
+        registrarBaixa('ervilha_conserva', 0.020 * qtdItem);
+      } else if (nome.includes('frango')) {
+        // Mordidaço Frango c/ Catupiry: 1 Salsicha, Frango, Catupiry Original
+        registrarBaixa('salsicha_sadia', 1 * qtdItem);
+        registrarBaixa('frango_desfiado', 0.050 * qtdItem);
+        registrarBaixa('catupiry_original', 0.035 * qtdItem);
+      } else {
+        // Mordidaço Clássico: 1 Salsicha, Ervilha, Purê, Batata Palha
+        registrarBaixa('salsicha_sadia', 1 * qtdItem);
+        registrarBaixa('ervilha_conserva', 0.020 * qtdItem);
       }
       return;
     }
 
-    // 3. ANÁLISE DE BEBIDAS INDIVIDUAIS
-    if (nome.includes('coca') && nome.includes('zero')) {
-      registrarBaixa('coca_zero_lata', 1 * qtdItem);
+    // 3. ANÁLISE DE ADICIONAIS EXTRAS
+    if (nome.includes('catupiry extra')) registrarBaixa('catupiry_original', 0.040 * qtdItem);
+    if (nome.includes('bacon extra')) registrarBaixa('bacon_cubos', 0.040 * qtdItem);
+    if (nome.includes('calabresa')) registrarBaixa('calabresa_fatiada', 0.040 * qtdItem);
+    if (nome.includes('parmesão extra') || nome.includes('parmesao extra')) registrarBaixa('queijo_parmesao', 0.020 * qtdItem);
+    if (nome.includes('purê extra') || nome.includes('pure extra')) registrarBaixa('pure_batata', 0.080 * qtdItem);
+    if (nome.includes('milho extra')) registrarBaixa('milho_conserva', 0.030 * qtdItem);
+    if (nome.includes('ervilha extra')) registrarBaixa('ervilha_conserva', 0.030 * qtdItem);
+    if (nome.includes('pote') || nome.includes('molho da casa')) registrarBaixa('pote_maionese_50ml', 1 * qtdItem);
+
+    // 4. ANÁLISE DE BEBIDAS INDIVIDUAIS
+    if (nome.includes('coca') && nome.includes('zero') && (nome.includes('2l') || nome.includes('2 litros'))) {
+      registrarBaixa('coca_zero_2l', 1 * qtdItem);
     } else if (nome.includes('coca') && (nome.includes('2l') || nome.includes('2 litros'))) {
       registrarBaixa('coca_2l', 1 * qtdItem);
+    } else if (nome.includes('coca') && nome.includes('zero')) {
+      registrarBaixa('coca_zero_lata', 1 * qtdItem);
     } else if (nome.includes('coca')) {
       registrarBaixa('coca_lata', 1 * qtdItem);
     } else if (nome.includes('guaraná') || nome.includes('guarana')) {
       if (nome.includes('2l') || nome.includes('2 litros')) {
         registrarBaixa('guarana_2l', 1 * qtdItem);
+      } else if (nome.includes('zero')) {
+        registrarBaixa('guarana_zero_lata', 1 * qtdItem);
       } else {
         registrarBaixa('guarana_lata', 1 * qtdItem);
       }
+    } else if (nome.includes('fanta')) {
+      registrarBaixa('fanta_lata', 1 * qtdItem);
+    } else if (nome.includes('heineken')) {
+      registrarBaixa('cerveja_heineken', 1 * qtdItem);
+    } else if (nome.includes('original')) {
+      registrarBaixa('cerveja_original', 1 * qtdItem);
     } else if (nome.includes('água') || nome.includes('agua')) {
-      registrarBaixa('agua_sem_gas', 1 * qtdItem);
-    } else if (nome.includes('maionese extra') || nome.includes('pote')) {
-      registrarBaixa('pote_maionese_50ml', 1 * qtdItem);
-      registrarBaixa('maionese_verde', 0.050 * qtdItem);
+      if (nome.includes('com gás') || nome.includes('com gas') || nome.includes('gas')) {
+        registrarBaixa('agua_com_gas', 1 * qtdItem);
+      } else {
+        registrarBaixa('agua_sem_gas', 1 * qtdItem);
+      }
     }
   });
 

@@ -495,12 +495,13 @@ app.get(['/api/pedidos/stream', '/pedidos/stream'], (req, res) => {
   });
 });
 
-// Cardápio Oficial de O Mordidaço (100% Cachorro Quente)
+// Cardápio Oficial de O Mordidaço (100% Cachorro Quente Artesanal)
 const CARDAPIO = {
   restaurante: {
     nome: "O Mordidaço",
     segmento: "Hot-Dogueria Artesanal",
-    slogan: "A mordida mais caprichada de Campinas !",
+    slogan: "Uma mordida e você entende!",
+    sloganSecundario: "A mordida mais caprichada de Campinas !",
     endereco: "Jardim Tamoio, Campinas - SP",
     tempoEntrega: "35 a 50 min",
     taxaEntregaPadrao: 5.00,
@@ -512,30 +513,30 @@ const CARDAPIO = {
       nome: "⭐ Combos Campeões (Mais Pedidos)",
       itens: [
         {
-          id: "combo-casal",
-          nome: "Combo Casal do Mordidaço",
-          descricao: "2 Dogs Duplos Especiais (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata (ou 1 Guaraná 2L) + 2 Potes de Maionese Verde Secreta da Casa (50ml). A janta perfeita para dois!",
+          id: "combo-dupla-mordida",
+          nome: "Combo Dupla Mordida",
+          descricao: "2 Mordidaços Duplos (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata (escolha Coca, Guaraná ou Fanta) + 2 Potes de Molho da Casa (50ml). A janta perfeita para dois!",
           preco: 49.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
           lanchesCombo: [
-            { label: "1º Dog Duplo Especial" },
-            { label: "2º Dog Duplo Especial" }
+            { label: "1º Mordidaço Duplo" },
+            { label: "2º Mordidaço Duplo" }
           ],
           destaque: true,
           isLanche: true
         },
         {
-          id: "combo-familia",
-          nome: "Combo Família do Tamoio",
-          descricao: "2 Dogs Duplos Especiais + 1 Dog Tradicional (escolha individual no Pão ou no Prato para cada um) + 1 Guaraná Antarctica 2 Litros + 2 Potes de Maionese Verde da Casa. Fartura garantida para toda a família!",
-          preco: 62.00,
+          id: "combo-familia-mordidaco",
+          nome: "Combo Família Mordidaço",
+          descricao: "2 Mordidaços Duplos + 1 Mordidaço Clássico (escolha individual no Pão ou no Prato para cada um) + 1 Guaraná Antarctica 2 Litros + 3 Potes de Molho da Casa (50ml). Fartura garantida para toda a família!",
+          preco: 64.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
           lanchesCombo: [
-            { label: "1º Dog Duplo Especial" },
-            { label: "2º Dog Duplo Especial" },
-            { label: "3º Dog Tradicional" }
+            { label: "1º Mordidaço Duplo" },
+            { label: "2º Mordidaço Duplo" },
+            { label: "3º Mordidaço Clássico" }
           ],
           destaque: false,
           isLanche: true
@@ -547,45 +548,70 @@ const CARDAPIO = {
       nome: "🌭 Hot Dogs Artesanais (No Pão ou No Prato)",
       itens: [
         {
-          id: "dog-tradicional",
-          nome: "Dog Tradicional do Mordidaço",
-          descricao: "Purê artesanal cremoso, 1 salsicha Sadia no molho caseiro refogado, milho, vinagrete suave, maionese verde da casa, batata palha e queijo parmesão fresco ralado na hora.",
-          preco: 16.00,
+          id: "mordidaco-classico",
+          nome: "Mordidaço Clássico",
+          descricao: "1 salsicha Sadia, molho especial da casa, ketchup, mostarda, milho, vinagrete suave, purê de batata artesanal cremoso, ervilha e batata palha crocante.",
+          preco: 16.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
           destaque: false,
           isLanche: true
         },
         {
-          id: "dog-duplo",
-          nome: "Dog Duplo Especial do Mordidaço",
-          descricao: "O campeão de vendas! 2 salsichas Sadia, o verdadeiro dobro de queijo muçarela derretida no calor do molho, purê cremoso artesanal, milho, vinagrete, maionese verde e chuva de parmesão ralado fresco.",
-          preco: 20.00,
+          id: "mordidaco-duplo",
+          nome: "Mordidaço Duplo",
+          descricao: "O campeão de vendas! 2 salsichas Sadia, molho especial da casa, queijo muçarela derretido, ketchup, mostarda, milho, vinagrete, purê artesanal, ervilha, batata palha e chuva de parmesão ralado por cima.",
+          preco: 21.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
           destaque: true,
           isLanche: true
         },
         {
-          id: "dog-bacon",
-          nome: "Dog Bacon Supreme",
-          descricao: "2 salsichas Sadia, generosa cobertura de bacon crocante em cubos dourados, muçarela derretida no molho, purê artesanal cremoso e batata palha crocante.",
-          preco: 24.00,
+          id: "mordidaco-bacon",
+          nome: "Mordidaço Bacon",
+          descricao: "2 salsichas Sadia, molho especial da casa, purê de batata artesanal, milho, ervilha, generosa cobertura de bacon crocante em cubos, queijo muçarela derretido, batata palha e parmesão ralado por cima.",
+          preco: 25.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
           destaque: false,
           isLanche: true
         },
         {
-          id: "dog-frango",
-          nome: "Dog Frango Cremoso c/ Catupiry",
-          descricao: "1 salsicha Sadia, peito de frango desfiado temperadinho, o Legítimo Catupiry® Original cremoso (sem amido), purê de batata artesanal e batata palha crocante.",
-          preco: 25.00,
+          id: "mordidaco-frango-catupiry",
+          nome: "Mordidaço Frango com Catupiry",
+          descricao: "1 salsicha Sadia, peito de frango desfiado temperado, o Legítimo Catupiry® Original cremoso (sem amido), molho especial da casa, purê de batata artesanal, ketchup, mostarda, milho, vinagrete e batata palha.",
+          preco: 26.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
           destaque: false,
           isLanche: true
+        },
+        {
+          id: "mordidaco-tudao",
+          nome: "Mordidaço Tudão",
+          descricao: "O gigante da casa! 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original, purê artesanal, molho especial da casa, ketchup, mostarda, milho, vinagrete, ervilha, bacon em dobro, calabresa fatiada dourada, queijo muçarela em dobro derretido, batata palha e parmesão ralado por cima.",
+          preco: 34.90,
+          adicionalPrato: 2.00,
+          permiteFormato: true,
+          destaque: true,
+          isLanche: true
         }
+      ]
+    },
+    {
+      id: "adicionais",
+      nome: "➕ Adicionais Extras",
+      itens: [
+        { id: "add-catupiry", nome: "Catupiry Original Extra (40g)", preco: 5.00 },
+        { id: "add-bacon", nome: "Bacon Crocante Extra em Cubos (40g)", preco: 5.00 },
+        { id: "add-calabresa", nome: "Calabresa Fatiada Dourada (40g)", preco: 4.50 },
+        { id: "add-parmesao", nome: "Parmesão Ralado Fresco (20g)", preco: 3.50 },
+        { id: "add-pure", nome: "Purê de Batata Artesanal Extra (80g)", preco: 3.50 },
+        { id: "add-milho", nome: "Milho Verde Extra", preco: 2.50 },
+        { id: "add-ervilha", nome: "Ervilha Extra", preco: 2.50 },
+        { id: "add-maionese", nome: "Pote de Molho Especial da Casa (50ml)", preco: 3.50 },
+        { id: "add-batata-palha", nome: "Batata Palha Crocante Extra", preco: 2.50 }
       ]
     },
     {
@@ -593,20 +619,17 @@ const CARDAPIO = {
       nome: "🥤 Bebidas Geladas",
       itens: [
         { id: "refri-coca-lata", nome: "Coca-Cola Original 350ml (Lata)", preco: 6.00 },
+        { id: "refri-coca-zero-lata", nome: "Coca-Cola Zero 350ml (Lata)", preco: 6.00 },
         { id: "refri-guarana-lata", nome: "Guaraná Antarctica 350ml (Lata)", preco: 6.00 },
+        { id: "refri-guarana-zero-lata", nome: "Guaraná Antarctica Zero 350ml (Lata)", preco: 6.00 },
         { id: "refri-fanta-lata", nome: "Fanta Laranja 350ml (Lata)", preco: 6.00 },
+        { id: "refri-coca-2l", nome: "Coca-Cola 2 Litros Normal", preco: 14.00 },
+        { id: "refri-coca-zero-2l", nome: "Coca-Cola 2 Litros Zero", preco: 14.00 },
         { id: "refri-guarana-2l", nome: "Guaraná Antarctica 2 Litros", preco: 12.00 },
-        { id: "agua-mineral", nome: "Água Mineral 500ml (sem gás)", preco: 4.00 }
-      ]
-    },
-    {
-      id: "adicionais",
-      nome: "🥫 Molhos & Adicionais Extras",
-      itens: [
-        { id: "add-maionese", nome: "Pote Extra de Maionese Verde (50ml)", preco: 3.50 },
-        { id: "add-bacon", nome: "Bacon Crocante Extra em Cubos", preco: 4.50 },
-        { id: "add-catupiry", nome: "Catupiry Original Extra", preco: 4.00 },
-        { id: "add-batata-palha", nome: "Batata Palha Crocante Extra", preco: 2.50 }
+        { id: "agua-mineral-sem-gas", nome: "Água Mineral 500ml (sem gás)", preco: 4.00 },
+        { id: "agua-mineral-com-gas", nome: "Água Mineral 500ml (com gás)", preco: 4.50 },
+        { id: "cerveja-original-lata", nome: "Cerveja Original 350ml (Lata)", preco: 7.50 },
+        { id: "cerveja-heineken-ln", nome: "Cerveja Heineken 330ml (Long Neck)", preco: 10.00 }
       ]
     }
   ]

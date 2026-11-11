@@ -68,22 +68,32 @@ async function sincronizarCardapioCompleto() {
   const catBebidas = await criarCategoria('Bebidas Geladas', 3);
   console.log('✓ Categoria Bebidas criada:', catBebidas.id);
 
-  // 2. Hot Dogs Artesanais
+  // 2. Hot Dogs Artesanais (Novos 5 Modelos Oficiais)
   const lanches = [
     {
-      nome: 'Dog Tradicional do Mordidaço',
-      descricao: '1 salsicha Perdigão no molho fervilhante, base de purê de batata artesanal cremoso, milho, vinagrete caseiro, maionese verde secreta e queijo parmesão ralado fresco na hora.',
-      preco: 21.90
+      nome: 'Mordidaço Clássico',
+      descricao: '1 salsicha Sadia, molho especial da casa, ketchup, mostarda, milho, vinagrete, purê de batata artesanal, ervilha e batata palha crocante.',
+      preco: 22.90
     },
     {
-      nome: 'Dog Bacon Supreme',
-      descricao: '2 salsichas Perdigão, purê artesanal, molho de tomate refogado, muçarela derretida no calor do molho, coberto com chuva de bacon crocante dourado em cubos.',
-      preco: 29.90
+      nome: 'Mordidaço Duplo',
+      descricao: 'O campeão de vendas! 2 salsichas Sadia, molho especial da casa, queijo muçarela derretido, ketchup, mostarda, milho, vinagrete, purê artesanal, ervilha, batata palha e chuva de parmesão ralado por cima.',
+      preco: 28.90
     },
     {
-      nome: 'Dog Frango Catupiry',
-      descricao: '2 salsichas Perdigão, purê cremoso, peito de frango desfiado refogado bem temperadinho e o legítimo Catupiry original maçaricado com parmesão ralado na hora.',
-      preco: 29.90
+      nome: 'Mordidaço Bacon',
+      descricao: '2 salsichas Sadia, molho especial da casa, purê de batata artesanal, milho, ervilha, bacon crocante em cubos, queijo muçarela, batata palha e parmesão ralado por cima.',
+      preco: 33.90
+    },
+    {
+      nome: 'Mordidaço Frango com Catupiry',
+      descricao: '1 salsicha Sadia, peito de frango desfiado temperado, o Legítimo Catupiry® Original cremoso (sem amido), molho especial da casa, purê de batata artesanal, ketchup, mostarda, milho, vinagrete e batata palha.',
+      preco: 34.90
+    },
+    {
+      nome: 'Mordidaço Tudão',
+      descricao: 'O gigante da casa! 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original, purê artesanal, molho especial da casa, ketchup, mostarda, milho, vinagrete, ervilha, bacon em dobro, calabresa fatiada dourada, queijo muçarela em dobro derretido, batata palha e parmesão ralado por cima.',
+      preco: 44.90
     }
   ];
 
@@ -94,18 +104,18 @@ async function sincronizarCardapioCompleto() {
     console.log(`  ✓ Item vinculado: R$ ${l.preco.toFixed(2)}`);
   }
 
-  // 3. Combos
+  // 3. Combos Oficiais
   const combos = [
     {
-      nome: 'Combo Casal do Mordidaço',
-      descricao: '2 Dogs Duplos Especiais (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata (ou 1 Guaraná 2L) + 2 Potes de Maionese Verde Secreta da Casa (50ml). A janta perfeita para dois!',
-      preco: 49.90,
+      nome: 'Combo Dupla Mordida',
+      descricao: '2 Mordidaços Duplos (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata (escolha Coca, Guaraná ou Fanta) + 2 Potes de Molho da Casa (50ml). A janta perfeita para dois!',
+      preco: 68.90,
       serving: 'SERVES_2'
     },
     {
-      nome: 'Combo Família do Tamoio',
-      descricao: '2 Dogs Duplos Especiais + 1 Dog Tradicional + 1 Guaraná Antarctica 2 Litros bem gelado + 2 Potes generosos da Maionese Verde artesanal da casa.',
-      preco: 69.90,
+      nome: 'Combo Família Mordidaço',
+      descricao: '2 Mordidaços Duplos + 1 Mordidaço Clássico (escolha individual no Pão ou no Prato para cada um) + 1 Guaraná Antarctica 2 Litros + 3 Potes de Molho da Casa (50ml). Fartura garantida para toda a família!',
+      preco: 86.90,
       serving: 'SERVES_3'
     }
   ];

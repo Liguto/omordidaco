@@ -2,7 +2,7 @@
   "insumos": [
     {
       "id": "pao_bambini",
-      "nome": "Pão de Hot Dog (Panificadora Bambini)",
+      "nome": "Pão de Hot Dog (Panificadora Bambini 70g)",
       "categoria": "Insumos",
       "unidade": "un",
       "quantidade": 50,
@@ -29,7 +29,7 @@
     },
     {
       "id": "molho_tomate",
-      "nome": "Molho de Tomate Caseiro Refogado",
+      "nome": "Molho Especial da Casa (Tomate Refogado)",
       "categoria": "Insumos",
       "unidade": "kg",
       "quantidade": 4.0,
@@ -38,7 +38,7 @@
     },
     {
       "id": "queijo_mussarela",
-      "nome": "Queijo Muçarela Fatiada (Sadia/Tirolez)",
+      "nome": "Queijo Muçarela Fatiada",
       "categoria": "Insumos",
       "unidade": "kg",
       "quantidade": 3.0,
@@ -47,7 +47,7 @@
     },
     {
       "id": "queijo_parmesao",
-      "nome": "Queijo Parmesão Fresco (Ralado na Hora)",
+      "nome": "Queijo Parmesão Fresco Ralado na Hora",
       "categoria": "Insumos",
       "unidade": "kg",
       "quantidade": 1.0,
@@ -62,6 +62,15 @@
       "quantidade": 1.5,
       "minimo": 0.4,
       "custoUnitario": 36.00
+    },
+    {
+      "id": "calabresa_fatiada",
+      "nome": "Calabresa Defumada Fatiada Dourada",
+      "categoria": "Insumos",
+      "unidade": "kg",
+      "quantidade": 1.5,
+      "minimo": 0.4,
+      "custoUnitario": 28.00
     },
     {
       "id": "frango_desfiado",
@@ -100,8 +109,17 @@
       "custoUnitario": 8.20
     },
     {
+      "id": "ervilha_conserva",
+      "nome": "Ervilha em Conserva Drenada",
+      "categoria": "Insumos",
+      "unidade": "kg",
+      "quantidade": 2.0,
+      "minimo": 0.5,
+      "custoUnitario": 8.50
+    },
+    {
       "id": "maionese_verde",
-      "nome": "Maionese Verde Especial da Casa",
+      "nome": "Molho Especial da Casa (Maionese Verde)",
       "categoria": "Insumos",
       "unidade": "kg",
       "quantidade": 2.5,
@@ -128,7 +146,7 @@
     },
     {
       "id": "pote_maionese_50ml",
-      "nome": "Pote Plástico c/ Tampa 50ml (Maionese Extra)",
+      "nome": "Pote Plástico c/ Tampa 50ml (Molho da Casa)",
       "categoria": "Embalagens",
       "unidade": "un",
       "quantidade": 90,
@@ -164,7 +182,7 @@
     },
     {
       "id": "coca_lata",
-      "nome": "Coca-Cola Original (Lata 350ml)",
+      "nome": "Coca-Cola Original 350ml (Lata)",
       "categoria": "Bebidas",
       "unidade": "un",
       "quantidade": 24,
@@ -173,7 +191,7 @@
     },
     {
       "id": "coca_zero_lata",
-      "nome": "Coca-Cola Sem Açúcar (Lata 350ml)",
+      "nome": "Coca-Cola Zero 350ml (Lata)",
       "categoria": "Bebidas",
       "unidade": "un",
       "quantidade": 12,
@@ -182,7 +200,7 @@
     },
     {
       "id": "guarana_lata",
-      "nome": "Guaraná Antarctica (Lata 350ml)",
+      "nome": "Guaraná Antarctica 350ml (Lata)",
       "categoria": "Bebidas",
       "unidade": "un",
       "quantidade": 18,
@@ -190,17 +208,26 @@
       "custoUnitario": 2.20
     },
     {
-      "id": "guarana_2l",
-      "nome": "Guaraná Antarctica (Garrafa 2 Litros)",
+      "id": "guarana_zero_lata",
+      "nome": "Guaraná Antarctica Zero 350ml (Lata)",
       "categoria": "Bebidas",
       "unidade": "un",
-      "quantidade": 10,
+      "quantidade": 12,
       "minimo": 4,
-      "custoUnitario": 6.50
+      "custoUnitario": 2.20
+    },
+    {
+      "id": "fanta_lata",
+      "nome": "Fanta Laranja 350ml (Lata)",
+      "categoria": "Bebidas",
+      "unidade": "un",
+      "quantidade": 12,
+      "minimo": 4,
+      "custoUnitario": 2.20
     },
     {
       "id": "coca_2l",
-      "nome": "Coca-Cola Original (Garrafa 2 Litros)",
+      "nome": "Coca-Cola 2 Litros Normal",
       "categoria": "Bebidas",
       "unidade": "un",
       "quantidade": 8,
@@ -208,13 +235,58 @@
       "custoUnitario": 7.50
     },
     {
+      "id": "coca_zero_2l",
+      "nome": "Coca-Cola 2 Litros Zero",
+      "categoria": "Bebidas",
+      "unidade": "un",
+      "quantidade": 6,
+      "minimo": 2,
+      "custoUnitario": 7.50
+    },
+    {
+      "id": "guarana_2l",
+      "nome": "Guaraná Antarctica 2 Litros",
+      "categoria": "Bebidas",
+      "unidade": "un",
+      "quantidade": 10,
+      "minimo": 4,
+      "custoUnitario": 6.50
+    },
+    {
       "id": "agua_sem_gas",
-      "nome": "Água Mineral Crystal 500ml",
+      "nome": "Água Mineral 500ml (sem gás)",
       "categoria": "Bebidas",
       "unidade": "un",
       "quantidade": 16,
       "minimo": 6,
       "custoUnitario": 1.10
+    },
+    {
+      "id": "agua_com_gas",
+      "nome": "Água Mineral 500ml (com gás)",
+      "categoria": "Bebidas",
+      "unidade": "un",
+      "quantidade": 12,
+      "minimo": 4,
+      "custoUnitario": 1.25
+    },
+    {
+      "id": "cerveja_original",
+      "nome": "Cerveja Original 350ml (Lata)",
+      "categoria": "Bebidas",
+      "unidade": "un",
+      "quantidade": 24,
+      "minimo": 8,
+      "custoUnitario": 3.80
+    },
+    {
+      "id": "cerveja_heineken",
+      "nome": "Cerveja Heineken 330ml (Long Neck)",
+      "categoria": "Bebidas",
+      "unidade": "un",
+      "quantidade": 24,
+      "minimo": 8,
+      "custoUnitario": 5.50
     }
   ],
   "movimentacoes": []
