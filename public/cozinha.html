@@ -766,9 +766,6 @@
       <div id="pinErroAviso" style="display: none; color: #dc2626; font-size: 12px; font-weight: 800; margin-top: 10px;">
         ❌ PIN incorreto. Tente novamente!
       </div>
-      <div style="font-size: 11px; color: #94a3b8; margin-top: 14px;">
-        Dica: O PIN padrão de fábrica são os 4 dígitos finais do WhatsApp (1550).
-      </div>
     </div>
   </div>
 
@@ -2920,7 +2917,7 @@
     }
 
     // CONTROLE DE ACESSO: PIN DE SEGURANÇA DA FAMÍLIA
-    const PIN_PADRAO = '1550';
+    const PIN_PADRAO = '2904';
 
     function verificarSegurancaPin() {
       const authSession = sessionStorage.getItem('mordidaco_auth_pin');
@@ -2943,7 +2940,7 @@
       const digitado = input ? input.value.trim() : '';
       const pinCorreto = localStorage.getItem('mordidaco_pin_configurado') || PIN_PADRAO;
 
-      if (digitado === pinCorreto || digitado === PIN_PADRAO || digitado === '2026') {
+      if (digitado === pinCorreto || digitado === PIN_PADRAO) {
         sessionStorage.setItem('mordidaco_auth_pin', 'true');
         if (document.getElementById('chkLembrarPin')?.checked) {
           localStorage.setItem('mordidaco_auth_lembrado', 'true');
