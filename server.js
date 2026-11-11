@@ -30,7 +30,7 @@ app.use('/assets', express.static(path.join(__dirname, 'public', 'assets')));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 app.get('/favicon.ico', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'assets', 'logo.png'));
+  res.sendFile(path.join(__dirname, 'public', 'favicon.ico'));
 });
 
 // Integração de nuvem para Serverless (Vercel KV / Upstash Redis e Cloud Pub/Sub)
