@@ -779,25 +779,32 @@
       </div>
     </div>
     <div class="topbar-actions">
-      <div id="statusSincronizacao" style="display: flex; align-items: center; gap: 6px; background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); color: #4ade80; padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 700;">
+      <div id="statusSincronizacao" style="display: flex; align-items: center; gap: 6px; background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); color: #4ade80; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 800;">
         <span style="display: inline-block; width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 6px #22c55e;"></span>
-        <span>Auto-Sync 3s</span>
+        <span>Online</span>
       </div>
-      <button class="btn-top" style="background: #0284c7;" onclick="abrirModalHistorico()">📜 Histórico (<span id="totalHistoricoBadge">0</span>)</button>
-      <button class="btn-top" style="background: #2563eb;" onclick="abrirModalClientes()">👥 Clientes VIP (<span id="totalClientesBadge">0</span>)</button>
-      <a href="/business.html" class="btn-top" style="background: #047857; text-decoration: none; color: #ffffff; display: inline-flex; align-items: center; gap: 4px;" title="Painel Business: Estoque Inteligente e Análises Financeiras">💼 Business</a>
+
       <label class="switch-label">
         <input type="checkbox" id="chkAutoPrint">
-        <span>🖨️ Auto-imprimir ao receber</span>
+        <span>🖨️ Auto-imprimir</span>
       </label>
-      <button class="btn-top" style="background: #475569;" onclick="configurarLinkGoogleReview()" title="Configurar link do QR Code de avaliação no Google">⭐ QR Google</button>
-      <button class="btn-top" onclick="testarAlarme()">🔔 Testar Som</button>
-      <button class="btn-top" style="background: #ea1d2c; color: #ffffff;" onclick="simularPedidoIFood()" title="Testar recebimento de pedido do iFood">🔴 Simular iFood</button>
-      <button class="btn-top" style="background: #f59e0b; color: #0f172a; font-weight: 900;" onclick="simularPedido99Food()" title="Testar recebimento de pedido da 99Food">🟡 Simular 99Food</button>
-      <button class="btn-top" style="background: #059669; color: #ffffff;" onclick="abrirModalLogsIFood()" title="Ver logs em tempo real do radar do iFood">📡 Logs iFood</button>
-      <button class="btn-top" onclick="carregarPedidos()">🔄 Atualizar</button>
-      <button class="btn-top" style="background: #dc2626;" onclick="resetarTudoSistema()">🗑️ Zerar Tudo (Reset)</button>
-      <button class="btn-top" style="background: #334155; color: #ffffff;" onclick="bloquearPainelPin()" title="Bloquear painel com PIN de segurança">🔒 Bloquear</button>
+
+      <button class="btn-top" style="background: #0284c7;" onclick="abrirModalHistorico()">
+        📜 Histórico (<span id="totalHistoricoBadge">0</span>)
+      </button>
+
+      <a href="/business.html" class="btn-top" style="background: #047857; text-decoration: none; color: #ffffff; display: inline-flex; align-items: center; gap: 6px;" title="Painel Business: Estoque Inteligente e Análises Financeiras">
+        💼 Business
+      </a>
+
+      <!-- MENU DE FERRAMENTAS & AJUSTES (CONDENSADO) -->
+      <button class="btn-top" style="background: #334155; color: #ffffff;" onclick="abrirModalFerramentas()" title="Ferramentas de teste e configurações">
+        ⚙️ Ferramentas
+      </button>
+
+      <button class="btn-top" style="background: #1e293b; color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15);" onclick="bloquearPainelPin()" title="Bloquear painel com PIN de segurança">
+        🔒 Bloquear
+      </button>
     </div>
   </div>
 
@@ -962,6 +969,50 @@
 
   <!-- CONTAINER DE IMPRESSÃO TÉRMICA (ESCONDIDO NA TELA, VISÍVEL NO PRINT) -->
   <div id="printReceipt"></div>
+
+  <!-- MODAL: FERRAMENTAS & AJUSTES DO KDS (PARA NÃO POLUIR A TELA) -->
+  <div id="modalFerramentasKDS" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.75); z-index: 120; justify-content: center; align-items: center; padding: 16px;">
+    <div style="background: #ffffff; width: 100%; max-width: 460px; border-radius: 16px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1.5px solid #cbd5e1;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 22px;">⚙️</span>
+          <h3 style="font-size: 17px; font-weight: 900; color: #0f172a; margin: 0;">Ferramentas & Ajustes da Cozinha</h3>
+        </div>
+        <button type="button" onclick="fecharModalFerramentas()" style="background:#f1f5f9; border:none; width:32px; height:32px; border-radius:50%; font-size:16px; cursor:pointer; font-weight:bold;">✕</button>
+      </div>
+
+      <div style="font-size: 11.5px; font-weight: 900; color: #64748b; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">SIMULADORES DE TESTE (SANDBOX)</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 18px;">
+        <button class="btn-top" style="background: #ea1d2c; color: #ffffff; padding: 10px; font-weight: 800; border-radius: 8px; font-size: 12.5px; cursor: pointer; border: none;" onclick="fecharModalFerramentas(); simularPedidoIFood();">
+          🔴 Simular iFood
+        </button>
+        <button class="btn-top" style="background: #f59e0b; color: #0f172a; padding: 10px; font-weight: 900; border-radius: 8px; font-size: 12.5px; cursor: pointer; border: none;" onclick="fecharModalFerramentas(); simularPedido99Food();">
+          🟡 Simular 99Food
+        </button>
+      </div>
+
+      <div style="font-size: 11.5px; font-weight: 900; color: #64748b; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">DIAGNÓSTICO & HARDWARE</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 18px;">
+        <button class="btn-top" style="background: #059669; color: #ffffff; padding: 10px; font-weight: 800; border-radius: 8px; font-size: 12.5px; cursor: pointer; border: none;" onclick="fecharModalFerramentas(); abrirModalLogsIFood();">
+          📡 Logs iFood
+        </button>
+        <button class="btn-top" style="background: #475569; color: #ffffff; padding: 10px; font-weight: 800; border-radius: 8px; font-size: 12.5px; cursor: pointer; border: none;" onclick="testarAlarme();">
+          🔔 Testar Alarme
+        </button>
+        <button class="btn-top" style="background: #f1f5f9; color: #0f172a; border: 1.5px solid #cbd5e1; padding: 10px; font-weight: 800; border-radius: 8px; font-size: 12.5px; cursor: pointer;" onclick="fecharModalFerramentas(); carregarPedidos();">
+          🔄 Forçar Sincronia
+        </button>
+        <button class="btn-top" style="background: #f1f5f9; color: #0f172a; border: 1.5px solid #cbd5e1; padding: 10px; font-weight: 800; border-radius: 8px; font-size: 12.5px; cursor: pointer;" onclick="configurarLinkGoogleReview();">
+          ⭐ QR Code Google
+        </button>
+      </div>
+
+      <div style="font-size: 11.5px; font-weight: 900; color: #dc2626; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">ZONA DE LIMPEZA GERAL</div>
+      <button class="btn-top" style="width: 100%; background: #dc2626; color: #ffffff; padding: 12px; font-weight: 900; border-radius: 8px; font-size: 13px; cursor: pointer; border: none; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);" onclick="fecharModalFerramentas(); resetarTudoSistema();">
+        🗑️ Zerar Tudo (Reset de Vendas & Fila)
+      </button>
+    </div>
+  </div>
 
   <!-- MODAL: HISTÓRICO DE DIAS ANTERIORES -->
   <div id="modalHistorico" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.7); z-index: 100; justify-content: center; align-items: center; padding: 16px;">
@@ -2465,6 +2516,14 @@
 
     function fecharModalHistorico() {
       document.getElementById('modalHistorico').style.display = 'none';
+    }
+
+    function abrirModalFerramentas() {
+      document.getElementById('modalFerramentasKDS').style.display = 'flex';
+    }
+
+    function fecharModalFerramentas() {
+      document.getElementById('modalFerramentasKDS').style.display = 'none';
     }
 
     // MODAL DE CANCELAMENTO COM MOTIVOS OFICIAIS DO IFOOD
