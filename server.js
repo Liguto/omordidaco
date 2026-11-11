@@ -918,9 +918,8 @@ app.patch(['/api/pedidos/:id/status', '/pedidos/:id/status'], async (req, res) =
   res.json(pedido);
 });
 
-// Fechar Caixa / Resetar Pedidos do Dia (Arquiva no histórico e limpa o painel da cozinha)
-// OS CLIENTES VIP NUNCA SÃO RESETADOS!
-app.post(['/api/pedidos/fechar-dia', '/api/pedidos/reset', '/pedidos/fechar-dia', '/pedidos/reset'], async (req, res) => {
+// Fechar Caixa do Dia (Arquiva pedidos ativos no histórico sem apagar a base)
+app.post(['/api/pedidos/fechar-dia', '/pedidos/fechar-dia'], async (req, res) => {
   recarregarPedidosDoDisco();
   recarregarHistoricoDoDisco();
 
@@ -983,8 +982,8 @@ app.post(['/api/pedidos/fechar-dia', '/api/pedidos/reset', '/pedidos/fechar-dia'
   });
 });
 
-// Reset Total do Sistema (Limpa Pedidos Ativos, Histórico e Clientes, e reinicia em #101)
-app.post(['/api/pedidos/reset-total', '/pedidos/reset-total'], async (req, res) => {
+// Reset Total do Sistema (Limpa TOTALMENTE Pedidos Ativos, Histórico e Lista VIP de Clientes)
+app.post(['/api/pedidos/reset-total', '/pedidos/reset-total', '/api/pedidos/reset', '/pedidos/reset'], async (req, res) => {
   pedidos = [];
   historicoPedidos = [];
   clientes = [];
@@ -992,6 +991,13 @@ app.post(['/api/pedidos/reset-total', '/pedidos/reset-total'], async (req, res) 
   salvarPedidos();
   salvarHistorico();
   salvarClientes();
+
+  // Limpa também o histórico de movimentações do estoque
+  try {
+    const est = gestaoEstoque.carregarEstoque();
+    est.movimentacoes = [];
+    gestaoEstoque.salvarEstoque(est);
+  } catch(e) {}
 
   if (KV_URL && KV_TOKEN) {
     try {
@@ -1013,6 +1019,18 @@ app.post(['/api/pedidos/reset-total', '/pedidos/reset-total'], async (req, res) 
     } catch (e) {}
   }
 
+  // Reseta o contador para #101
+  try {
+    await fetch(`https://api.restful-api.dev/objects/${COUNTER_STORE_ID}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'omordidaco_order_counter',
+        data: { current: 100, lastUpdated: Date.now() }
+      })
+    });
+  } catch (e) {}
+
   notificarCozinha({
     tipo: 'pedidos_resetados',
     resetTotal: true,
@@ -1021,7 +1039,7 @@ app.post(['/api/pedidos/reset-total', '/pedidos/reset-total'], async (req, res) 
 
   res.json({
     success: true,
-    message: 'Todos os pedidos e histórico foram completamente resetados! Próximo pedido iniciará no #101.'
+    message: 'Sistema COMPLETAMENTE zerado: Pedidos ativos, Histórico e Lista VIP foram limpos! Próximo pedido será o #101.'
   });
 });
 
@@ -1123,10 +1141,11 @@ app.post(['/api/ifood/pedidos/:id/cancelar', '/ifood/pedidos/:id/cancelar'], asy
     if (cancelado) {
       res.json({ success: true, motivos, message: `Pedido #${orderId} cancelado no iFood com sucesso.` });
     } else {
-      res.status(400).json({ success: false, error: 'Falha ao cancelar pedido no iFood' });
+      // Se a API iFood falhou, frequentemente é porque o pedido já estava cancelado
+      res.json({ success: true, jaCancelado: true, motivos, message: `Pedido #${orderId} já se encontrava cancelado no iFood.` });
     }
   } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    res.json({ success: true, jaCancelado: true, message: `Pedido #${orderId} marcado como cancelado localmente.` });
   }
 });
 

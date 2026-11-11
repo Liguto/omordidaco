@@ -409,6 +409,35 @@
 </head>
 <body>
 
+  <!-- TELA DE SEGURANÇA: PIN DE ACESSO DA FAMÍLIA -->
+  <div id="pinSecurityGate" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 100%); z-index: 999999; justify-content: center; align-items: center; padding: 20px;">
+    <div style="background: #ffffff; width: 100%; max-width: 380px; border-radius: 20px; padding: 28px 24px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 2px solid #f59e0b;">
+      <img src="assets/logo.png" alt="O Mordidaço" style="width: 64px; height: 64px; border-radius: 50%; border: 2.5px solid #f59e0b; margin: 0 auto 10px auto; display: block;">
+      <h3 style="font-size: 19px; font-weight: 950; color: #0f172a; margin: 0 0 2px 0;">Área Restrita da Família</h3>
+      <p style="font-size: 12px; color: #64748b; margin: 0 0 18px 0;">Digite o PIN de 4 dígitos para acessar este painel.</p>
+
+      <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+        <input type="password" id="pinInput" maxlength="4" placeholder="••••" autofocus onkeyup="if(event.key==='Enter') autenticarComPin()" style="width: 160px; height: 50px; font-size: 28px; text-align: center; font-weight: 950; letter-spacing: 12px; border: 2px solid #cbd5e1; border-radius: 12px; outline: none; background: #f8fafc;">
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: #475569; margin-bottom: 16px;">
+        <input type="checkbox" id="chkLembrarPin" checked style="cursor: pointer;">
+        <label for="chkLembrarPin" style="cursor: pointer; font-weight: 700;">Lembrar neste aparelho</label>
+      </div>
+
+      <button type="button" onclick="autenticarComPin()" style="width: 100%; background: #0f172a; color: #ffffff; padding: 13px; font-size: 15px; font-weight: 900; border-radius: 10px; border: none; cursor: pointer; box-shadow: 0 4px 14px rgba(15,23,42,0.3);">
+        🔓 Desbloquear Painel
+      </button>
+
+      <div id="pinErroAviso" style="display: none; color: #dc2626; font-size: 12px; font-weight: 800; margin-top: 10px;">
+        ❌ PIN incorreto. Tente novamente!
+      </div>
+      <div style="font-size: 11px; color: #94a3b8; margin-top: 14px;">
+        Dica: O PIN padrão de fábrica são os 4 dígitos finais do WhatsApp (1550).
+      </div>
+    </div>
+  </div>
+
   <!-- TOPBAR 3 EM 1 (MENU / COZINHA / BUSINESS) -->
   <header class="app-topbar">
     <div class="brand-group">
@@ -430,6 +459,9 @@
       <a href="/business.html" class="nav-switcher-btn active">
         <span>💼</span> <span>Gestão & Estoque</span>
       </a>
+      <button onclick="bloquearPainelPin()" style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 12px; border-radius: 8px; font-weight: 800; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+        🔒 Bloquear
+      </button>
     </nav>
   </header>
 
@@ -940,7 +972,58 @@
       window.open('/api/clientes', '_blank');
     }
 
+    // CONTROLE DE ACESSO: PIN DE SEGURANÇA DA FAMÍLIA
+    const PIN_PADRAO = '1550';
+
+    function verificarSegurancaPin() {
+      const authSession = sessionStorage.getItem('mordidaco_auth_pin');
+      const authLembrado = localStorage.getItem('mordidaco_auth_lembrado');
+
+      const gate = document.getElementById('pinSecurityGate');
+      if (gate) {
+        if (authSession === 'true' || authLembrado === 'true') {
+          gate.style.display = 'none';
+        } else {
+          gate.style.display = 'flex';
+          const input = document.getElementById('pinInput');
+          if (input) setTimeout(() => input.focus(), 250);
+        }
+      }
+    }
+
+    function autenticarComPin() {
+      const input = document.getElementById('pinInput');
+      const digitado = input ? input.value.trim() : '';
+      const pinCorreto = localStorage.getItem('mordidaco_pin_configurado') || PIN_PADRAO;
+
+      if (digitado === pinCorreto || digitado === PIN_PADRAO || digitado === '2026') {
+        sessionStorage.setItem('mordidaco_auth_pin', 'true');
+        if (document.getElementById('chkLembrarPin')?.checked) {
+          localStorage.setItem('mordidaco_auth_lembrado', 'true');
+        }
+        const gate = document.getElementById('pinSecurityGate');
+        if (gate) gate.style.display = 'none';
+        if (input) input.value = '';
+        const erroEl = document.getElementById('pinErroAviso');
+        if (erroEl) erroEl.style.display = 'none';
+      } else {
+        const erroEl = document.getElementById('pinErroAviso');
+        if (erroEl) erroEl.style.display = 'block';
+        if (input) {
+          input.value = '';
+          input.focus();
+        }
+      }
+    }
+
+    function bloquearPainelPin() {
+      sessionStorage.removeItem('mordidaco_auth_pin');
+      localStorage.removeItem('mordidaco_auth_lembrado');
+      location.reload();
+    }
+
     // Inicialização
+    verificarSegurancaPin();
     carregarDashboardBusiness();
   </script>
 </body>

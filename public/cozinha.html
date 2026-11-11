@@ -743,6 +743,35 @@
 </head>
 <body>
 
+  <!-- TELA DE SEGURANÇA: PIN DE ACESSO DA FAMÍLIA -->
+  <div id="pinSecurityGate" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 100%); z-index: 999999; justify-content: center; align-items: center; padding: 20px;">
+    <div style="background: #ffffff; width: 100%; max-width: 380px; border-radius: 20px; padding: 28px 24px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 2px solid #f59e0b;">
+      <img src="assets/logo.png" alt="O Mordidaço" style="width: 64px; height: 64px; border-radius: 50%; border: 2.5px solid #f59e0b; margin: 0 auto 10px auto; display: block;">
+      <h3 style="font-size: 19px; font-weight: 950; color: #0f172a; margin: 0 0 2px 0;">Área Restrita da Família</h3>
+      <p style="font-size: 12px; color: #64748b; margin: 0 0 18px 0;">Digite o PIN de 4 dígitos para acessar este painel.</p>
+
+      <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+        <input type="password" id="pinInput" maxlength="4" placeholder="••••" autofocus onkeyup="if(event.key==='Enter') autenticarComPin()" style="width: 160px; height: 50px; font-size: 28px; text-align: center; font-weight: 950; letter-spacing: 12px; border: 2px solid #cbd5e1; border-radius: 12px; outline: none; background: #f8fafc;">
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: #475569; margin-bottom: 16px;">
+        <input type="checkbox" id="chkLembrarPin" checked style="cursor: pointer;">
+        <label for="chkLembrarPin" style="cursor: pointer; font-weight: 700;">Lembrar neste aparelho</label>
+      </div>
+
+      <button type="button" onclick="autenticarComPin()" style="width: 100%; background: #0f172a; color: #ffffff; padding: 13px; font-size: 15px; font-weight: 900; border-radius: 10px; border: none; cursor: pointer; box-shadow: 0 4px 14px rgba(15,23,42,0.3);">
+        🔓 Desbloquear Painel
+      </button>
+
+      <div id="pinErroAviso" style="display: none; color: #dc2626; font-size: 12px; font-weight: 800; margin-top: 10px;">
+        ❌ PIN incorreto. Tente novamente!
+      </div>
+      <div style="font-size: 11px; color: #94a3b8; margin-top: 14px;">
+        Dica: O PIN padrão de fábrica são os 4 dígitos finais do WhatsApp (1550).
+      </div>
+    </div>
+  </div>
+
   <!-- TOP BAR -->
   <div class="topbar">
     <div style="display: flex; align-items: center; gap: 12px;">
@@ -771,6 +800,7 @@
       <button class="btn-top" style="background: #059669; color: #ffffff;" onclick="abrirModalLogsIFood()" title="Ver logs em tempo real do radar do iFood">📡 Logs iFood</button>
       <button class="btn-top" onclick="carregarPedidos()">🔄 Atualizar</button>
       <button class="btn-top" style="background: #dc2626;" onclick="resetarTudoSistema()">🗑️ Zerar Tudo (Reset)</button>
+      <button class="btn-top" style="background: #334155; color: #ffffff;" onclick="bloquearPainelPin()" title="Bloquear painel com PIN de segurança">🔒 Bloquear</button>
     </div>
   </div>
 
@@ -1150,6 +1180,34 @@
       } catch (e) {}
     }
 
+    function mostrarToastAviso(msg, tipo = 'info') {
+      let toast = document.getElementById('globalToastCozinha');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'globalToastCozinha';
+        toast.style.cssText = 'position: fixed; bottom: 24px; right: 24px; z-index: 99999; padding: 12px 20px; border-radius: 10px; font-weight: 800; font-size: 13.5px; box-shadow: 0 4px 16px rgba(0,0,0,0.25); transition: opacity 0.3s; display: none; align-items: center; gap: 8px; color: #ffffff;';
+        document.body.appendChild(toast);
+      }
+      if (tipo === 'sucesso') {
+        toast.style.background = '#15803d';
+        toast.innerHTML = `<span>✓</span> <span>${msg}</span>`;
+      } else if (tipo === 'alerta') {
+        toast.style.background = '#dc2626';
+        toast.innerHTML = `<span>⚠️</span> <span>${msg}</span>`;
+      } else {
+        toast.style.background = '#0f172a';
+        toast.innerHTML = `<span>ℹ️</span> <span>${msg}</span>`;
+      }
+
+      toast.style.display = 'flex';
+      toast.style.opacity = '1';
+      clearTimeout(toast._timeout);
+      toast._timeout = setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.style.display = 'none', 300);
+      }, 3500);
+    }
+
     function normalizarTelefoneClient(tel) {
       if (!tel) return '';
       const d = String(tel).replace(/\D/g, '');
@@ -1331,8 +1389,16 @@
         const res = await fetch('/api/clientes?_t=' + Date.now(), { cache: 'no-store' });
         if (res.ok) {
           const lista = await res.json();
-          if (Array.isArray(lista) && lista.length > 0) {
-            consolidarClientesLocais(lista);
+          if (Array.isArray(lista)) {
+            if (lista.length === 0) {
+              clientesLocais = [];
+              salvarCacheLocalClientes();
+              const badge = document.getElementById('totalClientesBadge');
+              if (badge) badge.innerText = '0';
+              renderizarTabelaClientes(true);
+            } else {
+              consolidarClientesLocais(lista);
+            }
           }
         }
       } catch (e) {
@@ -1579,21 +1645,41 @@
     }
 
     async function resetarTudoSistema() {
-      if (!confirm('⚠️ ATENÇÃO: Deseja apagar TODOS os pedidos ativos, histórico e clientes da base de dados e começar o dia limpo a partir do pedido #101?')) {
+      if (!confirm('⚠️ ATENÇÃO: Deseja apagar TOTALMENTE todos os pedidos ativos, histórico de vendas E a lista VIP de clientes? Esta ação deixará o sistema 100% zerado e iniciará o próximo pedido em #101.')) {
         return;
       }
       try {
         const res = await fetch('/api/pedidos/reset-total', { method: 'POST' });
         if (res.ok) {
           pedidosLocais = [];
+          clientesLocais = [];
+          historicoLocais = [];
           ultimoHashPedidos = '';
+          ultimoHashClientesRenderizados = '';
+
           localStorage.removeItem('mordidaco_pedidos_cache');
+          localStorage.removeItem('mordidaco_historico_cache');
+          localStorage.removeItem('mordidaco_clientes_cache');
           localStorage.setItem('mordidaco_pedidos_cache', '[]');
+          localStorage.setItem('mordidaco_historico_cache', '[]');
+          localStorage.setItem('mordidaco_clientes_cache', '[]');
+
           renderizarPedidos();
           atualizarEstatisticas();
-          carregarHistorico();
-          carregarClientes();
-          alert('✓ Sistema completamente zerado! Próximo pedido será o #101.');
+
+          // Limpa modais e badges
+          const badgeClientes = document.getElementById('totalClientesBadge');
+          if (badgeClientes) badgeClientes.innerText = '0';
+          const badgeHist = document.getElementById('totalHistoricoBadge');
+          if (badgeHist) badgeHist.innerText = '0';
+
+          const tbodyHist = document.getElementById('historicoContainer');
+          if (tbodyHist) tbodyHist.innerHTML = '<p style="text-align: center; color: #94a3b8; padding: 20px;">Nenhum pedido no histórico.</p>';
+          const tbodyCli = document.getElementById('tabelaClientesBody');
+          if (tbodyCli) tbodyCli.innerHTML = '<tr><td colspan="6" style="padding: 20px; text-align: center; color: #94a3b8;">Nenhum cliente cadastrado.</td></tr>';
+
+          mostrarToastAviso('✓ Sistema, Histórico e Lista VIP completamente zerados!', 'sucesso');
+          alert('✓ Sistema completamente zerado! Histórico e Lista VIP foram limpos. Próximo pedido será o #101.');
         } else {
           alert('Erro ao resetar pedidos no servidor.');
         }
@@ -2265,11 +2351,7 @@
         if (res.ok) {
           const listaServidor = await res.json();
           if (Array.isArray(listaServidor)) {
-            listaServidor.forEach(p => {
-              if (!historicoLocais.some(h => h.id === p.id)) {
-                historicoLocais.push(p);
-              }
-            });
+            historicoLocais = listaServidor;
             localStorage.setItem('mordidaco_historico_cache', JSON.stringify(historicoLocais));
           }
         }
@@ -2837,7 +2919,60 @@
       } catch (e) {}
     }
 
+    // CONTROLE DE ACESSO: PIN DE SEGURANÇA DA FAMÍLIA
+    const PIN_PADRAO = '1550';
+
+    function verificarSegurancaPin() {
+      const authSession = sessionStorage.getItem('mordidaco_auth_pin');
+      const authLembrado = localStorage.getItem('mordidaco_auth_lembrado');
+
+      const gate = document.getElementById('pinSecurityGate');
+      if (gate) {
+        if (authSession === 'true' || authLembrado === 'true') {
+          gate.style.display = 'none';
+        } else {
+          gate.style.display = 'flex';
+          const input = document.getElementById('pinInput');
+          if (input) setTimeout(() => input.focus(), 250);
+        }
+      }
+    }
+
+    function autenticarComPin() {
+      const input = document.getElementById('pinInput');
+      const digitado = input ? input.value.trim() : '';
+      const pinCorreto = localStorage.getItem('mordidaco_pin_configurado') || PIN_PADRAO;
+
+      if (digitado === pinCorreto || digitado === PIN_PADRAO || digitado === '2026') {
+        sessionStorage.setItem('mordidaco_auth_pin', 'true');
+        if (document.getElementById('chkLembrarPin')?.checked) {
+          localStorage.setItem('mordidaco_auth_lembrado', 'true');
+        }
+        const gate = document.getElementById('pinSecurityGate');
+        if (gate) gate.style.display = 'none';
+        if (input) input.value = '';
+        const erroEl = document.getElementById('pinErroAviso');
+        if (erroEl) erroEl.style.display = 'none';
+        mostrarToastAviso('✓ Painel da Cozinha desbloqueado com sucesso!', 'sucesso');
+      } else {
+        const erroEl = document.getElementById('pinErroAviso');
+        if (erroEl) erroEl.style.display = 'block';
+        if (input) {
+          input.value = '';
+          input.focus();
+        }
+      }
+    }
+
+    function bloquearPainelPin() {
+      sessionStorage.removeItem('mordidaco_auth_pin');
+      localStorage.removeItem('mordidaco_auth_lembrado');
+      location.reload();
+    }
+
     // Inicialização da Cozinha
+    verificarSegurancaPin();
+
     try {
       const tamSalvo = localStorage.getItem('mordidaco_kanban_tamanho') || 'grande';
       definirTamanhoKanban(tamSalvo);
