@@ -76,8 +76,8 @@ async function sincronizarCardapioCompleto() {
       preco: 22.90
     },
     {
-      nome: 'Mordidaço Duplo',
-      descricao: 'O campeão de vendas! 2 salsichas Sadia, molho especial da casa, queijo muçarela derretido, ketchup, mostarda, milho, vinagrete, purê artesanal, ervilha, batata palha e chuva de parmesão ralado por cima.',
+      nome: 'Mordidaço em Dobro',
+      descricao: 'O campeão de vendas! 2 salsichas Sadia, o verdadeiro dobro de queijo muçarela derretido, molho especial da casa, ketchup, mostarda, milho, vinagrete, purê artesanal, ervilha, batata palha e chuva de parmesão ralado por cima.',
       preco: 28.90
     },
     {
@@ -86,7 +86,7 @@ async function sincronizarCardapioCompleto() {
       preco: 33.90
     },
     {
-      nome: 'Mordidaço Frango com Catupiry',
+      nome: 'Mordidaço Cremoso',
       descricao: '1 salsicha Sadia, peito de frango desfiado temperado, o Legítimo Catupiry® Original cremoso (sem amido), molho especial da casa, purê de batata artesanal, ketchup, mostarda, milho, vinagrete e batata palha.',
       preco: 34.90
     },
@@ -107,14 +107,14 @@ async function sincronizarCardapioCompleto() {
   // 3. Combos Oficiais
   const combos = [
     {
-      nome: 'Combo Dupla Mordida',
-      descricao: '2 Mordidaços Duplos (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata (escolha Coca, Guaraná ou Fanta) + 2 Potes de Molho da Casa (50ml). A janta perfeita para dois!',
+      nome: 'Combo Mordidaço Casal',
+      descricao: '2 Mordidaços em Dobro (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata (escolha Coca, Guaraná ou Fanta) + 2 Potes de Molho da Casa (50ml). A janta perfeita para dois!',
       preco: 68.90,
       serving: 'SERVES_2'
     },
     {
       nome: 'Combo Família Mordidaço',
-      descricao: '2 Mordidaços Duplos + 1 Mordidaço Clássico (escolha individual no Pão ou no Prato para cada um) + 1 Guaraná Antarctica 2 Litros + 3 Potes de Molho da Casa (50ml). Fartura garantida para toda a família!',
+      descricao: '2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha individual no Pão ou no Prato para cada um) + 1 Guaraná Antarctica 2 Litros + 3 Potes de Molho da Casa (50ml). Fartura garantida para toda a família!',
       preco: 86.90,
       serving: 'SERVES_3'
     }

@@ -513,15 +513,15 @@ const CARDAPIO = {
       nome: "⭐ Combos Campeões (Mais Pedidos)",
       itens: [
         {
-          id: "combo-dupla-mordida",
-          nome: "Combo Dupla Mordida",
-          descricao: "2 Mordidaços Duplos (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata (escolha Coca, Guaraná ou Fanta) + 2 Potes de Molho da Casa (50ml). A janta perfeita para dois!",
+          id: "combo-casal",
+          nome: "Combo Mordidaço Casal",
+          descricao: "2 Mordidaços em Dobro (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata (escolha Coca, Guaraná ou Fanta) + 2 Potes de Molho da Casa (50ml). A janta perfeita para dois!",
           preco: 49.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
           lanchesCombo: [
-            { label: "1º Mordidaço Duplo" },
-            { label: "2º Mordidaço Duplo" }
+            { label: "1º Mordidaço em Dobro" },
+            { label: "2º Mordidaço em Dobro" }
           ],
           destaque: true,
           isLanche: true
@@ -529,13 +529,13 @@ const CARDAPIO = {
         {
           id: "combo-familia-mordidaco",
           nome: "Combo Família Mordidaço",
-          descricao: "2 Mordidaços Duplos + 1 Mordidaço Clássico (escolha individual no Pão ou no Prato para cada um) + 1 Guaraná Antarctica 2 Litros + 3 Potes de Molho da Casa (50ml). Fartura garantida para toda a família!",
+          descricao: "2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha individual no Pão ou no Prato para cada um) + 1 Guaraná Antarctica 2 Litros + 3 Potes de Molho da Casa (50ml). Fartura garantida para toda a família!",
           preco: 64.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
           lanchesCombo: [
-            { label: "1º Mordidaço Duplo" },
-            { label: "2º Mordidaço Duplo" },
+            { label: "1º Mordidaço em Dobro" },
+            { label: "2º Mordidaço em Dobro" },
             { label: "3º Mordidaço Clássico" }
           ],
           destaque: false,
@@ -559,8 +559,8 @@ const CARDAPIO = {
         },
         {
           id: "mordidaco-duplo",
-          nome: "Mordidaço Duplo",
-          descricao: "O campeão de vendas! 2 salsichas Sadia, molho especial da casa, queijo muçarela derretido, ketchup, mostarda, milho, vinagrete, purê artesanal, ervilha, batata palha e chuva de parmesão ralado por cima.",
+          nome: "Mordidaço em Dobro",
+          descricao: "O campeão de vendas! 2 salsichas Sadia, o verdadeiro dobro de queijo muçarela derretido, molho especial da casa, ketchup, mostarda, milho, vinagrete, purê artesanal, ervilha, batata palha e chuva de parmesão ralado por cima.",
           preco: 21.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -579,7 +579,7 @@ const CARDAPIO = {
         },
         {
           id: "mordidaco-frango-catupiry",
-          nome: "Mordidaço Frango com Catupiry",
+          nome: "Mordidaço Cremoso",
           descricao: "1 salsicha Sadia, peito de frango desfiado temperado, o Legítimo Catupiry® Original cremoso (sem amido), molho especial da casa, purê de batata artesanal, ketchup, mostarda, milho, vinagrete e batata palha.",
           preco: 26.90,
           adicionalPrato: 2.00,

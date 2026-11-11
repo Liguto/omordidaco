@@ -108,7 +108,7 @@ function deduzirEstoquePorPedido(pedido) {
     }
 
     // 2. ANÁLISE DE DOGS INDIVIDUAIS
-    const isDog = nome.includes('mordidaço') || nome.includes('mordidaco') || nome.includes('dog') || nome.includes('cachorro') || nome.includes('clássico') || nome.includes('duplo') || nome.includes('tudão');
+    const isDog = nome.includes('mordidaço') || nome.includes('mordidaco') || nome.includes('dog') || nome.includes('cachorro') || nome.includes('clássico') || nome.includes('duplo') || nome.includes('dobro') || nome.includes('cremoso') || nome.includes('tudão');
     if (isDog) {
       totalDogsNoPedido += qtdItem;
       registrarBaixa('pote_berco', 1 * qtdItem);
@@ -139,8 +139,8 @@ function deduzirEstoquePorPedido(pedido) {
         registrarBaixa('queijo_mussarela', 0.040 * qtdItem);
         registrarBaixa('queijo_parmesao', 0.015 * qtdItem);
         registrarBaixa('ervilha_conserva', 0.020 * qtdItem);
-      } else if (nome.includes('duplo')) {
-        // Mordidaço Duplo: 2 Salsichas, Muçarela dobro, Ervilha, Parmesão
+      } else if (nome.includes('duplo') || nome.includes('dobro')) {
+        // Mordidaço em Dobro: 2 Salsichas, Muçarela dobro, Ervilha, Parmesão
         registrarBaixa('salsicha_sadia', 2 * qtdItem);
         registrarBaixa('queijo_mussarela', 0.038 * qtdItem);
         registrarBaixa('queijo_parmesao', 0.012 * qtdItem);
@@ -152,8 +152,8 @@ function deduzirEstoquePorPedido(pedido) {
         registrarBaixa('queijo_mussarela', 0.020 * qtdItem);
         registrarBaixa('queijo_parmesao', 0.012 * qtdItem);
         registrarBaixa('ervilha_conserva', 0.020 * qtdItem);
-      } else if (nome.includes('frango')) {
-        // Mordidaço Frango c/ Catupiry: 1 Salsicha, Frango, Catupiry Original
+      } else if (nome.includes('cremoso') || nome.includes('frango')) {
+        // Mordidaço Cremoso: 1 Salsicha, Frango, Catupiry Original
         registrarBaixa('salsicha_sadia', 1 * qtdItem);
         registrarBaixa('frango_desfiado', 0.050 * qtdItem);
         registrarBaixa('catupiry_original', 0.035 * qtdItem);
