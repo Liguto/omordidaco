@@ -4,6 +4,7 @@ const path = require('path');
 const os = require('os');
 const integracaoIFood = require('./integracao_ifood');
 const integracao99Food = require('./integracao_99food');
+const gestaoEstoque = require('./gestao_estoque');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -760,6 +761,13 @@ app.post(['/api/pedidos', '/pedidos'], async (req, res) => {
       await salvarPedidosNuvem();
     }
 
+    // Deduz automaticamente o estoque pela ficha técnica do pedido
+    try {
+      gestaoEstoque.deduzirEstoquePorPedido(novoPedido);
+    } catch (e) {
+      console.warn('Erro ao deduzir estoque:', e.message);
+    }
+
     // Salva ou atualiza cliente na lista VIP de forma invisível
     registrarOuAtualizarCliente(cliente, entrega, total);
     if (KV_URL && KV_TOKEN) {
@@ -1085,6 +1093,7 @@ app.post(['/api/ifood/simular-teste', '/ifood/simular-teste'], (req, res) => {
 
   pedidos.unshift(pedidoSimulado);
   salvarPedidos();
+  try { gestaoEstoque.deduzirEstoquePorPedido(pedidoSimulado); } catch(e) {}
   notificarCozinha({
     tipo: 'novo_pedido',
     pedido: pedidoSimulado
@@ -1145,6 +1154,7 @@ app.post(['/api/99food/webhook', '/99food/webhook'], (req, res) => {
         pedidos.unshift(novoPedido);
         salvarPedidos();
         salvarPedidosNuvem();
+        try { gestaoEstoque.deduzirEstoquePorPedido(novoPedido); } catch(e) {}
 
         notificarCozinha({
           tipo: 'novo_pedido',
@@ -1180,6 +1190,7 @@ app.post(['/api/99food/simular-teste', '/99food/simular-teste'], (req, res) => {
   pedidos.unshift(pedidoSimulado);
   salvarPedidos();
   salvarPedidosNuvem();
+  try { gestaoEstoque.deduzirEstoquePorPedido(pedidoSimulado); } catch(e) {}
 
   notificarCozinha({
     tipo: 'novo_pedido',
@@ -1210,6 +1221,7 @@ try {
       if (!jaExiste) {
         pedidos.unshift(pedidoIFood);
         salvarPedidos();
+        try { gestaoEstoque.deduzirEstoquePorPedido(pedidoIFood); } catch(e) {}
         notificarCozinha({
           tipo: 'novo_pedido',
           pedido: pedidoIFood
@@ -1266,6 +1278,80 @@ try {
 } catch (err) {
   console.warn('⚠️ [iFood] Não foi possível iniciar radar:', err.message);
 }
+
+// ====================================================
+// ROTAS DO PAINEL BUSINESS (ESTOQUE, CRM & FINANCEIRO)
+// ====================================================
+
+// Rota de visualização amigável
+app.get(['/business', '/admin', '/gestao'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'business.html'));
+});
+
+// Dashboard Consolidado (Métricas Financeiras, Estoque e Alertas)
+app.get(['/api/business/dashboard', '/business/dashboard'], (req, res) => {
+  recarregarPedidosDoDisco();
+  recarregarHistoricoDoDisco();
+  recarregarClientesDoDisco();
+  const estoqueData = gestaoEstoque.carregarEstoque();
+
+  const todosPedidos = [...pedidos, ...historicoPedidos];
+  const metricas = gestaoEstoque.calcularMetricasBusiness(todosPedidos, estoqueData);
+
+  res.json({
+    sucesso: true,
+    metricas,
+    estoque: estoqueData.insumos,
+    alertasEstoque: metricas.alertasEstoque,
+    totalClientes: clientes.length,
+    ultimasMovimentacoes: (estoqueData.movimentacoes || []).slice(0, 20)
+  });
+});
+
+// Listar Estoque Completo
+app.get(['/api/business/estoque', '/business/estoque'], (req, res) => {
+  res.json(gestaoEstoque.carregarEstoque());
+});
+
+// Entrada de Estoque / Compra Rápida (+X unidades)
+app.post(['/api/business/estoque/entrada', '/business/estoque/entrada'], (req, res) => {
+  const { id, quantidade } = req.body || {};
+  if (!id || !quantidade || isNaN(quantidade)) {
+    return res.status(400).json({ sucesso: false, error: 'Parâmetros inválidos' });
+  }
+
+  const itemAtualizado = gestaoEstoque.adicionarEntradaEstoque(id, Number(quantidade));
+  if (!itemAtualizado) {
+    return res.status(404).json({ sucesso: false, error: 'Insumo não encontrado' });
+  }
+
+  notificarCozinha({
+    tipo: 'estoque_atualizado',
+    item: itemAtualizado
+  });
+
+  res.json({ sucesso: true, item: itemAtualizado });
+});
+
+// Ajuste Manual de Estoque (Correção de saldo físico)
+app.post(['/api/business/estoque/ajustar', '/business/estoque/ajustar'], (req, res) => {
+  const { id, quantidade, motivo } = req.body || {};
+  if (!id || quantidade === undefined || isNaN(quantidade)) {
+    return res.status(400).json({ sucesso: false, error: 'Parâmetros inválidos' });
+  }
+
+  const itemAtualizado = gestaoEstoque.ajustarEstoqueManual(id, Number(quantidade), motivo);
+  if (!itemAtualizado) {
+    return res.status(404).json({ sucesso: false, error: 'Insumo não encontrado' });
+  }
+
+  notificarCozinha({
+    tipo: 'estoque_atualizado',
+    item: itemAtualizado
+  });
+
+  res.json({ sucesso: true, item: itemAtualizado });
+});
 
 // Exporta o app para o Vercel Serverless
 module.exports = app;

@@ -1,0 +1,221 @@
+{
+  "insumos": [
+    {
+      "id": "pao_bambini",
+      "nome": "Pão de Hot Dog (Panificadora Bambini)",
+      "categoria": "Insumos",
+      "unidade": "un",
+      "quantidade": 50,
+      "minimo": 15,
+      "custoUnitario": 0.90
+    },
+    {
+      "id": "salsicha_sadia",
+      "nome": "Salsicha Sadia Oficial",
+      "categoria": "Insumos",
+      "unidade": "un",
+      "quantidade": 80,
+      "minimo": 20,
+      "custoUnitario": 0.78
+    },
+    {
+      "id": "pure_batata",
+      "nome": "Purê de Batata Artesanal da Casa",
+      "categoria": "Insumos",
+      "unidade": "kg",
+      "quantidade": 6.0,
+      "minimo": 1.5,
+      "custoUnitario": 8.00
+    },
+    {
+      "id": "molho_tomate",
+      "nome": "Molho de Tomate Caseiro Refogado",
+      "categoria": "Insumos",
+      "unidade": "kg",
+      "quantidade": 4.0,
+      "minimo": 1.0,
+      "custoUnitario": 10.00
+    },
+    {
+      "id": "queijo_mussarela",
+      "nome": "Queijo Muçarela Fatiada (Sadia/Tirolez)",
+      "categoria": "Insumos",
+      "unidade": "kg",
+      "quantidade": 3.0,
+      "minimo": 0.8,
+      "custoUnitario": 38.00
+    },
+    {
+      "id": "queijo_parmesao",
+      "nome": "Queijo Parmesão Fresco (Ralado na Hora)",
+      "categoria": "Insumos",
+      "unidade": "kg",
+      "quantidade": 1.0,
+      "minimo": 0.3,
+      "custoUnitario": 55.00
+    },
+    {
+      "id": "bacon_cubos",
+      "nome": "Bacon Sadia em Cubos Crocantes",
+      "categoria": "Insumos",
+      "unidade": "kg",
+      "quantidade": 1.5,
+      "minimo": 0.4,
+      "custoUnitario": 36.00
+    },
+    {
+      "id": "frango_desfiado",
+      "nome": "Frango Desfiado Temperado da Casa",
+      "categoria": "Insumos",
+      "unidade": "kg",
+      "quantidade": 1.5,
+      "minimo": 0.4,
+      "custoUnitario": 22.00
+    },
+    {
+      "id": "catupiry_original",
+      "nome": "Legítimo Catupiry® Original (Sem Amido)",
+      "categoria": "Insumos",
+      "unidade": "kg",
+      "quantidade": 1.5,
+      "minimo": 0.5,
+      "custoUnitario": 35.00
+    },
+    {
+      "id": "batata_palha",
+      "nome": "Batata Palha Extra Crocante",
+      "categoria": "Insumos",
+      "unidade": "kg",
+      "quantidade": 2.5,
+      "minimo": 0.6,
+      "custoUnitario": 16.00
+    },
+    {
+      "id": "milho_conserva",
+      "nome": "Milho Verde em Conserva Drenado",
+      "categoria": "Insumos",
+      "unidade": "kg",
+      "quantidade": 2.0,
+      "minimo": 0.5,
+      "custoUnitario": 8.20
+    },
+    {
+      "id": "maionese_verde",
+      "nome": "Maionese Verde Especial da Casa",
+      "categoria": "Insumos",
+      "unidade": "kg",
+      "quantidade": 2.5,
+      "minimo": 0.7,
+      "custoUnitario": 15.00
+    },
+    {
+      "id": "pote_berco",
+      "nome": "Pote/Caixa Berço c/ Trava (Pote Único)",
+      "categoria": "Embalagens",
+      "unidade": "un",
+      "quantidade": 120,
+      "minimo": 35,
+      "custoUnitario": 0.55
+    },
+    {
+      "id": "garfo_reforcado",
+      "nome": "Garfo Reforçado Descartável (No Prato)",
+      "categoria": "Embalagens",
+      "unidade": "un",
+      "quantidade": 70,
+      "minimo": 20,
+      "custoUnitario": 0.15
+    },
+    {
+      "id": "pote_maionese_50ml",
+      "nome": "Pote Plástico c/ Tampa 50ml (Maionese Extra)",
+      "categoria": "Embalagens",
+      "unidade": "un",
+      "quantidade": 90,
+      "minimo": 30,
+      "custoUnitario": 0.22
+    },
+    {
+      "id": "saco_kraft_m",
+      "nome": "Saco Kraft Delivery Médio (1 a 2 dogs)",
+      "categoria": "Embalagens",
+      "unidade": "un",
+      "quantidade": 80,
+      "minimo": 25,
+      "custoUnitario": 0.45
+    },
+    {
+      "id": "saco_kraft_g",
+      "nome": "Saco Kraft Delivery Grande (Combos)",
+      "categoria": "Embalagens",
+      "unidade": "un",
+      "quantidade": 50,
+      "minimo": 15,
+      "custoUnitario": 0.65
+    },
+    {
+      "id": "lacre_seguranca",
+      "nome": "Lacre Adesivo de Segurança Mordidaço",
+      "categoria": "Embalagens",
+      "unidade": "un",
+      "quantidade": 160,
+      "minimo": 40,
+      "custoUnitario": 0.08
+    },
+    {
+      "id": "coca_lata",
+      "nome": "Coca-Cola Original (Lata 350ml)",
+      "categoria": "Bebidas",
+      "unidade": "un",
+      "quantidade": 24,
+      "minimo": 8,
+      "custoUnitario": 2.30
+    },
+    {
+      "id": "coca_zero_lata",
+      "nome": "Coca-Cola Sem Açúcar (Lata 350ml)",
+      "categoria": "Bebidas",
+      "unidade": "un",
+      "quantidade": 12,
+      "minimo": 6,
+      "custoUnitario": 2.30
+    },
+    {
+      "id": "guarana_lata",
+      "nome": "Guaraná Antarctica (Lata 350ml)",
+      "categoria": "Bebidas",
+      "unidade": "un",
+      "quantidade": 18,
+      "minimo": 6,
+      "custoUnitario": 2.20
+    },
+    {
+      "id": "guarana_2l",
+      "nome": "Guaraná Antarctica (Garrafa 2 Litros)",
+      "categoria": "Bebidas",
+      "unidade": "un",
+      "quantidade": 10,
+      "minimo": 4,
+      "custoUnitario": 6.50
+    },
+    {
+      "id": "coca_2l",
+      "nome": "Coca-Cola Original (Garrafa 2 Litros)",
+      "categoria": "Bebidas",
+      "unidade": "un",
+      "quantidade": 8,
+      "minimo": 3,
+      "custoUnitario": 7.50
+    },
+    {
+      "id": "agua_sem_gas",
+      "nome": "Água Mineral Crystal 500ml",
+      "categoria": "Bebidas",
+      "unidade": "un",
+      "quantidade": 16,
+      "minimo": 6,
+      "custoUnitario": 1.10
+    }
+  ],
+  "movimentacoes": []
+}

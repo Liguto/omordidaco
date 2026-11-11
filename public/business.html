@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Business & Gestão de Estoque | O Mordidaço</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/assets/logo.png">
+
+  <style>
+    :root {
+      --dark: #0f172a;
+      --primary: #d97706;
+      --primary-hover: #b45309;
+      --green: #16a34a;
+      --green-dark: #15803d;
+      --red: #dc2626;
+      --blue: #2563eb;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --text-muted: #64748b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TOPBAR DE NAVEGAÇÃO ENTRE OS 3 PAINÉIS */
+    .app-topbar {
+      background: #0f172a;
+      color: #ffffff;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 3px solid var(--primary);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo-img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid #f59e0b;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+    }
+
+    .brand-titles h1 {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -0.3px;
+      line-height: 1.1;
+      color: #ffffff;
+    }
+
+    .brand-titles p {
+      font-size: 11.5px;
+      color: #fde68a;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .nav-switchers {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .nav-switcher-btn {
+      color: #cbd5e1;
+      text-decoration: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 800;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-switcher-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
+
+    .nav-switcher-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(217, 119, 6, 0.35);
+    }
+
+    /* CONTAINER PRINCIPAL */
+    .main-container {
+      max-width: 1300px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 20px;
+      flex: 1;
+    }
+
+    /* BANNER DE ALERTA DE ESTOQUE CRÍTICO */
+    .alert-banner-stock {
+      background: #fef2f2;
+      border: 1.5px solid #fca5a5;
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      box-shadow: 0 4px 14px rgba(220, 38, 38, 0.08);
+    }
+
+    /* KPIS EXECUTIVOS */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--border);
+    }
+    .kpi-card.green::after { background: var(--green); }
+    .kpi-card.amber::after { background: var(--primary); }
+    .kpi-card.blue::after { background: var(--blue); }
+    .kpi-card.purple::after { background: #7c3aed; }
+
+    .kpi-label {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .kpi-value {
+      font-size: 26px;
+      font-weight: 950;
+      color: #0f172a;
+      margin: 6px 0 2px 0;
+      letter-spacing: -0.5px;
+    }
+
+    .kpi-subtext {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    /* CARD EXCLUSIVO: BLINDAGEM DO CONSIGNADO */
+    .consignado-box {
+      background: linear-gradient(135deg, #064e3b 0%, #065f46 60%, #047857 100%);
+      color: #ffffff;
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      box-shadow: 0 6px 20px rgba(6, 78, 59, 0.25);
+    }
+
+    .progress-bar-bg {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      height: 12px;
+      width: 100%;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .progress-bar-fill {
+      background: #4ade80;
+      height: 100%;
+      border-radius: 10px;
+      transition: width 0.4s ease;
+    }
+
+    /* ABAS INTERNAS DO PAINEL BUSINESS */
+    .business-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 22px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .tab-item-btn {
+      background: none;
+      border: none;
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #64748b;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-item-btn:hover {
+      color: #0f172a;
+    }
+
+    .tab-item-btn.active {
+      color: var(--primary);
+    }
+
+    .tab-item-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 3px 3px 0 0;
+    }
+
+    /* BARRA DE FILTROS & AÇÕES DE ESTOQUE */
+    .stock-controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .stock-filters {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .filter-chip {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: #475569;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-chip.active, .filter-chip:hover {
+      background: #0f172a;
+      color: #ffffff;
+      border-color: #0f172a;
+    }
+
+    /* TABELAS MODERNAS */
+    .data-table-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    table.data-table th {
+      background: #f8fafc;
+      color: #64748b;
+      font-size: 11.5px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    table.data-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 13.5px;
+      vertical-align: middle;
+    }
+
+    table.data-table tr:hover td {
+      background: #fafafa;
+    }
+
+    /* BADGES DE ESTOQUE */
+    .badge-stock {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11.5px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .badge-stock.ok {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+    .badge-stock.alert {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+      animation: pulseAlert 2s infinite;
+    }
+
+    @keyframes pulseAlert {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+
+    /* BOTÕES DE COMPRA RÁPIDA */
+    .quick-add-btn {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      color: #0f172a;
+      padding: 5px 9px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .quick-add-btn:hover {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      width: 100%;
+      max-width: 480px;
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR 3 EM 1 (MENU / COZINHA / BUSINESS) -->
+  <header class="app-topbar">
+    <div class="brand-group">
+      <img src="assets/logo.png" alt="O Mordidaço" class="brand-logo-img">
+      <div class="brand-titles">
+        <h1>O MORDIDAÇO • BUSINESS</h1>
+        <p>Gestão de Estoque, CRM & Análises Financeiras</p>
+      </div>
+    </div>
+
+    <!-- SWITCHER DE NAVEGAÇÃO ENTRE AS 3 TELAS -->
+    <nav class="nav-switchers">
+      <a href="/" class="nav-switcher-btn">
+        <span>🌭</span> <span>Cardápio</span>
+      </a>
+      <a href="/cozinha.html" class="nav-switcher-btn">
+        <span>👨‍🍳</span> <span>Cozinha KDS</span>
+      </a>
+      <a href="/business.html" class="nav-switcher-btn active">
+        <span>💼</span> <span>Gestão & Estoque</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- CORPO PRINCIPAL -->
+  <main class="main-container">
+
+    <!-- BANNER DE ALERTA DE REPOSIÇÃO ANTECIPADA (DINÂMICO) -->
+    <div id="alertStockBanner" class="alert-banner-stock" style="display: none;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span style="font-size: 26px;">⚠️</span>
+        <div>
+          <strong style="color: #991b1b; font-size: 14.5px;">Atenção: Há produtos em Estoque Crítico!</strong>
+          <p id="alertStockListText" style="font-size: 12.5px; color: #b91c1c; margin-top: 2px;">
+            Verifique os itens abaixo para realizar a compra antes da operação noturna.
+          </p>
+        </div>
+      </div>
+      <button onclick="filtrarEstoque('critico')" style="background: #dc2626; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 800; font-size: 12px; cursor: pointer; white-space: nowrap;">
+        Ver Itens Críticos
+      </button>
+    </div>
+
+    <!-- KPIS EXECUTIVOS NO TOPO -->
+    <section class="kpi-grid">
+      <div class="kpi-card green">
+        <span class="kpi-label">Faturamento Total</span>
+        <div class="kpi-value" id="kpiFaturamentoTotal">R$ 0,00</div>
+        <div class="kpi-subtext" id="kpiFaturamentoSubtext">Site: R$ 0 • iFood: R$ 0 • 99: R$ 0</div>
+      </div>
+
+      <div class="kpi-card green">
+        <span class="kpi-label">Lucro Líquido Real</span>
+        <div class="kpi-value" id="kpiLucroLiquido" style="color: #15803d;">R$ 0,00</div>
+        <div class="kpi-subtext" id="kpiLucroMargem">Margem Líquida Média: 0%</div>
+      </div>
+
+      <div class="kpi-card amber">
+        <span class="kpi-label">CMV Médio da Loja</span>
+        <div class="kpi-value" id="kpiCmvPercentual" style="color: #b45309;">0%</div>
+        <div class="kpi-subtext" id="kpiCmvValor">Custo dos Insumos: R$ 0,00</div>
+      </div>
+
+      <div class="kpi-card blue">
+        <span class="kpi-label">Pedidos Realizados</span>
+        <div class="kpi-value" id="kpiTotalPedidos">0</div>
+        <div class="kpi-subtext" id="kpiTicketMedio">Ticket Médio: R$ 0,00 / pedido</div>
+      </div>
+    </section>
+
+    <!-- TERMÔMETRO DO EMPRÉSTIMO CONSIGNADO (RECOMENDAÇÃO CONSULTOR DELIVERY) -->
+    <section class="consignado-box">
+      <div style="flex: 1; min-width: 280px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 22px;">🛡️</span>
+          <strong style="font-size: 15px; letter-spacing: 0.2px;">Blindagem da Parcela do Consignado (~2,50% a.m.)</strong>
+        </div>
+        <p style="font-size: 12.5px; opacity: 0.9; margin-top: 4px;">
+          Meta semanal: <strong>R$ 35,00 toda segunda-feira</strong> antes de qualquer retirada pessoal • Parcela mensal: R$ 140,00.
+        </p>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="consignadoBarFill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <div style="text-align: right; min-width: 160px;">
+        <span style="font-size: 11px; text-transform: uppercase; font-weight: 800; opacity: 0.85;">STATUS DA PARCELA</span>
+        <div style="font-size: 20px; font-weight: 950;" id="consignadoStatusText">R$ 0,00 / R$ 140,00</div>
+        <span id="consignadoBadge" style="background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 8px; font-size: 11px; font-weight: 800;">
+          EM ANDAMENTO
+        </span>
+      </div>
+    </section>
+
+    <!-- NAVEGAÇÃO DE ABAS DO BUSINESS -->
+    <div class="business-tabs">
+      <button class="tab-item-btn active" onclick="trocarAbaBusiness('estoque')">
+        <span>📦</span> <span>Estoque Inteligente</span>
+      </button>
+      <button class="tab-item-btn" onclick="trocarAbaBusiness('clientes')">
+        <span>👥</span> <span>Lista VIP & CRM (<span id="tabClientesCount">0</span>)</span>
+      </button>
+      <button class="tab-item-btn" onclick="trocarAbaBusiness('canais')">
+        <span>📊</span> <span>Canais & DRE Simulado</span>
+      </button>
+      <button class="tab-item-btn" onclick="trocarAbaBusiness('movimentacoes')">
+        <span>📋</span> <span>Baixas Recentes</span>
+      </button>
+    </div>
+
+    <!-- VIEW 1: ESTOQUE INTELIGENTE -->
+    <div id="viewEstoque">
+      <div class="stock-controls-bar">
+        <div class="stock-filters">
+          <button class="filter-chip active" onclick="filtrarEstoque('todos', this)">Todos</button>
+          <button class="filter-chip" onclick="filtrarEstoque('critico', this)">⚠️ Estoque Crítico</button>
+          <button class="filter-chip" onclick="filtrarEstoque('Insumos', this)">🌭 Insumos</button>
+          <button class="filter-chip" onclick="filtrarEstoque('Embalagens', this)">📦 Embalagens</button>
+          <button class="filter-chip" onclick="filtrarEstoque('Bebidas', this)">🥤 Bebidas</button>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="buscaEstoque" placeholder="🔍 Buscar insumo..." oninput="buscarInsumo(this.value)" style="padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 13px; outline: none;">
+          <button onclick="carregarDashboardBusiness()" style="background: #f1f5f9; border: 1.5px solid var(--border); padding: 8px 14px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer;">
+            🔄 Atualizar
+          </button>
+        </div>
+      </div>
+
+      <div class="data-table-card">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Insumo / Mercadoria</th>
+              <th>Categoria</th>
+              <th>Saldo Atual</th>
+              <th>Estoque Mínimo</th>
+              <th>Custo Unit.</th>
+              <th>Status</th>
+              <th style="text-align: right;">Ações de Reposição</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaEstoqueBody">
+            <tr><td colspan="7" style="text-align:center; padding: 30px; color: #94a3b8;">Carregando dados de estoque...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- VIEW 2: LISTA VIP & CRM DE CLIENTES -->
+    <div id="viewClientes" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div>
+          <h3 style="font-size: 16px; font-weight: 900; color: #0f172a;">Clientes Fidelizados (Lista VIP)</h3>
+          <p style="font-size: 12.5px; color: #64748b;">Clientes capturados automaticamente no site próprio e campanhas de WhatsApp.</p>
+        </div>
+        <button onclick="exportarClientesCsv()" style="background: #15803d; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 800; font-size: 12.5px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+          📥 Exportar Contatos (CSV)
+        </button>
+      </div>
+
+      <div class="data-table-card">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>WhatsApp</th>
+              <th>Bairro</th>
+              <th>Total de Pedidos</th>
+              <th>Total Investido</th>
+              <th>Último Pedido</th>
+              <th style="text-align: right;">Ações de Relacionamento</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaClientesBody">
+            <tr><td colspan="7" style="text-align:center; padding: 30px; color: #94a3b8;">Carregando clientes VIP...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- VIEW 3: CANAIS & DRE SIMULADO -->
+    <div id="viewCanais" style="display: none;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+        <div class="data-table-card" style="padding: 22px;">
+          <h3 style="font-size: 16px; font-weight: 900; color: #0f172a; margin-bottom: 14px;">Comparativo de Margens por Canal</h3>
+          
+          <div style="margin-bottom: 16px; padding: 12px; background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 10px;">
+            <div style="display: flex; justify-content: space-between; font-weight: 900; color: #166534; font-size: 14px;">
+              <span>🌭 Canal Direto (Site / WhatsApp)</span>
+              <span>Margem Líquida: ~72%</span>
+            </div>
+            <p style="font-size: 12px; color: #15803d; margin-top: 4px;">
+              Taxa de comissão: <strong>0% (100% no caixa da família)</strong> • Preço competitivo e maior poder de fidelização.
+            </p>
+          </div>
+
+          <div style="margin-bottom: 16px; padding: 12px; background: #fff1f2; border: 1.5px solid #fecdd3; border-radius: 10px;">
+            <div style="display: flex; justify-content: space-between; font-weight: 900; color: #9f1239; font-size: 14px;">
+              <span>🔴 iFood Marketplace</span>
+              <span>Margem Líquida: ~51%</span>
+            </div>
+            <p style="font-size: 12px; color: #be123c; margin-top: 4px;">
+              Comissão da plataforma: 27% (Entrega Parceira) • Excelente canal de aquisição de novos clientes para migração.
+            </p>
+          </div>
+
+          <div style="padding: 12px; background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 10px;">
+            <div style="display: flex; justify-content: space-between; font-weight: 900; color: #92400e; font-size: 14px;">
+              <span>🟡 99Food App</span>
+              <span>Margem Líquida: ~53%</span>
+            </div>
+            <p style="font-size: 12px; color: #b45309; margin-top: 4px;">
+              Comissão da plataforma: ~25% • Canal complementar com repasse financeiro garantido.
+            </p>
+          </div>
+        </div>
+
+        <div class="data-table-card" style="padding: 22px;">
+          <h3 style="font-size: 16px; font-weight: 900; color: #0f172a; margin-bottom: 14px;">Estratégia Lean do Consultor Delivery</h3>
+          <ul style="font-size: 13px; color: #334155; line-height: 1.6; list-style-position: inside;">
+            <li style="margin-bottom: 8px;"><strong>Estratégia do Pote Único:</strong> Usamos a mesma caixa berço impermeabilizada tanto para o Dog no Pão quanto No Prato, economizando papel acoplado e marmitas de isopor.</li>
+            <li style="margin-bottom: 8px;"><strong>Ouro do "No Prato":</strong> Cobra-se + R$ 2,00 e economiza-se o pão Bambini (- R$ 0,90), gerando <strong>+ R$ 2,33 de lucro puro adicional</strong> por lanche.</li>
+            <li style="margin-bottom: 8px;"><strong>Combo Casal Campeão:</strong> Ticket médio elevado com 2 Dogs Duplos Sadia e bebidas, absorvendo custos fixos rapidamente nas noites de pico.</li>
+            <li><strong>Reserva do Consignado:</strong> Guardar R$ 35,00 toda segunda-feira protege o orçamento doméstico do salário do casal.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 4: BAIXAS RECENTES -->
+    <div id="viewMovimentacoes" style="display: none;">
+      <div class="data-table-card">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Data / Horário</th>
+              <th>Origem / Pedido</th>
+              <th>Insumos Baixados (Ficha Técnica)</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaMovimentacoesBody">
+            <tr><td colspan="3" style="text-align:center; padding: 30px; color: #94a3b8;">Carregando histórico de baixas...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODAL: AJUSTE MANUAL DE ESTOQUE -->
+  <div class="modal-overlay" id="modalAjusteEstoque" onclick="if(event.target === this) fecharModalAjuste()">
+    <div class="modal-box">
+      <h3 style="font-size: 17px; font-weight: 900; color: #0f172a; margin-bottom: 4px;" id="ajusteNomeInsumo">Ajustar Saldo</h3>
+      <span style="font-size: 12px; color: #64748b;" id="ajusteCategoria">Categoria</span>
+
+      <input type="hidden" id="ajusteIdInsumo">
+
+      <div style="margin: 16px 0;">
+        <label style="display: block; font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">
+          Novo Saldo Físico:
+        </label>
+        <input type="number" step="any" id="ajusteNovaQuantidade" style="width: 100%; padding: 12px; border-radius: 8px; border: 1.5px solid var(--border); font-size: 16px; font-weight: 900;">
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">
+          Motivo da Alteração:
+        </label>
+        <select id="ajusteMotivoSelect" style="width: 100%; padding: 10px; border-radius: 8px; border: 1.5px solid var(--border); font-size: 13px; font-weight: 700;">
+          <option value="Contagem física de rotina">Contagem física de rotina</option>
+          <option value="Compra / Reposição no atacado">Compra / Reposição no atacado</option>
+          <option value="Perda / Descarte por validade">Perda / Descarte por validade</option>
+          <option value="Ajuste operacional">Ajuste operacional</option>
+        </select>
+      </div>
+
+      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+        <button onclick="fecharModalAjuste()" style="background: #f1f5f9; color: #475569; border: 1px solid var(--border); padding: 10px 18px; border-radius: 8px; font-weight: 800; font-size: 13px; cursor: pointer;">
+          Cancelar
+        </button>
+        <button onclick="salvarAjusteEstoque()" style="background: var(--dark); color: #ffffff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 900; font-size: 13px; cursor: pointer;">
+          Salvar Saldo
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let dadosBusinessGlobais = null;
+    let filtroAtual = 'todos';
+
+    async function carregarDashboardBusiness() {
+      try {
+        const [resDash, resClientes] = await Promise.all([
+          fetch('/api/business/dashboard?_t=' + Date.now()),
+          fetch('/api/clientes?_t=' + Date.now())
+        ]);
+
+        if (resDash.ok) {
+          dadosBusinessGlobais = await resDash.json();
+          renderizarKPIs(dadosBusinessGlobais.metricas);
+          renderizarEstoque(dadosBusinessGlobais.estoque);
+          renderizarMovimentacoes(dadosBusinessGlobais.ultimasMovimentacoes);
+        }
+
+        if (resClientes.ok) {
+          const clientes = await resClientes.json();
+          renderizarClientes(clientes);
+          const cEl = document.getElementById('tabClientesCount');
+          if (cEl) cEl.innerText = clientes.length;
+        }
+      } catch (err) {
+        console.error('Erro ao carregar dados do business:', err);
+      }
+    }
+
+    function renderizarKPIs(m) {
+      if (!m) return;
+
+      document.getElementById('kpiFaturamentoTotal').innerText = 'R$ ' + m.faturamento.total.toFixed(2).replace('.', ',');
+      document.getElementById('kpiFaturamentoSubtext').innerText = `Site: R$ ${m.faturamento.site.toFixed(2).replace('.', ',')} • iFood: R$ ${m.faturamento.ifood.toFixed(2).replace('.', ',')} • 99: R$ ${m.faturamento.ninetyNine.toFixed(2).replace('.', ',')}`;
+
+      document.getElementById('kpiLucroLiquido').innerText = 'R$ ' + m.lucro.liquidoReal.toFixed(2).replace('.', ',');
+      document.getElementById('kpiLucroMargem').innerText = `Margem Líquida Real: ${m.lucro.margemPercentual.toFixed(1)}% do faturamento`;
+
+      document.getElementById('kpiCmvPercentual').innerText = m.lucro.cmvPercentual.toFixed(1) + '%';
+      document.getElementById('kpiCmvValor').innerText = 'Custo dos Insumos: R$ ' + m.lucro.cmvTotal.toFixed(2).replace('.', ',');
+
+      document.getElementById('kpiTotalPedidos').innerText = m.pedidos.total;
+      document.getElementById('kpiTicketMedio').innerText = 'Ticket Médio: R$ ' + m.pedidos.ticketMedio.toFixed(2).replace('.', ',') + ' / pedido';
+
+      // Termômetro do Consignado
+      const c = m.consignado;
+      document.getElementById('consignadoStatusText').innerText = `R$ ${c.provisionado.toFixed(2).replace('.', ',')} / R$ ${c.metaMensal.toFixed(2).replace('.', ',')}`;
+      document.getElementById('consignadoBarFill').style.width = c.percentualGarantido + '%';
+      document.getElementById('consignadoBadge').innerText = c.status;
+
+      // Banner de Alerta Crítico
+      const banner = document.getElementById('alertStockBanner');
+      if (m.alertasEstoque && m.alertasEstoque.length > 0) {
+        banner.style.display = 'flex';
+        const nomes = m.alertasEstoque.map(i => `${i.nome} (${i.saldo} ${i.unidade})`).join(', ');
+        document.getElementById('alertStockListText').innerText = `Itens que precisam de reposição urgente: ${nomes}.`;
+      } else {
+        banner.style.display = 'none';
+      }
+    }
+
+    function renderizarEstoque(insumos) {
+      const tbody = document.getElementById('tabelaEstoqueBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (!insumos || insumos.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 20px;">Nenhum insumo cadastrado.</td></tr>';
+        return;
+      }
+
+      let filtrados = insumos;
+      if (filtroAtual === 'critico') {
+        filtrados = insumos.filter(i => i.quantidade <= i.minimo);
+      } else if (filtroAtual !== 'todos') {
+        filtrados = insumos.filter(i => i.categoria === filtroAtual);
+      }
+
+      filtrados.forEach(i => {
+        const isCritico = i.quantidade <= i.minimo;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${i.nome}</strong></td>
+          <td><span style="font-size: 11.5px; color: #64748b; font-weight: 700; background: #f1f5f9; padding: 2px 8px; border-radius: 6px;">${i.categoria}</span></td>
+          <td style="font-weight: 900; font-size: 15px; color: ${isCritico ? '#dc2626' : '#0f172a'};">${i.quantidade} ${i.unidade}</td>
+          <td style="color: #64748b; font-weight: 700;">${i.minimo} ${i.unidade}</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-size: 12.5px;">R$ ${Number(i.custoUnitario).toFixed(2).replace('.', ',')}</td>
+          <td>
+            <span class="badge-stock ${isCritico ? 'alert' : 'ok'}">
+              ${isCritico ? '⚠️ Repor Urgente' : '🟢 Seguro'}
+            </span>
+          </td>
+          <td style="text-align: right;">
+            <div style="display: inline-flex; gap: 4px; align-items: center;">
+              <button class="quick-add-btn" onclick="adicionarEntrada('${i.id}', ${i.unidade === 'un' ? 10 : 1})">+${i.unidade === 'un' ? '10' : '1kg'}</button>
+              <button class="quick-add-btn" onclick="adicionarEntrada('${i.id}', ${i.unidade === 'un' ? 30 : 5})">+${i.unidade === 'un' ? '30' : '5kg'}</button>
+              <button class="quick-add-btn" style="background: #0f172a; color: #fff;" onclick="abrirModalAjuste('${i.id}', '${i.nome}', '${i.categoria}', ${i.quantidade})">✏️ Ajustar</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderizarClientes(clientes) {
+      const tbody = document.getElementById('tabelaClientesBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (!clientes || clientes.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 20px;">Nenhum cliente cadastrado ainda.</td></tr>';
+        return;
+      }
+
+      clientes.forEach(c => {
+        const telLimpo = (c.telefone || '').replace(/\D/g, '');
+        const msgZap = encodeURIComponent(`Olá, ${c.nome}! Aqui é do O Mordidaço Hot-Dogueria. Como você é nosso cliente VIP, preparamos um benefício especial para o seu próximo dogão! 🌭⭐`);
+        const linkZap = `https://wa.me/55${telLimpo}?text=${msgZap}`;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${c.nome || 'Cliente'}</strong></td>
+          <td><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #2563eb; font-weight: 700;">${c.telefone || '-'}</span></td>
+          <td>${c.bairro || 'Campinas'}</td>
+          <td style="font-weight: 900; text-align: center;">${c.totalPedidos || 1}</td>
+          <td style="font-weight: 900; color: #15803d;">R$ ${(Number(c.totalGasto) || 0).toFixed(2).replace('.', ',')}</td>
+          <td style="font-size: 12px; color: #64748b;">${c.ultimoPedido ? c.ultimoPedido.split(',')[0] : '-'}</td>
+          <td style="text-align: right;">
+            <a href="${linkZap}" target="_blank" style="background: #15803d; color: #fff; text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;">
+              📲 Enviar Promoção Zap
+            </a>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderizarMovimentacoes(movs) {
+      const tbody = document.getElementById('tabelaMovimentacoesBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (!movs || movs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px;">Nenhuma movimentação registrada.</td></tr>';
+        return;
+      }
+
+      movs.forEach(m => {
+        const resumo = (m.baixas || []).map(b => `${b.nome}: <strong>${b.baixado > 0 ? '-' + b.baixado : '+' + Math.abs(b.baixado)} ${b.unidade}</strong> (saldo: ${b.saldo})`).join(' • ');
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-size: 12.5px; color: #64748b;">${m.dataHora}</td>
+          <td>
+            <span style="background: #f1f5f9; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-weight: 900;">
+              ${m.origem || 'Pedido'} #${m.pedidoNumero || ''}
+            </span>
+          </td>
+          <td style="font-size: 12.5px; line-height: 1.4;">${resumo}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function trocarAbaBusiness(aba) {
+      document.querySelectorAll('.business-tabs button').forEach(b => b.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      document.getElementById('viewEstoque').style.display = aba === 'estoque' ? 'block' : 'none';
+      document.getElementById('viewClientes').style.display = aba === 'clientes' ? 'block' : 'none';
+      document.getElementById('viewCanais').style.display = aba === 'canais' ? 'block' : 'none';
+      document.getElementById('viewMovimentacoes').style.display = aba === 'movimentacoes' ? 'block' : 'none';
+    }
+
+    function filtrarEstoque(categoria, btn) {
+      filtroAtual = categoria;
+      if (btn) {
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+      }
+      if (dadosBusinessGlobais) {
+        renderizarEstoque(dadosBusinessGlobais.estoque);
+      }
+    }
+
+    function buscarInsumo(termo) {
+      if (!dadosBusinessGlobais) return;
+      const t = termo.toLowerCase().trim();
+      const filtrados = dadosBusinessGlobais.estoque.filter(i => i.nome.toLowerCase().includes(t));
+      renderizarEstoque(filtrados);
+    }
+
+    async function adicionarEntrada(id, qtd) {
+      try {
+        const res = await fetch('/api/business/estoque/entrada', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, quantidade: qtd })
+        });
+        if (res.ok) {
+          carregarDashboardBusiness();
+        }
+      } catch (e) {
+        alert('Erro ao dar entrada no estoque.');
+      }
+    }
+
+    function abrirModalAjuste(id, nome, categoria, atual) {
+      document.getElementById('ajusteIdInsumo').value = id;
+      document.getElementById('ajusteNomeInsumo').innerText = 'Ajustar: ' + nome;
+      document.getElementById('ajusteCategoria').innerText = categoria;
+      document.getElementById('ajusteNovaQuantidade').value = atual;
+      document.getElementById('modalAjusteEstoque').style.display = 'flex';
+    }
+
+    function fecharModalAjuste() {
+      document.getElementById('modalAjusteEstoque').style.display = 'none';
+    }
+
+    async function salvarAjusteEstoque() {
+      const id = document.getElementById('ajusteIdInsumo').value;
+      const qtd = document.getElementById('ajusteNovaQuantidade').value;
+      const motivo = document.getElementById('ajusteMotivoSelect').value;
+
+      try {
+        const res = await fetch('/api/business/estoque/ajustar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, quantidade: qtd, motivo })
+        });
+        if (res.ok) {
+          fecharModalAjuste();
+          carregarDashboardBusiness();
+        }
+      } catch (e) {
+        alert('Erro ao salvar ajuste de estoque.');
+      }
+    }
+
+    function exportarClientesCsv() {
+      window.open('/api/clientes', '_blank');
+    }
+
+    // Inicialização
+    carregarDashboardBusiness();
+  </script>
+</body>
+</html>
