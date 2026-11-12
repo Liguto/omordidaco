@@ -65,7 +65,7 @@
     },
     {
       "id": "calabresa_fatiada",
-      "nome": "Calabresa Defumada Fatiada Dourada",
+      "nome": "Calabresa Defumada Ralada Douradinha",
       "categoria": "Insumos",
       "unidade": "kg",
       "quantidade": 1.5,
@@ -224,6 +224,33 @@
       "quantidade": 12,
       "minimo": 4,
       "custoUnitario": 2.20
+    },
+    {
+      "id": "delvalle_uva_lata",
+      "nome": "Suco Del Valle Uva 290ml (Lata)",
+      "categoria": "Bebidas",
+      "unidade": "un",
+      "quantidade": 12,
+      "minimo": 4,
+      "custoUnitario": 2.40
+    },
+    {
+      "id": "delvalle_maracuja_lata",
+      "nome": "Suco Del Valle Maracujá 290ml (Lata)",
+      "categoria": "Bebidas",
+      "unidade": "un",
+      "quantidade": 12,
+      "minimo": 4,
+      "custoUnitario": 2.40
+    },
+    {
+      "id": "delvalle_laranja_lata",
+      "nome": "Suco Del Valle Laranja 290ml (Lata)",
+      "categoria": "Bebidas",
+      "unidade": "un",
+      "quantidade": 12,
+      "minimo": 4,
+      "custoUnitario": 2.40
     },
     {
       "id": "coca_2l",

@@ -72,27 +72,27 @@ async function sincronizarCardapioCompleto() {
   const lanches = [
     {
       nome: 'Mordidaço Clássico',
-      descricao: '1 salsicha Sadia, molho especial da casa, ketchup, mostarda, milho, vinagrete, purê de batata artesanal, ervilha e batata palha crocante.',
+      descricao: '1 salsicha Sadia, molho especial da casa, ketchup, mostarda, milho, ervilha, vinagrete, purê de batata artesanal e batata palha crocante.',
       preco: 22.90
     },
     {
       nome: 'Mordidaço em Dobro',
-      descricao: 'O campeão de vendas! 2 salsichas Sadia, o verdadeiro dobro de queijo muçarela derretido, molho especial da casa, ketchup, mostarda, milho, vinagrete, purê artesanal, ervilha, batata palha e chuva de parmesão ralado por cima.',
+      descricao: 'O campeão de vendas! 2 salsichas Sadia, o verdadeiro dobro de queijo muçarela derretido, molho especial da casa, ketchup, mostarda, milho, ervilha, vinagrete, purê artesanal, batata palha e chuva de parmesão ralado por cima.',
       preco: 28.90
     },
     {
       nome: 'Mordidaço Bacon',
-      descricao: '2 salsichas Sadia, molho especial da casa, purê de batata artesanal, milho, ervilha, bacon crocante em cubos, queijo muçarela, batata palha e parmesão ralado por cima.',
+      descricao: '2 salsichas Sadia, molho especial da casa, purê de batata artesanal, milho, ervilha, bacon crocante em cubos, queijo muçarela derretido, batata palha e parmesão ralado por cima.',
       preco: 33.90
     },
     {
       nome: 'Mordidaço Cremoso',
-      descricao: '1 salsicha Sadia, peito de frango desfiado temperado, o Legítimo Catupiry® Original cremoso (sem amido), molho especial da casa, purê de batata artesanal, ketchup, mostarda, milho, vinagrete e batata palha.',
+      descricao: '1 salsicha Sadia, ketchup, mostarda, milho, vinagrete, frango desfiado temperado, Catupiry® Original cremoso, molho especial da casa, purê de batata artesanal e batata palha.',
       preco: 34.90
     },
     {
       nome: 'Mordidaço Tudão',
-      descricao: 'O gigante da casa! 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original, purê artesanal, molho especial da casa, ketchup, mostarda, milho, vinagrete, ervilha, bacon em dobro, calabresa fatiada dourada, queijo muçarela em dobro derretido, batata palha e parmesão ralado por cima.',
+      descricao: 'O gigante da casa! 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original, purê artesanal, molho especial da casa, ketchup, mostarda, milho, ervilha, vinagrete, bacon em dobro, calabresa ralada douradinha, queijo muçarela em dobro derretido, batata palha e parmesão ralado por cima.',
       preco: 44.90
     }
   ];

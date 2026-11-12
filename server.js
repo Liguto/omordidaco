@@ -550,7 +550,7 @@ const CARDAPIO = {
         {
           id: "mordidaco-classico",
           nome: "Mordidaço Clássico",
-          descricao: "1 salsicha Sadia, molho especial da casa, ketchup, mostarda, milho, vinagrete suave, purê de batata artesanal cremoso, ervilha e batata palha crocante.",
+          descricao: "1 salsicha Sadia, molho especial da casa, ketchup, mostarda, milho, ervilha, vinagrete, purê de batata artesanal e batata palha crocante.",
           preco: 16.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -560,7 +560,7 @@ const CARDAPIO = {
         {
           id: "mordidaco-duplo",
           nome: "Mordidaço em Dobro",
-          descricao: "O campeão de vendas! 2 salsichas Sadia, o verdadeiro dobro de queijo muçarela derretido, molho especial da casa, ketchup, mostarda, milho, vinagrete, purê artesanal, ervilha, batata palha e chuva de parmesão ralado por cima.",
+          descricao: "O campeão de vendas! 2 salsichas Sadia, o verdadeiro dobro de queijo muçarela derretido, molho especial da casa, ketchup, mostarda, milho, ervilha, vinagrete, purê artesanal, batata palha e chuva de parmesão ralado por cima.",
           preco: 21.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -570,7 +570,7 @@ const CARDAPIO = {
         {
           id: "mordidaco-bacon",
           nome: "Mordidaço Bacon",
-          descricao: "2 salsichas Sadia, molho especial da casa, purê de batata artesanal, milho, ervilha, generosa cobertura de bacon crocante em cubos, queijo muçarela derretido, batata palha e parmesão ralado por cima.",
+          descricao: "2 salsichas Sadia, molho especial da casa, purê de batata artesanal, milho, ervilha, bacon crocante em cubos, queijo muçarela derretido, batata palha e parmesão ralado por cima.",
           preco: 25.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -580,7 +580,7 @@ const CARDAPIO = {
         {
           id: "mordidaco-frango-catupiry",
           nome: "Mordidaço Cremoso",
-          descricao: "1 salsicha Sadia, peito de frango desfiado temperado, o Legítimo Catupiry® Original cremoso (sem amido), molho especial da casa, purê de batata artesanal, ketchup, mostarda, milho, vinagrete e batata palha.",
+          descricao: "1 salsicha Sadia, ketchup, mostarda, milho, vinagrete, frango desfiado temperado, Catupiry® Original cremoso, molho especial da casa, purê de batata artesanal e batata palha crocante.",
           preco: 26.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -590,7 +590,7 @@ const CARDAPIO = {
         {
           id: "mordidaco-tudao",
           nome: "Mordidaço Tudão",
-          descricao: "O gigante da casa! 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original, purê artesanal, molho especial da casa, ketchup, mostarda, milho, vinagrete, ervilha, bacon em dobro, calabresa fatiada dourada, queijo muçarela em dobro derretido, batata palha e parmesão ralado por cima.",
+          descricao: "O gigante da casa! 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original, purê artesanal, molho especial da casa, ketchup, mostarda, milho, ervilha, vinagrete, bacon em dobro, calabresa ralada douradinha, queijo muçarela em dobro derretido, batata palha e parmesão ralado por cima.",
           preco: 34.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -605,7 +605,7 @@ const CARDAPIO = {
       itens: [
         { id: "add-catupiry", nome: "Catupiry Original Extra (40g)", preco: 5.00 },
         { id: "add-bacon", nome: "Bacon Crocante Extra em Cubos (40g)", preco: 5.00 },
-        { id: "add-calabresa", nome: "Calabresa Fatiada Dourada (40g)", preco: 4.50 },
+        { id: "add-calabresa", nome: "Calabresa Ralada Douradinha (40g)", preco: 4.50 },
         { id: "add-parmesao", nome: "Parmesão Ralado Fresco (20g)", preco: 3.50 },
         { id: "add-pure", nome: "Purê de Batata Artesanal Extra (80g)", preco: 3.50 },
         { id: "add-milho", nome: "Milho Verde Extra", preco: 2.50 },
@@ -623,6 +623,9 @@ const CARDAPIO = {
         { id: "refri-guarana-lata", nome: "Guaraná Antarctica 350ml (Lata)", preco: 6.00 },
         { id: "refri-guarana-zero-lata", nome: "Guaraná Antarctica Zero 350ml (Lata)", preco: 6.00 },
         { id: "refri-fanta-lata", nome: "Fanta Laranja 350ml (Lata)", preco: 6.00 },
+        { id: "suco-delvalle-uva", nome: "Suco Del Valle Uva 290ml (Lata)", preco: 6.50 },
+        { id: "suco-delvalle-maracuja", nome: "Suco Del Valle Maracujá 290ml (Lata)", preco: 6.50 },
+        { id: "suco-delvalle-laranja", nome: "Suco Del Valle Laranja 290ml (Lata)", preco: 6.50 },
         { id: "refri-coca-2l", nome: "Coca-Cola 2 Litros Normal", preco: 14.00 },
         { id: "refri-coca-zero-2l", nome: "Coca-Cola 2 Litros Zero", preco: 14.00 },
         { id: "refri-guarana-2l", nome: "Guaraná Antarctica 2 Litros", preco: 12.00 },

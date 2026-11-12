@@ -194,6 +194,14 @@ function deduzirEstoquePorPedido(pedido) {
       }
     } else if (nome.includes('fanta')) {
       registrarBaixa('fanta_lata', 1 * qtdItem);
+    } else if (nome.includes('del valle') || nome.includes('delvalle') || nome.includes('suco')) {
+      if (nome.includes('uva')) {
+        registrarBaixa('delvalle_uva_lata', 1 * qtdItem);
+      } else if (nome.includes('maracujá') || nome.includes('maracuja')) {
+        registrarBaixa('delvalle_maracuja_lata', 1 * qtdItem);
+      } else if (nome.includes('laranja')) {
+        registrarBaixa('delvalle_laranja_lata', 1 * qtdItem);
+      }
     } else if (nome.includes('heineken')) {
       registrarBaixa('cerveja_heineken', 1 * qtdItem);
     } else if (nome.includes('original')) {
