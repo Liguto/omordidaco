@@ -1244,34 +1244,11 @@
       <!-- Escolha do Formato (se aplicável ao item ou múltiplos lanches do combo) -->
       <div class="form-group" id="formatoGroup" style="display: none;"></div>
 
-      <!-- Turbinar com Adicionais Extras -->
-      <div class="form-group" id="adicionaisGroup">
-        <label class="form-label">🥫 Turbinar com Adicionais Extras?</label>
-        <label class="check-option" style="cursor: pointer; margin-bottom: 6px;">
-          <input type="checkbox" class="check-adicional" data-id="add-maionese" data-nome="Pote Extra de Maionese Verde (50ml)" data-preco="3.50" onchange="recalcularPrecoModal()">
-          <span>Pote Extra de Maionese Verde (50ml) • <strong style="color: #15803d;">+ R$ 3,50</strong></span>
-        </label>
-        <label class="check-option" style="cursor: pointer; margin-bottom: 6px;">
-          <input type="checkbox" class="check-adicional" data-id="add-bacon" data-nome="Bacon Crocante Extra em Cubos" data-preco="4.50" onchange="recalcularPrecoModal()">
-          <span>Bacon Crocante Extra em Cubos • <strong style="color: #15803d;">+ R$ 4,50</strong></span>
-        </label>
-        <label class="check-option" style="cursor: pointer; margin-bottom: 6px;">
-          <input type="checkbox" class="check-adicional" data-id="add-catupiry" data-nome="Catupiry Original Extra" data-preco="4.00" onchange="recalcularPrecoModal()">
-          <span>Catupiry Original Extra • <strong style="color: #15803d;">+ R$ 4,00</strong></span>
-        </label>
-        <label class="check-option" style="cursor: pointer;">
-          <input type="checkbox" class="check-adicional" data-id="add-batata-palha" data-nome="Batata Palha Crocante Extra" data-preco="2.50" onchange="recalcularPrecoModal()">
-          <span>Batata Palha Crocante Extra • <strong style="color: #15803d;">+ R$ 2,50</strong></span>
-        </label>
-      </div>
+      <!-- Turbinar com Adicionais Extras (Renderizado dinamicamente) -->
+      <div class="form-group" id="adicionaisGroup"></div>
 
-      <!-- Observações / Retirar ingredientes -->
-      <div class="form-group" id="retirarGroup">
-        <label class="form-label">Deseja retirar algum ingrediente?</label>
-        <label class="check-option"><input type="checkbox" id="semVinagrete"> <span>Sem vinagrete</span></label>
-        <label class="check-option"><input type="checkbox" id="semMilho"> <span>Sem milho</span></label>
-        <label class="check-option"><input type="checkbox" id="semBatataPalha"> <span>Sem batata palha</span></label>
-      </div>
+      <!-- Observações / Retirar ingredientes (Renderizado dinamicamente com base no lanche) -->
+      <div class="form-group" id="retirarGroup"></div>
 
       <div class="form-group">
         <label class="form-label">Observações especiais para a cozinha:</label>
@@ -1747,14 +1724,45 @@
       document.getElementById('modalItemPrice').innerText = 'R$ ' + total.toFixed(2).replace('.', ',');
     }
 
+    // INGREDIENTES ESPECÍFICOS DE CADA HOT DOG (PARA PERMITIR RETIRADA EXATA)
+    function obterIngredientesDoDog(nomeDog) {
+      const n = (nomeDog || '').toLowerCase();
+      if (n.includes('tudão') || n.includes('tudao')) {
+        return ['Salsicha Sadia', 'Frango desfiado temperado', 'Catupiry® Original', 'Purê de batata artesanal', 'Molho especial da casa', 'Ketchup', 'Mostarda', 'Milho', 'Ervilha', 'Vinagrete', 'Bacon em dobro', 'Calabresa ralada', 'Queijo muçarela em dobro', 'Batata palha', 'Parmesão ralado fresco'];
+      }
+      if (n.includes('duplo') || n.includes('dobro')) {
+        return ['Salsicha Sadia (2 unidades)', 'Queijo muçarela derretido', 'Molho especial da casa', 'Ketchup', 'Mostarda', 'Milho', 'Ervilha', 'Vinagrete', 'Purê de batata artesanal', 'Batata palha', 'Parmesão ralado fresco'];
+      }
+      if (n.includes('bacon')) {
+        return ['Salsicha Sadia (2 unidades)', 'Molho especial da casa', 'Purê de batata artesanal', 'Milho', 'Ervilha', 'Bacon crocante em cubos', 'Queijo muçarela derretido', 'Batata palha', 'Parmesão ralado fresco'];
+      }
+      if (n.includes('cremoso') || n.includes('frango')) {
+        return ['Salsicha Sadia', 'Ketchup', 'Mostarda', 'Milho', 'Vinagrete', 'Frango desfiado temperado', 'Catupiry® Original cremoso', 'Molho especial da casa', 'Purê de batata artesanal', 'Batata palha'];
+      }
+      // Clássico padrão
+      return ['Salsicha Sadia', 'Molho especial da casa', 'Ketchup', 'Mostarda', 'Milho', 'Ervilha', 'Vinagrete', 'Purê de batata artesanal', 'Batata palha'];
+    }
+
+    // LISTA COMPLETA DE ADICIONAIS EXTRAS (SEMPRE COM SALSICHA SADIA NO TOPO)
+    const LISTA_ADICIONAIS_OPCOES = [
+      { id: 'add-salsicha', nome: '1 Salsicha Sadia Extra', preco: 3.50, destaque: true },
+      { id: 'add-catupiry', nome: 'Catupiry® Original Extra (40g)', preco: 5.00 },
+      { id: 'add-bacon', nome: 'Bacon Crocante Extra em Cubos (40g)', preco: 5.00 },
+      { id: 'add-calabresa', nome: 'Calabresa Ralada Douradinha Extra', preco: 4.50 },
+      { id: 'add-mussarela', nome: 'Dobro de Muçarela Derretida', preco: 3.50 },
+      { id: 'add-parmesao', nome: 'Parmesão Ralado Fresco Extra', preco: 3.50 },
+      { id: 'add-pure', nome: 'Purê de Batata Artesanal Extra', preco: 3.50 },
+      { id: 'add-maionese', nome: 'Pote de Molho Especial da Casa (50ml)', preco: 3.50 },
+      { id: 'add-batata-palha', nome: 'Batata Palha Crocante Extra', preco: 2.50 },
+      { id: 'add-milho', nome: 'Milho Verde Extra', preco: 2.50 },
+      { id: 'add-ervilha', nome: 'Ervilha Extra', preco: 2.50 }
+    ];
+
     function abrirModalPersonalizacao(item, catId = 'hotdogs') {
       itemSelecionadoTemp = { ...item, catId };
       document.getElementById('modalItemTitle').innerText = item.nome;
       document.getElementById('modalItemDesc').innerText = item.descricao || '';
       document.getElementById('itemObs').value = '';
-      document.getElementById('semVinagrete').checked = false;
-      document.getElementById('semMilho').checked = false;
-      document.getElementById('semBatataPalha').checked = false;
 
       // Desmarca todos os adicionais extras individuais
       document.querySelectorAll('.check-adicional').forEach(chk => chk.checked = false);
@@ -1766,8 +1774,8 @@
       // SE FOR COMBO COM MÚLTIPLOS LANCHES (PERSONALIZAÇÃO COMPLETA POR DOG)
       if (item.lanchesCombo && Array.isArray(item.lanchesCombo) && item.lanchesCombo.length > 0) {
         formatoGroup.style.display = 'block';
-        if (adicionaisGroup) adicionaisGroup.style.display = 'none';
-        if (retirarGroup) retirarGroup.style.display = 'none';
+        if (adicionaisGroup) { adicionaisGroup.style.display = 'none'; adicionaisGroup.innerHTML = ''; }
+        if (retirarGroup) { retirarGroup.style.display = 'none'; retirarGroup.innerHTML = ''; }
 
         const adicPrato = item.adicionalPrato !== undefined ? item.adicionalPrato : 2.00;
         let html = `
@@ -1783,6 +1791,28 @@
 
         item.lanchesCombo.forEach((lanche, idx) => {
           const lancheNome = typeof lanche === 'string' ? lanche : (lanche.label || `${idx + 1}º Hot Dog`);
+          const ingrsCombo = obterIngredientesDoDog(lancheNome);
+
+          let htmlRetirarCombo = '';
+          ingrsCombo.forEach(ing => {
+            htmlRetirarCombo += `
+              <label class="chip-checkbox">
+                <input type="checkbox" class="check-remover-combo" data-dog="${idx}" data-item="${ing}">
+                <span>Sem ${ing}</span>
+              </label>
+            `;
+          });
+
+          let htmlAdicCombo = '';
+          LISTA_ADICIONAIS_OPCOES.forEach(ad => {
+            htmlAdicCombo += `
+              <label class="check-option" style="cursor: pointer; margin: 0; padding: 6px 10px; font-size: 12px; border-radius: 6px; background: ${ad.destaque ? '#fef3c7' : '#f8fafc'}; border: 1.5px solid ${ad.destaque ? '#fde68a' : '#e2e8f0'};">
+                <input type="checkbox" class="check-adicional-combo" data-dog="${idx}" data-nome="${ad.nome}" data-preco="${ad.preco}" onchange="recalcularPrecoModal()">
+                <span><strong>+ ${ad.nome}</strong> • <strong style="color: #15803d;">+ R$ ${ad.preco.toFixed(2).replace('.', ',')}</strong></span>
+              </label>
+            `;
+          });
+
           html += `
             <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 14px; padding: 14px; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
               <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #f1f5f9; padding-bottom: 8px; margin-bottom: 10px;">
@@ -1812,49 +1842,15 @@
               <div style="margin-bottom: 10px;">
                 <label style="font-size: 11px; font-weight: 900; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 4px;">Deseja retirar algo deste dog?</label>
                 <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-                  <label class="chip-checkbox">
-                    <input type="checkbox" class="check-remover-combo" data-dog="${idx}" data-item="milho">
-                    <span>Sem milho</span>
-                  </label>
-                  <label class="chip-checkbox">
-                    <input type="checkbox" class="check-remover-combo" data-dog="${idx}" data-item="vinagrete">
-                    <span>Sem vinagrete</span>
-                  </label>
-                  <label class="chip-checkbox">
-                    <input type="checkbox" class="check-remover-combo" data-dog="${idx}" data-item="batata palha">
-                    <span>Sem batata palha</span>
-                  </label>
-                  <label class="chip-checkbox">
-                    <input type="checkbox" class="check-remover-combo" data-dog="${idx}" data-item="purê">
-                    <span>Sem purê</span>
-                  </label>
-                  <label class="chip-checkbox">
-                    <input type="checkbox" class="check-remover-combo" data-dog="${idx}" data-item="maionese">
-                    <span>Sem maionese</span>
-                  </label>
+                  ${htmlRetirarCombo}
                 </div>
               </div>
 
               <!-- 3. ADICIONAIS EXTRAS PARA ESTE DOG -->
               <div>
-                <label style="font-size: 11px; font-weight: 900; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 4px;">Turbinar com adicionais?</label>
+                <label style="font-size: 11px; font-weight: 900; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 4px;">Turbinar com adicionais extras?</label>
                 <div style="display: grid; grid-template-columns: 1fr; gap: 4px;">
-                  <label class="check-option" style="cursor: pointer; margin: 0; padding: 6px 10px; font-size: 12px; border-radius: 6px; background: #f8fafc;">
-                    <input type="checkbox" class="check-adicional-combo" data-dog="${idx}" data-nome="Bacon Crocante Extra" data-preco="4.50" onchange="recalcularPrecoModal()">
-                    <span>+ Bacon Crocante em Cubos • <strong style="color: #15803d;">+ R$ 4,50</strong></span>
-                  </label>
-                  <label class="check-option" style="cursor: pointer; margin: 0; padding: 6px 10px; font-size: 12px; border-radius: 6px; background: #f8fafc;">
-                    <input type="checkbox" class="check-adicional-combo" data-dog="${idx}" data-nome="Catupiry Original Extra" data-preco="4.00" onchange="recalcularPrecoModal()">
-                    <span>+ Legítimo Catupiry® Original • <strong style="color: #15803d;">+ R$ 4,00</strong></span>
-                  </label>
-                  <label class="check-option" style="cursor: pointer; margin: 0; padding: 6px 10px; font-size: 12px; border-radius: 6px; background: #f8fafc;">
-                    <input type="checkbox" class="check-adicional-combo" data-dog="${idx}" data-nome="Dobro de Muçarela" data-preco="3.50" onchange="recalcularPrecoModal()">
-                    <span>+ Dobro de Muçarela Derretida • <strong style="color: #15803d;">+ R$ 3,50</strong></span>
-                  </label>
-                  <label class="check-option" style="cursor: pointer; margin: 0; padding: 6px 10px; font-size: 12px; border-radius: 6px; background: #f8fafc;">
-                    <input type="checkbox" class="check-adicional-combo" data-dog="${idx}" data-nome="Batata Palha Extra" data-preco="2.50" onchange="recalcularPrecoModal()">
-                    <span>+ Batata Palha Crocante Extra • <strong style="color: #15803d;">+ R$ 2,50</strong></span>
-                  </label>
+                  ${htmlAdicCombo}
                 </div>
               </div>
             </div>
@@ -1864,8 +1860,47 @@
         formatoGroup.innerHTML = html;
       } else {
         // HOT DOG INDIVIDUAL
-        if (adicionaisGroup) adicionaisGroup.style.display = 'block';
-        if (retirarGroup) retirarGroup.style.display = 'block';
+        if (adicionaisGroup) {
+          adicionaisGroup.style.display = 'block';
+          let htmlAdic = `
+            <label class="form-label">🥫 Turbinar com Adicionais Extras?</label>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 6px;">
+          `;
+          LISTA_ADICIONAIS_OPCOES.forEach(ad => {
+            htmlAdic += `
+              <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; font-size: 13px; border-radius: 8px; background: ${ad.destaque ? '#fef3c7' : '#f8fafc'}; border: 1.5px solid ${ad.destaque ? '#fde68a' : '#e2e8f0'};">
+                <input type="checkbox" class="check-adicional" data-id="${ad.id}" data-nome="${ad.nome}" data-preco="${ad.preco}" onchange="recalcularPrecoModal()">
+                <span>
+                  <strong>+ ${ad.nome}</strong> • <strong style="color: #15803d;">+ R$ ${ad.preco.toFixed(2).replace('.', ',')}</strong>
+                </span>
+              </label>
+            `;
+          });
+          htmlAdic += `</div>`;
+          adicionaisGroup.innerHTML = htmlAdic;
+        }
+
+        if (retirarGroup) {
+          retirarGroup.style.display = 'block';
+          const ingrs = obterIngredientesDoDog(item.nome);
+          let htmlRet = `
+            <label class="form-label" style="display: flex; justify-content: space-between; align-items: center;">
+              <span>Deseja retirar algo deste dog?</span>
+              <span style="font-size: 11px; font-weight: 700; color: #64748b;">(Opcional)</span>
+            </label>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          `;
+          ingrs.forEach(ing => {
+            htmlRet += `
+              <label class="chip-checkbox">
+                <input type="checkbox" class="check-remover-item" data-item="${ing}">
+                <span>Sem ${ing}</span>
+              </label>
+            `;
+          });
+          htmlRet += `</div>`;
+          retirarGroup.innerHTML = htmlRet;
+        }
 
         if (item.permiteFormato) {
           formatoGroup.style.display = 'block';
@@ -1946,9 +1981,10 @@
 
       } else {
         // HOT DOG INDIVIDUAL
-        if (document.getElementById('semVinagrete').checked) observacoes.push('Sem vinagrete');
-        if (document.getElementById('semMilho').checked) observacoes.push('Sem milho');
-        if (document.getElementById('semBatataPalha').checked) observacoes.push('Sem batata palha');
+        document.querySelectorAll('.check-remover-item:checked').forEach(chk => {
+          observacoes.push(`Sem ${chk.dataset.item}`);
+        });
+
         const obsTexto = document.getElementById('itemObs').value.trim();
         if (obsTexto) observacoes.push(obsTexto);
 

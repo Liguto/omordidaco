@@ -166,9 +166,11 @@ function deduzirEstoquePorPedido(pedido) {
     }
 
     // 3. ANÁLISE DE ADICIONAIS EXTRAS
+    if (nome.includes('salsicha extra') || nome.includes('salsicha sadia extra')) registrarBaixa('salsicha_sadia', 1 * qtdItem);
     if (nome.includes('catupiry extra')) registrarBaixa('catupiry_original', 0.040 * qtdItem);
     if (nome.includes('bacon extra')) registrarBaixa('bacon_cubos', 0.040 * qtdItem);
     if (nome.includes('calabresa')) registrarBaixa('calabresa_fatiada', 0.040 * qtdItem);
+    if (nome.includes('muçarela extra') || nome.includes('mussarela extra') || nome.includes('dobro de muçarela')) registrarBaixa('queijo_mussarela', 0.038 * qtdItem);
     if (nome.includes('parmesão extra') || nome.includes('parmesao extra')) registrarBaixa('queijo_parmesao', 0.020 * qtdItem);
     if (nome.includes('purê extra') || nome.includes('pure extra')) registrarBaixa('pure_batata', 0.080 * qtdItem);
     if (nome.includes('milho extra')) registrarBaixa('milho_conserva', 0.030 * qtdItem);

@@ -603,6 +603,7 @@ const CARDAPIO = {
       id: "adicionais",
       nome: "➕ Adicionais Extras",
       itens: [
+        { id: "add-salsicha", nome: "1 Salsicha Sadia Extra", preco: 3.50 },
         { id: "add-catupiry", nome: "Catupiry Original Extra (40g)", preco: 5.00 },
         { id: "add-bacon", nome: "Bacon Crocante Extra em Cubos (40g)", preco: 5.00 },
         { id: "add-calabresa", nome: "Calabresa Ralada Douradinha (40g)", preco: 4.50 },
