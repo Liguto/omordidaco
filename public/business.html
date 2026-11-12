@@ -405,6 +405,202 @@
       padding: 22px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     }
+
+    /* ==================================================== */
+    /* RESPONSIVIDADE MOBILE SENIOR (SMARTPHONES & TABLETS) */
+    /* ==================================================== */
+    @media (max-width: 992px) {
+      .app-topbar {
+        padding: 10px 16px;
+      }
+      .brand-titles h1 {
+        font-size: 16px;
+      }
+      .brand-titles p {
+        font-size: 11px;
+      }
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .app-topbar {
+        padding: 10px 14px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+
+      .brand-group {
+        justify-content: space-between;
+      }
+
+      .nav-switchers {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr auto;
+        gap: 4px;
+        padding: 3px;
+      }
+
+      .nav-switcher-btn {
+        padding: 8px 4px;
+        font-size: 11px;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .main-container {
+        padding: 14px 12px;
+      }
+
+      .alert-banner-stock {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px 14px;
+        gap: 10px;
+      }
+      .alert-banner-stock button {
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+      }
+
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+
+      .kpi-card {
+        padding: 14px 12px;
+        border-radius: 12px;
+      }
+
+      .kpi-label {
+        font-size: 10px;
+      }
+
+      .kpi-value {
+        font-size: 19px;
+      }
+
+      .kpi-subtext {
+        font-size: 10.5px;
+        white-space: normal;
+        line-height: 1.3;
+      }
+
+      .consignado-box {
+        padding: 16px 14px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        border-radius: 14px;
+      }
+
+      .consignado-box > div:last-child {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        padding-top: 10px;
+        text-align: left;
+      }
+
+      .consignado-box > div:last-child div {
+        font-size: 16px;
+      }
+
+      .business-tabs {
+        gap: 4px;
+        margin-bottom: 16px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .business-tabs::-webkit-scrollbar {
+        display: none;
+      }
+
+      .tab-item-btn {
+        padding: 8px 12px;
+        font-size: 12.5px;
+      }
+
+      .stock-controls-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+
+      .stock-filters {
+        width: 100%;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .stock-filters::-webkit-scrollbar {
+        display: none;
+      }
+
+      .filter-chip {
+        white-space: nowrap;
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+
+      .stock-controls-bar > div:last-child {
+        width: 100%;
+        display: flex;
+        gap: 6px;
+      }
+
+      #buscaEstoque {
+        flex: 1;
+        width: 100%;
+      }
+
+      .mobile-scroll-hint {
+        display: block !important;
+      }
+
+      /* Tabela com scroll horizontal suave */
+      .data-table-card {
+        border-radius: 12px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border: 1px solid var(--border);
+      }
+
+      table.data-table {
+        min-width: 620px;
+      }
+
+      table.data-table th, table.data-table td {
+        padding: 10px 12px;
+        font-size: 12.5px;
+      }
+
+      .quick-add-btn {
+        padding: 6px 9px;
+        font-size: 11px;
+      }
+
+      /* Modal Mobile */
+      .modal-box {
+        max-width: 94vw;
+        padding: 20px 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
@@ -561,12 +757,13 @@
 
         <div style="display: flex; gap: 8px;">
           <input type="text" id="buscaEstoque" placeholder="🔍 Buscar insumo..." oninput="buscarInsumo(this.value)" style="padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 13px; outline: none;">
-          <button onclick="carregarDashboardBusiness()" style="background: #f1f5f9; border: 1.5px solid var(--border); padding: 8px 14px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer;">
+          <button onclick="carregarDashboardBusiness()" style="background: #f1f5f9; border: 1.5px solid var(--border); padding: 8px 14px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; white-space: nowrap;">
             🔄 Atualizar
           </button>
         </div>
       </div>
 
+      <div class="mobile-scroll-hint" style="display: none; font-size: 11px; color: #94a3b8; text-align: right; margin-bottom: 6px; font-weight: 700;">👉 Deslize a tabela para os lados ➔</div>
       <div class="data-table-card">
         <table class="data-table">
           <thead>
@@ -589,7 +786,7 @@
 
     <!-- VIEW 2: LISTA VIP & CRM DE CLIENTES -->
     <div id="viewClientes" style="display: none;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;">
         <div>
           <h3 style="font-size: 16px; font-weight: 900; color: #0f172a;">Clientes Fidelizados (Lista VIP)</h3>
           <p style="font-size: 12.5px; color: #64748b;">Clientes capturados automaticamente no site próprio e campanhas de WhatsApp.</p>
@@ -599,6 +796,7 @@
         </button>
       </div>
 
+      <div class="mobile-scroll-hint" style="display: none; font-size: 11px; color: #94a3b8; text-align: right; margin-bottom: 6px; font-weight: 700;">👉 Deslize a tabela para os lados ➔</div>
       <div class="data-table-card">
         <table class="data-table">
           <thead>
