@@ -2056,8 +2056,8 @@
           meus = JSON.parse(localStorage.getItem('mordidaco_meus_pedidos') || '[]');
         } catch(e) {}
         const temAtivo = meus.some(p => p.status === 'Pendente' || p.status === 'Em Preparo' || p.status === 'Saiu p/ Entrega');
-        if (trackerBar && temAtivo) {
-          trackerBar.style.display = 'flex';
+        if (trackerBar) {
+          trackerBar.style.display = temAtivo ? 'flex' : 'none';
         }
       }
     }
@@ -2463,6 +2463,14 @@
         if (floatingText) floatingText.innerText = `Pedido #${pedido.numero}: Cancelado`;
       }
 
+      // Se o pedido foi concluído ou cancelado, oculta imediatamente a barra flutuante de rastreamento
+      const floatingBar = document.getElementById('floatingTrackerBar');
+      if (floatingBar) {
+        if (status === 'Entregue' || status === 'Cancelado' || status === 'Concluído') {
+          floatingBar.style.display = 'none';
+        }
+      }
+
       // Controle do Botão de Confirmação de Entrega pelo Cliente no Modal
       const btnConfirmar = document.getElementById('btnConfirmarEntregaModal');
       if (btnConfirmar) {
@@ -2694,8 +2702,10 @@
           if (pedidoAtualizado && pedidoAtualizado.status) {
             processarAtualizacaoPedido(pedidoAtualizado);
 
-            if (pedidoAtualizado.status === 'Entregue' || pedidoAtualizado.status === 'Cancelado') {
+            if (pedidoAtualizado.status === 'Entregue' || pedidoAtualizado.status === 'Cancelado' || pedidoAtualizado.status === 'Concluído') {
               clearInterval(intervalSincronizacao);
+              if (floatingBar) floatingBar.style.display = 'none';
+              try { localStorage.removeItem('mordidaco_ultimo_pedido_id'); } catch(e) {}
             }
           }
         } catch (e) {}
@@ -3303,7 +3313,17 @@
             if (ped && ped.status) {
               processarAtualizacaoPedido(ped);
               const floatingBar = document.getElementById('floatingTrackerBar');
-              if (floatingBar) floatingBar.style.display = 'flex';
+              const isAtivo = ped.status === 'Pendente' || ped.status === 'Em Preparo' || ped.status === 'Saiu p/ Entrega';
+              
+              if (floatingBar) {
+                floatingBar.style.display = isAtivo ? 'flex' : 'none';
+              }
+              if (!isAtivo) {
+                try { localStorage.removeItem('mordidaco_ultimo_pedido_id'); } catch(e) {}
+              } else {
+                // Mantém loop de polling ativo apenas se o pedido ainda estiver em andamento
+                iniciarLoopSincronizacao(pedidoId);
+              }
               
               // Se veio explicitamente pelo link de pedido na URL, abre a aba de pedidos
               if (urlParams.get('pedido') || urlParams.get('acompanhar') || window.location.pathname.startsWith('/pedido/')) {
@@ -3312,9 +3332,6 @@
             }
           })
           .catch(() => {});
-
-        // Mantém loop de polling ativo como garantia
-        iniciarLoopSincronizacao(pedidoId);
       }
     }
 
