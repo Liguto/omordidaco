@@ -79,7 +79,7 @@ async function confirmarPedido99(orderId) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         auth_token: token,
-        order_id: Number(orderId)
+        order_id: String(orderId)
       })
     });
 
@@ -105,7 +105,7 @@ async function marcarPedidoPronto99(orderId) {
     const token = await obterTokenAcesso99();
     if (!token) return false;
 
-    const url = `${BASE_URL_99}/v1/order/order/ready?auth_token=${encodeURIComponent(token)}&order_id=${Number(orderId)}`;
+    const url = `${BASE_URL_99}/v1/order/order/ready?auth_token=${encodeURIComponent(token)}&order_id=${encodeURIComponent(String(orderId))}`;
     const res = await fetch(url);
     const data = await res.json();
 
@@ -130,7 +130,7 @@ async function marcarPedidoEntregue99(orderId) {
     const token = await obterTokenAcesso99();
     if (!token) return false;
 
-    const url = `${BASE_URL_99}/v1/order/order/delivered?auth_token=${encodeURIComponent(token)}&order_id=${Number(orderId)}`;
+    const url = `${BASE_URL_99}/v1/order/order/delivered?auth_token=${encodeURIComponent(token)}&order_id=${encodeURIComponent(String(orderId))}`;
     const res = await fetch(url);
     const data = await res.json();
 
