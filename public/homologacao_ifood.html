@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>O Mordidaço - Painel de Homologação Oficial iFood</title>
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+  <style>
+    :root {
+      --primary: #ea1d2c;
+      --primary-dark: #b91c1c;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-green: #10b981;
+      --accent-yellow: #f59e0b;
+      --accent-blue: #3b82f6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Topbar */
+    .header {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    .header-info h1 {
+      font-size: 20px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+    }
+
+    .badge-app {
+      background: rgba(234, 29, 44, 0.15);
+      border: 1px solid rgba(234, 29, 44, 0.4);
+      color: #f87171;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .header-meta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .meta-tag {
+      background: #334155;
+      padding: 4px 10px;
+      border-radius: 6px;
+      color: #e2e8f0;
+      font-family: monospace;
+    }
+
+    /* Navegação por Abas */
+    .tabs-nav {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 10px;
+    }
+
+    .tab-btn {
+      background: #1e293b;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(234, 29, 44, 0.35);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Cards de Cenários */
+    .scenario-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 22px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    }
+
+    .scenario-title {
+      font-size: 16px;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .scenario-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      border-left: 3px solid var(--accent-yellow);
+      padding-left: 10px;
+    }
+
+    /* Formulários e Inputs */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #cbd5e1;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-control {
+      background: #0f172a;
+      border: 1px solid var(--card-border);
+      color: #ffffff;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-control:focus {
+      border-color: var(--accent-blue);
+    }
+
+    /* Botões */
+    .btn {
+      padding: 11px 18px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 800;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-green { background: var(--accent-green); color: #fff; }
+    .btn-yellow { background: var(--accent-yellow); color: #0f172a; }
+    .btn-blue { background: var(--accent-blue); color: #fff; }
+    .btn-outline { background: transparent; border: 1px solid var(--card-border); color: #cbd5e1; }
+    .btn-outline:hover { background: #334155; }
+    .btn-danger { background: #ef4444; color: #fff; }
+
+    /* Caixa de Resposta / Visualizador */
+    .response-box {
+      background: #090d16;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 14px;
+      margin-top: 14px;
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      color: #38bdf8;
+      max-height: 180px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    /* Lista de Pausas e Itens */
+    .active-list {
+      margin-top: 14px;
+      border-top: 1px dashed var(--card-border);
+      padding-top: 14px;
+    }
+
+    .active-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0f172a;
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      border: 1px solid var(--card-border);
+      font-size: 13px;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .nav-link-btn {
+      background: #334155;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Topbar -->
+    <div class="header">
+      <div class="header-info">
+        <h1>
+          <span>🔴</span> Painel de Homologação iFood (Sandbox)
+          <span class="badge-app">Módulos Merchant & Catalog</span>
+        </h1>
+        <div class="header-meta" style="margin-top: 8px;">
+          <span>App: <strong>omordidaco-pdv (Teste)</strong></span>
+          <span>•</span>
+          <span>Client ID: <span class="meta-tag">d543f817-4252-46e3-919b-9280bbb4ed8f</span></span>
+          <span>•</span>
+          <span>Merchant ID: <span class="meta-tag">1c6a85ea-2063-4bb9-a2ab-a198c2d9946b</span></span>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="/cozinha.html" class="nav-link-btn">👨‍🍳 Ir para Cozinha</a>
+        <a href="/business.html" class="nav-link-btn">📊 Ir para Business</a>
+      </div>
+    </div>
+
+    <!-- Abas dos Módulos -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="alternarAba('merchant')">
+        <span>🏬</span> 1. Módulo Merchant (Loja, Pausas & Horários)
+      </button>
+      <button class="tab-btn" onclick="alternarAba('catalog')">
+        <span>🍕</span> 2. Módulo Catalog (Categoria, Itens & PATCH)
+      </button>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- ABA 1: MÓDULO MERCHANT (3 CENÁRIOS)            -->
+    <!-- ============================================== -->
+    <div id="tab-merchant" class="tab-content active">
+
+      <!-- CENÁRIO 1: INFORMAÇÕES DA LOJA -->
+      <div class="scenario-card">
+        <div class="scenario-title">
+          <span>📹 Cenário 1:</span> Informações da Loja & Disponibilidade
+        </div>
+        <div class="scenario-desc">
+          O checklist exige listar as lojas vinculadas, exibir os detalhes completos e consultar a disponibilidade da loja via API.
+        </div>
+        <button class="btn btn-primary" onclick="consultarInformacoesLoja()">
+          🔍 Consultar Lojas & Disponibilidade em Tempo Real
+        </button>
+        <div id="respLoja" class="response-box" style="display: none;"></div>
+      </div>
+
+      <!-- CENÁRIO 2: INTERRUPÇÃO NA LOJA (PAUSAS) -->
+      <div class="scenario-card">
+        <div class="scenario-title">
+          <span>📹 Cenário 2:</span> Interrupção na Loja (Pausas Emergenciais)
+        </div>
+        <div class="scenario-desc">
+          O checklist exige cadastrar uma pausa no sistema, validar se ela reflete no Portal do Parceiro, listar pausas ativas e remover a pausa.
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group" style="grid-column: span 2;">
+            <label>Motivo da Pausa</label>
+            <input type="text" id="pausaDesc" class="form-control" value="Falta de insumos / Chapa cheia" placeholder="Ex: Falta de pão, troca de gás...">
+          </div>
+          <div class="form-group">
+            <label>Duração da Pausa (Minutos)</label>
+            <input type="number" id="pausaMinutos" class="form-control" value="60" min="15" max="360">
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn btn-yellow" onclick="cadastrarPausaLoja()">
+            ⏸️ Cadastrar Pausa na Loja
+          </button>
+          <button class="btn btn-outline" onclick="listarPausasLoja()">
+            🔄 Consultar Pausas Ativas
+          </button>
+        </div>
+
+        <div id="respPausa" class="response-box" style="display: none;"></div>
+
+        <div id="boxPausasAtivas" class="active-list" style="display: none;">
+          <div style="font-size: 12px; font-weight: 800; color: #cbd5e1; margin-bottom: 8px;">PAUSAS ATIVAS NO IFOOD:</div>
+          <div id="listaPausas"></div>
+        </div>
+      </div>
+
+      <!-- CENÁRIO 3: HORÁRIO DE FUNCIONAMENTO -->
+      <div class="scenario-card">
+        <div class="scenario-title">
+          <span>📹 Cenário 3:</span> Horário de Funcionamento da Loja
+        </div>
+        <div class="scenario-desc">
+          O checklist exige cadastrar exatamente: <strong>Sábado (10:00 às 19:00)</strong> e <strong>Domingo (09:00-12:00, 13:00-16:00 e 17:00-23:00)</strong>, consultar e validar no Portal do Parceiro.
+        </div>
+
+        <div style="background: #0f172a; padding: 14px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; border: 1px solid var(--card-border);">
+          <div style="font-weight: 800; color: #38bdf8; margin-bottom: 6px;">📅 Horários Exigidos pelo Suporte iFood:</div>
+          <div>• <strong>Sábado:</strong> das 10:00 às 19:00</div>
+          <div>• <strong>Domingo (Turno 1):</strong> das 09:00 às 12:00</div>
+          <div>• <strong>Domingo (Turno 2):</strong> das 13:00 às 16:00</div>
+          <div>• <strong>Domingo (Turno 3):</strong> das 17:00 às 23:00</div>
+        </div>
+
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn btn-green" onclick="salvarHorariosFuncionamento()">
+            💾 Salvar Horários Exigidos no iFood
+          </button>
+          <button class="btn btn-outline" onclick="consultarHorariosFuncionamento()">
+            🔄 Consultar Horários Atuais
+          </button>
+        </div>
+
+        <div id="respHorarios" class="response-box" style="display: none;"></div>
+      </div>
+
+    </div>
+
+    <!-- ============================================== -->
+    <!-- ABA 2: MÓDULO CATALOG (3 CENÁRIOS)             -->
+    <!-- ============================================== -->
+    <div id="tab-catalog" class="tab-content">
+
+      <!-- CENÁRIO 1: CADASTRO DE CATEGORIA E CRIAÇÃO DE ITEM -->
+      <div class="scenario-card">
+        <div class="scenario-title">
+          <span>📹 Cenário 1:</span> Cadastro de Categoria e Criação de Item
+        </div>
+        <div class="scenario-desc">
+          Criar categoria <strong>"Teste Homologação"</strong> e criar item <strong>"Produto Teste"</strong> com status Ativo, preço e foto.
+        </div>
+
+        <!-- 1. Categoria -->
+        <div style="margin-bottom: 18px;">
+          <label style="font-size: 12px; font-weight: 700; color: #cbd5e1; text-transform: uppercase;">1. Nome da Categoria</label>
+          <div style="display: flex; gap: 10px; margin-top: 6px;">
+            <input type="text" id="catNome" class="form-control" value="Teste Homologação" style="flex: 1;">
+            <button class="btn btn-blue" onclick="criarCategoriaCatalog()">
+              📁 Criar Categoria
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. Item -->
+        <div class="form-grid">
+          <div class="form-group" style="grid-column: span 2;">
+            <label>2. Nome do Produto</label>
+            <input type="text" id="itemNome" class="form-control" value="Produto Teste">
+          </div>
+          <div class="form-group">
+            <label>Preço (R$)</label>
+            <input type="number" id="itemPreco" class="form-control" value="25.00" step="0.50">
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <input type="text" class="form-control" value="AVAILABLE (Ativo)" disabled>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="cadastrarItemCatalog()">
+          🍔 Cadastrar Item na Categoria
+        </button>
+
+        <div id="respCatalogItem" class="response-box" style="display: none;"></div>
+      </div>
+
+      <!-- CENÁRIO 2: GRUPOS DE COMPLEMENTOS -->
+      <div class="scenario-card">
+        <div class="scenario-title">
+          <span>📹 Cenário 2:</span> Cadastro de Grupo de Complemento e Complementos
+        </div>
+        <div class="scenario-desc">
+          Criar grupo de complementos e cadastrar 2 complementos com nome, preço, status ativo e foto.
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group" style="grid-column: span 2;">
+            <label>Nome do Grupo de Complementos</label>
+            <input type="text" id="grupoNome" class="form-control" value="Adicionais Teste Homologação">
+          </div>
+          <div class="form-group">
+            <label>Complemento 1 (Nome e Preço)</label>
+            <input type="text" id="comp1Nome" class="form-control" value="Bacon Crocante Extra - R$ 5,00" disabled>
+          </div>
+          <div class="form-group">
+            <label>Complemento 2 (Nome e Preço)</label>
+            <input type="text" id="comp2Nome" class="form-control" value="Queijo Muçarela Extra - R$ 4,00" disabled>
+          </div>
+        </div>
+
+        <button class="btn btn-green" onclick="cadastrarGrupoComplementos()">
+          ➕ Criar Grupo e Complementos
+        </button>
+
+        <div id="respGrupoComp" class="response-box" style="display: none;"></div>
+      </div>
+
+      <!-- CENÁRIO 3: ALTERAÇÕES VIA PATCH -->
+      <div class="scenario-card">
+        <div class="scenario-title">
+          <span>📹 Cenário 3:</span> Alteração de Item e Complemento (Requests PATCH)
+        </div>
+        <div class="scenario-desc">
+          O analista exige explicitamente o uso das requisições <strong>PATCH /items/price</strong> e <strong>PATCH /items/status</strong> (Pausar/Reativar).
+        </div>
+
+        <!-- Alterar Preço do Item -->
+        <div style="background: #0f172a; padding: 16px; border-radius: 8px; margin-bottom: 16px; border: 1px solid var(--card-border);">
+          <div style="font-weight: 800; color: #ffffff; margin-bottom: 10px;">1. Alteração de Preço do Item (PATCH /items/price)</div>
+          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <input type="number" id="patchPrecoItem" class="form-control" value="28.00" step="0.50" style="width: 140px;">
+            <button class="btn btn-yellow" onclick="dispararPatchPreco()">
+              💲 Atualizar Preço para R$ 28,00 (PATCH)
+            </button>
+          </div>
+        </div>
+
+        <!-- Alterar Status do Item (Pausar / Reativar) -->
+        <div style="background: #0f172a; padding: 16px; border-radius: 8px; border: 1px solid var(--card-border);">
+          <div style="font-weight: 800; color: #ffffff; margin-bottom: 10px;">2. Alteração de Status do Item (PATCH /items/status)</div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn btn-danger" onclick="dispararPatchStatus('UNAVAILABLE')">
+              ⏸️ Pausar Item (PATCH UNAVAILABLE)
+            </button>
+            <button class="btn btn-green" onclick="dispararPatchStatus('AVAILABLE')">
+              ▶️ Reativar Item (PATCH AVAILABLE)
+            </button>
+          </div>
+        </div>
+
+        <div id="respPatch" class="response-box" style="display: none;"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function alternarAba(aba) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+      if (aba === 'merchant') {
+        document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+        document.getElementById('tab-merchant').classList.add('active');
+      } else {
+        document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+        document.getElementById('tab-catalog').classList.add('active');
+      }
+    }
+
+    function exibirResposta(elementId, dados) {
+      const el = document.getElementById(elementId);
+      el.style.display = 'block';
+      el.innerText = typeof dados === 'object' ? JSON.stringify(dados, null, 2) : String(dados);
+    }
+
+    // ----------------------------------------------------
+    // MERCHANT CENÁRIO 1: INFORMAÇÕES DA LOJA
+    // ----------------------------------------------------
+    async function consultarInformacoesLoja() {
+      const el = document.getElementById('respLoja');
+      el.style.display = 'block';
+      el.innerText = 'Carregando informações da loja na API do iFood...';
+      try {
+        const res = await fetch('/api/ifood/sandbox/loja');
+        const data = await res.json();
+        exibirResposta('respLoja', data);
+      } catch (e) {
+        exibirResposta('respLoja', { erro: e.message });
+      }
+    }
+
+    // ----------------------------------------------------
+    // MERCHANT CENÁRIO 2: PAUSAS E INTERRUPÇÕES
+    // ----------------------------------------------------
+    async function cadastrarPausaLoja() {
+      const desc = document.getElementById('pausaDesc').value;
+      const min = document.getElementById('pausaMinutos').value;
+      exibirResposta('respPausa', 'Enviando requisição de pausa para o iFood...');
+      try {
+        const res = await fetch('/api/ifood/sandbox/pausas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ description: desc, durationMinutes: min })
+        });
+        const data = await res.json();
+        exibirResposta('respPausa', data);
+        listarPausasLoja();
+      } catch (e) {
+        exibirResposta('respPausa', { erro: e.message });
+      }
+    }
+
+    async function listarPausasLoja() {
+      try {
+        const res = await fetch('/api/ifood/sandbox/pausas');
+        const data = await res.json();
+        const box = document.getElementById('boxPausasAtivas');
+        const lista = document.getElementById('listaPausas');
+        lista.innerHTML = '';
+
+        if (Array.isArray(data.pausas) && data.pausas.length > 0) {
+          box.style.display = 'block';
+          data.pausas.forEach(p => {
+            const div = document.createElement('div');
+            div.className = 'active-item';
+            div.innerHTML = `
+              <div>
+                <strong>${p.description || 'Pausa na Loja'}</strong><br>
+                <span style="font-size: 11px; color: #94a3b8;">Início: ${p.start} | Fim: ${p.end}</span>
+              </div>
+              <button class="btn btn-danger btn-sm" onclick="removerPausaLoja('${p.id}')">
+                🗑️ Remover Pausa
+              </button>
+            `;
+            lista.appendChild(div);
+          });
+        } else {
+          box.style.display = 'block';
+          lista.innerHTML = '<div style="color: #10b981; font-size: 12px;">Nenhuma pausa ativa no momento (Loja Disponível).</div>';
+        }
+      } catch (e) {}
+    }
+
+    async function removerPausaLoja(id) {
+      if (!confirm('Deseja remover esta pausa e reabrir a loja no iFood?')) return;
+      exibirResposta('respPausa', `Removendo pausa ${id}...`);
+      try {
+        const res = await fetch(`/api/ifood/sandbox/pausas/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        exibirResposta('respPausa', data);
+        listarPausasLoja();
+      } catch (e) {
+        exibirResposta('respPausa', { erro: e.message });
+      }
+    }
+
+    // ----------------------------------------------------
+    // MERCHANT CENÁRIO 3: HORÁRIOS DE FUNCIONAMENTO
+    // ----------------------------------------------------
+    async function salvarHorariosFuncionamento() {
+      exibirResposta('respHorarios', 'Salvando horários de Sábado (10:00-19:00) e Domingo (3 turnos)...');
+      try {
+        const res = await fetch('/api/ifood/sandbox/horarios', { method: 'PUT' });
+        const data = await res.json();
+        exibirResposta('respHorarios', data);
+      } catch (e) {
+        exibirResposta('respHorarios', { erro: e.message });
+      }
+    }
+
+    async function consultarHorariosFuncionamento() {
+      exibirResposta('respHorarios', 'Consultando horários na API do iFood...');
+      try {
+        const res = await fetch('/api/ifood/sandbox/horarios');
+        const data = await res.json();
+        exibirResposta('respHorarios', data);
+      } catch (e) {
+        exibirResposta('respHorarios', { erro: e.message });
+      }
+    }
+
+    // ----------------------------------------------------
+    // CATALOG CENÁRIO 1: CRIAR CATEGORIA E ITEM
+    // ----------------------------------------------------
+    let categoriaCriadaId = 'b35afb8c-b736-41a7-b351-a741b30afce8';
+    let itemCriadoId = 'a7cbf2b4-5d76-483e-9ebf-165348da71bf';
+
+    async function criarCategoriaCatalog() {
+      const nome = document.getElementById('catNome').value;
+      exibirResposta('respCatalogItem', `Criando categoria "${nome}" no iFood...`);
+      try {
+        const res = await fetch('/api/ifood/sandbox/categoria', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: nome })
+        });
+        const data = await res.json();
+        if (data.data && data.data.id) categoriaCriadaId = data.data.id;
+        exibirResposta('respCatalogItem', data);
+      } catch (e) {
+        exibirResposta('respCatalogItem', { erro: e.message });
+      }
+    }
+
+    async function cadastrarItemCatalog() {
+      const nome = document.getElementById('itemNome').value;
+      const preco = document.getElementById('itemPreco').value;
+      exibirResposta('respCatalogItem', `Cadastrando "${nome}" a R$ ${preco} na categoria...`);
+      try {
+        const res = await fetch('/api/ifood/sandbox/item', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: nome,
+            price: preco,
+            categoryId: categoriaCriadaId
+          })
+        });
+        const data = await res.json();
+        if (data.item && data.item.id) itemCriadoId = data.item.id;
+        exibirResposta('respCatalogItem', data);
+      } catch (e) {
+        exibirResposta('respCatalogItem', { erro: e.message });
+      }
+    }
+
+    // ----------------------------------------------------
+    // CATALOG CENÁRIO 2: GRUPOS DE COMPLEMENTOS
+    // ----------------------------------------------------
+    async function cadastrarGrupoComplementos() {
+      const nome = document.getElementById('grupoNome').value;
+      exibirResposta('respGrupoComp', `Criando grupo de complementos "${nome}"...`);
+      try {
+        const res = await fetch('/api/ifood/sandbox/grupo-complementos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: nome })
+        });
+        const data = await res.json();
+        exibirResposta('respGrupoComp', data);
+      } catch (e) {
+        exibirResposta('respGrupoComp', { erro: e.message });
+      }
+    }
+
+    // ----------------------------------------------------
+    // CATALOG CENÁRIO 3: ALTERAÇÕES VIA PATCH
+    // ----------------------------------------------------
+    async function dispararPatchPreco() {
+      const preco = document.getElementById('patchPrecoItem').value;
+      exibirResposta('respPatch', `Disparando PATCH /items/price para R$ ${preco}...`);
+      try {
+        const res = await fetch('/api/ifood/sandbox/item/preco', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ itemId: itemCriadoId, price: preco })
+        });
+        const data = await res.json();
+        exibirResposta('respPatch', data);
+      } catch (e) {
+        exibirResposta('respPatch', { erro: e.message });
+      }
+    }
+
+    async function dispararPatchStatus(status) {
+      exibirResposta('respPatch', `Disparando PATCH /items/status para ${status}...`);
+      try {
+        const res = await fetch('/api/ifood/sandbox/item/status', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ itemId: itemCriadoId, status: status })
+        });
+        const data = await res.json();
+        exibirResposta('respPatch', data);
+      } catch (e) {
+        exibirResposta('respPatch', { erro: e.message });
+      }
+    }
+  </script>
+</body>
+</html>

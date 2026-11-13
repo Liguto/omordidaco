@@ -1177,6 +1177,12 @@ app.post(['/api/ifood/pedidos/:id/cancelar', '/ifood/pedidos/:id/cancelar'], asy
 });
 
 // ====================================================
+// ROTAS DE HOMOLOGAÇÃO MANUAL IFOOD (SANDBOX)
+// ====================================================
+const homologacaoIFoodRouter = require('./homologacao_ifood_api');
+app.use('/api/ifood/sandbox', homologacaoIFoodRouter);
+
+// ====================================================
 // ROTAS DE INTEGRAÇÃO OFICIAL COM A 99FOOD (99APP)
 // ====================================================
 
