@@ -288,25 +288,47 @@ router.post('/grupo-complementos', async (req, res) => {
     const catId = 'b35afb8c-b736-41a7-b351-a741b30afce8';
     const prodId = 'd78d7f56-5f42-48d2-a04c-1742a0a04720';
     const itemId = 'cf0edf6f-b044-4032-b447-fe64ce5226a7';
-    const grpId = '9fe260d6-a6d0-4385-9dec-ba423b5f9bfb';
-    const opt1Id = 'cb068786-9e67-401d-a84c-29ad63ea572d';
-    const opt2Id = '8e44741a-8ece-4a39-80de-7770e4e15a26';
+    const ts = Date.now();
 
-    // Cria produtos dos complementos
-    const resP1 = await fetch(`https://merchant-api.ifood.com.br/catalog/v2.0/merchants/${SANDBOX_CONFIG.merchantId}/products`, {
+    // 1. Cria 2 produtos com externalCode único para evitar conflito
+    const p1Res = await fetch(`https://merchant-api.ifood.com.br/catalog/v2.0/merchants/${SANDBOX_CONFIG.merchantId}/products`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ name: 'Bacon Extra Teste', serving: 'NOT_APPLICABLE' })
+      body: JSON.stringify({ name: 'Bacon Extra Teste', externalCode: 'BACON_' + ts, serving: 'NOT_APPLICABLE' })
     });
-    const p1 = await resP1.json();
+    const p1 = await p1Res.json();
 
-    const resP2 = await fetch(`https://merchant-api.ifood.com.br/catalog/v2.0/merchants/${SANDBOX_CONFIG.merchantId}/products`, {
+    const p2Res = await fetch(`https://merchant-api.ifood.com.br/catalog/v2.0/merchants/${SANDBOX_CONFIG.merchantId}/products`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ name: 'Queijo Extra Teste', serving: 'NOT_APPLICABLE' })
+      body: JSON.stringify({ name: 'Queijo Extra Teste', externalCode: 'QUEIJO_' + ts, serving: 'NOT_APPLICABLE' })
     });
-    const p2 = await resP2.json();
+    const p2 = await p2Res.json();
 
+    // 2. Cria OptionGroup
+    const grpRes = await fetch(`https://merchant-api.ifood.com.br/catalog/v2.0/merchants/${SANDBOX_CONFIG.merchantId}/optionGroups`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ name, min: Number(min), max: Number(max), status: 'AVAILABLE' })
+    });
+    const grp = await grpRes.json();
+
+    // 3. Cria as Opções no OptionGroup
+    const opt1Res = await fetch(`https://merchant-api.ifood.com.br/catalog/v2.0/merchants/${SANDBOX_CONFIG.merchantId}/optionGroups/${grp.id}/options`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ productId: p1.id, status: 'AVAILABLE', price: { value: 5.00 } })
+    });
+    const opt1 = await opt1Res.json();
+
+    const opt2Res = await fetch(`https://merchant-api.ifood.com.br/catalog/v2.0/merchants/${SANDBOX_CONFIG.merchantId}/optionGroups/${grp.id}/options`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ productId: p2.id, status: 'AVAILABLE', price: { value: 4.00 } })
+    });
+    const opt2 = await opt2Res.json();
+
+    // 4. Executa PUT /items para persistir o vínculo dentro do Produto Teste
     const payload = {
       item: {
         id: itemId,
@@ -319,10 +341,11 @@ router.post('/grupo-complementos', async (req, res) => {
         {
           id: prodId,
           name: 'Produto Teste',
+          description: 'Item criado para validação do checklist de homologação ifood',
           serving: 'SERVES_1',
           optionGroups: [
             {
-              id: grpId,
+              id: grp.id,
               min: Number(min),
               max: Number(max)
             }
@@ -333,25 +356,25 @@ router.post('/grupo-complementos', async (req, res) => {
       ],
       optionGroups: [
         {
-          id: grpId,
+          id: grp.id,
           name: name,
           status: 'AVAILABLE',
           min: Number(min),
           max: Number(max),
-          optionIds: [opt1Id, opt2Id]
+          optionIds: [opt1.id, opt2.id]
         }
       ],
       options: [
         {
-          id: opt1Id,
-          optionGroupId: grpId,
+          id: opt1.id,
+          optionGroupId: grp.id,
           productId: p1.id,
           status: 'AVAILABLE',
           price: { value: 5.00 }
         },
         {
-          id: opt2Id,
-          optionGroupId: grpId,
+          id: opt2.id,
+          optionGroupId: grp.id,
           productId: p2.id,
           status: 'AVAILABLE',
           price: { value: 4.00 }
@@ -368,10 +391,10 @@ router.post('/grupo-complementos', async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Grupo de complementos e 2 complementos vinculados ao Produto Teste com sucesso!',
-      group: { id: grpId, name },
+      group: { id: grp.id, name },
       complementos: [
-        { nome: 'Bacon Extra Teste', preco: 5.00, optionId: opt1Id },
-        { nome: 'Queijo Extra Teste', preco: 4.00, optionId: opt2Id }
+        { nome: 'Bacon Extra Teste', preco: 5.00, optionId: opt1.id },
+        { nome: 'Queijo Extra Teste', preco: 4.00, optionId: opt2.id }
       ]
     });
   } catch (err) {
