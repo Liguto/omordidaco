@@ -1246,6 +1246,46 @@ app.post(['/api/99food/simular-teste', '/99food/simular-teste'], (req, res) => {
   res.json({ success: true, message: 'Pedido simulado da 99Food gerado com sucesso!', pedido: pedidoSimulado });
 });
 
+// Importar e puxar pedido da 99Food diretamente pelo Order ID (Sandbox ou Real)
+app.post(['/api/99food/pedidos/importar/:orderId', '/99food/pedidos/importar/:orderId'], async (req, res) => {
+  const orderId = (req.params.orderId || '').trim();
+  try {
+    const token = await integracao99Food.obterTokenAcesso99();
+    if (!token) {
+      return res.status(500).json({ success: false, error: 'Falha ao autenticar na 99Food' });
+    }
+
+    const urlDetail = `https://openapi.99food.com/v1/order/order/detail?auth_token=${encodeURIComponent(token)}&order_id=${encodeURIComponent(orderId)}`;
+    const resDetail = await fetch(urlDetail);
+    const dataDetail = await resDetail.json();
+
+    if (dataDetail.errno !== 0 || !dataDetail.data) {
+      return res.status(404).json({ success: false, error: dataDetail.errmsg || 'Pedido não encontrado na 99Food' });
+    }
+
+    const novoPedido = integracao99Food.converterPedido99ParaInterno(dataDetail.data);
+
+    recarregarPedidosDoDisco();
+    const jaExiste = pedidos.some(p => p.id === novoPedido.id);
+    if (!jaExiste) {
+      pedidos.unshift(novoPedido);
+      salvarPedidos();
+      salvarPedidosNuvem();
+      try { gestaoEstoque.deduzirEstoquePorPedido(novoPedido); } catch(e) {}
+
+      notificarCozinha({
+        tipo: 'novo_pedido',
+        pedido: novoPedido
+      });
+      integracao99Food.registrarLog99('SUCESSO', `Pedido 99Food #${novoPedido.numero} importado com sucesso para a cozinha!`);
+    }
+
+    res.json({ success: true, pedido: novoPedido });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // Obter Logs em Tempo Real da 99Food
 app.get(['/api/99food/logs', '/99food/logs'], (req, res) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
