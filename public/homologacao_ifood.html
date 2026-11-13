@@ -492,7 +492,7 @@
         </div>
 
         <!-- Alterar Status do Item (Pausar / Reativar) -->
-        <div style="background: #0f172a; padding: 16px; border-radius: 8px; border: 1px solid var(--card-border);">
+        <div style="background: #0f172a; padding: 16px; border-radius: 8px; margin-bottom: 16px; border: 1px solid var(--card-border);">
           <div style="font-weight: 800; color: #ffffff; margin-bottom: 10px;">2. Alteração de Status do Item (PATCH /items/status)</div>
           <div style="display: flex; gap: 10px; flex-wrap: wrap;">
             <button class="btn btn-danger" onclick="dispararPatchStatus('UNAVAILABLE')">
@@ -500,6 +500,25 @@
             </button>
             <button class="btn btn-green" onclick="dispararPatchStatus('AVAILABLE')">
               ▶️ Reativar Item (PATCH AVAILABLE)
+            </button>
+          </div>
+        </div>
+
+        <!-- Alterar Preço e Status do Complemento (Opção) -->
+        <div style="background: #0f172a; padding: 16px; border-radius: 8px; border: 1px solid var(--card-border);">
+          <div style="font-weight: 800; color: #ffffff; margin-bottom: 10px;">3. Alterações do Complemento (PATCH /options/price e /options/status)</div>
+          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px;">
+            <input type="number" id="patchPrecoOpcao" class="form-control" value="6.00" step="0.50" style="width: 140px;">
+            <button class="btn btn-yellow" onclick="dispararPatchOpcaoPreco()">
+              💲 Atualizar Preço Complemento para R$ 6,00 (PATCH)
+            </button>
+          </div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn btn-danger" onclick="dispararPatchOpcaoStatus('UNAVAILABLE')">
+              ⏸️ Pausar Complemento (PATCH UNAVAILABLE)
+            </button>
+            <button class="btn btn-green" onclick="dispararPatchOpcaoStatus('AVAILABLE')">
+              ▶️ Reativar Complemento (PATCH AVAILABLE)
             </button>
           </div>
         </div>
@@ -685,6 +704,8 @@
     // ----------------------------------------------------
     // CATALOG CENÁRIO 2: GRUPOS DE COMPLEMENTOS
     // ----------------------------------------------------
+    let opcaoCriadaId = 'f96b23fe-07b3-4fe0-8f4d-c4341cdce5e1';
+
     async function cadastrarGrupoComplementos() {
       const nome = document.getElementById('grupoNome').value;
       exibirResposta('respGrupoComp', `Criando grupo de complementos "${nome}"...`);
@@ -695,6 +716,9 @@
           body: JSON.stringify({ name: nome })
         });
         const data = await res.json();
+        if (data.complementos && data.complementos[0]) {
+          opcaoCriadaId = data.complementos[0].optionId;
+        }
         exibirResposta('respGrupoComp', data);
       } catch (e) {
         exibirResposta('respGrupoComp', { erro: e.message });
@@ -727,6 +751,37 @@
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ itemId: itemCriadoId, status: status })
+        });
+        const data = await res.json();
+        exibirResposta('respPatch', data);
+      } catch (e) {
+        exibirResposta('respPatch', { erro: e.message });
+      }
+    }
+
+    async function dispararPatchOpcaoPreco() {
+      const preco = document.getElementById('patchPrecoOpcao').value;
+      exibirResposta('respPatch', `Disparando PATCH /options/price para R$ ${preco}...`);
+      try {
+        const res = await fetch('/api/ifood/sandbox/opcao/preco', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ optionId: opcaoCriadaId, price: preco })
+        });
+        const data = await res.json();
+        exibirResposta('respPatch', data);
+      } catch (e) {
+        exibirResposta('respPatch', { erro: e.message });
+      }
+    }
+
+    async function dispararPatchOpcaoStatus(status) {
+      exibirResposta('respPatch', `Disparando PATCH /options/status para ${status}...`);
+      try {
+        const res = await fetch('/api/ifood/sandbox/opcao/status', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ optionId: opcaoCriadaId, status: status })
         });
         const data = await res.json();
         exibirResposta('respPatch', data);
