@@ -435,7 +435,7 @@ router.patch('/item/status', async (req, res) => {
 router.patch('/opcao/preco', async (req, res) => {
   try {
     const token = await obterTokenSandbox();
-    const { optionId = 'cb068786-9e67-401d-a84c-29ad63ea572d', price = 6.00 } = req.body || {};
+    const { optionId = '95162207-5d6a-444c-aa39-9c55058dd469', price = 6.00 } = req.body || {};
 
     const resPatch = await fetch(`https://merchant-api.ifood.com.br/catalog/v2.0/merchants/${SANDBOX_CONFIG.merchantId}/options/price`, {
       method: 'PATCH',
@@ -460,7 +460,7 @@ router.patch('/opcao/preco', async (req, res) => {
 router.patch('/opcao/status', async (req, res) => {
   try {
     const token = await obterTokenSandbox();
-    const { optionId = 'cb068786-9e67-401d-a84c-29ad63ea572d', status = 'UNAVAILABLE' } = req.body || {};
+    const { optionId = '95162207-5d6a-444c-aa39-9c55058dd469', status = 'UNAVAILABLE' } = req.body || {};
 
     const resPatch = await fetch(`https://merchant-api.ifood.com.br/catalog/v2.0/merchants/${SANDBOX_CONFIG.merchantId}/options/status`, {
       method: 'PATCH',
