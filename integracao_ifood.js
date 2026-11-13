@@ -13,7 +13,7 @@ const IFOOD_TEST_CLIENT_ID = 'd543f817-4252-46e3-919b-9280bbb4ed8f';
 const IFOOD_TEST_CLIENT_SECRET = 'n912lea0o0sa1zx108s6t0xhxco90p6t97ohlrt7kpkw8fvc9qmpitzkqjuxa4opdqga0s58zbo0av1r2za464lkxu787hsogma';
 const IFOOD_TEST_MERCHANT_ID = '1c6a85ea-2063-4bb9-a2ab-a198c2d9946b';
 
-const IS_PROD = process.env.IFOOD_ENV === 'production';
+const IS_PROD = process.env.IFOOD_ENV !== 'sandbox' && process.env.IFOOD_ENV !== 'test';
 
 const IFOOD_CLIENT_ID = process.env.IFOOD_CLIENT_ID || (IS_PROD ? IFOOD_PROD_CLIENT_ID : IFOOD_TEST_CLIENT_ID);
 const IFOOD_CLIENT_SECRET = process.env.IFOOD_CLIENT_SECRET || (IS_PROD ? IFOOD_PROD_CLIENT_SECRET : IFOOD_TEST_CLIENT_SECRET);
