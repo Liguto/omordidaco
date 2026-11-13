@@ -148,12 +148,14 @@ async function marcarPedidoEntregue99(orderId) {
 /**
  * Converte o payload de pedido da 99Food (OrderModel) para o formato interno do KDS O Mordidaço
  */
-function converterPedido99ParaInterno(order99) {
-  const orderId = String(order99.order_id || Date.now());
-  const orderIndex = String(order99.order_index || Math.floor(100 + Math.random() * 900));
+function converterPedido99ParaInterno(rawOrder) {
+  if (!rawOrder) return null;
+  const order99 = rawOrder.order_info || (rawOrder.data && rawOrder.data.order_info) || rawOrder.data || rawOrder;
+  const orderId = String(order99.order_id || rawOrder.order_id || Date.now());
+  const orderIndex = String(order99.order_index || rawOrder.order_index || Math.floor(100 + Math.random() * 900));
 
   // Converte itens e adicionais
-  const itensFormatados = (order99.order_items || []).map(item => {
+  const itensFormatados = (order99.order_items || rawOrder.order_items || []).map(item => {
     let precoUnit = (item.total_price || item.sku_price || 0) / 100;
     let adicionaisStr = '';
 
@@ -172,12 +174,12 @@ function converterPedido99ParaInterno(order99) {
   });
 
   // Endereço de entrega
-  const end = order99.receive_address || {};
-  const enderecoFormatado = end.poi_address ? `${end.poi_address}, nº ${end.house_number || 'S/N'}` : 'Entrega parceira 99Food';
-  const bairroFormatado = end.poi_display_name || 'Campinas - SP';
+  const end = order99.receive_address || rawOrder.receive_address || {};
+  const enderecoFormatado = end.poi_address ? `${end.poi_address}, nº ${end.house_number || 'S/N'}` : (end.name ? `Cliente: ${end.name}` : 'Entrega parceira 99Food');
+  const bairroFormatado = end.poi_display_name || end.district || 'Campinas - SP';
 
   // Valores financeiros (convertidos de centavos)
-  const priceObj = order99.price || {};
+  const priceObj = order99.price || rawOrder.price || {};
   const subtotal = (priceObj.order_price || 0) / 100;
   const taxaEntrega = (priceObj.delivery_price || 0) / 100;
   const total = (priceObj.real_price || priceObj.real_pay_price || (subtotal + taxaEntrega)) / 100;

@@ -1187,12 +1187,11 @@ app.post(['/api/99food/webhook', '/99food/webhook'], (req, res) => {
 
   try {
     const payload = req.body || {};
-    const eventType = payload.event || payload.eventType || (payload.order ? 'orderNew' : 'desconhecido');
+    const eventType = payload.type || payload.event || payload.eventType || (payload.order ? 'orderNew' : 'desconhecido');
     integracao99Food.registrarLog99('INFO', `Webhook 99Food recebido: ${eventType}`);
 
-    if (payload.order || payload.order_items || eventType === 'orderNew') {
-      const orderData = payload.order || payload;
-      const novoPedido = integracao99Food.converterPedido99ParaInterno(orderData);
+    if (eventType === 'orderNew' || payload.order || payload.order_items || (payload.data && payload.data.order_info)) {
+      const novoPedido = integracao99Food.converterPedido99ParaInterno(payload);
 
       recarregarPedidosDoDisco();
       const jaExiste = pedidos.some(p => p.id === novoPedido.id);
