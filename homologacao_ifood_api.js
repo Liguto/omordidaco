@@ -285,74 +285,94 @@ router.post('/grupo-complementos', async (req, res) => {
       max = 2
     } = req.body || {};
 
-    // 1. Cria OptionGroup
-    const resGroup = await fetch(`https://merchant-api.ifood.com.br/catalog/v2.0/merchants/${SANDBOX_CONFIG.merchantId}/optionGroups`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        name,
-        min: Number(min),
-        max: Number(max),
-        status: 'AVAILABLE'
-      })
-    });
+    const catId = 'b35afb8c-b736-41a7-b351-a741b30afce8';
+    const prodId = 'd78d7f56-5f42-48d2-a04c-1742a0a04720';
+    const itemId = 'cf0edf6f-b044-4032-b447-fe64ce5226a7';
+    const grpId = '9fe260d6-a6d0-4385-9dec-ba423b5f9bfb';
+    const opt1Id = 'cb068786-9e67-401d-a84c-29ad63ea572d';
+    const opt2Id = '8e44741a-8ece-4a39-80de-7770e4e15a26';
 
-    const groupData = await resGroup.json();
-
-    // 2. Cria Complemento 1 (Bacon)
+    // Cria produtos dos complementos
     const resP1 = await fetch(`https://merchant-api.ifood.com.br/catalog/v2.0/merchants/${SANDBOX_CONFIG.merchantId}/products`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ name: 'Bacon Extra Teste', serving: 'NOT_APPLICABLE' })
     });
     const p1 = await resP1.json();
-    const resOpt1 = await fetch(`https://merchant-api.ifood.com.br/catalog/v2.0/merchants/${SANDBOX_CONFIG.merchantId}/optionGroups/${groupData.id}/options`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ productId: p1.id, status: 'AVAILABLE', price: { value: 5.00 } })
-    });
-    const opt1Data = await resOpt1.json();
 
-    // 3. Cria Complemento 2 (Queijo)
     const resP2 = await fetch(`https://merchant-api.ifood.com.br/catalog/v2.0/merchants/${SANDBOX_CONFIG.merchantId}/products`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ name: 'Queijo Extra Teste', serving: 'NOT_APPLICABLE' })
     });
     const p2 = await resP2.json();
-    const resOpt2 = await fetch(`https://merchant-api.ifood.com.br/catalog/v2.0/merchants/${SANDBOX_CONFIG.merchantId}/optionGroups/${groupData.id}/options`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ productId: p2.id, status: 'AVAILABLE', price: { value: 4.00 } })
-    });
-    const opt2Data = await resOpt2.json();
 
-    // 4. Vincula o Grupo de Complementos diretamente ao Produto Teste
-    const prodId = (req.body && req.body.productId) || 'accad7d2-52ec-4315-8631-f4a38cf9820f';
-    await fetch(`https://merchant-api.ifood.com.br/catalog/v2.0/merchants/${SANDBOX_CONFIG.merchantId}/products/${prodId}`, {
-      method: 'PATCH',
+    const payload = {
+      item: {
+        id: itemId,
+        productId: prodId,
+        categoryId: catId,
+        status: 'AVAILABLE',
+        price: { value: 25.00 }
+      },
+      products: [
+        {
+          id: prodId,
+          name: 'Produto Teste',
+          serving: 'SERVES_1',
+          optionGroups: [
+            {
+              id: grpId,
+              min: Number(min),
+              max: Number(max)
+            }
+          ]
+        },
+        { id: p1.id, name: 'Bacon Extra Teste', serving: 'NOT_APPLICABLE' },
+        { id: p2.id, name: 'Queijo Extra Teste', serving: 'NOT_APPLICABLE' }
+      ],
+      optionGroups: [
+        {
+          id: grpId,
+          name: name,
+          status: 'AVAILABLE',
+          min: Number(min),
+          max: Number(max),
+          optionIds: [opt1Id, opt2Id]
+        }
+      ],
+      options: [
+        {
+          id: opt1Id,
+          optionGroupId: grpId,
+          productId: p1.id,
+          status: 'AVAILABLE',
+          price: { value: 5.00 }
+        },
+        {
+          id: opt2Id,
+          optionGroupId: grpId,
+          productId: p2.id,
+          status: 'AVAILABLE',
+          price: { value: 4.00 }
+        }
+      ]
+    };
+
+    const resPut = await fetch(`https://merchant-api.ifood.com.br/catalog/v2.0/merchants/${SANDBOX_CONFIG.merchantId}/items`, {
+      method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({
-        optionGroups: [
-          {
-            id: groupData.id,
-            min: Number(min),
-            max: Number(max)
-          }
-        ]
-      })
+      body: JSON.stringify(payload)
     });
 
-    res.status(resGroup.status).json({
-      success: true,
-      message: 'Grupo de complementos criado e vinculado ao Produto Teste com sucesso!',
-      group: groupData,
+    const dataPut = await resPut.json();
+    res.status(resPut.status).json({
+      success: resPut.ok,
+      message: 'Grupo de complementos e 2 complementos vinculados ao Produto Teste com sucesso!',
+      group: dataPut.optionGroups ? dataPut.optionGroups[0] : { id: grpId, name },
       complementos: [
-        { nome: 'Bacon Extra Teste', preco: 5.00, optionId: opt1Data.id },
-        { nome: 'Queijo Extra Teste', preco: 4.00, optionId: opt2Data.id }
+        { nome: 'Bacon Extra Teste', preco: 5.00, optionId: opt1Id },
+        { nome: 'Queijo Extra Teste', preco: 4.00, optionId: opt2Id }
       ]
     });
   } catch (err) {
