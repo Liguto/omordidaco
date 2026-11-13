@@ -330,9 +330,25 @@ router.post('/grupo-complementos', async (req, res) => {
     });
     const opt2Data = await resOpt2.json();
 
+    // 4. Vincula o Grupo de Complementos diretamente ao Produto Teste
+    const prodId = (req.body && req.body.productId) || 'accad7d2-52ec-4315-8631-f4a38cf9820f';
+    await fetch(`https://merchant-api.ifood.com.br/catalog/v2.0/merchants/${SANDBOX_CONFIG.merchantId}/products/${prodId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({
+        optionGroups: [
+          {
+            id: groupData.id,
+            min: Number(min),
+            max: Number(max)
+          }
+        ]
+      })
+    });
+
     res.status(resGroup.status).json({
       success: true,
-      message: 'Grupo de complementos e 2 complementos criados com sucesso!',
+      message: 'Grupo de complementos criado e vinculado ao Produto Teste com sucesso!',
       group: groupData,
       complementos: [
         { nome: 'Bacon Extra Teste', preco: 5.00, optionId: opt1Data.id },
