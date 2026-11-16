@@ -38,7 +38,7 @@ async function sincronizarCardapio99Food() {
     {
       app_menu_id: '5764617594607502251',
       menu_name: 'O Mordidaço - Dogs',
-      app_category_id_list: ['cat_combos', 'cat_hotdogs', 'cat_adicionais', 'cat_bebidas']
+      app_category_ids: ['cat_combos', 'cat_hotdogs', 'cat_adicionais', 'cat_bebidas']
     }
   ];
 
@@ -47,7 +47,7 @@ async function sincronizarCardapio99Food() {
     {
       app_category_id: 'cat_combos',
       category_name: '⭐ Combos Campeões (Mais Pedidos)',
-      app_item_id_list: [
+      app_item_ids: [
         'combo_casal',
         'combo_familia'
       ]
@@ -55,7 +55,7 @@ async function sincronizarCardapio99Food() {
     {
       app_category_id: 'cat_hotdogs',
       category_name: '🌭 Hot Dogs Artesanais (No Pão ou No Prato)',
-      app_item_id_list: [
+      app_item_ids: [
         'dog_classico',
         'dog_em_dobro',
         'dog_bacon',
@@ -66,7 +66,7 @@ async function sincronizarCardapio99Food() {
     {
       app_category_id: 'cat_adicionais',
       category_name: '➕ Adicionais Extras',
-      app_item_id_list: [
+      app_item_ids: [
         'add_salsicha',
         'add_catupiry',
         'add_bacon',
@@ -82,7 +82,7 @@ async function sincronizarCardapio99Food() {
     {
       app_category_id: 'cat_bebidas',
       category_name: '🥤 Bebidas Geladas',
-      app_item_id_list: [
+      app_item_ids: [
         'refri_coca_lata',
         'refri_coca_zero_lata',
         'refri_guarana_lata',
