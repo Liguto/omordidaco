@@ -289,9 +289,14 @@
           <span>Merchant ID: <span class="meta-tag">1c6a85ea-2063-4bb9-a2ab-a198c2d9946b</span></span>
         </div>
       </div>
-      <div class="nav-links">
-        <a href="/cozinha.html" class="nav-link-btn">👨‍🍳 Ir para Cozinha</a>
-        <a href="/business.html" class="nav-link-btn">📊 Ir para Business</a>
+      <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+        <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; padding: 6px 14px; border-radius: 8px; color: #34d399; font-weight: 800; font-family: monospace; font-size: 14px; display: flex; align-items: center; gap: 8px; box-shadow: 0 0 15px rgba(16,185,129,0.2);">
+          <span>🕒</span> <span id="relogioAoVivo">Carregando data e hora...</span>
+        </div>
+        <div class="nav-links">
+          <a href="/cozinha.html" class="nav-link-btn">👨‍🍳 Ir para Cozinha</a>
+          <a href="/business.html" class="nav-link-btn">📊 Ir para Business</a>
+        </div>
       </div>
     </div>
 
@@ -789,6 +794,21 @@
         exibirResposta('respPatch', { erro: e.message });
       }
     }
+
+    // Relógio ao vivo para exigência do checklist de homologação iFood
+    function atualizarRelogio() {
+      const agora = new Date();
+      const dia = String(agora.getDate()).padStart(2, '0');
+      const mes = String(agora.getMonth() + 1).padStart(2, '0');
+      const ano = agora.getFullYear();
+      const hora = String(agora.getHours()).padStart(2, '0');
+      const min = String(agora.getMinutes()).padStart(2, '0');
+      const seg = String(agora.getSeconds()).padStart(2, '0');
+      const el = document.getElementById('relogioAoVivo');
+      if (el) el.innerText = `${dia}/${mes}/${ano} ${hora}:${min}:${seg}`;
+    }
+    setInterval(atualizarRelogio, 1000);
+    atualizarRelogio();
   </script>
 </body>
 </html>
