@@ -485,6 +485,11 @@
           O analista exige explicitamente o uso das requisições <strong>PATCH /items/price</strong> e <strong>PATCH /items/status</strong> (Pausar/Reativar).
         </div>
 
+        <div id="alvoCatalogBadge" style="margin-bottom: 14px; font-size: 12.5px; color: #38bdf8; background: #0f172a; padding: 10px 14px; border-radius: 8px; border: 1px solid #334155; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+          <span>🎯 <strong>Carregando dados ativos do Sandbox...</strong></span>
+          <button class="btn btn-outline btn-sm" onclick="carregarDadosTeste()" style="padding: 4px 10px; font-size: 11px;">🔄 Sincronizar Alvos</button>
+        </div>
+
         <!-- Alterar Preço do Item -->
         <div style="background: #0f172a; padding: 16px; border-radius: 8px; margin-bottom: 16px; border: 1px solid var(--card-border);">
           <div style="font-weight: 800; color: #ffffff; margin-bottom: 10px;">1. Alteração de Preço do Item (PATCH /items/price)</div>
@@ -546,6 +551,7 @@
       } else {
         document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
         document.getElementById('tab-catalog').classList.add('active');
+        carregarDadosTeste();
       }
     }
 
@@ -709,7 +715,35 @@
     // ----------------------------------------------------
     // CATALOG CENÁRIO 2: GRUPOS DE COMPLEMENTOS
     // ----------------------------------------------------
-    let opcaoCriadaId = '95162207-5d6a-444c-aa39-9c55058dd469';
+    let categoriaCriadaId = null;
+    let itemCriadoId = null;
+    let opcaoCriadaId = null;
+
+    async function carregarDadosTeste() {
+      const badge = document.getElementById('alvoCatalogBadge');
+      if (badge) badge.innerHTML = `<span>⏳ Consultando IDs reais do Produto Teste no iFood Sandbox...</span>`;
+      try {
+        const res = await fetch('/api/ifood/sandbox/dados-teste');
+        const json = await res.json();
+        if (json.success && json.data) {
+          if (json.data.categoryId) categoriaCriadaId = json.data.categoryId;
+          if (json.data.itemId) itemCriadoId = json.data.itemId;
+          if (json.data.optionId) opcaoCriadaId = json.data.optionId;
+
+          if (badge) {
+            badge.innerHTML = `
+              <div>
+                🎯 <strong>Item Alvo:</strong> ${json.data.itemName || 'Produto Teste'} (<code>${itemCriadoId || 'Auto'}</code>)<br>
+                ➕ <strong>Opção Alvo:</strong> ${json.data.optionName || 'Bacon Extra Teste'} (<code>${opcaoCriadaId || 'Auto'}</code>) - Atual: R$ ${Number(json.data.optionPrice||5).toFixed(2)} [${json.data.optionStatus||'AVAILABLE'}]
+              </div>
+              <button class="btn btn-outline btn-sm" onclick="carregarDadosTeste()" style="padding: 4px 10px; font-size: 11px;">🔄 Sincronizar Alvos</button>
+            `;
+          }
+        }
+      } catch (e) {
+        if (badge) badge.innerHTML = `<span>⚠️ Erro ao consultar alvos: ${e.message}</span>`;
+      }
+    }
 
     async function cadastrarGrupoComplementos() {
       const nome = document.getElementById('grupoNome').value;
@@ -725,6 +759,7 @@
           opcaoCriadaId = data.complementos[0].optionId;
         }
         exibirResposta('respGrupoComp', data);
+        carregarDadosTeste();
       } catch (e) {
         exibirResposta('respGrupoComp', { erro: e.message });
       }
@@ -744,6 +779,7 @@
         });
         const data = await res.json();
         exibirResposta('respPatch', data);
+        carregarDadosTeste();
       } catch (e) {
         exibirResposta('respPatch', { erro: e.message });
       }
@@ -759,6 +795,7 @@
         });
         const data = await res.json();
         exibirResposta('respPatch', data);
+        carregarDadosTeste();
       } catch (e) {
         exibirResposta('respPatch', { erro: e.message });
       }
@@ -775,6 +812,7 @@
         });
         const data = await res.json();
         exibirResposta('respPatch', data);
+        carregarDadosTeste();
       } catch (e) {
         exibirResposta('respPatch', { erro: e.message });
       }
@@ -790,6 +828,7 @@
         });
         const data = await res.json();
         exibirResposta('respPatch', data);
+        carregarDadosTeste();
       } catch (e) {
         exibirResposta('respPatch', { erro: e.message });
       }

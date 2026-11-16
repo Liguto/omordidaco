@@ -470,13 +470,32 @@ async function obterItemEOpcaoTeste(token) {
     const item = (catData.items && catData.items.find(i => i.name.includes('Teste'))) || (catData.items && catData.items[0]);
     const option = item && item.optionGroups && item.optionGroups[0] && item.optionGroups[0].options && item.optionGroups[0].options[0];
     return {
+      categoryId: cat ? cat.id : null,
+      categoryName: cat ? cat.name : null,
       itemId: item ? item.id : null,
-      optionId: option ? option.id : null
+      itemName: item ? item.name : null,
+      itemPrice: item && item.price ? item.price.value : 25.00,
+      itemStatus: item ? item.status : 'AVAILABLE',
+      optionId: option ? option.id : null,
+      optionName: option ? option.name : null,
+      optionPrice: option && option.price ? option.price.value : 5.00,
+      optionStatus: option ? option.status : 'AVAILABLE'
     };
   } catch (e) {
     return { itemId: null, optionId: null };
   }
 }
+
+// Endpoint para o frontend consultar dados em tempo real do item de teste
+router.get('/dados-teste', async (req, res) => {
+  try {
+    const token = await obterTokenSandbox();
+    const dados = await obterItemEOpcaoTeste(token);
+    res.json({ success: true, data: dados });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 
 // ----------------------------------------------------
 // 6. CATALOG: Cenário 3 - Alterações via PATCH (Obrigatório)
@@ -546,7 +565,7 @@ router.patch('/opcao/preco', async (req, res) => {
     const token = await obterTokenSandbox();
     let { optionId, price = 6.00 } = req.body || {};
 
-    if (!optionId || optionId === '2f4fc898-ff08-4a63-84a7-87432436ea8c') {
+    if (!optionId || optionId === '2f4fc898-ff08-4a63-84a7-87432436ea8c' || optionId === '95162207-5d6a-444c-aa39-9c55058dd469') {
       const info = await obterItemEOpcaoTeste(token);
       if (info.optionId) optionId = info.optionId;
     }
@@ -576,7 +595,7 @@ router.patch('/opcao/status', async (req, res) => {
     const token = await obterTokenSandbox();
     let { optionId, status = 'UNAVAILABLE' } = req.body || {};
 
-    if (!optionId || optionId === '2f4fc898-ff08-4a63-84a7-87432436ea8c') {
+    if (!optionId || optionId === '2f4fc898-ff08-4a63-84a7-87432436ea8c' || optionId === '95162207-5d6a-444c-aa39-9c55058dd469') {
       const info = await obterItemEOpcaoTeste(token);
       if (info.optionId) optionId = info.optionId;
     }
