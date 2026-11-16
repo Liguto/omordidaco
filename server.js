@@ -16,7 +16,11 @@ const DB_FILE = isServerless ? path.join(os.tmpdir(), 'pedidos.json') : path.joi
 const HISTORICO_FILE = isServerless ? path.join(os.tmpdir(), 'historico_pedidos.json') : path.join(__dirname, 'historico_pedidos.json');
 const CLIENTES_FILE = isServerless ? path.join(os.tmpdir(), 'clientes.json') : path.join(__dirname, 'clientes.json');
 
-app.use(express.json());
+app.use(express.json({
+  verify: (req, res, buf) => {
+    try { req.rawBody = buf ? buf.toString('utf8') : ''; } catch (e) {}
+  }
+}));
 app.use((req, res, next) => {
   if (typeof req.body === 'string' && req.body.length > 0) {
     try {
@@ -1193,6 +1197,14 @@ app.post(['/api/99food/webhook', '/99food/webhook'], (req, res) => {
 
   try {
     const payload = req.body || {};
+    // Preserva o order_id exato de 64 bits a partir do rawBody sem truncamento float
+    if (req.rawBody) {
+      const matchOrderId = req.rawBody.match(/"order_id"\s*:\s*([0-9]{15,22})/);
+      if (matchOrderId) {
+        payload.exact_order_id = matchOrderId[1];
+      }
+    }
+
     const eventType = payload.type || payload.event || payload.eventType || (payload.order ? 'orderNew' : 'desconhecido');
     integracao99Food.registrarLog99('INFO', `Webhook 99Food recebido: ${eventType}`);
 
@@ -1214,7 +1226,8 @@ app.post(['/api/99food/webhook', '/99food/webhook'], (req, res) => {
         integracao99Food.registrarLog99('SUCESSO', `Novo pedido 99Food #${novoPedido.numero} adicionado ao KDS!`);
       }
     } else if (eventType === 'orderCancel') {
-      const orderId = payload.order_id || (payload.order && payload.order.order_id);
+      const matchCancelId = req.rawBody ? req.rawBody.match(/"order_id"\s*:\s*([0-9]{15,22})/) : null;
+      const orderId = matchCancelId ? matchCancelId[1] : (payload.order_id || (payload.order && payload.order.order_id));
       if (orderId) {
         recarregarPedidosDoDisco();
         const p = pedidos.find(item => item.id === `99_${orderId}` || item.id === String(orderId));

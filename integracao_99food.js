@@ -164,7 +164,7 @@ async function marcarPedidoEntregue99(orderId) {
 function converterPedido99ParaInterno(rawOrder) {
   if (!rawOrder) return null;
   const order99 = rawOrder.order_info || (rawOrder.data && rawOrder.data.order_info) || rawOrder.data || rawOrder;
-  const orderId = String(order99.order_id || rawOrder.order_id || Date.now());
+  const orderId = String(rawOrder.exact_order_id || (rawOrder.data && rawOrder.data.exact_order_id) || order99.order_id || rawOrder.order_id || Date.now());
   const orderIndex = String(order99.order_index || rawOrder.order_index || Math.floor(100 + Math.random() * 900));
 
   // Converte itens e adicionais
