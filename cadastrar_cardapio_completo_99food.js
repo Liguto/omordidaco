@@ -3,9 +3,9 @@
  * Loja: O Mordidaço - Hot-Dogueria Artesanal
  */
 
-const FOOD99_APP_ID = process.env.FOOD99_APP_ID || '5764607596705613899';
-const FOOD99_APP_SECRET = process.env.FOOD99_APP_SECRET || '86252f9902d2155cf74d82a542e3c415';
-const FOOD99_APP_SHOP_ID = process.env.FOOD99_APP_SHOP_ID || 'mordidaco_test_1';
+const FOOD99_APP_ID = process.env.FOOD99_APP_ID || '5764607545191172268';
+const FOOD99_APP_SECRET = process.env.FOOD99_APP_SECRET || 'd706e3190a17c3488ee5074a6af5e628';
+const FOOD99_APP_SHOP_ID = process.env.FOOD99_APP_SHOP_ID || 'mordidaco_tamoio_1';
 const BASE_URL_99 = 'https://openapi.99food.com';
 
 async function obterToken() {
