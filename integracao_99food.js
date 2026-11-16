@@ -5,7 +5,7 @@
 
 const FOOD99_APP_ID = process.env.FOOD99_APP_ID || '5764607596705613899';
 const FOOD99_APP_SECRET = process.env.FOOD99_APP_SECRET || '86252f9902d2155cf74d82a542e3c415';
-const FOOD99_APP_SHOP_ID = process.env.FOOD99_APP_SHOP_ID || 'mordidaco_tamoio_1';
+const FOOD99_APP_SHOP_ID = process.env.FOOD99_APP_SHOP_ID || 'mordidaco_test_1';
 
 const BASE_URL_99 = 'https://openapi.99food.com';
 
@@ -34,6 +34,7 @@ function obterLogs99() {
 
 /**
  * Obtém ou renova o AuthToken da loja na 99Food
+ * Implementa auto-refresh recomendado pela DiDi
  */
 async function obterTokenAcesso99() {
   const agora = Date.now();
@@ -42,18 +43,30 @@ async function obterTokenAcesso99() {
   }
 
   try {
-    const url = `${BASE_URL_99}/v1/auth/authtoken/get?app_id=${FOOD99_APP_ID}&app_secret=${FOOD99_APP_SECRET}&app_shop_id=${FOOD99_APP_SHOP_ID}`;
-    const res = await fetch(url);
+    let url = `${BASE_URL_99}/v1/auth/authtoken/get?app_id=${FOOD99_APP_ID}&app_secret=${FOOD99_APP_SECRET}&app_shop_id=${FOOD99_APP_SHOP_ID}`;
+    let res = await fetch(url);
     if (!res.ok) {
       const errText = await res.text();
       registrarLog99('ERRO', `Falha ao obter token 99Food (${res.status}): ${errText}`);
       return null;
     }
 
-    const data = await res.json();
+    let data = await res.json();
+
+    // Se o token estiver expirado (errno 10102 ou 10100), chama o Refresh da DiDi
+    if (data.errno === 10102 || data.errno === 10100) {
+      registrarLog99('INFO', 'Renovando token expirado da 99Food via /refresh...');
+      const urlRefresh = `${BASE_URL_99}/v1/auth/authtoken/refresh?app_id=${FOOD99_APP_ID}&app_secret=${FOOD99_APP_SECRET}&app_shop_id=${FOOD99_APP_SHOP_ID}`;
+      await fetch(urlRefresh);
+
+      // Busca o token renovado
+      res = await fetch(url);
+      data = await res.json();
+    }
+
     if (data.errno === 0 && data.data && data.data.auth_token) {
       tokenEmCache99 = data.data.auth_token;
-      tokenExpiraEm99 = (data.data.token_expiration_time * 1000) || (Date.now() + 3600000);
+      tokenExpiraEm99 = (data.data.token_expiration_time * 1000) || (Date.now() + 900000);
       registrarLog99('INFO', 'Token de autenticação 99Food atualizado com sucesso.');
       return tokenEmCache99;
     } else {
