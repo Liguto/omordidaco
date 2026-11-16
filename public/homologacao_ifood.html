@@ -668,11 +668,15 @@
     }
 
     // ----------------------------------------------------
+    // CATALOG: IDs de Estado
+    // ----------------------------------------------------
+    let categoriaCriadaId = null;
+    let itemCriadoId = null;
+    let opcaoCriadaId = null;
+
+    // ----------------------------------------------------
     // CATALOG CENÁRIO 1: CRIAR CATEGORIA E ITEM
     // ----------------------------------------------------
-    let categoriaCriadaId = 'b35afb8c-b736-41a7-b351-a741b30afce8';
-    let itemCriadoId = 'cf0edf6f-b044-4032-b447-fe64ce5226a7';
-
     async function criarCategoriaCatalog() {
       const nome = document.getElementById('catNome').value;
       exibirResposta('respCatalogItem', `Criando categoria "${nome}" no iFood...`);
@@ -715,10 +719,6 @@
     // ----------------------------------------------------
     // CATALOG CENÁRIO 2: GRUPOS DE COMPLEMENTOS
     // ----------------------------------------------------
-    let categoriaCriadaId = null;
-    let itemCriadoId = null;
-    let opcaoCriadaId = null;
-
     async function carregarDadosTeste() {
       const badge = document.getElementById('alvoCatalogBadge');
       if (badge) badge.innerHTML = `<span>⏳ Consultando IDs reais do Produto Teste no iFood Sandbox...</span>`;
