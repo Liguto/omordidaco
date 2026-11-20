@@ -127,6 +127,24 @@
       "custoUnitario": 15.00
     },
     {
+      "id": "palito_queijo_empanado",
+      "nome": "Palitinho de Queijo Empanado Crocante",
+      "categoria": "Insumos",
+      "unidade": "un",
+      "quantidade": 30,
+      "minimo": 10,
+      "custoUnitario": 1.55
+    },
+    {
+      "id": "vinagrete_artesanal",
+      "nome": "Vinagrete Artesanal da Casa",
+      "categoria": "Insumos",
+      "unidade": "kg",
+      "quantidade": 2.0,
+      "minimo": 0.5,
+      "custoUnitario": 11.50
+    },
+    {
       "id": "pote_berco",
       "nome": "Pote/Caixa Berço c/ Trava (Pote Único)",
       "categoria": "Embalagens",

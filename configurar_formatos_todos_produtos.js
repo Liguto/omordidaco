@@ -150,10 +150,23 @@ async function executar() {
       prodId: 'b4c4801b-3929-4c58-8557-53f90afcdd05',
       desc: '2 salsichas Perdigão, purê cremoso, peito de frango desfiado refogado bem temperadinho e o legítimo Catupiry original maçaricado com parmesão ralado na hora.',
       preco: 29.90
+    },
+    {
+      nome: 'Mordidaço- VEG',
+      // NOTA: Ao sincronizar no iFood (via cadastrar_cardapio_completo_ifood.js ou Catalog API),
+      // preencha o itemId e prodId retornados pelo iFood para vincular a opção No Pão / No Prato (+ R$ 2,00).
+      itemId: process.env.IFOD_VEG_ITEM_ID || 'DOG_VEG_ITEM_ID',
+      prodId: process.env.IFOD_VEG_PROD_ID || 'DOG_VEG_PROD_ID',
+      desc: '🌱 Opção Ovolactovegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese verde da casa e batata palha crocante.',
+      preco: 29.90
     }
   ];
 
   for (const d of dogsIndividuais) {
+    if (d.itemId.startsWith('DOG_VEG_') || d.prodId.startsWith('DOG_VEG_')) {
+      console.log(`ℹ️ ${d.nome}: aguardando IDs definitivos do iFood Catalog para vinculação atômica de opções de formato.`);
+      continue;
+    }
     console.log(`🌭 Vinculando opções ao ${d.nome}...`);
     await atualizarItemComOpcoes(CAT_HOTDOGS, d.itemId, d.prodId, d.nome, d.desc, d.preco, [grupoFormatoGeral]);
     console.log(`  ✓ ${d.nome} configurado com No Pão / No Prato (+ R$ 2,00)!`);

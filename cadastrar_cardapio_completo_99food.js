@@ -42,7 +42,7 @@ async function sincronizarCardapioCompleto() {
     {
       app_category_id: 'cat_hotdogs',
       category_name: '🌭 Hot Dogs Artesanais (No Pão ou No Prato)',
-      app_item_ids: ['dog_classico', 'dog_em_dobro', 'dog_bacon', 'dog_cremoso', 'dog_tudao']
+      app_item_ids: ['dog_classico', 'dog_em_dobro', 'dog_bacon', 'dog_cremoso', 'dog_tudao', 'dog_veg']
     },
     {
       app_category_id: 'cat_adicionais',
@@ -111,7 +111,7 @@ async function sincronizarCardapioCompleto() {
       app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_formato_dog3', 'mg_adicionais']
     },
 
-    // 2. 5 HOT DOGS ARTESANAIS OFICIAIS (Com Escolha No Pão/No Prato, Retiradas e Adicionais)
+    // 2. 6 HOT DOGS ARTESANAIS OFICIAIS (Com Escolha No Pão/No Prato, Retiradas e Adicionais)
     {
       app_item_id: 'dog_classico',
       item_name: 'Mordidaço Clássico',
@@ -155,6 +155,15 @@ async function sincronizarCardapioCompleto() {
       status: 1,
       is_sold_separately: true,
       short_desc: 'O gigante da casa! 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original, purê artesanal, molho especial da casa, ketchup, mostarda, milho, ervilha, vinagrete, bacon em dobro, calabresa ralada douradinha, queijo muçarela em dobro derretido, batata palha e parmesão ralado por cima.',
+      app_modifier_group_ids: ['mg_formato', 'mg_retirar', 'mg_adicionais']
+    },
+    {
+      app_item_id: 'dog_veg',
+      item_name: 'Mordidaço- VEG',
+      price: 2990,
+      status: 1,
+      is_sold_separately: true,
+      short_desc: '🌱 Opção Ovolactovegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese verde da casa e batata palha crocante.',
       app_modifier_group_ids: ['mg_formato', 'mg_retirar', 'mg_adicionais']
     },
 

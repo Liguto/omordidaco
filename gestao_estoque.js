@@ -108,7 +108,7 @@ function deduzirEstoquePorPedido(pedido) {
     }
 
     // 2. ANÁLISE DE DOGS INDIVIDUAIS
-    const isDog = nome.includes('mordidaço') || nome.includes('mordidaco') || nome.includes('dog') || nome.includes('cachorro') || nome.includes('clássico') || nome.includes('duplo') || nome.includes('dobro') || nome.includes('cremoso') || nome.includes('tudão');
+    const isDog = nome.includes('mordidaço') || nome.includes('mordidaco') || nome.includes('dog') || nome.includes('cachorro') || nome.includes('clássico') || nome.includes('duplo') || nome.includes('dobro') || nome.includes('cremoso') || nome.includes('tudão') || nome.includes('veg');
     if (isDog) {
       totalDogsNoPedido += qtdItem;
       registrarBaixa('pote_berco', 1 * qtdItem);
@@ -129,7 +129,11 @@ function deduzirEstoquePorPedido(pedido) {
       registrarBaixa('batata_palha', 0.020 * qtdItem);
       registrarBaixa('maionese_verde', 0.020 * qtdItem);
 
-      if (nome.includes('tudão') || nome.includes('tudao')) {
+      if (nome.includes('veg')) {
+        // Mordidaço- VEG (Ovolactovegetariano - SEM salsicha Sadia)
+        registrarBaixa('palito_queijo_empanado', 2 * qtdItem);
+        registrarBaixa('vinagrete_artesanal', 0.030 * qtdItem);
+      } else if (nome.includes('tudão') || nome.includes('tudao')) {
         // Mordidaço Tudão: Salsicha, Frango, Catupiry, Calabresa, Bacon dobro, Muçarela dobro, Parmesão, Ervilha
         registrarBaixa('salsicha_sadia', 1 * qtdItem);
         registrarBaixa('frango_desfiado', 0.050 * qtdItem);

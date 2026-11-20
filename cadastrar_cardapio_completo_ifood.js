@@ -68,7 +68,7 @@ async function sincronizarCardapioCompleto() {
   const catBebidas = await criarCategoria('Bebidas Geladas', 3);
   console.log('✓ Categoria Bebidas criada:', catBebidas.id);
 
-  // 2. Hot Dogs Artesanais (Novos 5 Modelos Oficiais)
+  // 2. Hot Dogs Artesanais (6 Modelos Oficiais - incluindo VEG)
   const lanches = [
     {
       nome: 'Mordidaço Clássico',
@@ -94,6 +94,11 @@ async function sincronizarCardapioCompleto() {
       nome: 'Mordidaço Tudão',
       descricao: 'O gigante da casa! 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original, purê artesanal, molho especial da casa, ketchup, mostarda, milho, ervilha, vinagrete, bacon em dobro, calabresa ralada douradinha, queijo muçarela em dobro derretido, batata palha e parmesão ralado por cima.',
       preco: 44.90
+    },
+    {
+      nome: 'Mordidaço- VEG',
+      descricao: '🌱 Opção Ovolactovegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese verde da casa e batata palha crocante.',
+      preco: 29.90
     }
   ];
 

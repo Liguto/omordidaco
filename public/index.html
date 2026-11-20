@@ -1727,6 +1727,9 @@
     // INGREDIENTES ESPECÍFICOS DE CADA HOT DOG (PARA PERMITIR RETIRADA EXATA)
     function obterIngredientesDoDog(nomeDog) {
       const n = (nomeDog || '').toLowerCase();
+      if (n.includes('veg')) {
+        return ['2 Palitos de queijo empanados', 'Purê de batata artesanal', 'Vinagrete fresco', 'Milho', 'Ketchup', 'Mostarda', 'Maionese verde da casa', 'Batata palha'];
+      }
       if (n.includes('tudão') || n.includes('tudao')) {
         return ['Salsicha Sadia', 'Frango desfiado temperado', 'Catupiry® Original', 'Purê de batata artesanal', 'Molho especial da casa', 'Ketchup', 'Mostarda', 'Milho', 'Ervilha', 'Vinagrete', 'Bacon em dobro', 'Calabresa ralada', 'Queijo muçarela em dobro', 'Batata palha', 'Parmesão ralado fresco'];
       }
