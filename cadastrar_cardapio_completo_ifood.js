@@ -97,8 +97,8 @@ async function sincronizarCardapioCompleto() {
     },
     {
       nome: 'Mordidaço- VEG',
-      descricao: '🌱 Opção Ovolactovegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese verde da casa e batata palha crocante.',
-      preco: 29.90
+      descricao: '🌱 Opção Ovolactovegetariana! 2 legítimos Mozzarella Sticks McCain crocantes com queijo puxa-puxa derretido, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese verde da casa e batata palha crocante.',
+      preco: 31.90
     }
   ];
 

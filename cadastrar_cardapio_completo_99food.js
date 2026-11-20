@@ -160,10 +160,10 @@ async function sincronizarCardapioCompleto() {
     {
       app_item_id: 'dog_veg',
       item_name: 'Mordidaço- VEG',
-      price: 2990,
+      price: 3190,
       status: 1,
       is_sold_separately: true,
-      short_desc: '🌱 Opção Ovolactovegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese verde da casa e batata palha crocante.',
+      short_desc: '🌱 Opção Ovolactovegetariana! 2 legítimos Mozzarella Sticks McCain crocantes com queijo puxa-puxa derretido, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese verde da casa e batata palha crocante.',
       app_modifier_group_ids: ['mg_formato', 'mg_retirar', 'mg_adicionais']
     },
 

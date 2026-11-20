@@ -128,12 +128,12 @@
     },
     {
       "id": "palito_queijo_empanado",
-      "nome": "Palitinho de Queijo Empanado Crocante",
+      "nome": "Palito Stick Mussarela McCain 1kg (un)",
       "categoria": "Insumos",
       "unidade": "un",
-      "quantidade": 30,
+      "quantidade": 34,
       "minimo": 10,
-      "custoUnitario": 1.55
+      "custoUnitario": 2.12
     },
     {
       "id": "vinagrete_artesanal",
