@@ -1727,7 +1727,7 @@
     // INGREDIENTES ESPECÍFICOS DE CADA HOT DOG (PARA PERMITIR RETIRADA EXATA)
     function obterIngredientesDoDog(nomeDog) {
       const n = (nomeDog || '').toLowerCase();
-      if (n.includes('veg')) {
+      if (n.includes('veg') || n.includes('queijudo')) {
         return ['2 Palitos de queijo empanados', 'Purê de batata artesanal', 'Vinagrete fresco', 'Milho', 'Ketchup', 'Mostarda', 'Maionese verde da casa', 'Batata palha'];
       }
       if (n.includes('tudão') || n.includes('tudao')) {

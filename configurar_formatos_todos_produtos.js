@@ -152,12 +152,12 @@ async function executar() {
       preco: 29.90
     },
     {
-      nome: 'Mordidaço- VEG',
+      nome: 'Mordidaço Queijudo (VEG)',
       // NOTA: Ao sincronizar no iFood (via cadastrar_cardapio_completo_ifood.js ou Catalog API),
       // preencha o itemId e prodId retornados pelo iFood para vincular a opção No Pão / No Prato (+ R$ 2,00).
       itemId: process.env.IFOD_VEG_ITEM_ID || 'DOG_VEG_ITEM_ID',
       prodId: process.env.IFOD_VEG_PROD_ID || 'DOG_VEG_PROD_ID',
-      desc: '🌱 Opção Ovolactovegetariana! 2 legítimos Mozzarella Sticks McCain crocantes com queijo puxa-puxa derretido, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese verde da casa e batata palha crocante.',
+      desc: '🌱 Opção Vegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa derretido, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese verde da casa e batata palha crocante.',
       preco: 31.90
     }
   ];
