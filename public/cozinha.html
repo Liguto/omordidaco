@@ -1818,6 +1818,182 @@
       } catch(e) {}
     }
 
+    // Decomposição inteligente dos dogs de combo e itens individuais
+    function decomporFormatoItem(formatoStr) {
+      if (!formatoStr || typeof formatoStr !== 'string') return [];
+      const raw = formatoStr.trim();
+      if (!raw) return [];
+
+      const partes = raw.split(/\s*•\s*|\n+/).map(s => s.trim()).filter(Boolean);
+
+      return partes.map((parte, idx) => {
+        let customizacoes = [];
+        let textoBase = parte;
+
+        // Extrai colchetes [...] no final se houver
+        const matchColchetes = textoBase.match(/\[(.*?)\]\s*$/);
+        if (matchColchetes) {
+          textoBase = textoBase.replace(/\[(.*?)\]\s*$/, '').trim();
+          customizacoes = matchColchetes[1].split(/,\s*/).map(s => s.trim()).filter(Boolean);
+        }
+
+        // Extrai formato entre parênteses no final do textoBase: (No Prato) / (No Pão)
+        let formatoNome = '';
+        let nomeDog = textoBase;
+        const matchFormato = textoBase.match(/\(([^)]+)\)\s*$/);
+        if (matchFormato) {
+          formatoNome = matchFormato[1].trim();
+          nomeDog = textoBase.replace(/\([^)]+\)\s*$/, '').trim();
+        }
+
+        const isPrato = /prato|marmita/i.test(formatoNome || parte);
+        const isPao = /pão|pao|tradicional/i.test(formatoNome || parte);
+
+        if (!nomeDog) nomeDog = `${idx + 1}º Dog`;
+
+        const retiradas = [];
+        const adicionais = [];
+        const outros = [];
+        customizacoes.forEach(c => {
+          if (/^sem\s/i.test(c)) {
+            retiradas.push(c);
+          } else if (/^\+\s*/.test(c) || /adicional/i.test(c)) {
+            adicionais.push(c);
+          } else {
+            outros.push(c);
+          }
+        });
+
+        return {
+          raw: parte,
+          nomeDog: nomeDog.replace(/^👉\s*/, ''),
+          formatoNome: formatoNome,
+          isPrato: isPrato,
+          isPao: isPao,
+          customizacoes: customizacoes,
+          retiradas: retiradas,
+          adicionais: adicionais,
+          outros: outros
+        };
+      });
+    }
+
+    // Formatação visual dedicada para a tela do KDS (Quebra de linha por Dog)
+    function formatarFormatoItemHtml(formatoStr) {
+      if (!formatoStr || typeof formatoStr !== 'string') return '';
+      const formato = formatoStr.trim();
+      if (!formato) return '';
+
+      const dogs = decomporFormatoItem(formato);
+      const isMultiplosDogs = dogs.length > 1 || (dogs.length === 1 && /1º|2º|3º|^\d+º/i.test(dogs[0].nomeDog));
+
+      if (isMultiplosDogs) {
+        return `
+          <div class="combo-dogs-container" style="margin: 8px 0 6px 28px; display: flex; flex-direction: column; gap: 7px;">
+            <div style="font-size: 11px; font-weight: 900; color: #475569; text-transform: uppercase; letter-spacing: 0.6px; display: flex; align-items: center; gap: 5px;">
+              <span>🌭</span> <span>DOGS DO COMBO (${dogs.length} ITENS):</span>
+            </div>
+            ${dogs.map((d, idx) => {
+              const isPrato = d.isPrato;
+              const bgBox = isPrato ? '#fffbeb' : '#f8fafc';
+              const borderBox = isPrato ? '#fde68a' : '#cbd5e1';
+              const stripeColor = isPrato ? '#d97706' : '#2563eb';
+
+              return `
+                <div style="background: ${bgBox}; border: 1.5px solid ${borderBox}; border-left: 5px solid ${stripeColor}; border-radius: 8px; padding: 7px 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+                    <span style="font-size: 14px; font-weight: 900; color: #0f172a; display: flex; align-items: center; gap: 5px;">
+                      <span style="background: #0f172a; color: #ffffff; border-radius: 4px; padding: 1px 6px; font-size: 11px; font-weight: 900;">#${idx + 1}</span>
+                      ${d.nomeDog}
+                    </span>
+                    ${isPrato ? `
+                      <span style="background: #fef3c7; color: #92400e; border: 1.5px solid #fde68a; font-size: 11.5px; font-weight: 950; padding: 2px 8px; border-radius: 6px; letter-spacing: 0.3px; display: inline-flex; align-items: center; gap: 4px;">
+                        🍲 NO PRATO (Marmita)
+                      </span>
+                    ` : `
+                      <span style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe; font-size: 11.5px; font-weight: 900; padding: 2px 8px; border-radius: 6px; letter-spacing: 0.3px; display: inline-flex; align-items: center; gap: 4px;">
+                        🥖 ${d.formatoNome ? d.formatoNome.toUpperCase() : 'NO PÃO'}
+                      </span>
+                    `}
+                  </div>
+
+                  ${(d.retiradas.length > 0 || d.adicionais.length > 0 || d.outros.length > 0) ? `
+                    <div style="margin-top: 5px; display: flex; flex-direction: column; gap: 3px; padding-left: 2px;">
+                      ${d.retiradas.map(r => `
+                        <div style="display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 900; color: #991b1b; background: #fee2e2; border-left: 3px solid #ef4444; padding: 2px 7px; border-radius: 4px; width: fit-content;">
+                          <span>❌</span> <span>${r}</span>
+                        </div>
+                      `).join('')}
+                      ${d.adicionais.map(a => `
+                        <div style="display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 900; color: #15803d; background: #dcfce7; border-left: 3px solid #22c55e; padding: 2px 7px; border-radius: 4px; width: fit-content;">
+                          <span>➕</span> <span>${a}</span>
+                        </div>
+                      `).join('')}
+                      ${d.outros.map(o => `
+                        <div style="font-size: 11.5px; font-weight: 800; color: #334155; background: #e2e8f0; padding: 2px 7px; border-radius: 4px; width: fit-content;">
+                          <span>•</span> <span>${o}</span>
+                        </div>
+                      `).join('')}
+                    </div>
+                  ` : ''}
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      }
+
+      // Hot dog individual
+      const isPrato = /prato|marmita/i.test(formato);
+      return `
+        <div style="margin: 4px 0 2px 32px; display: inline-flex; align-items: center; gap: 6px;">
+          ${isPrato ? `
+            <span style="background: #fef3c7; color: #92400e; border: 1.5px solid #fde68a; font-size: 12.5px; font-weight: 950; padding: 3px 10px; border-radius: 6px;">
+              🍲 NO PRATO (Marmitinha Térmica)
+            </span>
+          ` : `
+            <span style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe; font-size: 12.5px; font-weight: 900; padding: 3px 10px; border-radius: 6px;">
+              👉 ${formato}
+            </span>
+          `}
+        </div>
+      `;
+    }
+
+    // Quebra de observações com delimitador |
+    function formatarObservacoesHtml(obsStr) {
+      if (!obsStr || typeof obsStr !== 'string') return '';
+      const obs = obsStr.trim();
+      if (!obs) return '';
+
+      const partes = obs.split(/\s*\|\s*/).map(s => s.trim()).filter(Boolean);
+      if (partes.length === 0) return '';
+
+      if (partes.length === 1) {
+        return `
+          <div style="background: #fee2e2; border-left: 4px solid #ef4444; padding: 5px 9px; border-radius: 6px; margin: 4px 0 0 32px; color: #991b1b; font-size: 12.5px; font-weight: 800; line-height: 1.35;">
+            ⚠️ OBS: ${partes[0]}
+          </div>
+        `;
+      }
+
+      return `
+        <div style="background: #fee2e2; border-left: 4px solid #ef4444; padding: 7px 10px; border-radius: 6px; margin: 6px 0 0 28px; color: #991b1b; font-size: 12.5px; font-weight: 800; line-height: 1.45;">
+          <div style="font-weight: 950; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>⚠️ OBSERVAÇÕES & BEBIDAS:</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            ${partes.map(p => `
+              <div style="display: flex; align-items: flex-start; gap: 6px; background: rgba(255, 255, 255, 0.75); padding: 3px 8px; border-radius: 4px; color: #7f1d1d; font-weight: 850;">
+                <span style="color: #ef4444; font-weight: 950;">•</span>
+                <span>${p}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
     function gerarHtmlCardPedido(p, modo = 'kanban') {
       const isIFood = p.origem === 'iFood';
       const is99Food = p.origem === '99Food';
@@ -1861,8 +2037,8 @@
               <span style="background: ${isIFood ? '#ea1d2c' : (is99Food ? '#d97706' : '#0f172a')}; color: #ffffff; padding: 2px 8px; border-radius: 6px; font-size: 13px; font-weight: 900; margin-right: 6px;">${qtd}x</span>
               ${nomeLimpo}
             </div>
-            ${i.formato ? `<div style="font-size: 13px; font-weight: 800; color: #2563eb; margin: 3px 0 0 32px;">👉 ${i.formato}</div>` : ''}
-            ${i.observacoes ? `<div style="background: #fee2e2; border-left: 4px solid #ef4444; padding: 5px 9px; border-radius: 6px; margin: 4px 0 0 32px; color: #991b1b; font-size: 12.5px; font-weight: 800;">⚠️ OBS: ${i.observacoes}</div>` : ''}
+            ${i.formato ? formatarFormatoItemHtml(i.formato) : ''}
+            ${i.observacoes ? formatarObservacoesHtml(i.observacoes) : ''}
           </li>
         `;
       });
@@ -2711,12 +2887,56 @@
       `;
 
       p.itens.forEach(i => {
+        let formatoTicketHtml = '';
+        if (i.formato) {
+          const dogs = decomporFormatoItem(i.formato);
+          if (dogs.length > 1 || (dogs.length === 1 && /1º|2º|3º|^\d+º/i.test(dogs[0].nomeDog))) {
+            dogs.forEach(d => {
+              const tagFmt = d.isPrato ? '[NO PRATO (Marmita)]' : '[NO PÃO]';
+              formatoTicketHtml += `<div style="font-weight: bold; margin-left: 2mm; margin-top: 1mm; font-size: 8.5pt;">  » ${d.nomeDog} ${tagFmt}</div>`;
+              if (d.retiradas && d.retiradas.length > 0) {
+                d.retiradas.forEach(r => {
+                  formatoTicketHtml += `<div style="margin-left: 4.5mm; font-size: 8pt;">    - ${r}</div>`;
+                });
+              }
+              if (d.adicionais && d.adicionais.length > 0) {
+                d.adicionais.forEach(a => {
+                  formatoTicketHtml += `<div style="margin-left: 4.5mm; font-size: 8pt; font-weight: bold;">    + ${a}</div>`;
+                });
+              }
+              if (d.outros && d.outros.length > 0) {
+                d.outros.forEach(o => {
+                  formatoTicketHtml += `<div style="margin-left: 4.5mm; font-size: 8pt;">    • ${o}</div>`;
+                });
+              }
+            });
+          } else {
+            const isPrato = /prato|marmita/i.test(i.formato);
+            formatoTicketHtml = `<div style="margin-left: 2mm; font-size: 8.5pt;">  [${isPrato ? 'NO PRATO (Marmita)' : i.formato}]</div>`;
+          }
+        }
+
+        let obsTicketHtml = '';
+        if (i.observacoes) {
+          const partesObs = i.observacoes.split(/\s*\|\s*/).map(s => s.trim()).filter(Boolean);
+          if (partesObs.length > 1) {
+            obsTicketHtml += `<div class="ticket-bold" style="margin-left: 2mm; margin-top: 1mm; font-size: 8pt;">  *Obs/Bebidas:*</div>`;
+            partesObs.forEach(o => {
+              obsTicketHtml += `<div style="margin-left: 4.5mm; font-size: 8pt; font-weight: bold;">    - ${o}</div>`;
+            });
+          } else if (partesObs.length === 1) {
+            obsTicketHtml += `<div class="ticket-bold" style="margin-left: 2mm; margin-top: 0.8mm; font-size: 8pt;">  *Obs: ${partesObs[0]}*</div>`;
+          }
+        }
+
+        const qtd = i.quantidade || 1;
+        const nomeLimpo = i.nome ? i.nome.replace(/^\d+x\s*/i, '') : 'Item';
         html += `
-          <div class="ticket-item">
-            <div class="ticket-bold">• 1x ${i.nome}</div>
-            ${i.formato ? `<div>  [${i.formato}]</div>` : ''}
-            ${i.observacoes ? `<div class="ticket-bold">  *Obs: ${i.observacoes}*</div>` : ''}
-            <div class="ticket-right">R$ ${i.preco.toFixed(2).replace('.', ',')}</div>
+          <div class="ticket-item" style="margin-bottom: 4px;">
+            <div class="ticket-bold">• ${qtd}x ${nomeLimpo}</div>
+            ${formatoTicketHtml}
+            ${obsTicketHtml}
+            <div class="ticket-right" style="margin-top: 1mm;">R$ ${Number(i.preco || 0).toFixed(2).replace('.', ',')}</div>
           </div>
         `;
       });
