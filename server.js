@@ -1347,6 +1347,29 @@ app.post(['/api/99food/webhook', '/99food/webhook'], (req, res) => {
           integracao99Food.registrarLog99('AVISO', `Pedido 99Food #${orderId} cancelado pelo cliente/plataforma.`);
         }
       }
+    } else if (eventType === 'orderFinish' || eventType === 'orderComplete' || eventType === 'orderDelivered' || payload.status === 40 || (payload.data && payload.data.status === 40)) {
+      const matchFinishId = req.rawBody ? req.rawBody.match(/"order_id"\s*:\s*([0-9]{15,22})/) : null;
+      const orderId = matchFinishId ? matchFinishId[1] : (payload.order_id || (payload.order && payload.order.order_id));
+      if (orderId) {
+        recarregarPedidosDoDisco();
+        const p = pedidos.find(item => item.id === `99_${orderId}` || item.id === String(orderId));
+        if (p) {
+          p.status = 'Entregue';
+          p.statusAtualizadoEm = Date.now();
+          salvarPedidos();
+          salvarPedidosNuvem();
+
+          recarregarHistoricoDoDisco();
+          const jaTem = historicoPedidos.some(h => h.id === p.id);
+          if (!jaTem) {
+            historicoPedidos.unshift({ ...p, status: 'Entregue' });
+            salvarHistorico();
+          }
+
+          notificarCozinha({ tipo: 'status_atualizado', id: p.id, status: 'Entregue', numero: p.numero });
+          integracao99Food.registrarLog99('SUCESSO', `Pedido 99Food #${orderId} marcado automaticamente como Entregue via webhook!`);
+        }
+      }
     }
   } catch (err) {
     integracao99Food.registrarLog99('ERRO', `Erro no processamento do webhook 99Food: ${err.message}`);
