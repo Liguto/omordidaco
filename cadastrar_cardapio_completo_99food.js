@@ -28,7 +28,10 @@ async function sincronizarCardapioCompleto() {
     {
       app_category_id: 'cat_combos',
       category_name: '⭐ Combos Campeões (Mais Pedidos)',
-      app_item_ids: ['combo_casal', 'combo_familia']
+      app_item_ids: [
+        'combo_solo_classico', 'combo_solo_campeao', 'combo_completo_sobremesa',
+        'combo_solo_tudao', 'combo_casal', 'combo_familia', 'combo_casal_vip'
+      ]
     },
     {
       app_category_id: 'cat_hotdogs',
@@ -87,7 +90,49 @@ async function sincronizarCardapioCompleto() {
     { app_item_id: 'mod_delvalle_uva', item_name: '1x Suco Del Valle Uva 290ml (Lata)', price: 0, status: 1, is_sold_separately: false },
     { app_item_id: 'mod_agua_mineral', item_name: '1x Água Mineral 500ml (sem gás)', price: 0, status: 1, is_sold_separately: false },
 
-    // 1. COMBOS OFICIAIS (Com modificadores de formato por dog e refris)
+    // Bebidas 2L do Combo Família
+    { app_item_id: 'mod_guarana_2l', item_name: '🟢 1x Guaraná Antarctica 2L (Tradicional)', price: 0, status: 1, is_sold_separately: false },
+    { app_item_id: 'mod_guarana_zero_2l', item_name: '🟢 1x Guaraná Antarctica 2L Zero', price: 0, status: 1, is_sold_separately: false },
+    { app_item_id: 'mod_coca_2l', item_name: '🔴 Upgrade: 1x Coca-Cola 2L (Original)', price: 300, status: 1, is_sold_separately: false },
+    { app_item_id: 'mod_coca_zero_2l', item_name: '🔴 Upgrade: 1x Coca-Cola 2L Zero', price: 300, status: 1, is_sold_separately: false },
+
+    // 1. COMBOS OFICIAIS
+    {
+      app_item_id: 'combo_solo_classico',
+      item_name: 'Mordidaço Solo Clássico',
+      price: 2890,
+      status: 1,
+      is_sold_separately: true,
+      short_desc: '1 Mordidaço Clássico (escolha No Pão ou No Prato) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese da Casa.',
+      app_modifier_group_ids: ['mg_formato', 'mg_refri_1', 'mg_retirar', 'mg_adicionais']
+    },
+    {
+      app_item_id: 'combo_solo_campeao',
+      item_name: 'Mordidaço Solo Campeão',
+      price: 3390,
+      status: 1,
+      is_sold_separately: true,
+      short_desc: '1 Mordidaço em Dobro (2 salsichas Sadia e dobro de muçarela) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese da Casa. O campeão de vendas individual!',
+      app_modifier_group_ids: ['mg_formato', 'mg_refri_1', 'mg_retirar', 'mg_adicionais']
+    },
+    {
+      app_item_id: 'combo_completo_sobremesa',
+      item_name: 'Mordidaço Completo c/ Sobremesa',
+      price: 4590,
+      status: 1,
+      is_sold_separately: true,
+      short_desc: '1 Mordidaço em Dobro (No Pão ou No Prato) + 1 Refrigerante Lata + 1 Tortinha de Limão no Pote (170ml) + 2 Potes de Maionese. A refeição completa!',
+      app_modifier_group_ids: ['mg_formato', 'mg_refri_1', 'mg_retirar', 'mg_adicionais']
+    },
+    {
+      app_item_id: 'combo_solo_tudao',
+      item_name: 'Mordidaço Solo Tudão',
+      price: 4890,
+      status: 1,
+      is_sold_separately: true,
+      short_desc: '1 Mordidaço Tudão (o gigante da casa!) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese da Casa. Fartura máxima!',
+      app_modifier_group_ids: ['mg_formato', 'mg_refri_1', 'mg_retirar', 'mg_adicionais']
+    },
     {
       app_item_id: 'combo_casal',
       item_name: 'Combo Mordidaço Casal',
@@ -103,8 +148,17 @@ async function sincronizarCardapioCompleto() {
       price: 8690,
       status: 1,
       is_sold_separately: true,
-      short_desc: '2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha no Pão ou no Prato para cada um) + 1 Guaraná Antarctica 2 Litros + 3 Potes de Molho da Casa (50ml). Fartura garantida!',
-      app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_formato_dog3', 'mg_adicionais']
+      short_desc: '2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha no Pão ou no Prato para cada um) + 1 Refrigerante 2 Litros (Guaraná incluso ou upgrade Coca 2L) + 3 Potes de Molho da Casa. Fartura garantida!',
+      app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_formato_dog3', 'mg_bebida_2l', 'mg_adicionais']
+    },
+    {
+      app_item_id: 'combo_casal_vip',
+      item_name: 'Mordidaço Casal VIP (com Sobremesas)',
+      price: 9690,
+      status: 1,
+      is_sold_separately: true,
+      short_desc: '2 Mordidaços em Dobro + 2 Refrigerantes Lata + 1 Tortinha de Limão (170ml) + 1 Escondidinho de Nutella c/ Brownie (170ml) + 2 Potes de Maionese da Casa. A experiência completa a dois!',
+      app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_refri_1', 'mg_refri_2', 'mg_adicionais']
     },
 
     // 2. 6 HOT DOGS ARTESANAIS OFICIAIS (Com Escolha No Pão/No Prato, Retiradas e Adicionais)
@@ -332,6 +386,20 @@ async function sincronizarCardapioCompleto() {
         { app_item_id: 'mod_fanta_lata', price: 0 },
         { app_item_id: 'mod_delvalle_uva', price: 0 },
         { app_item_id: 'mod_agua_mineral', price: 0 }
+      ]
+    },
+    {
+      app_modifier_group_id: 'mg_bebida_2l',
+      modifier_group_name: 'Escolha a Bebida 2 Litros da Família',
+      is_required: 1,
+      quantity_min_permitted: 1,
+      quantity_max_permitted: 1,
+      buy_mode: 0,
+      app_mg_items: [
+        { app_item_id: 'mod_guarana_2l', price: 0 },
+        { app_item_id: 'mod_guarana_zero_2l', price: 0 },
+        { app_item_id: 'mod_coca_2l', price: 300 },
+        { app_item_id: 'mod_coca_zero_2l', price: 300 }
       ]
     }
   ];

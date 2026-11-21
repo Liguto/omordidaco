@@ -153,8 +153,8 @@ async function sincronizarTudo() {
   await vincularItem(catHotdogs.id, prodTudao.id, 44.90);
   console.log('  ✓ Mordidaço Tudão cadastrado: R$ 44,90');
 
-  // 4. Atualizar Combos
-  console.log('\n⭐ Atualizando Combos Campeões...');
+  // 4. Atualizar e Cadastrar Combos
+  console.log('\n⭐ Atualizando e Cadastrando Combos Campeões...');
   await atualizarProduto(
     '671428a3-b3f7-4ead-b0cf-0582cf658b0a',
     'Combo Mordidaço Casal',
@@ -167,11 +167,51 @@ async function sincronizarTudo() {
   await atualizarProduto(
     '11ec186b-dc70-4d86-9cbd-2b183ff9605e',
     'Combo Família Mordidaço',
-    '2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha individual no Pão ou no Prato para cada um) + 1 Guaraná Antarctica 2 Litros + 3 Potes de Molho da Casa (50ml). Fartura garantida para toda a família!',
+    '2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha individual no Pão ou no Prato para cada um) + 1 Refrigerante 2 Litros (Guaraná incluso ou upgrade Coca 2L) + 3 Potes de Molho da Casa (50ml). Fartura garantida para toda a família!',
     'SERVES_3'
   );
   await atualizarPrecoItem('356850e2-d87d-4261-bcdc-b5794469afdf', 86.90);
   console.log('  ✓ Combo Família Mordidaço atualizado: R$ 86,90');
+
+  // Novos Combos Estratégicos
+  const novosCombos = [
+    {
+      nome: 'Mordidaço Solo Clássico',
+      descricao: '1 Mordidaço Clássico (escolha No Pão ou No Prato) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese da Casa.',
+      preco: 28.90,
+      serving: 'SERVES_1'
+    },
+    {
+      nome: 'Mordidaço Solo Campeão',
+      descricao: '1 Mordidaço em Dobro (2 salsichas Sadia e dobro de muçarela) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese da Casa. O campeão de vendas individual!',
+      preco: 33.90,
+      serving: 'SERVES_1'
+    },
+    {
+      nome: 'Mordidaço Completo c/ Sobremesa',
+      descricao: '1 Mordidaço em Dobro (No Pão ou No Prato) + 1 Refrigerante Lata + 1 Tortinha de Limão no Pote (170ml) + 2 Potes de Maionese. A refeição completa!',
+      preco: 45.90,
+      serving: 'SERVES_1'
+    },
+    {
+      nome: 'Mordidaço Solo Tudão',
+      descricao: '1 Mordidaço Tudão (o gigante da casa!) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese da Casa. Fartura máxima!',
+      preco: 48.90,
+      serving: 'SERVES_1'
+    },
+    {
+      nome: 'Mordidaço Casal VIP (com Sobremesas)',
+      descricao: '2 Mordidaços em Dobro + 2 Refrigerantes Lata + 1 Tortinha de Limão (170ml) + 1 Escondidinho de Nutella c/ Brownie (170ml) + 2 Potes de Maionese da Casa. A experiência completa a dois!',
+      preco: 96.90,
+      serving: 'SERVES_2'
+    }
+  ];
+
+  for (const nc of novosCombos) {
+    const prod = await criarProduto(nc.nome, nc.descricao, nc.serving);
+    await vincularItem(catCombos.id, prod.id, nc.preco);
+    console.log(`  ✓ ${nc.nome} cadastrado e vinculado: R$ ${nc.preco.toFixed(2)}`);
+  }
 
   // 5. Cadastrar Sobremesa 2 (Escondidinho de Nutella)
   console.log('\n🍰 Cadastrando Escondidinho de Nutella com Brownie...');

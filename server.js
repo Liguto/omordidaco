@@ -563,6 +563,46 @@ const CARDAPIO = {
       nome: "⭐ Combos Campeões (Mais Pedidos)",
       itens: [
         {
+          id: "combo-solo-classico",
+          nome: "Mordidaço Solo Clássico",
+          descricao: "1 Mordidaço Clássico (escolha No Pão ou No Prato) + 1 Refrigerante Lata 350ml geladinho + 2 Potes de Maionese Artesanal da Casa (30ml). Refeição individual perfeita!",
+          preco: 20.90,
+          adicionalPrato: 2.00,
+          permiteFormato: true,
+          destaque: false,
+          isLanche: true
+        },
+        {
+          id: "combo-solo-campeao",
+          nome: "Mordidaço Solo Campeão",
+          descricao: "1 Mordidaço em Dobro (2 salsichas Sadia e dobro de muçarela) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese Artesanal. O campeão de vendas na versão individual!",
+          preco: 24.90,
+          adicionalPrato: 2.00,
+          permiteFormato: true,
+          destaque: true,
+          isLanche: true
+        },
+        {
+          id: "combo-completo-sobremesa",
+          nome: "Mordidaço Completo c/ Sobremesa",
+          descricao: "1 Mordidaço em Dobro (escolha No Pão ou No Prato) + 1 Refrigerante Lata 350ml + 1 Tortinha de Limão no Pote (170ml) + 2 Potes de Maionese da Casa. O almoço/jantar completo com sobremesa!",
+          preco: 33.90,
+          adicionalPrato: 2.00,
+          permiteFormato: true,
+          destaque: true,
+          isLanche: true
+        },
+        {
+          id: "combo-solo-tudao",
+          nome: "Mordidaço Solo Tudão",
+          descricao: "1 Mordidaço Tudão (o gigante da casa!) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese Artesanal. Fartura máxima para matar qualquer fome!",
+          preco: 37.90,
+          adicionalPrato: 2.00,
+          permiteFormato: true,
+          destaque: false,
+          isLanche: true
+        },
+        {
           id: "combo-casal",
           nome: "Combo Mordidaço Casal",
           descricao: "2 Mordidaços em Dobro (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata (escolha Coca, Guaraná ou Fanta) + 2 Potes de Molho da Casa (50ml). A janta perfeita para dois!",
@@ -579,16 +619,31 @@ const CARDAPIO = {
         {
           id: "combo-familia-mordidaco",
           nome: "Combo Família Mordidaço",
-          descricao: "2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha individual no Pão ou no Prato para cada um) + 1 Guaraná Antarctica 2 Litros + 3 Potes de Molho da Casa (50ml). Fartura garantida para toda a família!",
+          descricao: "2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha individual no Pão ou no Prato para cada um) + 1 Refrigerante 2 Litros (Guaraná incluso ou upgrade Coca 2L) + 3 Potes de Molho da Casa (50ml). Fartura garantida para toda a família!",
           preco: 64.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
+          permiteUpgradeBebida: true,
           lanchesCombo: [
             { label: "1º Mordidaço em Dobro" },
             { label: "2º Mordidaço em Dobro" },
             { label: "3º Mordidaço Clássico" }
           ],
           destaque: false,
+          isLanche: true
+        },
+        {
+          id: "combo-casal-vip",
+          nome: "Mordidaço Casal VIP (com Sobremesas)",
+          descricao: "2 Mordidaços em Dobro (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata 350ml + 1 Tortinha de Limão (170ml) + 1 Escondidinho de Nutella com Brownie (170ml) + 2 Potes de Maionese da Casa. A experiência completa a dois!",
+          preco: 69.90,
+          adicionalPrato: 2.00,
+          permiteFormato: true,
+          lanchesCombo: [
+            { label: "1º Mordidaço em Dobro" },
+            { label: "2º Mordidaço em Dobro" }
+          ],
+          destaque: true,
           isLanche: true
         }
       ]

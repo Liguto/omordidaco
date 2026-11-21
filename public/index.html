@@ -1285,11 +1285,17 @@
       <!-- Escolha do Formato (se aplicável ao item ou múltiplos lanches do combo) -->
       <div class="form-group" id="formatoGroup" style="display: none;"></div>
 
+      <!-- Seleção de Bebida do Combo (Latas ou 2L c/ Upgrade) -->
+      <div class="form-group" id="comboBebidaGroup" style="display: none;"></div>
+
       <!-- Observações / Retirar ingredientes (Renderizado dinamicamente com base no lanche) -->
       <div class="form-group" id="retirarGroup"></div>
 
       <!-- Turbinar com Adicionais Extras (Renderizado dinamicamente) -->
       <div class="form-group" id="adicionaisGroup"></div>
+
+      <!-- Upsell Inteligente (Transforme seu Dog em Combo) -->
+      <div class="form-group" id="upsellGroup" style="display: none;"></div>
 
       <div class="form-group">
         <label class="form-label">Observações especiais para a cozinha:</label>
@@ -1897,6 +1903,17 @@
         document.querySelectorAll('.check-adicional:checked').forEach(chk => {
           total += Number(chk.dataset.preco) || 0;
         });
+
+        // Soma upsell inteligente (Refri ou Sobremesa com desconto)
+        document.querySelectorAll('.check-upsell:checked').forEach(chk => {
+          total += Number(chk.dataset.preco) || 0;
+        });
+      }
+
+      // Upgrade de Bebida 2L do Combo Família
+      const radioUpgrade2L = document.querySelector('input[name="comboBebida2L"]:checked');
+      if (radioUpgrade2L) {
+        total += Number(radioUpgrade2L.dataset.upgrade) || 0;
       }
 
       document.getElementById('modalItemPrice').innerText = 'R$ ' + total.toFixed(2).replace('.', ',');
@@ -2111,6 +2128,122 @@
         }
       }
 
+      // SELEÇÃO DE BEBIDA DO COMBO (SE APLICÁVEL)
+      const comboBebidaGroup = document.getElementById('comboBebidaGroup');
+      if (item.permiteUpgradeBebida) {
+        // Combo Família: Escolha do 2L com opção de Upgrade para Coca-Cola 2L
+        comboBebidaGroup.style.display = 'block';
+        comboBebidaGroup.innerHTML = `
+          <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px; margin-bottom: 12px;">
+            <label style="font-size: 12.5px; font-weight: 900; color: #0f172a; display: block; margin-bottom: 6px;">
+              🥤 Escolha o Refrigerante de 2 Litros da Família:
+            </label>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 6px;">
+              <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; font-size: 13px; border-radius: 8px; background: #ffffff; border: 1.5px solid #cbd5e1;">
+                <input type="radio" name="comboBebida2L" value="Guaraná Antarctica 2L (Tradicional)" data-upgrade="0" checked onchange="recalcularPrecoModal()">
+                <span><strong>🟢 Guaraná Antarctica 2 Litros (Tradicional)</strong> • <span style="color:#15803d; font-weight:800;">Incluso</span></span>
+              </label>
+              <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; font-size: 13px; border-radius: 8px; background: #ffffff; border: 1.5px solid #cbd5e1;">
+                <input type="radio" name="comboBebida2L" value="Guaraná Antarctica 2L Zero" data-upgrade="0" onchange="recalcularPrecoModal()">
+                <span><strong>🟢 Guaraná Antarctica 2 Litros Zero</strong> • <span style="color:#15803d; font-weight:800;">Incluso</span></span>
+              </label>
+              <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; font-size: 13px; border-radius: 8px; background: #fffbeb; border: 1.5px solid #fde68a;">
+                <input type="radio" name="comboBebida2L" value="Upgrade: Coca-Cola 2L (Original)" data-upgrade="2.00" onchange="recalcularPrecoModal()">
+                <span><strong>🔴 Upgrade: Coca-Cola 2 Litros (Original)</strong> • <strong style="color:#b45309;">+ R$ 2,00</strong></span>
+              </label>
+              <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; font-size: 13px; border-radius: 8px; background: #fffbeb; border: 1.5px solid #fde68a;">
+                <input type="radio" name="comboBebida2L" value="Upgrade: Coca-Cola 2L Zero" data-upgrade="2.00" onchange="recalcularPrecoModal()">
+                <span><strong>🔴 Upgrade: Coca-Cola 2 Litros Zero</strong> • <strong style="color:#b45309;">+ R$ 2,00</strong></span>
+              </label>
+            </div>
+          </div>
+        `;
+      } else if (item.id === 'combo-casal' || item.id === 'combo-casal-vip') {
+        // Combo Casal e Casal VIP: Escolha dos 2 Refris Lata
+        comboBebidaGroup.style.display = 'block';
+        comboBebidaGroup.innerHTML = `
+          <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px; margin-bottom: 12px;">
+            <label style="font-size: 12.5px; font-weight: 900; color: #0f172a; display: block; margin-bottom: 6px;">
+              🥤 Escolha os 2 Refrigerantes Lata (350ml):
+            </label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <div>
+                <span style="font-size:11px; font-weight:800; color:#64748b;">1º Refri:</span>
+                <select id="comboRefri1" class="form-control" style="font-size:12px; padding:6px 8px; margin-top:2px;">
+                  <option value="Coca-Cola Original 350ml">Coca-Cola Original 350ml</option>
+                  <option value="Coca-Cola Zero 350ml">Coca-Cola Zero 350ml</option>
+                  <option value="Guaraná Antarctica 350ml">Guaraná Antarctica 350ml</option>
+                  <option value="Guaraná Antarctica Zero 350ml">Guaraná Zero 350ml</option>
+                  <option value="Fanta Laranja 350ml">Fanta Laranja 350ml</option>
+                  <option value="Suco Del Valle Uva 290ml">Suco Del Valle Uva 290ml</option>
+                  <option value="Água Mineral 500ml">Água Mineral 500ml</option>
+                </select>
+              </div>
+              <div>
+                <span style="font-size:11px; font-weight:800; color:#64748b;">2º Refri:</span>
+                <select id="comboRefri2" class="form-control" style="font-size:12px; padding:6px 8px; margin-top:2px;">
+                  <option value="Guaraná Antarctica 350ml">Guaraná Antarctica 350ml</option>
+                  <option value="Coca-Cola Original 350ml">Coca-Cola Original 350ml</option>
+                  <option value="Coca-Cola Zero 350ml">Coca-Cola Zero 350ml</option>
+                  <option value="Guaraná Antarctica Zero 350ml">Guaraná Zero 350ml</option>
+                  <option value="Fanta Laranja 350ml">Fanta Laranja 350ml</option>
+                  <option value="Suco Del Valle Uva 290ml">Suco Del Valle Uva 290ml</option>
+                  <option value="Água Mineral 500ml">Água Mineral 500ml</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (item.id && (item.id.startsWith('combo-solo-') || item.id === 'combo-completo-sobremesa')) {
+        // Combos Solos: Escolha de 1 Refri Lata
+        comboBebidaGroup.style.display = 'block';
+        comboBebidaGroup.innerHTML = `
+          <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px; margin-bottom: 12px;">
+            <label style="font-size: 12.5px; font-weight: 900; color: #0f172a; display: block; margin-bottom: 6px;">
+              🥤 Escolha o Refrigerante Lata (350ml) incluso:
+            </label>
+            <select id="comboRefriSolo" class="form-control" style="font-size:13px; padding:8px 10px;">
+              <option value="Coca-Cola Original 350ml">Coca-Cola Original 350ml (Lata)</option>
+              <option value="Coca-Cola Zero 350ml">Coca-Cola Zero 350ml (Lata)</option>
+              <option value="Guaraná Antarctica 350ml">Guaraná Antarctica 350ml (Lata)</option>
+              <option value="Guaraná Antarctica Zero 350ml">Guaraná Antarctica Zero 350ml (Lata)</option>
+              <option value="Fanta Laranja 350ml">Fanta Laranja 350ml (Lata)</option>
+              <option value="Suco Del Valle Uva 290ml">Suco Del Valle Uva 290ml (Lata)</option>
+              <option value="Água Mineral 500ml">Água Mineral 500ml (sem gás)</option>
+            </select>
+          </div>
+        `;
+      } else {
+        comboBebidaGroup.style.display = 'none';
+        comboBebidaGroup.innerHTML = '';
+      }
+
+      // UPSELL INTELIGENTE (Para Hot Dogs Avulsos)
+      const upsellGroup = document.getElementById('upsellGroup');
+      if (catId === 'hotdogs') {
+        upsellGroup.style.display = 'block';
+        upsellGroup.innerHTML = `
+          <div style="background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%); border: 1.5px solid #fde68a; border-radius: 12px; padding: 12px; margin-top: 10px;">
+            <span style="font-size: 12px; font-weight: 900; color: #92400e; text-transform: uppercase; display: block; margin-bottom: 6px;">
+              🔥 Que tal transformar seu lanche em uma refeição completa?
+            </span>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 6px;">
+              <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; font-size: 12.5px; border-radius: 8px; background: #ffffff; border: 1px solid #fde68a;">
+                <input type="checkbox" class="check-upsell" data-nome="Refri Lata 350ml Geladinho" data-preco="5.00" onchange="recalcularPrecoModal()">
+                <span><strong>🥤 + 1 Refri Lata 350ml</strong> • <strong style="color: #15803d;">+ R$ 5,00</strong> <small style="color: #64748b;">(Economize R$ 1,00)</small></span>
+              </label>
+              <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; font-size: 12.5px; border-radius: 8px; background: #ffffff; border: 1px solid #fde68a;">
+                <input type="checkbox" class="check-upsell" data-nome="Tortinha de Limão no Pote (170ml)" data-preco="9.00" onchange="recalcularPrecoModal()">
+                <span><strong>🍋 + 1 Tortinha de Limão no Pote</strong> • <strong style="color: #15803d;">+ R$ 9,00</strong> <small style="color: #64748b;">(Economize R$ 1,90)</small></span>
+              </label>
+            </div>
+          </div>
+        `;
+      } else {
+        upsellGroup.style.display = 'none';
+        upsellGroup.innerHTML = '';
+      }
+
       recalcularPrecoModal();
       abrirModal('itemModal');
       dispararPixel('ViewContent', { content_name: item.nome, value: item.preco, currency: 'BRL' });
@@ -2157,14 +2290,35 @@
 
         formato = detalhesPorDog.join(' • ');
 
+        // Bebida 2L do Combo Família
+        const radioBebida2L = document.querySelector('input[name="comboBebida2L"]:checked');
+        if (radioBebida2L) {
+          const upg = Number(radioBebida2L.dataset.upgrade) || 0;
+          precoCalculado += upg;
+          observacoes.push(`Bebida 2L: ${radioBebida2L.value}`);
+        }
+
+        // Bebidas do Combo Casal e Casal VIP
+        const r1 = document.getElementById('comboRefri1');
+        const r2 = document.getElementById('comboRefri2');
+        if (r1 && r2) {
+          observacoes.push(`Refrigerantes: 1x ${r1.value}, 1x ${r2.value}`);
+        }
+
         const obsTexto = document.getElementById('itemObs').value.trim();
         if (obsTexto) observacoes.push(obsTexto);
 
       } else {
-        // HOT DOG INDIVIDUAL
+        // HOT DOG INDIVIDUAL OU COMBO SOLO
         document.querySelectorAll('.check-remover-item:checked').forEach(chk => {
           observacoes.push(`Sem ${chk.dataset.item}`);
         });
+
+        // Bebida inclusa dos Combos Solos
+        const rs = document.getElementById('comboRefriSolo');
+        if (rs && itemSelecionadoTemp.catId === 'combos') {
+          observacoes.push(`Refri incluso: ${rs.value}`);
+        }
 
         const obsTexto = document.getElementById('itemObs').value.trim();
         if (obsTexto) observacoes.push(obsTexto);
@@ -2192,6 +2346,13 @@
         if (adicionaisEscolhidos.length > 0) {
           observacoes.push('Adicionais: ' + adicionaisEscolhidos.join(', '));
         }
+
+        // Upsell inteligente (Refri ou Sobremesa com desconto no checkout)
+        document.querySelectorAll('.check-upsell:checked').forEach(chk => {
+          const pUpg = Number(chk.dataset.preco) || 0;
+          precoCalculado += pUpg;
+          observacoes.push(`Upsell: ${chk.dataset.nome} (+ R$ ${pUpg.toFixed(2).replace('.', ',')})`);
+        });
       }
 
       carrinho.push({
