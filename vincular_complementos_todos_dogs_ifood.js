@@ -142,7 +142,7 @@ async function vincularComplementosItem(itemInfo) {
     },
     {
       id: PROD_PRATO_ID,
-      name: '🥣 No Prato (+ R$ 2,00) - Marmitinha Térmica 500ml',
+      name: '🥣 No Prato',
       serving: 'NOT_APPLICABLE'
     }
   ];

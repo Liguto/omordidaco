@@ -144,7 +144,7 @@ async function configurarComboCasal() {
       ]
     },
     { id: PROD_PAO_ID, name: '🥖 Tradicional de Rua (No Pão)', serving: 'NOT_APPLICABLE' },
-    { id: PROD_PRATO_ID, name: '🥣 No Prato (+ R$ 2,00) - Marmitinha Térmica 500ml', serving: 'NOT_APPLICABLE' }
+    { id: PROD_PRATO_ID, name: '🥣 No Prato', serving: 'NOT_APPLICABLE' }
   ];
 
   REFRIS_DEFS.forEach(r => products.push({ id: r.id, name: r.name, serving: 'NOT_APPLICABLE' }));
@@ -259,7 +259,7 @@ async function configurarComboFamilia() {
       ]
     },
     { id: PROD_PAO_ID, name: '🥖 Tradicional de Rua (No Pão)', serving: 'NOT_APPLICABLE' },
-    { id: PROD_PRATO_ID, name: '🥣 No Prato (+ R$ 2,00) - Marmitinha Térmica 500ml', serving: 'NOT_APPLICABLE' }
+    { id: PROD_PRATO_ID, name: '🥣 No Prato', serving: 'NOT_APPLICABLE' }
   ];
 
   ADICIONAIS_DEFS.forEach(a => products.push({ id: a.id, name: a.name, serving: 'NOT_APPLICABLE' }));

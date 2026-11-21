@@ -64,8 +64,8 @@ async function sincronizarCardapioCompleto() {
 
   const items = [
     // Opções de modificador internas (não vendidas soltas)
-    { app_item_id: 'mod_pao', item_name: '🥖 Tradicional de Rua (No Pão Bambini 70g)', price: 0, status: 1, is_sold_separately: false, short_desc: 'Aberto farto, selado e com queijo ralado na hora' },
-    { app_item_id: 'mod_prato', item_name: '🥣 No Prato (+ R$ 2,00) - Marmitinha Térmica 500ml', price: 200, status: 1, is_sold_separately: false, short_desc: 'Sem pão! +40g de purê artesanal e garfo descartável reforçado' },
+    { app_item_id: 'mod_pao', item_name: '🥖 Tradicional de Rua (No Pão)', price: 0, status: 1, is_sold_separately: false, short_desc: 'Aberto farto, selado e com queijo ralado na hora' },
+    { app_item_id: 'mod_prato', item_name: '🥣 No Prato', price: 200, status: 1, is_sold_separately: false, short_desc: 'Sem pão! +40g de purê artesanal e garfo descartável reforçado' },
 
     // Retiradas (Grátis)
     { app_item_id: 'ret_milho', item_name: 'Sem Milho', price: 0, status: 1, is_sold_separately: false },
