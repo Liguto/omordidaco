@@ -43,7 +43,6 @@ const PROD_PRATO_ID = 'c3e77628-97b0-4630-a9d9-db8aebad85aa';
 
 const BEBIDAS_2L_DEFS = [
   { id: '44444444-0001-4000-8000-000000000001', name: '🟢 1x Guaraná Antarctica 2L (Tradicional)', preco: 0 },
-  { id: '44444444-0002-4000-8000-000000000002', name: '🟢 1x Guaraná Antarctica 2L Zero', preco: 0 },
   { id: '44444444-0003-4000-8000-000000000003', name: '🔴 Upgrade: 1x Coca-Cola 2L (Original)', preco: 3.00 },
   { id: '44444444-0004-4000-8000-000000000004', name: '🔴 Upgrade: 1x Coca-Cola 2L Zero', preco: 3.00 }
 ];

@@ -92,7 +92,6 @@ async function sincronizarCardapioCompleto() {
 
     // Bebidas 2L do Combo Família
     { app_item_id: 'mod_guarana_2l', item_name: '🟢 1x Guaraná Antarctica 2L (Tradicional)', price: 0, status: 1, is_sold_separately: false },
-    { app_item_id: 'mod_guarana_zero_2l', item_name: '🟢 1x Guaraná Antarctica 2L Zero', price: 0, status: 1, is_sold_separately: false },
     { app_item_id: 'mod_coca_2l', item_name: '🔴 Upgrade: 1x Coca-Cola 2L (Original)', price: 300, status: 1, is_sold_separately: false },
     { app_item_id: 'mod_coca_zero_2l', item_name: '🔴 Upgrade: 1x Coca-Cola 2L Zero', price: 300, status: 1, is_sold_separately: false },
 
@@ -397,7 +396,6 @@ async function sincronizarCardapioCompleto() {
       buy_mode: 0,
       app_mg_items: [
         { app_item_id: 'mod_guarana_2l', price: 0 },
-        { app_item_id: 'mod_guarana_zero_2l', price: 0 },
         { app_item_id: 'mod_coca_2l', price: 300 },
         { app_item_id: 'mod_coca_zero_2l', price: 300 }
       ]
