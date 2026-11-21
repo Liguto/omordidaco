@@ -471,6 +471,52 @@ sincronizarClientesComPedidos();
 // Lista de clientes conectados ao SSE (tempo real para a cozinha)
 let sseClients = [];
 
+// Gerenciamento de Status Operacional da Loja (Aberta, Pausada, Fechada)
+const STATUS_LOJA_FILE = path.join(__dirname, 'status_loja.json');
+let statusLojaCache = {
+  status: 'aberta',
+  mensagem: '',
+  atualizadoEm: new Date().toISOString()
+};
+
+try {
+  if (fs.existsSync(STATUS_LOJA_FILE)) {
+    statusLojaCache = JSON.parse(fs.readFileSync(STATUS_LOJA_FILE, 'utf8'));
+  }
+} catch (e) {
+  console.error('[STATUS LOJA] Erro ao ler status_loja.json:', e.message);
+}
+
+function salvarStatusLoja(novoStatus, mensagem = '') {
+  let msgPadrao = '';
+  if (novoStatus === 'pausada') {
+    msgPadrao = 'Cozinha em pausa temporária devido à alta demanda. Voltamos em instantes!';
+  } else if (novoStatus === 'fechada') {
+    msgPadrao = 'Loja fechada no momento. Atendimento de Quinta a Domingo a partir das 18h30.';
+  }
+
+  statusLojaCache = {
+    status: novoStatus,
+    mensagem: mensagem || msgPadrao,
+    atualizadoEm: new Date().toISOString()
+  };
+
+  try {
+    fs.writeFileSync(STATUS_LOJA_FILE, JSON.stringify(statusLojaCache, null, 2), 'utf8');
+  } catch (e) {
+    console.error('[STATUS LOJA] Erro ao gravar status_loja.json:', e.message);
+  }
+
+  console.log(`[STATUS LOJA] Loja alterada para: ${novoStatus.toUpperCase()} (${statusLojaCache.mensagem})`);
+
+  // Notifica imediatamente via SSE a todos os clientes conectados (cozinha e clientes)
+  sseClients.forEach(client => {
+    try {
+      client.res.write(`data: ${JSON.stringify({ tipo: 'status_loja', ...statusLojaCache })}\n\n`);
+    } catch (e) {}
+  });
+}
+
 function notificarCozinha(novoPedido) {
   sseClients.forEach(client => {
     try {
@@ -655,21 +701,21 @@ const CARDAPIO = {
       id: "bebidas",
       nome: "🥤 Bebidas Geladas",
       itens: [
-        { id: "refri-coca-lata", nome: "Coca-Cola Original 350ml (Lata)", preco: 6.00 },
-        { id: "refri-coca-zero-lata", nome: "Coca-Cola Zero 350ml (Lata)", preco: 6.00 },
-        { id: "refri-guarana-lata", nome: "Guaraná Antarctica 350ml (Lata)", preco: 6.00 },
-        { id: "refri-guarana-zero-lata", nome: "Guaraná Antarctica Zero 350ml (Lata)", preco: 6.00 },
-        { id: "refri-fanta-lata", nome: "Fanta Laranja 350ml (Lata)", preco: 6.00 },
-        { id: "suco-delvalle-uva", nome: "Suco Del Valle Uva 290ml (Lata)", preco: 6.50 },
-        { id: "suco-delvalle-maracuja", nome: "Suco Del Valle Maracujá 290ml (Lata)", preco: 6.50 },
-        { id: "suco-delvalle-laranja", nome: "Suco Del Valle Laranja 290ml (Lata)", preco: 6.50 },
-        { id: "refri-coca-2l", nome: "Coca-Cola 2 Litros Normal", preco: 14.00 },
-        { id: "refri-coca-zero-2l", nome: "Coca-Cola 2 Litros Zero", preco: 14.00 },
-        { id: "refri-guarana-2l", nome: "Guaraná Antarctica 2 Litros", preco: 12.00 },
-        { id: "agua-mineral-sem-gas", nome: "Água Mineral 500ml (sem gás)", preco: 4.00 },
-        { id: "agua-mineral-com-gas", nome: "Água Mineral 500ml (com gás)", preco: 4.50 },
-        { id: "cerveja-original-lata", nome: "Cerveja Original 350ml (Lata)", preco: 7.50 },
-        { id: "cerveja-heineken-ln", nome: "Cerveja Heineken 330ml (Long Neck)", preco: 10.00 }
+        { id: "refri-coca-lata", nome: "Coca-Cola Original 350ml (Lata)", preco: 6.00, imagem: "assets/produtos/coca-lata.jpg" },
+        { id: "refri-coca-zero-lata", nome: "Coca-Cola Zero 350ml (Lata)", preco: 6.00, imagem: "assets/produtos/coca-zero-lata.jpg" },
+        { id: "refri-guarana-lata", nome: "Guaraná Antarctica 350ml (Lata)", preco: 6.00, imagem: "assets/produtos/guarana-lata.jpg" },
+        { id: "refri-guarana-zero-lata", nome: "Guaraná Antarctica Zero 350ml (Lata)", preco: 6.00, imagem: "assets/produtos/guarana-zero-lata.jpg" },
+        { id: "refri-fanta-lata", nome: "Fanta Laranja 350ml (Lata)", preco: 6.00, imagem: "assets/produtos/fanta-lata.jpg" },
+        { id: "suco-delvalle-uva", nome: "Suco Del Valle Uva 290ml (Lata)", preco: 6.50, imagem: "assets/produtos/delvalle-uva.jpg" },
+        { id: "suco-delvalle-maracuja", nome: "Suco Del Valle Maracujá 290ml (Lata)", preco: 6.50, imagem: "assets/produtos/delvalle-maracuja.jpg" },
+        { id: "suco-delvalle-laranja", nome: "Suco Del Valle Laranja 290ml (Lata)", preco: 6.50, imagem: "assets/produtos/delvalle-uva.jpg" },
+        { id: "refri-coca-2l", nome: "Coca-Cola 2 Litros Normal", preco: 14.00, imagem: "assets/produtos/coca-2l.jpg" },
+        { id: "refri-coca-zero-2l", nome: "Coca-Cola 2 Litros Zero", preco: 14.00, imagem: "assets/produtos/coca-2l.jpg" },
+        { id: "refri-guarana-2l", nome: "Guaraná Antarctica 2 Litros", preco: 12.00, imagem: "assets/produtos/guarana-2l.jpg" },
+        { id: "agua-mineral-sem-gas", nome: "Água Mineral 500ml (sem gás)", preco: 4.00, imagem: "assets/produtos/agua.jpg" },
+        { id: "agua-mineral-com-gas", nome: "Água Mineral 500ml (com gás)", preco: 4.50, imagem: "assets/produtos/agua.jpg" },
+        { id: "cerveja-original-lata", nome: "Cerveja Original 350ml (Lata)", preco: 7.50, imagem: "assets/produtos/cerveja-original.jpg" },
+        { id: "cerveja-heineken-ln", nome: "Cerveja Heineken 330ml (Long Neck)", preco: 10.00, imagem: "assets/produtos/heineken.jpg" }
       ]
     }
   ]
@@ -680,9 +726,31 @@ app.get('/cozinha', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'cozinha.html'));
 });
 
-// Obter Cardápio
+// Rotas de Status Operacional da Loja (Aberta, Pausada, Fechada)
+app.get(['/api/status-loja', '/status-loja'], (req, res) => {
+  res.json(statusLojaCache);
+});
+
+app.post(['/api/status-loja', '/status-loja'], (req, res) => {
+  const { status, mensagem } = req.body || {};
+  if (!status || !['aberta', 'pausada', 'fechada'].includes(status)) {
+    return res.status(400).json({ error: 'Status inválido. Use "aberta", "pausada" ou "fechada".' });
+  }
+  salvarStatusLoja(status, mensagem);
+  res.json({ success: true, ...statusLojaCache });
+});
+
+// Obter Cardápio (Injeta o status da loja para o frontend)
 app.get(['/api/cardapio', '/cardapio'], (req, res) => {
-  res.json(CARDAPIO);
+  const resposta = {
+    ...CARDAPIO,
+    restaurante: {
+      ...CARDAPIO.restaurante,
+      statusLoja: statusLojaCache.status,
+      mensagemLoja: statusLojaCache.mensagem
+    }
+  };
+  res.json(resposta);
 });
 
 // Desmascara produtos e cliente de pedidos vindos do Sandbox do iFood
@@ -785,6 +853,13 @@ app.get(['/pedido/:id', '/acompanhar/:id'], (req, res) => {
 
 // Receber Novo Pedido
 app.post(['/api/pedidos', '/pedidos'], async (req, res) => {
+  if (statusLojaCache.status === 'fechada') {
+    return res.status(400).json({ error: 'Loja fechada no momento. Nosso horário de atendimento é de Quinta a Domingo a partir das 18h30.' });
+  }
+  if (statusLojaCache.status === 'pausada') {
+    return res.status(400).json({ error: 'Cozinha em pausa temporária devido à alta demanda. Aguarde alguns instantes e tente novamente!' });
+  }
+
   recarregarPedidosDoDisco();
   if (KV_URL && KV_TOKEN) {
     await carregarPedidosNuvem();

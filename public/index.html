@@ -475,6 +475,43 @@
       background: linear-gradient(180deg, #ffffff 0%, #fffcf5 100%);
     }
 
+    .item-body-flex {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .item-info {
+      flex: 1;
+    }
+
+    .item-img-container {
+      width: 86px;
+      height: 86px;
+      min-width: 86px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    .item-thumb-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 4px;
+      transition: transform 0.2s ease;
+    }
+
+    .item-card:hover .item-thumb-img {
+      transform: scale(1.08);
+    }
+
     .item-header {
       display: flex;
       justify-content: space-between;
@@ -1031,7 +1068,7 @@
           </div>
           <p class="slogan">Uma mordida e você entende! • Jardim Tamoio</p>
           <div>
-            <span class="sidebar-status-pill">🟢 Aberto • ⏱️ 35-50 min</span>
+            <span id="sidebarStatusPill" class="sidebar-status-pill">🟢 Aberto • ⏱️ 35-50 min</span>
           </div>
         </div>
 
@@ -1095,7 +1132,8 @@
               <div style="font-size: 11px; color: #fde68a;">Uma mordida e você entende!</div>
             </div>
           </div>
-          <div style="display: flex; gap: 6px;">
+          <div style="display: flex; gap: 6px; align-items: center;">
+            <span id="mobileStatusPill" style="font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 12px; background: rgba(34, 197, 94, 0.2); color: #4ade80;">🟢 Aberto</span>
             <button onclick="trocarAbaPrincipal('pedidos')" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px;">
               🛍️ Pedidos <span id="badgePedidosMobile" class="tab-badge" style="display: none;">0</span>
             </button>
@@ -1112,6 +1150,9 @@
           <!-- Inserido dinamicamente -->
         </nav>
       </div>
+
+      <!-- BANNER DINÂMICO DE STATUS OPERACIONAL DA LOJA (ABERTA / PAUSADA / FECHADA) -->
+      <div id="bannerStatusLoja" style="display: none; margin: 14px 16px 0 16px; padding: 13px 20px; border-radius: 12px; font-weight: 800; font-size: 13.5px; text-align: center; box-shadow: 0 4px 14px rgba(0,0,0,0.06); transition: all 0.3s ease;"></div>
 
       <!-- 2. DESKTOP APP BAR (SOMENTE NO COMPUTADOR) -->
       <div class="desktop-only">
@@ -1525,16 +1566,124 @@
     let carrinho = [];
     let itemSelecionadoTemp = null;
     let formaPagtoSelecionada = 'Pix na Entrega';
+    let statusLojaAtual = 'aberta';
+    let mensagemLojaAtual = '';
 
-    // Carregar Cardápio do Backend
+    // Carregar Cardápio do Backend e Status Operacional
     async function carregarCardapio() {
       try {
-        const res = await fetch('/api/cardapio');
+        const res = await fetch('/api/cardapio?_t=' + Date.now());
         cardapioGlobal = await res.json();
+        if (cardapioGlobal && cardapioGlobal.restaurante) {
+          aplicarStatusLoja(cardapioGlobal.restaurante.statusLoja || 'aberta', cardapioGlobal.restaurante.mensagemLoja || '');
+        }
         renderizarCardapio();
       } catch (err) {
         document.getElementById('menuContainer').innerHTML = '<p style="color:red; text-align:center;">Erro ao carregar cardápio. Verifique se o servidor está rodando.</p>';
       }
+    }
+
+    function aplicarStatusLoja(status, mensagem = '') {
+      statusLojaAtual = status || 'aberta';
+      mensagemLojaAtual = mensagem || '';
+
+      const pillSidebar = document.getElementById('sidebarStatusPill');
+      const pillMobile = document.getElementById('mobileStatusPill');
+      const banner = document.getElementById('bannerStatusLoja');
+      const btnCheckout = document.getElementById('btnConfirmarPedidoCheckout');
+
+      if (status === 'aberta') {
+        if (pillSidebar) {
+          pillSidebar.innerText = '🟢 Aberto • ⏱️ 35-50 min';
+          pillSidebar.style.background = 'rgba(22, 163, 74, 0.15)';
+          pillSidebar.style.color = '#16a34a';
+          pillSidebar.style.borderColor = 'rgba(22, 163, 74, 0.3)';
+        }
+        if (pillMobile) {
+          pillMobile.innerText = '🟢 Aberto';
+          pillMobile.style.background = 'rgba(34, 197, 94, 0.2)';
+          pillMobile.style.color = '#4ade80';
+        }
+        if (banner) banner.style.display = 'none';
+        if (btnCheckout) {
+          btnCheckout.disabled = false;
+          btnCheckout.style.opacity = '1';
+          btnCheckout.style.cursor = 'pointer';
+          btnCheckout.style.background = 'var(--green)';
+          btnCheckout.innerText = '✓ Confirmar & Enviar Pedido';
+        }
+      } else if (status === 'pausada') {
+        if (pillSidebar) {
+          pillSidebar.innerText = '🟡 Pausado • Alta Demanda';
+          pillSidebar.style.background = 'rgba(217, 119, 6, 0.15)';
+          pillSidebar.style.color = '#d97706';
+          pillSidebar.style.borderColor = 'rgba(217, 119, 6, 0.3)';
+        }
+        if (pillMobile) {
+          pillMobile.innerText = '🟡 Pausado';
+          pillMobile.style.background = 'rgba(245, 158, 11, 0.2)';
+          pillMobile.style.color = '#fbbf24';
+        }
+        if (banner) {
+          banner.style.display = 'block';
+          banner.style.background = '#fef3c7';
+          banner.style.color = '#92400e';
+          banner.style.border = '1.5px solid #fde68a';
+          banner.innerHTML = `⚠️ <strong>Cozinha em Pausa Temporária</strong><br><span style="font-size:12px; font-weight:600;">${mensagem || 'Estamos com alta demanda de pedidos na cozinha. Voltamos em instantes! Você pode montar seu carrinho normalmente.'}</span>`;
+        }
+        if (btnCheckout) {
+          btnCheckout.disabled = true;
+          btnCheckout.style.opacity = '0.65';
+          btnCheckout.style.cursor = 'not-allowed';
+          btnCheckout.style.background = '#d97706';
+          btnCheckout.innerText = '⏳ Cozinha em Pausa Temporária';
+        }
+      } else if (status === 'fechada') {
+        if (pillSidebar) {
+          pillSidebar.innerText = '🔴 Fechado no Momento';
+          pillSidebar.style.background = 'rgba(220, 38, 38, 0.15)';
+          pillSidebar.style.color = '#dc2626';
+          pillSidebar.style.borderColor = 'rgba(220, 38, 38, 0.3)';
+        }
+        if (pillMobile) {
+          pillMobile.innerText = '🔴 Fechado';
+          pillMobile.style.background = 'rgba(239, 68, 68, 0.2)';
+          pillMobile.style.color = '#f87171';
+        }
+        if (banner) {
+          banner.style.display = 'block';
+          banner.style.background = '#fee2e2';
+          banner.style.color = '#991b1b';
+          banner.style.border = '1.5px solid #fecaca';
+          banner.innerHTML = `🌙 <strong>Loja Fechada no Momento</strong><br><span style="font-size:12px; font-weight:600;">${mensagem || 'Nosso atendimento é de Quinta a Domingo a partir das 18h30. Fique à vontade para explorar o cardápio!'}</span>`;
+        }
+        if (btnCheckout) {
+          btnCheckout.disabled = true;
+          btnCheckout.style.opacity = '0.65';
+          btnCheckout.style.cursor = 'not-allowed';
+          btnCheckout.style.background = '#64748b';
+          btnCheckout.innerText = '🌙 Loja Fechada no Momento';
+        }
+      }
+    }
+
+    function conectarStatusSSE() {
+      try {
+        const es = new EventSource('/api/pedidos/stream');
+        es.onmessage = (event) => {
+          if (!event.data) return;
+          try {
+            const data = JSON.parse(event.data);
+            if (data.tipo === 'status_loja') {
+              aplicarStatusLoja(data.status, data.mensagem);
+            }
+          } catch(e) {}
+        };
+        es.onerror = () => {
+          try { es.close(); } catch(e) {}
+          setTimeout(conectarStatusSSE, 8000);
+        };
+      } catch(e) {}
     }
 
     function renderizarCardapio() {
@@ -1605,13 +1754,26 @@
         cat.itens.forEach(item => {
           const card = document.createElement('div');
           card.className = `item-card ${item.destaque ? 'destaque' : ''}`;
-          card.innerHTML = `
-            <div>
-              <div class="item-header">
-                <span class="item-title">${item.nome}</span>
-                ${item.destaque ? '<span class="item-badge">Mais Pedido</span>' : ''}
+
+          let imagemHtml = '';
+          if (item.imagem) {
+            imagemHtml = `
+              <div class="item-img-container">
+                <img src="${item.imagem}" alt="${item.nome}" class="item-thumb-img" loading="lazy" onerror="this.parentElement.style.display='none'">
               </div>
-              ${item.descricao ? `<p class="item-desc">${item.descricao}</p>` : ''}
+            `;
+          }
+
+          card.innerHTML = `
+            <div class="item-body-flex">
+              <div class="item-info">
+                <div class="item-header">
+                  <span class="item-title">${item.nome}</span>
+                  ${item.destaque ? '<span class="item-badge">Mais Pedido</span>' : ''}
+                </div>
+                ${item.descricao ? `<p class="item-desc">${item.descricao}</p>` : ''}
+              </div>
+              ${imagemHtml}
             </div>
             <div class="item-footer">
               <span class="item-price">R$ ${item.preco.toFixed(2).replace('.', ',')}</span>
@@ -2741,6 +2903,15 @@
     }
 
     async function finalizarPedido() {
+      if (statusLojaAtual === 'fechada') {
+        alert('A loja está fechada no momento! Nosso horário de atendimento é de Quinta a Domingo a partir das 18h30.');
+        return;
+      }
+      if (statusLojaAtual === 'pausada') {
+        alert('A cozinha está em pausa temporária devido à alta demanda! Por favor, aguarde alguns minutos e tente novamente.');
+        return;
+      }
+
       const nome = document.getElementById('clienteNome').value.trim();
       const telefone = document.getElementById('clienteTelefone').value.trim();
       const cep = document.getElementById('clienteCep').value.trim();
@@ -3356,6 +3527,7 @@
 
     // Iniciar
     carregarCardapio();
+    conectarStatusSSE();
     verificarRastreamentoAoCarregar();
 
     // Reativação imediata ao destravar celular ou voltar à aba (Anti-Sleep mobile)

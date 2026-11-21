@@ -779,6 +779,19 @@
       </div>
     </div>
     <div class="topbar-actions">
+      <!-- CONTROLE DE STATUS OPERACIONAL DA LOJA (ABERTA / PAUSADA / FECHADA) -->
+      <div id="controlStatusLoja" style="display: flex; align-items: center; background: #0f172a; border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 2px; gap: 2px;">
+        <button type="button" id="btnStatusAberta" onclick="definirStatusLoja('aberta')" title="Loja Aberta: Recebendo pedidos normalmente" style="background: #16a34a; color: #ffffff; border: none; padding: 5px 12px; border-radius: 18px; font-size: 11.5px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: all 0.2s;">
+          <span>🟢</span> <span>Aberta</span>
+        </button>
+        <button type="button" id="btnStatusPausada" onclick="definirStatusLoja('pausada')" title="Pausar Loja: Cozinha em alta demanda (interrompe novos pedidos temporariamente)" style="background: transparent; color: #94a3b8; border: none; padding: 5px 12px; border-radius: 18px; font-size: 11.5px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: all 0.2s;">
+          <span>🟡</span> <span>Pausar</span>
+        </button>
+        <button type="button" id="btnStatusFechada" onclick="definirStatusLoja('fechada')" title="Fechar Loja: Fora do horário de atendimento" style="background: transparent; color: #94a3b8; border: none; padding: 5px 12px; border-radius: 18px; font-size: 11.5px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: all 0.2s;">
+          <span>🔴</span> <span>Fechar</span>
+        </button>
+      </div>
+
       <div id="statusSincronizacao" style="display: flex; align-items: center; gap: 6px; background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); color: #4ade80; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 800;">
         <span style="display: inline-block; width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 6px #22c55e;"></span>
         <span>Online</span>
@@ -2955,7 +2968,11 @@
           if (!event.data) return;
           try {
             const data = JSON.parse(event.data);
-            if (data.tipo === 'status_atualizado') {
+            if (data.tipo === 'status_loja') {
+              atualizarBotoesStatusLoja(data.status);
+              const label = data.status === 'aberta' ? '🟢 Loja ABERTA' : data.status === 'pausada' ? '🟡 Loja PAUSADA' : '🔴 Loja FECHADA';
+              mostrarToastAviso(`Status da Loja: ${label}`, 'sucesso');
+            } else if (data.tipo === 'status_atualizado') {
               const p = pedidosLocais.find(x => x.id === data.id || (data.numero && x.numero && String(x.numero) === String(data.numero)));
               if (p) {
                 p.status = data.status;
@@ -2996,6 +3013,57 @@
           setTimeout(conectarServidorSSE, 4000);
         };
       } catch (e) {}
+    }
+
+    // GERENCIAMENTO OPERACIONAL DO STATUS DA LOJA (ABERTA / PAUSADA / FECHADA)
+    async function carregarStatusLoja() {
+      try {
+        const res = await fetch('/api/status-loja?_t=' + Date.now());
+        if (res.ok) {
+          const data = await res.json();
+          atualizarBotoesStatusLoja(data.status);
+        }
+      } catch (e) {}
+    }
+
+    async function definirStatusLoja(novoStatus) {
+      atualizarBotoesStatusLoja(novoStatus);
+      try {
+        const res = await fetch('/api/status-loja', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: novoStatus })
+        });
+        if (res.ok) {
+          const label = novoStatus === 'aberta' ? '🟢 Loja ABERTA!' : novoStatus === 'pausada' ? '🟡 Loja PAUSADA!' : '🔴 Loja FECHADA!';
+          mostrarToastAviso(`Status atualizado: ${label}`, 'sucesso');
+        }
+      } catch (e) {
+        mostrarToastAviso('Erro ao atualizar status da loja: ' + e.message, 'alerta');
+      }
+    }
+
+    function atualizarBotoesStatusLoja(status) {
+      const btnAberta = document.getElementById('btnStatusAberta');
+      const btnPausada = document.getElementById('btnStatusPausada');
+      const btnFechada = document.getElementById('btnStatusFechada');
+      if (!btnAberta || !btnPausada || !btnFechada) return;
+
+      [btnAberta, btnPausada, btnFechada].forEach(b => {
+        b.style.background = 'transparent';
+        b.style.color = '#94a3b8';
+      });
+
+      if (status === 'aberta') {
+        btnAberta.style.background = '#16a34a';
+        btnAberta.style.color = '#ffffff';
+      } else if (status === 'pausada') {
+        btnPausada.style.background = '#d97706';
+        btnPausada.style.color = '#ffffff';
+      } else if (status === 'fechada') {
+        btnFechada.style.background = '#dc2626';
+        btnFechada.style.color = '#ffffff';
+      }
     }
 
     // CONTROLE DE ACESSO: PIN DE SEGURANÇA DA FAMÍLIA
@@ -3062,6 +3130,7 @@
     carregarPedidos();
     carregarClientes();
     carregarHistorico();
+    carregarStatusLoja();
     conectarCanalLocal();
     conectarCanalNuvem();
     conectarServidorSSE();
