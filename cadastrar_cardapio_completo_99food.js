@@ -20,7 +20,7 @@ async function sincronizarCardapioCompleto() {
     {
       app_menu_id: '5764617594607502251',
       menu_name: 'O Mordidaço - Dogs',
-      app_category_ids: ['cat_combos', 'cat_hotdogs', 'cat_adicionais', 'cat_bebidas']
+      app_category_ids: ['cat_combos', 'cat_hotdogs', 'cat_sobremesas', 'cat_adicionais', 'cat_bebidas']
     }
   ];
 
@@ -33,7 +33,12 @@ async function sincronizarCardapioCompleto() {
     {
       app_category_id: 'cat_hotdogs',
       category_name: '🌭 Hot Dogs Artesanais (No Pão ou No Prato)',
-      app_item_ids: ['dog_classico', 'dog_em_dobro', 'dog_bacon', 'dog_cremoso', 'dog_tudao', 'dog_veg']
+      app_item_ids: ['dog_classico', 'dog_em_dobro', 'dog_veg', 'dog_bacon', 'dog_cremoso', 'dog_tudao']
+    },
+    {
+      app_category_id: 'cat_sobremesas',
+      category_name: '🍰 Sobremesas no Pote (170ml)',
+      app_item_ids: ['sobremesa_tortinha_limao', 'sobremesa_escondidinho_nutella']
     },
     {
       app_category_id: 'cat_adicionais',
@@ -122,6 +127,15 @@ async function sincronizarCardapioCompleto() {
       app_modifier_group_ids: ['mg_formato', 'mg_retirar', 'mg_adicionais']
     },
     {
+      app_item_id: 'dog_veg',
+      item_name: 'Mordidaço Queijudo (VEG)',
+      price: 3190,
+      status: 1,
+      is_sold_separately: true,
+      short_desc: '🌱 Opção Vegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa derretido, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese Hellmann\'s e batata palha crocante.',
+      app_modifier_group_ids: ['mg_formato', 'mg_retirar', 'mg_adicionais']
+    },
+    {
       app_item_id: 'dog_bacon',
       item_name: 'Mordidaço Bacon',
       price: 3390,
@@ -148,14 +162,23 @@ async function sincronizarCardapioCompleto() {
       short_desc: 'O gigante da casa! 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original, purê artesanal, maionese Hellmann\'s, ketchup, mostarda, milho, ervilha, vinagrete, bacon em dobro, calabresa ralada douradinha, queijo muçarela em dobro derretido, batata palha e parmesão ralado por cima.',
       app_modifier_group_ids: ['mg_formato', 'mg_retirar', 'mg_adicionais']
     },
+
+    // 3. SOBREMESAS ARTESANAIS NO POTE (170ML)
     {
-      app_item_id: 'dog_veg',
-      item_name: 'Mordidaço Queijudo (VEG)',
-      price: 3190,
+      app_item_id: 'sobremesa_tortinha_limao',
+      item_name: 'Tortinha de Limão no Pote (170ml)',
+      price: 1490,
       status: 1,
       is_sold_separately: true,
-      short_desc: '🌱 Opção Vegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa derretido, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese Hellmann\'s e batata palha crocante.',
-      app_modifier_group_ids: ['mg_formato', 'mg_retirar', 'mg_adicionais']
+      short_desc: 'Camadas de farofa amanteigada de biscoito, creme aveludado de limão fresco e raspas de limão verde. Acompanha colherzinha lacrada! (~161g).'
+    },
+    {
+      app_item_id: 'sobremesa_escondidinho_nutella',
+      item_name: 'Escondidinho de Nutella com Brownie (170ml)',
+      price: 2190,
+      status: 1,
+      is_sold_separately: true,
+      short_desc: 'Base e topo de brigadeiro de Leite Ninho®, recheado com brownie artesanal e Nutella® Ferrero pura. Acompanha colherzinha lacrada! (~155g).'
     },
 
     // 3. ADICIONAIS EXTRAS (Vendidos avulsos e como opcionais)

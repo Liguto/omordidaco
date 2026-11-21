@@ -145,6 +145,24 @@
       "custoUnitario": 11.50
     },
     {
+      "id": "sobremesa_tortinha_limao",
+      "nome": "Tortinha de Limão no Pote (170ml)",
+      "categoria": "Sobremesas",
+      "unidade": "un",
+      "quantidade": 15,
+      "minimo": 5,
+      "custoUnitario": 2.70
+    },
+    {
+      "id": "sobremesa_escondidinho_nutella",
+      "nome": "Escondidinho de Nutella com Brownie (170ml)",
+      "categoria": "Sobremesas",
+      "unidade": "un",
+      "quantidade": 15,
+      "minimo": 5,
+      "custoUnitario": 4.93
+    },
+    {
       "id": "pote_berco",
       "nome": "Pote/Caixa Berço c/ Trava (Pote Único)",
       "categoria": "Embalagens",

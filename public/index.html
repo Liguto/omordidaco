@@ -1687,6 +1687,22 @@
         return;
       }
 
+      if (catId === 'sobremesas' || item.isSobremesa) {
+        carrinho.push({
+          id: item.id,
+          nome: item.nome,
+          formato: '',
+          preco: item.preco,
+          observacoes: '',
+          isLanche: false,
+          isSobremesa: true,
+          catId: 'sobremesas'
+        });
+        atualizarBarraCarrinho();
+        mostrarToast(`✓ ${item.nome} adicionada ao pedido!`);
+        return;
+      }
+
       // Hot Dogs e Combos abrem a personalização
       abrirModalPersonalizacao(item, catId);
     }

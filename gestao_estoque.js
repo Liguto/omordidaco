@@ -218,6 +218,10 @@ function deduzirEstoquePorPedido(pedido) {
       } else {
         registrarBaixa('agua_sem_gas', 1 * qtdItem);
       }
+    } else if (nome.includes('tortinha') || nome.includes('limão') || nome.includes('limao')) {
+      registrarBaixa('sobremesa_tortinha_limao', 1 * qtdItem);
+    } else if (nome.includes('escondidinho') || nome.includes('nutella') || nome.includes('brownie')) {
+      registrarBaixa('sobremesa_escondidinho_nutella', 1 * qtdItem);
     }
   });
 

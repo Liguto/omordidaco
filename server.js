@@ -572,6 +572,16 @@ const CARDAPIO = {
           isLanche: true
         },
         {
+          id: "mordidaco-veg",
+          nome: "Mordidaço Queijudo (VEG)",
+          descricao: "🌱 Opção Vegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa derretido, purê de batata artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese Hellmann's e batata palha crocante.",
+          preco: 24.90,
+          adicionalPrato: 2.00,
+          permiteFormato: true,
+          destaque: false,
+          isLanche: true
+        },
+        {
           id: "mordidaco-bacon",
           nome: "Mordidaço Bacon",
           descricao: "2 salsichas Sadia, maionese Hellmann's, purê de batata artesanal, milho, ervilha, bacon crocante em cubos, queijo muçarela derretido, batata palha e parmesão ralado por cima.",
@@ -600,16 +610,28 @@ const CARDAPIO = {
           permiteFormato: true,
           destaque: true,
           isLanche: true
+        }
+      ]
+    },
+    {
+      id: "sobremesas",
+      nome: "🍰 Sobremesas no Pote (170ml)",
+      itens: [
+        {
+          id: "sobremesa-tortinha-limao",
+          nome: "Tortinha de Limão no Pote (170ml)",
+          descricao: "Camadas perfeitas de farofa crocante amanteigada de biscoito, creme aveludado de limão fresco e raspas de limão verde. Acompanha colherzinha descartável lacrada! (~161g).",
+          preco: 10.90,
+          destaque: true,
+          isSobremesa: true
         },
         {
-          id: "mordidaco-veg",
-          nome: "Mordidaço Queijudo (VEG)",
-          descricao: "🌱 Opção Vegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa derretido, purê de batata artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese Hellmann's e batata palha crocante.",
-          preco: 24.90,
-          adicionalPrato: 2.00,
-          permiteFormato: true,
-          destaque: false,
-          isLanche: true
+          id: "sobremesa-escondidinho-nutella",
+          nome: "Escondidinho de Nutella com Brownie (170ml)",
+          descricao: "Base e cobertura de brigadeiro cremoso de Leite Ninho®, recheado com pedaços generosos de brownie artesanal e Nutella® Ferrero pura. Uma explosão de sabor! Acompanha colherzinha lacrada! (~155g).",
+          preco: 15.90,
+          destaque: true,
+          isSobremesa: true
         }
       ]
     },

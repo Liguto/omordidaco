@@ -68,7 +68,7 @@ async function sincronizarCardapioCompleto() {
   const catBebidas = await criarCategoria('Bebidas Geladas', 3);
   console.log('✓ Categoria Bebidas criada:', catBebidas.id);
 
-  // 2. Hot Dogs Artesanais (6 Modelos Oficiais - incluindo VEG)
+  // 2. Hot Dogs Artesanais (6 Modelos Oficiais ordenados por preço crescente)
   const lanches = [
     {
       nome: 'Mordidaço Clássico',
@@ -79,6 +79,11 @@ async function sincronizarCardapioCompleto() {
       nome: 'Mordidaço em Dobro',
       descricao: 'O campeão de vendas! 2 salsichas Sadia, o verdadeiro dobro de queijo muçarela derretido, maionese Hellmann\'s, ketchup, mostarda, milho, ervilha, vinagrete, purê artesanal, batata palha e chuva de parmesão ralado por cima.',
       preco: 28.90
+    },
+    {
+      nome: 'Mordidaço Queijudo (VEG)',
+      descricao: '🌱 Opção Vegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa derretido, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese Hellmann\'s e batata palha crocante.',
+      preco: 31.90
     },
     {
       nome: 'Mordidaço Bacon',
@@ -94,11 +99,6 @@ async function sincronizarCardapioCompleto() {
       nome: 'Mordidaço Tudão',
       descricao: 'O gigante da casa! 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original, purê artesanal, maionese Hellmann\'s, ketchup, mostarda, milho, ervilha, vinagrete, bacon em dobro, calabresa ralada douradinha, queijo muçarela em dobro derretido, batata palha e parmesão ralado por cima.',
       preco: 44.90
-    },
-    {
-      nome: 'Mordidaço Queijudo (VEG)',
-      descricao: '🌱 Opção Vegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa derretido, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese Hellmann\'s e batata palha crocante.',
-      preco: 31.90
     }
   ];
 
@@ -132,9 +132,32 @@ async function sincronizarCardapioCompleto() {
     console.log(`  ✓ Combo vinculado: R$ ${c.preco.toFixed(2)}`);
   }
 
-  // 4. Categoria Adicionais Extras
+  // 4. Sobremesas Artesanais no Pote (170ml)
+  console.log('🍰 Criando categoria Sobremesas no Pote...');
+  const catSobremesas = await criarCategoria('🍰 Sobremesas no Pote (170ml)', 3);
+  const sobremesas = [
+    {
+      nome: 'Tortinha de Limão no Pote (170ml)',
+      descricao: 'Camadas perfeitas de farofa amanteigada crocante de biscoito, creme aveludado de limão fresco e raspas de limão verde. Acompanha colherzinha descartável lacrada! (~161g).',
+      preco: 14.90
+    },
+    {
+      nome: 'Escondidinho de Nutella com Brownie (170ml)',
+      descricao: 'Base e topo de brigadeiro cremoso de Leite Ninho®, recheado com pedaços de brownie artesanal e Nutella® Ferrero pura. Uma explosão de sabor! Acompanha colherzinha lacrada! (~155g).',
+      preco: 21.90
+    }
+  ];
+
+  for (const s of sobremesas) {
+    console.log(`🍰 Cadastrando sobremesa ${s.nome}...`);
+    const prod = await criarProduto(s.nome, s.descricao, 'SERVES_1');
+    await vincularItem(catSobremesas.id, prod.id, s.preco);
+    console.log(`  ✓ Sobremesa vinculada: R$ ${s.preco.toFixed(2)}`);
+  }
+
+  // 5. Categoria Adicionais Extras
   console.log('📂 Criando categoria Adicionais Extras...');
-  const catAdicionais = await criarCategoria('➕ Adicionais Extras', 3);
+  const catAdicionais = await criarCategoria('➕ Adicionais Extras', 4);
   const adicionais = [
     { nome: '1 Salsicha Sadia Extra', descricao: 'Salsicha Sadia cozida no molho artesanal.', preco: 4.90 },
     { nome: 'Catupiry Original Extra (40g)', descricao: 'Legítimo Catupiry cremoso original.', preco: 6.90 },
