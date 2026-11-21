@@ -65,7 +65,7 @@ const ADICIONAIS_DEFS = [
   { id: '22222222-0006-4000-8000-000000000006', name: 'Purê de Batata Artesanal Extra (80g)', preco: 4.90 },
   { id: '22222222-0007-4000-8000-000000000007', name: 'Milho Verde Extra', preco: 3.50 },
   { id: '22222222-0008-4000-8000-000000000008', name: 'Ervilha Extra', preco: 3.50 },
-  { id: '22222222-0009-4000-8000-000000000009', name: 'Pote de Molho Especial da Casa (50ml)', preco: 4.50 },
+  { id: '22222222-0009-4000-8000-000000000009', name: 'Pote de Molho Especial da Casa (30ml)', preco: 4.50 },
   { id: '22222222-0010-4000-8000-000000000010', name: 'Batata Palha Crocante Extra', preco: 3.50 }
 ];
 

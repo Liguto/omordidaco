@@ -158,7 +158,7 @@ async function sincronizarTudo() {
   await atualizarProduto(
     '671428a3-b3f7-4ead-b0cf-0582cf658b0a',
     'Combo Mordidaço Casal',
-    '2 Mordidaços em Dobro (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata (escolha Coca, Guaraná ou Fanta) + 2 Potes de Molho da Casa (50ml). A janta perfeita para dois!',
+    '2 Mordidaços em Dobro (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata (escolha Coca, Guaraná ou Fanta) + 2 Potes de Molho da Casa (30ml). A janta perfeita para dois!',
     'SERVES_2'
   );
   await atualizarPrecoItem('3ecab1bc-295b-4ce1-8235-a898c6a68b45', 68.90);
@@ -167,7 +167,7 @@ async function sincronizarTudo() {
   await atualizarProduto(
     '11ec186b-dc70-4d86-9cbd-2b183ff9605e',
     'Combo Família Mordidaço',
-    '2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha individual no Pão ou no Prato para cada um) + 1 Refrigerante 2 Litros (Guaraná incluso ou upgrade Coca 2L) + 3 Potes de Molho da Casa (50ml). Fartura garantida para toda a família!',
+    '2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha individual no Pão ou no Prato para cada um) + 1 Refrigerante 2 Litros (Guaraná incluso ou upgrade Coca 2L) + 3 Potes de Molho da Casa (30ml). Fartura garantida para toda a família!',
     'SERVES_3'
   );
   await atualizarPrecoItem('356850e2-d87d-4261-bcdc-b5794469afdf', 86.90);
@@ -177,31 +177,31 @@ async function sincronizarTudo() {
   const novosCombos = [
     {
       nome: 'Mordidaço Solo Clássico',
-      descricao: '1 Mordidaço Clássico (escolha No Pão ou No Prato) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese da Casa.',
+      descricao: '1 Mordidaço Clássico (escolha No Pão ou No Prato) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese da Casa (30ml).',
       preco: 28.90,
       serving: 'SERVES_1'
     },
     {
       nome: 'Mordidaço Solo Campeão',
-      descricao: '1 Mordidaço em Dobro (2 salsichas Sadia e dobro de muçarela) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese da Casa. O campeão de vendas individual!',
+      descricao: '1 Mordidaço em Dobro (2 salsichas Sadia e dobro de muçarela) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese da Casa (30ml). O campeão de vendas individual!',
       preco: 33.90,
       serving: 'SERVES_1'
     },
     {
       nome: 'Mordidaço Completo c/ Sobremesa',
-      descricao: '1 Mordidaço em Dobro (No Pão ou No Prato) + 1 Refrigerante Lata + 1 Tortinha de Limão no Pote (170ml) + 2 Potes de Maionese. A refeição completa!',
+      descricao: '1 Mordidaço em Dobro (No Pão ou No Prato) + 1 Refrigerante Lata + 1 Tortinha de Limão no Pote (170ml) + 2 Potes de Maionese da Casa (30ml). A janta completa com sobremesa!',
       preco: 45.90,
       serving: 'SERVES_1'
     },
     {
       nome: 'Mordidaço Solo Tudão',
-      descricao: '1 Mordidaço Tudão (o gigante da casa!) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese da Casa. Fartura máxima!',
+      descricao: '1 Mordidaço Tudão (o gigante da casa!) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese da Casa (30ml). Fartura máxima!',
       preco: 48.90,
       serving: 'SERVES_1'
     },
     {
       nome: 'Mordidaço Casal VIP (com Sobremesas)',
-      descricao: '2 Mordidaços em Dobro + 2 Refrigerantes Lata + 1 Tortinha de Limão (170ml) + 1 Escondidinho de Nutella c/ Brownie (170ml) + 2 Potes de Maionese da Casa. A experiência completa a dois!',
+      descricao: '2 Mordidaços em Dobro + 2 Refrigerantes Lata + 1 Tortinha de Limão (170ml) + 1 Escondidinho de Nutella c/ Brownie (170ml) + 2 Potes de Maionese da Casa (30ml). A experiência completa a dois!',
       preco: 96.90,
       serving: 'SERVES_2'
     }
@@ -234,7 +234,7 @@ async function sincronizarTudo() {
     { nome: 'Purê de Batata Artesanal Extra (80g)', descricao: 'Purê aveludado e quentinho.', preco: 4.90 },
     { nome: 'Milho Verde Extra', descricao: 'Milho verde selecionado.', preco: 3.50 },
     { nome: 'Ervilha Extra', descricao: 'Ervilha fresca em conserva.', preco: 3.50 },
-    { nome: 'Pote de Molho Especial da Casa (50ml)', descricao: 'Pote extra com a maionese temperada da casa.', preco: 4.50 },
+    { nome: 'Pote de Molho Especial da Casa (30ml)', descricao: 'Pote extra com a maionese temperada da casa.', preco: 4.50 },
     { nome: 'Batata Palha Crocante Extra', descricao: 'Chuva extra de batata palha fininha.', preco: 3.50 }
   ];
 

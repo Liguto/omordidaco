@@ -585,7 +585,7 @@ const CARDAPIO = {
         {
           id: "combo-completo-sobremesa",
           nome: "Mordidaço Completo c/ Sobremesa",
-          descricao: "1 Mordidaço em Dobro (escolha No Pão ou No Prato) + 1 Refrigerante Lata 350ml + 1 Tortinha de Limão no Pote (170ml) + 2 Potes de Maionese da Casa. O almoço/jantar completo com sobremesa!",
+          descricao: "1 Mordidaço em Dobro (escolha No Pão ou No Prato) + 1 Refrigerante Lata 350ml + 1 Tortinha de Limão no Pote (170ml) + 2 Potes de Maionese da Casa (30ml). A janta completa com sobremesa!",
           preco: 33.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -595,7 +595,7 @@ const CARDAPIO = {
         {
           id: "combo-solo-tudao",
           nome: "Mordidaço Solo Tudão",
-          descricao: "1 Mordidaço Tudão (o gigante da casa!) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese Artesanal. Fartura máxima para matar qualquer fome!",
+          descricao: "1 Mordidaço Tudão (o gigante da casa!) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese Artesanal (30ml). Fartura máxima para matar qualquer fome!",
           preco: 37.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -605,7 +605,7 @@ const CARDAPIO = {
         {
           id: "combo-casal",
           nome: "Combo Mordidaço Casal",
-          descricao: "2 Mordidaços em Dobro (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata (escolha Coca, Guaraná ou Fanta) + 2 Potes de Molho da Casa (50ml). A janta perfeita para dois!",
+          descricao: "2 Mordidaços em Dobro (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata (escolha Coca, Guaraná ou Fanta) + 2 Potes de Molho da Casa (30ml). A janta perfeita para dois!",
           preco: 49.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -619,7 +619,7 @@ const CARDAPIO = {
         {
           id: "combo-familia-mordidaco",
           nome: "Combo Família Mordidaço",
-          descricao: "2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha individual no Pão ou no Prato para cada um) + 1 Refrigerante 2 Litros (Guaraná incluso ou upgrade Coca 2L) + 3 Potes de Molho da Casa (50ml). Fartura garantida para toda a família!",
+          descricao: "2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha individual no Pão ou no Prato para cada um) + 1 Refrigerante 2 Litros (Guaraná incluso ou upgrade Coca 2L) + 3 Potes de Molho da Casa (30ml). Fartura garantida para toda a família!",
           preco: 64.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -635,7 +635,7 @@ const CARDAPIO = {
         {
           id: "combo-casal-vip",
           nome: "Mordidaço Casal VIP (com Sobremesas)",
-          descricao: "2 Mordidaços em Dobro (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata 350ml + 1 Tortinha de Limão (170ml) + 1 Escondidinho de Nutella com Brownie (170ml) + 2 Potes de Maionese da Casa. A experiência completa a dois!",
+          descricao: "2 Mordidaços em Dobro (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata 350ml + 1 Tortinha de Limão (170ml) + 1 Escondidinho de Nutella com Brownie (170ml) + 2 Potes de Maionese da Casa (30ml). A experiência completa a dois!",
           preco: 69.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -748,7 +748,7 @@ const CARDAPIO = {
         { id: "add-pure", nome: "Purê de Batata Artesanal Extra (80g)", preco: 3.50 },
         { id: "add-milho", nome: "Milho Verde Extra", preco: 2.50 },
         { id: "add-ervilha", nome: "Ervilha Extra", preco: 2.50 },
-        { id: "add-maionese", nome: "Pote de Molho Especial da Casa (50ml)", preco: 3.50 },
+        { id: "add-maionese", nome: "Pote de Molho Especial da Casa (30ml)", preco: 3.50 },
         { id: "add-batata-palha", nome: "Batata Palha Crocante Extra", preco: 2.50 }
       ]
     },

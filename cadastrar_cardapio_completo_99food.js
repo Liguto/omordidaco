@@ -120,7 +120,7 @@ async function sincronizarCardapioCompleto() {
       price: 4590,
       status: 1,
       is_sold_separately: true,
-      short_desc: '1 Mordidaço em Dobro (No Pão ou No Prato) + 1 Refrigerante Lata + 1 Tortinha de Limão no Pote (170ml) + 2 Potes de Maionese. A refeição completa!',
+      short_desc: '1 Mordidaço em Dobro (No Pão ou No Prato) + 1 Refrigerante Lata + 1 Tortinha de Limão no Pote (170ml) + 2 Potes de Maionese da Casa (30ml). A janta completa com sobremesa!',
       app_modifier_group_ids: ['mg_formato', 'mg_refri_1', 'mg_retirar', 'mg_adicionais']
     },
     {
@@ -129,7 +129,7 @@ async function sincronizarCardapioCompleto() {
       price: 4890,
       status: 1,
       is_sold_separately: true,
-      short_desc: '1 Mordidaço Tudão (o gigante da casa!) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese da Casa. Fartura máxima!',
+      short_desc: '1 Mordidaço Tudão (o gigante da casa!) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese da Casa (30ml). Fartura máxima!',
       app_modifier_group_ids: ['mg_formato', 'mg_refri_1', 'mg_retirar', 'mg_adicionais']
     },
     {
@@ -138,7 +138,7 @@ async function sincronizarCardapioCompleto() {
       price: 6890,
       status: 1,
       is_sold_separately: true,
-      short_desc: '2 Mordidaços em Dobro (escolha no Pão ou no Prato para cada um) + 2 Refrigerantes Lata + 2 Potes de Molho Especial da Casa (50ml). A pedida perfeita para duas pessoas!',
+      short_desc: '2 Mordidaços em Dobro (escolha no Pão ou no Prato para cada um) + 2 Refrigerantes Lata + 2 Potes de Molho Especial da Casa (30ml). A pedida perfeita para duas pessoas!',
       app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_refri_1', 'mg_refri_2', 'mg_adicionais']
     },
     {
@@ -147,7 +147,7 @@ async function sincronizarCardapioCompleto() {
       price: 8690,
       status: 1,
       is_sold_separately: true,
-      short_desc: '2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha no Pão ou no Prato para cada um) + 1 Refrigerante 2 Litros (Guaraná incluso ou upgrade Coca 2L) + 3 Potes de Molho da Casa. Fartura garantida!',
+      short_desc: '2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha no Pão ou no Prato para cada um) + 1 Refrigerante 2 Litros (Guaraná incluso ou upgrade Coca 2L) + 3 Potes de Molho da Casa (30ml). Fartura garantida!',
       app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_formato_dog3', 'mg_bebida_2l', 'mg_adicionais']
     },
     {
@@ -156,7 +156,7 @@ async function sincronizarCardapioCompleto() {
       price: 9690,
       status: 1,
       is_sold_separately: true,
-      short_desc: '2 Mordidaços em Dobro + 2 Refrigerantes Lata + 1 Tortinha de Limão (170ml) + 1 Escondidinho de Nutella c/ Brownie (170ml) + 2 Potes de Maionese da Casa. A experiência completa a dois!',
+      short_desc: '2 Mordidaços em Dobro + 2 Refrigerantes Lata + 1 Tortinha de Limão (170ml) + 1 Escondidinho de Nutella c/ Brownie (170ml) + 2 Potes de Maionese da Casa (30ml). A experiência completa a dois!',
       app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_refri_1', 'mg_refri_2', 'mg_adicionais']
     },
 
@@ -243,7 +243,7 @@ async function sincronizarCardapioCompleto() {
     { app_item_id: 'add_pure', item_name: 'Purê de Batata Artesanal Extra (80g)', price: 490, status: 1, is_sold_separately: true, short_desc: 'Purê de batata artesanal cremoso' },
     { app_item_id: 'add_milho', item_name: 'Milho Verde Extra', price: 350, status: 1, is_sold_separately: true, short_desc: 'Milho verde selecionado' },
     { app_item_id: 'add_ervilha', item_name: 'Ervilha Extra', price: 350, status: 1, is_sold_separately: true, short_desc: 'Ervilha fresca tenra' },
-    { app_item_id: 'add_maionese', item_name: 'Pote de Molho Especial da Casa (50ml)', price: 450, status: 1, is_sold_separately: true, short_desc: 'Molho verde especial da casa em potinho' },
+    { app_item_id: 'add_maionese', item_name: 'Pote de Molho Especial da Casa (30ml)', price: 450, status: 1, is_sold_separately: true, short_desc: 'Molho verde especial da casa em potinho' },
     { app_item_id: 'add_batata_palha', item_name: 'Batata Palha Crocante Extra', price: 350, status: 1, is_sold_separately: true, short_desc: 'Batata palha fininha crocante' },
 
     // 4. BEBIDAS GELADAS
