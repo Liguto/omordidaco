@@ -77,13 +77,14 @@ async function vincularComplementosItem(itemInfo) {
   const ogRetirarId = genUuid();
   const ogAdicionaisId = genUuid();
 
-  // Opções Formato
+  // Opções Formato (Index 0 e 1)
   const formatoOptions = [
     {
       id: genUuid(),
       productId: PROD_PAO_ID,
       optionGroupId: ogFormatoId,
       status: 'AVAILABLE',
+      index: 0,
       price: { value: 0 }
     },
     {
@@ -91,6 +92,7 @@ async function vincularComplementosItem(itemInfo) {
       productId: PROD_PRATO_ID,
       optionGroupId: ogFormatoId,
       status: 'AVAILABLE',
+      index: 1,
       price: { value: 2.00 }
     }
   ];
@@ -101,24 +103,26 @@ async function vincularComplementosItem(itemInfo) {
     return true;
   });
 
-  const retirarOptions = retiradasFiltradas.map(r => ({
+  const retirarOptions = retiradasFiltradas.map((r, idx) => ({
     id: genUuid(),
     productId: r.id,
     optionGroupId: ogRetirarId,
     status: 'AVAILABLE',
+    index: idx,
     price: { value: 0 }
   }));
 
   // Opções Adicionais
-  const adicionaisOptions = ADICIONAIS_DEFS.map(a => ({
+  const adicionaisOptions = ADICIONAIS_DEFS.map((a, idx) => ({
     id: genUuid(),
     productId: a.id,
     optionGroupId: ogAdicionaisId,
     status: 'AVAILABLE',
+    index: idx,
     price: { value: a.preco }
   }));
 
-  // PRODUTOS: O produto principal DEVE listar os optionGroups dele!
+  // PRODUTOS: O produto principal DEVE listar os optionGroups dele na ordem exata (Formato em primeiro)!
   const products = [
     {
       id: itemInfo.productId,
@@ -126,9 +130,9 @@ async function vincularComplementosItem(itemInfo) {
       description: itemInfo.desc || '',
       serving: 'SERVES_1',
       optionGroups: [
-        { id: ogFormatoId, min: 1, max: 1 },
-        { id: ogRetirarId, min: 0, max: 10 },
-        { id: ogAdicionaisId, min: 0, max: 10 }
+        { id: ogFormatoId, min: 1, max: 1, index: 0 },
+        { id: ogRetirarId, min: 0, max: 10, index: 1 },
+        { id: ogAdicionaisId, min: 0, max: 10, index: 2 }
       ]
     },
     {
@@ -151,7 +155,7 @@ async function vincularComplementosItem(itemInfo) {
     products.push({ id: a.id, name: a.name, serving: 'NOT_APPLICABLE' });
   });
 
-  // OPTION GROUPS
+  // OPTION GROUPS (Formato SEMPRE em primeiro lugar index 0)
   const optionGroups = [
     {
       id: ogFormatoId,
@@ -159,6 +163,7 @@ async function vincularComplementosItem(itemInfo) {
       status: 'AVAILABLE',
       min: 1,
       max: 1,
+      index: 0,
       optionIds: formatoOptions.map(o => o.id)
     },
     {
@@ -167,6 +172,7 @@ async function vincularComplementosItem(itemInfo) {
       status: 'AVAILABLE',
       min: 0,
       max: 10,
+      index: 1,
       optionIds: retirarOptions.map(o => o.id)
     },
     {
@@ -175,6 +181,7 @@ async function vincularComplementosItem(itemInfo) {
       status: 'AVAILABLE',
       min: 0,
       max: 10,
+      index: 2,
       optionIds: adicionaisOptions.map(o => o.id)
     }
   ];

@@ -250,7 +250,7 @@ async function sincronizarCardapioCompleto() {
       is_required: 2,
       quantity_min_permitted: 0,
       quantity_max_permitted: 10,
-      buy_mode: 1,
+      buy_mode: 0,
       app_mg_items: [
         { app_item_id: 'add_salsicha', price: 490 },
         { app_item_id: 'add_catupiry', price: 690 },
