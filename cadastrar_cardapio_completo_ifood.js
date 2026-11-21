@@ -4,8 +4,8 @@
 
 const { obterTokenAcesso } = require('./integracao_ifood');
 
-const MERCHANT_ID = '1c6a85ea-2063-4bb9-a2ab-a198c2d9946b';
-const CATALOG_ID = '3dab72cd-7f8d-4bc6-9131-f5d0ad9779e9';
+const MERCHANT_ID = process.env.IFOOD_MERCHANT_ID || '1aafd9ac-f972-49bd-9a5d-9fec4036132e';
+const CATALOG_ID = process.env.IFOOD_CATALOG_ID || '3dab72cd-7f8d-4bc6-9131-f5d0ad9779e9';
 
 async function request(endpoint, method = 'GET', body = null) {
   const token = await obterTokenAcesso();
@@ -72,32 +72,32 @@ async function sincronizarCardapioCompleto() {
   const lanches = [
     {
       nome: 'Mordidaço Clássico',
-      descricao: '1 salsicha Sadia, molho especial da casa, ketchup, mostarda, milho, ervilha, vinagrete, purê de batata artesanal e batata palha crocante.',
+      descricao: '1 salsicha Sadia, maionese Hellmann\'s, ketchup, mostarda, milho, ervilha, vinagrete, purê de batata artesanal e batata palha crocante.',
       preco: 22.90
     },
     {
       nome: 'Mordidaço em Dobro',
-      descricao: 'O campeão de vendas! 2 salsichas Sadia, o verdadeiro dobro de queijo muçarela derretido, molho especial da casa, ketchup, mostarda, milho, ervilha, vinagrete, purê artesanal, batata palha e chuva de parmesão ralado por cima.',
+      descricao: 'O campeão de vendas! 2 salsichas Sadia, o verdadeiro dobro de queijo muçarela derretido, maionese Hellmann\'s, ketchup, mostarda, milho, ervilha, vinagrete, purê artesanal, batata palha e chuva de parmesão ralado por cima.',
       preco: 28.90
     },
     {
       nome: 'Mordidaço Bacon',
-      descricao: '2 salsichas Sadia, molho especial da casa, purê de batata artesanal, milho, ervilha, bacon crocante em cubos, queijo muçarela derretido, batata palha e parmesão ralado por cima.',
+      descricao: '2 salsichas Sadia, maionese Hellmann\'s, purê de batata artesanal, milho, ervilha, bacon crocante em cubos, queijo muçarela derretido, batata palha e parmesão ralado por cima.',
       preco: 33.90
     },
     {
       nome: 'Mordidaço Cremoso',
-      descricao: '1 salsicha Sadia, ketchup, mostarda, milho, vinagrete, frango desfiado temperado, Catupiry® Original cremoso, molho especial da casa, purê de batata artesanal e batata palha.',
+      descricao: '1 salsicha Sadia, frango desfiado temperado, Catupiry® Original cremoso, maionese Hellmann\'s, ketchup, mostarda, milho, vinagrete, purê de batata artesanal e batata palha crocante.',
       preco: 34.90
     },
     {
       nome: 'Mordidaço Tudão',
-      descricao: 'O gigante da casa! 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original, purê artesanal, molho especial da casa, ketchup, mostarda, milho, ervilha, vinagrete, bacon em dobro, calabresa ralada douradinha, queijo muçarela em dobro derretido, batata palha e parmesão ralado por cima.',
+      descricao: 'O gigante da casa! 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original, purê artesanal, maionese Hellmann\'s, ketchup, mostarda, milho, ervilha, vinagrete, bacon em dobro, calabresa ralada douradinha, queijo muçarela em dobro derretido, batata palha e parmesão ralado por cima.',
       preco: 44.90
     },
     {
       nome: 'Mordidaço Queijudo (VEG)',
-      descricao: '🌱 Opção Vegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa derretido, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese verde da casa e batata palha crocante.',
+      descricao: '🌱 Opção Vegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa derretido, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese Hellmann\'s e batata palha crocante.',
       preco: 31.90
     }
   ];
@@ -132,28 +132,42 @@ async function sincronizarCardapioCompleto() {
     console.log(`  ✓ Combo vinculado: R$ ${c.preco.toFixed(2)}`);
   }
 
-  // 4. Bebidas
+  // 4. Categoria Adicionais Extras
+  console.log('📂 Criando categoria Adicionais Extras...');
+  const catAdicionais = await criarCategoria('➕ Adicionais Extras', 3);
+  const adicionais = [
+    { nome: '1 Salsicha Sadia Extra', descricao: 'Salsicha Sadia cozida no molho artesanal.', preco: 4.90 },
+    { nome: 'Catupiry Original Extra (40g)', descricao: 'Legítimo Catupiry cremoso original.', preco: 6.90 },
+    { nome: 'Bacon Crocante Extra em Cubos (40g)', descricao: 'Bacon em cubos douradinho e sequinho.', preco: 6.90 },
+    { nome: 'Calabresa Ralada Douradinha (40g)', descricao: 'Calabresa fininha refogada.', preco: 5.90 },
+    { nome: 'Parmesão Ralado Fresco (20g)', descricao: 'Queijo parmesão ralado na hora.', preco: 4.50 },
+    { nome: 'Purê de Batata Artesanal Extra (80g)', descricao: 'Purê aveludado e quentinho.', preco: 4.90 },
+    { nome: 'Milho Verde Extra', descricao: 'Milho verde selecionado.', preco: 3.50 },
+    { nome: 'Ervilha Extra', descricao: 'Ervilha fresca em conserva.', preco: 3.50 },
+    { nome: 'Pote de Molho Especial da Casa (50ml)', descricao: 'Pote extra com a maionese temperada da casa.', preco: 4.50 },
+    { nome: 'Batata Palha Crocante Extra', descricao: 'Chuva extra de batata palha fininha.', preco: 3.50 }
+  ];
+
+  for (const a of adicionais) {
+    const prod = await criarProduto(a.nome, a.descricao, 'NOT_APPLICABLE');
+    await vincularItem(catAdicionais.id, prod.id, a.preco);
+  }
+  console.log('✓ 10 Adicionais Extras vinculados com preços de delivery!');
+
+  // 5. Bebidas Geladas (Preços Calibrados para Delivery)
   const bebidas = [
-    {
-      nome: 'Refrigerante Coca-Cola (Lata 350ml)',
-      descricao: 'Lata 350ml trincando de gelada.',
-      preco: 6.00
-    },
-    {
-      nome: 'Refrigerante Guaraná Antarctica (Lata 350ml)',
-      descricao: 'Lata 350ml trincando de gelada.',
-      preco: 6.00
-    },
-    {
-      nome: 'Refrigerante Guaraná Antarctica (Garrafa 2 Litros)',
-      descricao: 'Garrafa 2 Litros para acompanhar o dogão em família.',
-      preco: 12.00
-    },
-    {
-      nome: 'Refrigerante Coca-Cola Original (Garrafa 2 Litros)',
-      descricao: 'Garrafa 2 Litros gelada.',
-      preco: 14.00
-    }
+    { nome: 'Refrigerante Coca-Cola (Lata 350ml)', descricao: 'Lata 350ml trincando de gelada.', preco: 7.90 },
+    { nome: 'Refrigerante Coca-Cola Zero (Lata 350ml)', descricao: 'Lata 350ml sem açúcar gelada.', preco: 7.90 },
+    { nome: 'Refrigerante Guaraná Antarctica (Lata 350ml)', descricao: 'Lata 350ml trincando de gelada.', preco: 7.90 },
+    { nome: 'Refrigerante Guaraná Antarctica Zero (Lata 350ml)', descricao: 'Lata 350ml zero açúcar.', preco: 7.90 },
+    { nome: 'Refrigerante Fanta Laranja (Lata 350ml)', descricao: 'Lata 350ml gelada.', preco: 7.90 },
+    { nome: 'Suco Del Valle Uva (Lata 290ml)', descricao: 'Lata 290ml gelada.', preco: 8.50 },
+    { nome: 'Refrigerante Coca-Cola Original (Garrafa 2 Litros)', descricao: 'Garrafa 2 Litros gelada.', preco: 17.90 },
+    { nome: 'Refrigerante Guaraná Antarctica (Garrafa 2 Litros)', descricao: 'Garrafa 2 Litros para acompanhar o dogão em família.', preco: 15.90 },
+    { nome: 'Água Mineral 500ml (sem gás)', descricao: 'Garrafa 500ml gelada.', preco: 5.00 },
+    { nome: 'Água Mineral 500ml (com gás)', descricao: 'Garrafa 500ml gelada.', preco: 5.50 },
+    { nome: 'Cerveja Original 350ml (Lata)', descricao: 'Lata 350ml trincando de gelada.', preco: 9.90 },
+    { nome: 'Cerveja Heineken 330ml (Long Neck)', descricao: 'Long Neck 330ml gelada.', preco: 12.90 }
   ];
 
   for (const b of bebidas) {

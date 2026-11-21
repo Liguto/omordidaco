@@ -554,7 +554,7 @@ const CARDAPIO = {
         {
           id: "mordidaco-classico",
           nome: "Mordidaço Clássico",
-          descricao: "1 salsicha Sadia, molho especial da casa, ketchup, mostarda, milho, ervilha, vinagrete, purê de batata artesanal e batata palha crocante.",
+          descricao: "1 salsicha Sadia, maionese Hellmann's, ketchup, mostarda, milho, ervilha, vinagrete, purê de batata artesanal e batata palha crocante.",
           preco: 16.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -564,7 +564,7 @@ const CARDAPIO = {
         {
           id: "mordidaco-duplo",
           nome: "Mordidaço em Dobro",
-          descricao: "O campeão de vendas! 2 salsichas Sadia, o verdadeiro dobro de queijo muçarela derretido, molho especial da casa, ketchup, mostarda, milho, ervilha, vinagrete, purê artesanal, batata palha e chuva de parmesão ralado por cima.",
+          descricao: "O campeão de vendas! 2 salsichas Sadia, o verdadeiro dobro de queijo muçarela derretido, maionese Hellmann's, ketchup, mostarda, milho, ervilha, vinagrete, purê artesanal, batata palha e chuva de parmesão ralado por cima.",
           preco: 21.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -574,7 +574,7 @@ const CARDAPIO = {
         {
           id: "mordidaco-bacon",
           nome: "Mordidaço Bacon",
-          descricao: "2 salsichas Sadia, molho especial da casa, purê de batata artesanal, milho, ervilha, bacon crocante em cubos, queijo muçarela derretido, batata palha e parmesão ralado por cima.",
+          descricao: "2 salsichas Sadia, maionese Hellmann's, purê de batata artesanal, milho, ervilha, bacon crocante em cubos, queijo muçarela derretido, batata palha e parmesão ralado por cima.",
           preco: 25.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -584,7 +584,7 @@ const CARDAPIO = {
         {
           id: "mordidaco-frango-catupiry",
           nome: "Mordidaço Cremoso",
-          descricao: "1 salsicha Sadia, ketchup, mostarda, milho, vinagrete, frango desfiado temperado, Catupiry® Original cremoso, molho especial da casa, purê de batata artesanal e batata palha crocante.",
+          descricao: "1 salsicha Sadia, ketchup, mostarda, milho, vinagrete, frango desfiado temperado, Catupiry® Original cremoso, maionese Hellmann's, purê de batata artesanal e batata palha crocante.",
           preco: 26.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -594,7 +594,7 @@ const CARDAPIO = {
         {
           id: "mordidaco-tudao",
           nome: "Mordidaço Tudão",
-          descricao: "O gigante da casa! 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original, purê artesanal, molho especial da casa, ketchup, mostarda, milho, ervilha, vinagrete, bacon em dobro, calabresa ralada douradinha, queijo muçarela em dobro derretido, batata palha e parmesão ralado por cima.",
+          descricao: "O gigante da casa! 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original, purê artesanal, maionese Hellmann's, ketchup, mostarda, milho, ervilha, vinagrete, bacon em dobro, calabresa ralada douradinha, queijo muçarela em dobro derretido, batata palha e parmesão ralado por cima.",
           preco: 34.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -604,7 +604,7 @@ const CARDAPIO = {
         {
           id: "mordidaco-veg",
           nome: "Mordidaço Queijudo (VEG)",
-          descricao: "🌱 Opção Vegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa derretido, purê de batata artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese verde da casa e batata palha crocante.",
+          descricao: "🌱 Opção Vegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa derretido, purê de batata artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese Hellmann's e batata palha crocante.",
           preco: 24.90,
           adicionalPrato: 2.00,
           permiteFormato: true,

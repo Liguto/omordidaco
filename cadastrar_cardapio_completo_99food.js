@@ -5,24 +5,15 @@
  * e Valores Calibrados de Delivery.
  */
 
-const APP_ID = '5764607545191172268';
-const APP_SECRET = 'd706e3190a17c3488ee5074a6af5e628';
-const APP_SHOP_ID = 'mordidaco_tamoio_1';
+const { obterTokenAcesso99 } = require('./integracao_99food');
 const BASE_URL = 'https://openapi.99food.com';
-
-async function obterTokenProducao() {
-  const url = `${BASE_URL}/v1/auth/authtoken/get?app_id=${APP_ID}&secret=${APP_SECRET}&app_shop_id=${APP_SHOP_ID}`;
-  const res = await fetch(url);
-  const data = await res.json();
-  if (data.errno !== 0 || !data.data || !data.data.auth_token) {
-    throw new Error(`Erro ao obter token 99Food: ${JSON.stringify(data)}`);
-  }
-  return data.data.auth_token;
-}
 
 async function sincronizarCardapioCompleto() {
   console.log('🚀 Iniciando sincronização do cardápio completo de O Mordidaço com a 99Food...');
-  const token = await obterTokenProducao();
+  const token = await obterTokenAcesso99();
+  if (!token) {
+    throw new Error('Não foi possível obter o token de acesso da 99Food');
+  }
   console.log('✓ Token de acesso autenticado!');
 
   const menus = [
@@ -77,7 +68,7 @@ async function sincronizarCardapioCompleto() {
     { app_item_id: 'ret_vinagrete', item_name: 'Sem Vinagrete', price: 0, status: 1, is_sold_separately: false },
     { app_item_id: 'ret_pure', item_name: 'Sem Purê de Batata', price: 0, status: 1, is_sold_separately: false },
     { app_item_id: 'ret_palha', item_name: 'Sem Batata Palha', price: 0, status: 1, is_sold_separately: false },
-    { app_item_id: 'ret_molho', item_name: 'Sem Molho Especial', price: 0, status: 1, is_sold_separately: false },
+    { app_item_id: 'ret_molho', item_name: "Sem Maionese Hellmann's", price: 0, status: 1, is_sold_separately: false },
     { app_item_id: 'ret_ketchup', item_name: 'Sem Ketchup', price: 0, status: 1, is_sold_separately: false },
     { app_item_id: 'ret_mostarda', item_name: 'Sem Mostarda', price: 0, status: 1, is_sold_separately: false },
     { app_item_id: 'ret_parmesao', item_name: 'Sem Queijo Parmesão', price: 0, status: 1, is_sold_separately: false },
@@ -118,7 +109,7 @@ async function sincronizarCardapioCompleto() {
       price: 2290,
       status: 1,
       is_sold_separately: true,
-      short_desc: '1 salsicha Sadia, molho especial da casa, ketchup, mostarda, milho, ervilha, vinagrete, purê de batata artesanal e batata palha crocante.',
+      short_desc: '1 salsicha Sadia, maionese Hellmann\'s, ketchup, mostarda, milho, ervilha, vinagrete, purê de batata artesanal e batata palha crocante.',
       app_modifier_group_ids: ['mg_formato', 'mg_retirar', 'mg_adicionais']
     },
     {
@@ -127,7 +118,7 @@ async function sincronizarCardapioCompleto() {
       price: 2890,
       status: 1,
       is_sold_separately: true,
-      short_desc: 'O campeão de vendas! 2 salsichas Sadia, o verdadeiro dobro de queijo muçarela derretido, molho especial da casa, ketchup, mostarda, milho, ervilha, vinagrete, purê artesanal, batata palha e chuva de parmesão ralado por cima.',
+      short_desc: 'O campeão de vendas! 2 salsichas Sadia, o verdadeiro dobro de queijo muçarela derretido, maionese Hellmann\'s, ketchup, mostarda, milho, ervilha, vinagrete, purê artesanal, batata palha e chuva de parmesão ralado por cima.',
       app_modifier_group_ids: ['mg_formato', 'mg_retirar', 'mg_adicionais']
     },
     {
@@ -136,7 +127,7 @@ async function sincronizarCardapioCompleto() {
       price: 3390,
       status: 1,
       is_sold_separately: true,
-      short_desc: '2 salsichas Sadia, molho especial da casa, purê de batata artesanal, milho, ervilha, bacon crocante em cubos, queijo muçarela derretido, batata palha e parmesão ralado por cima.',
+      short_desc: '2 salsichas Sadia, maionese Hellmann\'s, purê de batata artesanal, milho, ervilha, bacon crocante em cubos, queijo muçarela derretido, batata palha e parmesão ralado por cima.',
       app_modifier_group_ids: ['mg_formato', 'mg_retirar', 'mg_adicionais']
     },
     {
@@ -145,7 +136,7 @@ async function sincronizarCardapioCompleto() {
       price: 3490,
       status: 1,
       is_sold_separately: true,
-      short_desc: '1 salsicha Sadia, ketchup, mostarda, milho, vinagrete, frango desfiado temperado, Catupiry® Original cremoso, molho especial da casa, purê de batata artesanal e batata palha crocante.',
+      short_desc: '1 salsicha Sadia, frango desfiado temperado, Catupiry® Original cremoso, maionese Hellmann\'s, ketchup, mostarda, milho, vinagrete, purê de batata artesanal e batata palha crocante.',
       app_modifier_group_ids: ['mg_formato', 'mg_retirar', 'mg_adicionais']
     },
     {
@@ -154,7 +145,7 @@ async function sincronizarCardapioCompleto() {
       price: 4490,
       status: 1,
       is_sold_separately: true,
-      short_desc: 'O gigante da casa! 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original, purê artesanal, molho especial da casa, ketchup, mostarda, milho, ervilha, vinagrete, bacon em dobro, calabresa ralada douradinha, queijo muçarela em dobro derretido, batata palha e parmesão ralado por cima.',
+      short_desc: 'O gigante da casa! 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original, purê artesanal, maionese Hellmann\'s, ketchup, mostarda, milho, ervilha, vinagrete, bacon em dobro, calabresa ralada douradinha, queijo muçarela em dobro derretido, batata palha e parmesão ralado por cima.',
       app_modifier_group_ids: ['mg_formato', 'mg_retirar', 'mg_adicionais']
     },
     {
@@ -163,7 +154,7 @@ async function sincronizarCardapioCompleto() {
       price: 3190,
       status: 1,
       is_sold_separately: true,
-      short_desc: '🌱 Opção Vegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa derretido, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese verde da casa e batata palha crocante.',
+      short_desc: '🌱 Opção Vegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa derretido, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese Hellmann\'s e batata palha crocante.',
       app_modifier_group_ids: ['mg_formato', 'mg_retirar', 'mg_adicionais']
     },
 

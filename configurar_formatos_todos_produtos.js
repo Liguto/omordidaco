@@ -131,33 +131,45 @@ async function executar() {
   // 2. Vincular aos Dogs Individuais
   const dogsIndividuais = [
     {
-      nome: 'Dog Tradicional do Mordidaço',
-      itemId: '64aaeef9-63bc-4cde-a9e5-18e387ce4361',
-      prodId: '8afaca0f-0931-4588-8d20-e4ede56ba6d8',
-      desc: '1 salsicha Perdigão no molho fervilhante, base de purê de batata artesanal cremoso, milho, vinagrete caseiro, maionese verde secreta e queijo parmesão ralado fresco na hora.',
-      preco: 21.90
+      nome: 'Mordidaço Clássico',
+      itemId: process.env.IFOD_CLASSICO_ITEM_ID || '64aaeef9-63bc-4cde-a9e5-18e387ce4361',
+      prodId: process.env.IFOD_CLASSICO_PROD_ID || '8afaca0f-0931-4588-8d20-e4ede56ba6d8',
+      desc: '1 salsicha Sadia, maionese Hellmann\'s, ketchup, mostarda, milho, ervilha, vinagrete, purê de batata artesanal e batata palha crocante.',
+      preco: 22.90
     },
     {
-      nome: 'Dog Bacon Supreme',
-      itemId: '6c903bd6-eadf-421b-9daf-82f014a7f9ff',
-      prodId: '2d202aa0-4a7c-40be-9bad-ef6fae26e185',
-      desc: '2 salsichas Perdigão, purê artesanal, molho de tomate refogado, muçarela derretida no calor do molho, coberto com chuva de bacon crocante dourado em cubos.',
-      preco: 29.90
+      nome: 'Mordidaço em Dobro',
+      itemId: process.env.IFOD_DUPLO_ITEM_ID || '6c903bd6-eadf-421b-9daf-82f014a7f9ff',
+      prodId: process.env.IFOD_DUPLO_PROD_ID || '2d202aa0-4a7c-40be-9bad-ef6fae26e185',
+      desc: 'O campeão de vendas! 2 salsichas Sadia, o verdadeiro dobro de queijo muçarela derretido, maionese Hellmann\'s, ketchup, mostarda, milho, ervilha, vinagrete, purê artesanal, batata palha e chuva de parmesão ralado por cima.',
+      preco: 28.90
     },
     {
-      nome: 'Dog Frango Catupiry',
-      itemId: 'e9b25a06-3174-4f0a-8715-dd2ec8333a2b',
-      prodId: 'b4c4801b-3929-4c58-8557-53f90afcdd05',
-      desc: '2 salsichas Perdigão, purê cremoso, peito de frango desfiado refogado bem temperadinho e o legítimo Catupiry original maçaricado com parmesão ralado na hora.',
-      preco: 29.90
+      nome: 'Mordidaço Bacon',
+      itemId: process.env.IFOD_BACON_ITEM_ID || 'DOG_BACON_ITEM_ID',
+      prodId: process.env.IFOD_BACON_PROD_ID || 'DOG_BACON_PROD_ID',
+      desc: '2 salsichas Sadia, maionese Hellmann\'s, purê de batata artesanal, milho, ervilha, bacon crocante em cubos, queijo muçarela derretido, batata palha e parmesão ralado por cima.',
+      preco: 33.90
+    },
+    {
+      nome: 'Mordidaço Cremoso',
+      itemId: process.env.IFOD_CREMOSO_ITEM_ID || 'e9b25a06-3174-4f0a-8715-dd2ec8333a2b',
+      prodId: process.env.IFOD_CREMOSO_PROD_ID || 'b4c4801b-3929-4c58-8557-53f90afcdd05',
+      desc: '1 salsicha Sadia, frango desfiado temperado, Catupiry® Original cremoso, maionese Hellmann\'s, ketchup, mostarda, milho, vinagrete, purê de batata artesanal e batata palha crocante.',
+      preco: 34.90
+    },
+    {
+      nome: 'Mordidaço Tudão',
+      itemId: process.env.IFOD_TUDAO_ITEM_ID || 'DOG_TUDAO_ITEM_ID',
+      prodId: process.env.IFOD_TUDAO_PROD_ID || 'DOG_TUDAO_PROD_ID',
+      desc: 'O gigante da casa! 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original, purê artesanal, maionese Hellmann\'s, ketchup, mostarda, milho, ervilha, vinagrete, bacon em dobro, calabresa ralada douradinha, queijo muçarela em dobro derretido, batata palha e parmesão ralado por cima.',
+      preco: 44.90
     },
     {
       nome: 'Mordidaço Queijudo (VEG)',
-      // NOTA: Ao sincronizar no iFood (via cadastrar_cardapio_completo_ifood.js ou Catalog API),
-      // preencha o itemId e prodId retornados pelo iFood para vincular a opção No Pão / No Prato (+ R$ 2,00).
       itemId: process.env.IFOD_VEG_ITEM_ID || 'DOG_VEG_ITEM_ID',
       prodId: process.env.IFOD_VEG_PROD_ID || 'DOG_VEG_PROD_ID',
-      desc: '🌱 Opção Vegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa derretido, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese verde da casa e batata palha crocante.',
+      desc: '🌱 Opção Vegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa derretido, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese Hellmann\'s e batata palha crocante.',
       preco: 31.90
     }
   ];
