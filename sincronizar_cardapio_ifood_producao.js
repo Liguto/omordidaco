@@ -254,6 +254,7 @@ async function sincronizarTudo() {
     { nome: 'Fanta Laranja 350ml (Lata)', descricao: 'Lata 350ml gelada.', preco: 7.90 },
     { nome: 'Suco Del Valle Uva 290ml (Lata)', descricao: 'Lata 290ml gelada.', preco: 8.50 },
     { nome: 'Coca-Cola Original 2 Litros', descricao: 'Garrafa 2 Litros gelada.', preco: 17.90 },
+    { nome: 'Coca-Cola 2 Litros Zero', descricao: 'Garrafa 2 Litros sem açúcar trincando de gelada.', preco: 17.90 },
     { nome: 'Guaraná Antarctica 2 Litros', descricao: 'Garrafa 2 Litros gelada.', preco: 15.90 },
     { nome: 'Água Mineral 500ml (sem gás)', descricao: 'Garrafa 500ml gelada.', preco: 5.00 },
     { nome: 'Água Mineral 500ml (com gás)', descricao: 'Garrafa 500ml gelada.', preco: 5.50 },
