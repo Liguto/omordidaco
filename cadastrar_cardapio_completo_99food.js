@@ -413,11 +413,25 @@ async function sincronizarCardapioCompleto() {
     });
   });
 
+  // Ordena também o array principal de items na exata sequência de exibição das categorias
+  const itensFinaisOrdenados = [];
+  // 1. Modificadores internos
+  items.filter(i => !i.is_sold_separately).forEach(i => itensFinaisOrdenados.push(i));
+  // 2. Itens das categorias na ordem estrita crescente de app_item_ids
+  categories.forEach(cat => {
+    cat.app_item_ids.forEach(itemId => {
+      const it = items.find(i => i.app_item_id === itemId);
+      if (it && !itensFinaisOrdenados.includes(it)) {
+        itensFinaisOrdenados.push(it);
+      }
+    });
+  });
+
   const payload = {
     auth_token: token,
     menus,
     categories,
-    items,
+    items: itensFinaisOrdenados,
     modifier_groups
   };
 
