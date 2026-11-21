@@ -404,6 +404,15 @@ async function sincronizarCardapioCompleto() {
     }
   ];
 
+  // Ordena os itens de cada categoria por preço estritamente crescente (do mais barato ao mais caro)
+  categories.forEach(cat => {
+    cat.app_item_ids.sort((idA, idB) => {
+      const itemA = items.find(i => i.app_item_id === idA);
+      const itemB = items.find(i => i.app_item_id === idB);
+      return (itemA?.price || 0) - (itemB?.price || 0);
+    });
+  });
+
   const payload = {
     auth_token: token,
     menus,

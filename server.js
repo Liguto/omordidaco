@@ -795,10 +795,16 @@ app.post(['/api/status-loja', '/status-loja'], (req, res) => {
   res.json({ success: true, ...statusLojaCache });
 });
 
-// Obter Cardápio (Injeta o status da loja para o frontend)
+// Obter Cardápio (Injeta o status da loja e garante ordenação do mais barato ao mais caro em cada categoria)
 app.get(['/api/cardapio', '/cardapio'], (req, res) => {
+  const categoriasOrdenadas = CARDAPIO.categorias.map(cat => ({
+    ...cat,
+    itens: [...cat.itens].sort((a, b) => (Number(a.preco) || 0) - (Number(b.preco) || 0))
+  }));
+
   const resposta = {
     ...CARDAPIO,
+    categorias: categoriasOrdenadas,
     restaurante: {
       ...CARDAPIO.restaurante,
       statusLoja: statusLojaCache.status,
