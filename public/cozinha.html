@@ -925,11 +925,16 @@
 
       <!-- COLUNA 4: ENTREGUES / CONCLUÍDOS -->
       <div class="kanban-column" id="kanbanColConcluidos">
-        <div class="kanban-column-header concluido">
+        <div class="kanban-column-header concluido" style="display: flex; justify-content: space-between; align-items: center;">
           <div style="display: flex; align-items: center; gap: 8px;">
             <span>✅</span> <span>CONCLUÍDOS / ENTREGUES</span>
           </div>
-          <span class="kanban-badge" id="badgeKanbanConcluidos">0</span>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span class="kanban-badge" id="badgeKanbanConcluidos">0</span>
+            <button type="button" onclick="limparEntreguesDaTela()" title="Limpar e ocultar todos os entregues da tela" style="background: #ffffff; border: 1.5px solid #86efac; color: #15803d; border-radius: 6px; padding: 2px 8px; font-size: 11px; font-weight: 850; cursor: pointer;">
+              🗑️ Limpar
+            </button>
+          </div>
         </div>
         <div class="kanban-column-cards" id="cardsKanbanConcluidos"></div>
       </div>
@@ -1624,9 +1629,15 @@
         if (res.ok) {
           const listaServidor = await res.json();
           if (Array.isArray(listaServidor)) {
-            // REGRA ANTI-SUMIÇO: Se o servidor retornou vazio temporariamente mas temos pedidos em tela,
-            // não descarta para evitar que o pedido suma entre ciclos de workers
-            if (listaServidor.length === 0 && pedidosLocais.length > 0) {
+            // Se o servidor foi resetado/zerado, limpa a tela local imediatamente
+            if (listaServidor.length === 0) {
+              if (pedidosLocais.length > 0) {
+                pedidosLocais = [];
+                salvarCacheLocalPedidos();
+                ultimoHashPedidos = '';
+                renderizarPedidos();
+                atualizarEstatisticas();
+              }
               return;
             }
 
@@ -1644,26 +1655,20 @@
               }
             });
 
-            // MESCLAGEM INTELIGENTE ANTI-PERDA:
-            // Combina os pedidos locais existentes com a lista do servidor, garantindo que
-            // pedidos concluídos/entregues no dia NUNCA sumam da tela se o servidor reiniciar!
-            const mapa = new Map();
-            pedidosLocais.forEach(p => {
-              if (p && p.id) mapa.set(p.id, p);
-            });
+            // Sincronização inteligente: Se algum pedido foi removido/deletado no servidor, remove localmente
+            const idsServidor = new Set(listaServidor.map(p => p.id));
+            pedidosLocais = pedidosLocais.filter(p => idsServidor.has(p.id));
 
+            // Atualiza ou insere novos pedidos do servidor
             listaServidor.forEach(pServidor => {
-              if (pServidor && pServidor.id) {
-                const local = mapa.get(pServidor.id);
-                if (local) {
-                  mapa.set(pServidor.id, { ...local, ...pServidor });
-                } else {
-                  mapa.set(pServidor.id, pServidor);
-                }
+              const idx = pedidosLocais.findIndex(p => p.id === pServidor.id);
+              if (idx !== -1) {
+                pedidosLocais[idx] = { ...pedidosLocais[idx], ...pServidor };
+              } else {
+                pedidosLocais.push(pServidor);
               }
             });
 
-            pedidosLocais = Array.from(mapa.values());
             pedidosLocais.sort((a, b) => (b.numero || 0) - (a.numero || 0));
             salvarCacheLocalPedidos();
 
@@ -2075,6 +2080,9 @@
                 <button type="button" onclick="alterarStatus('${p.id}', 'Em Preparo')" title="Reabrir pedido se marcado por engano" style="background: none; border: 1.5px dashed #94a3b8; color: #64748b; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;">
                   ↩️ Reabrir
                 </button>
+                <button type="button" onclick="removerPedido('${p.id}')" title="Remover e limpar este pedido da tela" style="background: none; border: 1.5px solid #cbd5e1; color: #64748b; padding: 8px 11px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;">
+                  🗑️
+                </button>
               </div>
             </div>
           </div>
@@ -2112,6 +2120,9 @@
                 </button>
                 <button type="button" onclick="alterarStatus('${p.id}', 'Em Preparo')" title="Reabrir pedido se foi cancelado por engano" style="background: none; border: 1.5px dashed #94a3b8; color: #64748b; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;">
                   ↩️ Reabrir
+                </button>
+                <button type="button" onclick="removerPedido('${p.id}')" title="Remover e limpar este pedido da tela" style="background: none; border: 1.5px solid #fca5a5; color: #dc2626; padding: 8px 11px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;">
+                  🗑️
                 </button>
               </div>
             </div>
@@ -2356,6 +2367,35 @@
       if (bPrep) bPrep.innerText = preparo;
       if (bRota) bRota.innerText = saiu;
       if (bConc) bConc.innerText = entregues + cancelados;
+    }
+
+    async function removerPedido(id) {
+      if (!confirm('Deseja realmente remover e limpar este pedido da tela?')) return;
+      pedidosLocais = pedidosLocais.filter(p => p.id !== id && String(p.numero) !== String(id));
+      salvarCacheLocalPedidos();
+      ultimoHashPedidos = '';
+      renderizarPedidos();
+      atualizarEstatisticas();
+      try {
+        await fetch(`/api/pedidos/${id}`, { method: 'DELETE' });
+      } catch (e) {}
+    }
+
+    async function limparEntreguesDaTela() {
+      const temEntregues = pedidosLocais.some(p => p.status === 'Entregue' || p.status === 'Concluído' || p.status === 'Cancelado');
+      if (!temEntregues) {
+        alert('Nenhum pedido entregue ou concluído para limpar no momento.');
+        return;
+      }
+      if (!confirm('Deseja limpar todos os pedidos Concluídos/Entregues da tela?')) return;
+      pedidosLocais = pedidosLocais.filter(p => p.status !== 'Entregue' && p.status !== 'Concluído' && p.status !== 'Cancelado');
+      salvarCacheLocalPedidos();
+      ultimoHashPedidos = '';
+      renderizarPedidos();
+      atualizarEstatisticas();
+      try {
+        await fetch('/api/pedidos/limpar-entregues', { method: 'POST' });
+      } catch (e) {}
     }
 
     async function alterarStatus(id, novoStatus) {

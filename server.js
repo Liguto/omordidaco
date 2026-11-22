@@ -1242,6 +1242,55 @@ app.post(['/api/pedidos/reset-total', '/pedidos/reset-total', '/api/pedidos/rese
   });
 });
 
+// Excluir / Descartar Pedido Específico (Remover pedido de teste ou limpar da tela)
+app.delete(['/api/pedidos/:id', '/pedidos/:id'], async (req, res) => {
+  const { id } = req.params;
+  recarregarPedidosDoDisco();
+  recarregarHistoricoDoDisco();
+
+  const idxAtivo = pedidos.findIndex(p => p.id === id || String(p.numero) === String(id));
+  if (idxAtivo !== -1) {
+    pedidos.splice(idxAtivo, 1);
+    salvarPedidos();
+  }
+
+  const idxHist = historicoPedidos.findIndex(p => p.id === id || String(p.numero) === String(id));
+  if (idxHist !== -1) {
+    historicoPedidos.splice(idxHist, 1);
+    salvarHistorico();
+  }
+
+  if (KV_URL && KV_TOKEN) {
+    await salvarPedidosNuvem();
+  }
+
+  notificarCozinha({
+    tipo: 'pedido_removido',
+    id: id
+  });
+
+  res.json({ success: true, message: `Pedido ${id} removido com sucesso.` });
+});
+
+// Limpar Apenas Pedidos Entregues / Concluídos da Bancada
+app.post(['/api/pedidos/limpar-entregues', '/pedidos/limpar-entregues'], async (req, res) => {
+  recarregarPedidosDoDisco();
+  const entregues = pedidos.filter(p => p.status === 'Entregue' || p.status === 'Concluído' || p.status === 'Cancelado');
+  pedidos = pedidos.filter(p => p.status !== 'Entregue' && p.status !== 'Concluído' && p.status !== 'Cancelado');
+  salvarPedidos();
+
+  if (KV_URL && KV_TOKEN) {
+    await salvarPedidosNuvem();
+  }
+
+  notificarCozinha({
+    tipo: 'entregues_limpos',
+    removidos: entregues.length
+  });
+
+  res.json({ success: true, removidos: entregues.length });
+});
+
 // ====================================================
 // ROTAS DE INTEGRAÇÃO OFICIAL COM O IFOOD
 // ====================================================
