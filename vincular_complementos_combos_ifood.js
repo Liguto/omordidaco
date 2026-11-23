@@ -127,7 +127,7 @@ async function configurarComboFamilia() {
         { id: ogAdicionaisId, min: 0, max: 10, index: 2 }
       ]
     },
-    { id: PROD_PAO_ID, name: '🥖 Tradicional de Rua (No Pão)', serving: 'NOT_APPLICABLE' },
+    { id: PROD_PAO_ID, name: '🥖 Tradicional de Rua (No Pão Bambini 70g)', serving: 'NOT_APPLICABLE' },
     { id: PROD_PRATO_ID, name: '🥣 No Prato', serving: 'NOT_APPLICABLE' }
   ];
 
@@ -227,7 +227,7 @@ async function configurarComboDuplo(itemId, productId, nomeCombo, preco, serving
         { id: ogAdicionaisId, min: 0, max: 10, index: 3 }
       ]
     },
-    { id: PROD_PAO_ID, name: '🥖 Tradicional de Rua (No Pão)', serving: 'NOT_APPLICABLE' },
+    { id: PROD_PAO_ID, name: '🥖 Tradicional de Rua (No Pão Bambini 70g)', serving: 'NOT_APPLICABLE' },
     { id: PROD_PRATO_ID, name: '🥣 No Prato', serving: 'NOT_APPLICABLE' }
   ];
 
@@ -336,7 +336,7 @@ async function configurarComboSolo(itemId, productId, nomeCombo, preco) {
         { id: ogAdicionaisId, min: 0, max: 10, index: 3 }
       ]
     },
-    { id: PROD_PAO_ID, name: '🥖 Tradicional de Rua (No Pão)', serving: 'NOT_APPLICABLE' },
+    { id: PROD_PAO_ID, name: '🥖 Tradicional de Rua (No Pão Bambini 70g)', serving: 'NOT_APPLICABLE' },
     { id: PROD_PRATO_ID, name: '🥣 No Prato', serving: 'NOT_APPLICABLE' }
   ];
 

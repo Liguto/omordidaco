@@ -137,7 +137,7 @@ async function vincularComplementosItem(itemInfo) {
     },
     {
       id: PROD_PAO_ID,
-      name: '🥖 Tradicional de Rua (No Pão)',
+      name: '🥖 Tradicional de Rua (No Pão Bambini 70g)',
       serving: 'NOT_APPLICABLE'
     },
     {

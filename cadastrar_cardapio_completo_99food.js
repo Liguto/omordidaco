@@ -67,7 +67,7 @@ async function sincronizarCardapioCompleto() {
 
   const items = [
     // Opções de modificador internas (não vendidas soltas)
-    { app_item_id: 'mod_pao', item_name: '🥖 Tradicional de Rua (No Pão)', price: 0, status: 1, is_sold_separately: false, short_desc: 'Aberto farto, selado e com queijo ralado na hora' },
+    { app_item_id: 'mod_pao', item_name: '🥖 Tradicional de Rua (No Pão Bambini 70g)', price: 0, status: 1, is_sold_separately: false, short_desc: 'Aberto farto no autêntico Pão Bambini (18cm), selado e quentinho' },
     { app_item_id: 'mod_prato', item_name: '🥣 No Prato', price: 200, status: 1, is_sold_separately: false, short_desc: 'Sem pão! +40g de purê artesanal e garfo descartável reforçado' },
 
     // Retiradas (Grátis)
@@ -167,7 +167,7 @@ async function sincronizarCardapioCompleto() {
       price: 2290,
       status: 1,
       is_sold_separately: true,
-      short_desc: '1 salsicha Sadia, maionese Hellmann\'s, ketchup, mostarda, milho, ervilha, vinagrete, purê de batata artesanal e batata palha crocante.',
+      short_desc: 'Pão macio Bambini (70g/18cm), 1 salsicha Sadia, purê artesanal, maionese Hellmann\'s, ketchup, mostarda, milho, ervilha, vinagrete e batata palha.',
       app_modifier_group_ids: ['mg_formato', 'mg_retirar', 'mg_adicionais']
     },
     {
@@ -176,7 +176,7 @@ async function sincronizarCardapioCompleto() {
       price: 2890,
       status: 1,
       is_sold_separately: true,
-      short_desc: 'O campeão de vendas! 2 salsichas Sadia, o verdadeiro dobro de queijo muçarela derretido, maionese Hellmann\'s, ketchup, mostarda, milho, ervilha, vinagrete, purê artesanal, batata palha e chuva de parmesão ralado por cima.',
+      short_desc: 'O campeão de vendas! Pão macio Bambini (70g/18cm), 2 salsichas Sadia, o verdadeiro dobro de muçarela derretida, purê artesanal, maionese Hellmann\'s, vinagrete, milho, ervilha e batata palha.',
       app_modifier_group_ids: ['mg_formato', 'mg_retirar', 'mg_adicionais']
     },
     {
@@ -185,7 +185,7 @@ async function sincronizarCardapioCompleto() {
       price: 3190,
       status: 1,
       is_sold_separately: true,
-      short_desc: '🌱 Opção Vegetariana! 2 palitos de queijo empanados crocantes com queijo puxa-puxa derretido, purê artesanal da casa, vinagrete fresco, milho, ketchup, mostarda, maionese Hellmann\'s e batata palha crocante.',
+      short_desc: '🌱 Opção Vegetariana! Pão macio Bambini (70g/18cm), 2 palitos de queijo empanados crocantes puxa-puxa (Air Fryer sem óleo), purê artesanal, vinagrete, milho e batata palha.',
       app_modifier_group_ids: ['mg_formato', 'mg_retirar', 'mg_adicionais']
     },
     {
@@ -194,7 +194,7 @@ async function sincronizarCardapioCompleto() {
       price: 3390,
       status: 1,
       is_sold_separately: true,
-      short_desc: '2 salsichas Sadia, maionese Hellmann\'s, purê de batata artesanal, milho, ervilha, bacon crocante em cubos, queijo muçarela derretido, batata palha e parmesão ralado por cima.',
+      short_desc: 'Pão macio Bambini (70g/18cm), 2 salsichas Sadia, bacon crocante em cubos, muçarela derretida, purê artesanal, maionese Hellmann\'s, milho, ervilha e batata palha.',
       app_modifier_group_ids: ['mg_formato', 'mg_retirar', 'mg_adicionais']
     },
     {
@@ -203,7 +203,7 @@ async function sincronizarCardapioCompleto() {
       price: 3490,
       status: 1,
       is_sold_separately: true,
-      short_desc: '1 salsicha Sadia, frango desfiado temperado, Catupiry® Original cremoso, maionese Hellmann\'s, ketchup, mostarda, milho, vinagrete, purê de batata artesanal e batata palha crocante.',
+      short_desc: 'Pão macio Bambini (70g/18cm), 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original cremoso, purê artesanal, maionese Hellmann\'s, milho, vinagrete e batata palha.',
       app_modifier_group_ids: ['mg_formato', 'mg_retirar', 'mg_adicionais']
     },
     {
@@ -212,7 +212,7 @@ async function sincronizarCardapioCompleto() {
       price: 4490,
       status: 1,
       is_sold_separately: true,
-      short_desc: 'O gigante da casa! 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original, purê artesanal, maionese Hellmann\'s, ketchup, mostarda, milho, ervilha, vinagrete, bacon em dobro, calabresa ralada douradinha, queijo muçarela em dobro derretido, batata palha e parmesão ralado por cima.',
+      short_desc: 'O gigante da casa! Pão macio Bambini (70g/18cm), 1 salsicha Sadia, frango desfiado, Catupiry® Original, bacon em dobro, calabresa, muçarela dobro, purê artesanal e batata palha.',
       app_modifier_group_ids: ['mg_formato', 'mg_retirar', 'mg_adicionais']
     },
 
