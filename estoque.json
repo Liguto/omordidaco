@@ -146,7 +146,7 @@
     },
     {
       "id": "sobremesa_tortinha_limao",
-      "nome": "Tortinha de Limão no Pote (170ml)",
+      "nome": "Tortinha de Limão no Pote (170ml) [Montada/Pronta]",
       "categoria": "Sobremesas",
       "unidade": "un",
       "quantidade": 15,
@@ -155,12 +155,138 @@
     },
     {
       "id": "sobremesa_escondidinho_nutella",
-      "nome": "Escondidinho de Nutella com Brownie (170ml)",
+      "nome": "Escondidinho de Ninho com Nutella e Brownie (170ml) [Montado/Pronto]",
       "categoria": "Sobremesas",
       "unidade": "un",
       "quantidade": 15,
       "minimo": 5,
       "custoUnitario": 4.93
+    },
+    {
+      "id": "leite_condensado",
+      "nome": "Leite Condensado (Lata/Caixa 395g - Moça/Itambé/Italac)",
+      "categoria": "Sobremesas",
+      "unidade": "un",
+      "quantidade": 12,
+      "minimo": 4,
+      "custoUnitario": 5.40
+    },
+    {
+      "id": "creme_leite",
+      "nome": "Creme de Leite (Caixa 200g - Italac/Piracanjuba)",
+      "categoria": "Sobremesas",
+      "unidade": "un",
+      "quantidade": 12,
+      "minimo": 4,
+      "custoUnitario": 3.10
+    },
+    {
+      "id": "leite_ninho",
+      "nome": "Leite em Pó Ninho Integral Instantâneo (Nestlé 380g)",
+      "categoria": "Sobremesas",
+      "unidade": "lata",
+      "quantidade": 4,
+      "minimo": 1,
+      "custoUnitario": 17.90
+    },
+    {
+      "id": "nutella_ferrero",
+      "nome": "Nutella Ferrero Legítima Pura (Pote/Balde)",
+      "categoria": "Sobremesas",
+      "unidade": "kg",
+      "quantidade": 3.0,
+      "minimo": 1.0,
+      "custoUnitario": 56.00
+    },
+    {
+      "id": "chocolate_meio_amargo",
+      "nome": "Chocolate Meio Amargo Nobre p/ Brownie (Barra Confeitaria)",
+      "categoria": "Sobremesas",
+      "unidade": "kg",
+      "quantidade": 2.0,
+      "minimo": 0.5,
+      "custoUnitario": 42.00
+    },
+    {
+      "id": "chocolate_po_50",
+      "nome": "Chocolate em Pó 50% Cacau p/ Brownie",
+      "categoria": "Sobremesas",
+      "unidade": "kg",
+      "quantidade": 1.0,
+      "minimo": 0.3,
+      "custoUnitario": 28.00
+    },
+    {
+      "id": "manteiga_sem_sal",
+      "nome": "Manteiga Sem Sal (Barra 500g Confeitaria)",
+      "categoria": "Sobremesas",
+      "unidade": "barra",
+      "quantidade": 4,
+      "minimo": 1,
+      "custoUnitario": 16.00
+    },
+    {
+      "id": "acucar_refinado",
+      "nome": "Açúcar Refinado Especial p/ Brownie",
+      "categoria": "Sobremesas",
+      "unidade": "kg",
+      "quantidade": 2.0,
+      "minimo": 1.0,
+      "custoUnitario": 4.80
+    },
+    {
+      "id": "ovos_frescos",
+      "nome": "Ovos Frescos Selecionados p/ Brownie",
+      "categoria": "Sobremesas",
+      "unidade": "dz",
+      "quantidade": 3,
+      "minimo": 1,
+      "custoUnitario": 11.00
+    },
+    {
+      "id": "farinha_trigo",
+      "nome": "Farinha de Trigo Especial p/ Brownie",
+      "categoria": "Sobremesas",
+      "unidade": "kg",
+      "quantidade": 2.0,
+      "minimo": 1.0,
+      "custoUnitario": 4.90
+    },
+    {
+      "id": "limao_taiti",
+      "nome": "Limão Taiti Fresco Selecionado (Ceasa)",
+      "categoria": "Sobremesas",
+      "unidade": "kg",
+      "quantidade": 2.5,
+      "minimo": 1.0,
+      "custoUnitario": 5.00
+    },
+    {
+      "id": "biscoito_maisena",
+      "nome": "Biscoito Maisena (Pacote 400g - Marilan/Triunfo)",
+      "categoria": "Sobremesas",
+      "unidade": "pct",
+      "quantidade": 4,
+      "minimo": 1,
+      "custoUnitario": 5.20
+    },
+    {
+      "id": "pote_cristal_170ml",
+      "nome": "Pote Cristal 170ml com Tampa Vedada (Galvanotek)",
+      "categoria": "Embalagens",
+      "unidade": "un",
+      "quantidade": 50,
+      "minimo": 15,
+      "custoUnitario": 0.55
+    },
+    {
+      "id": "colher_sobremesa_lacrada",
+      "nome": "Colherzinha de Sobremesa Reforçada Lacrada Individual",
+      "categoria": "Embalagens",
+      "unidade": "un",
+      "quantidade": 50,
+      "minimo": 15,
+      "custoUnitario": 0.12
     },
     {
       "id": "pote_berco",

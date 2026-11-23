@@ -80,11 +80,12 @@ function deduzirEstoquePorPedido(pedido) {
           registrarBaixa('pote_berco', 2 * qtdItem);
         }
 
-        // Bebidas do Combo Dupla Mordida
-        if (nome.includes('guaraná') || nome.includes('guarana')) {
-          registrarBaixa('guarana_lata', 2 * qtdItem);
-        } else {
-          registrarBaixa('coca_lata', 2 * qtdItem);
+        // Se for o Combo Casal VIP (com Sobremesas): baixa também as 2 sobremesas e colheres
+        if (nome.includes('vip') || nome.includes('sobremesa')) {
+          registrarBaixa('sobremesa_tortinha_limao', 1 * qtdItem);
+          registrarBaixa('sobremesa_escondidinho_nutella', 1 * qtdItem);
+          registrarBaixa('pote_cristal_170ml', 2 * qtdItem);
+          registrarBaixa('colher_sobremesa_lacrada', 2 * qtdItem);
         }
       } else if (nome.includes('família') || nome.includes('familia')) {
         // Combo Família: 2 Mordidaços Duplos + 1 Mordidaço Clássico + 1 Guaraná 2L + 3 Molhos da Casa
@@ -220,8 +221,12 @@ function deduzirEstoquePorPedido(pedido) {
       }
     } else if (nome.includes('tortinha') || nome.includes('limão') || nome.includes('limao')) {
       registrarBaixa('sobremesa_tortinha_limao', 1 * qtdItem);
-    } else if (nome.includes('escondidinho') || nome.includes('nutella') || nome.includes('brownie')) {
+      registrarBaixa('pote_cristal_170ml', 1 * qtdItem);
+      registrarBaixa('colher_sobremesa_lacrada', 1 * qtdItem);
+    } else if (nome.includes('escondidinho') || nome.includes('ninho') || nome.includes('nutella') || nome.includes('brownie')) {
       registrarBaixa('sobremesa_escondidinho_nutella', 1 * qtdItem);
+      registrarBaixa('pote_cristal_170ml', 1 * qtdItem);
+      registrarBaixa('colher_sobremesa_lacrada', 1 * qtdItem);
     }
   });
 
