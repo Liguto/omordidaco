@@ -635,7 +635,7 @@ const CARDAPIO = {
         {
           id: "combo-casal-vip",
           nome: "Mordidaço Casal VIP (com Sobremesas)",
-          descricao: "2 Mordidaços em Dobro (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata 350ml + 1 Tortinha de Limão (170ml) + 1 Escondidinho de Nutella com Brownie (170ml) + 2 Potes de Maionese da Casa (30ml). A experiência completa a dois!",
+          descricao: "2 Mordidaços em Dobro (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata 350ml + 1 Tortinha de Limão (170ml) + 1 Escondidinho de Ninho com Nutella e Brownie (170ml) + 2 Potes de Maionese da Casa (30ml). A experiência completa a dois!",
           preco: 69.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -721,15 +721,15 @@ const CARDAPIO = {
         {
           id: "sobremesa-tortinha-limao",
           nome: "Tortinha de Limão no Pote (170ml)",
-          descricao: "Camadas perfeitas de farofa crocante amanteigada de biscoito, creme aveludado de limão fresco e raspas de limão verde. Acompanha colherzinha descartável lacrada! (~161g).",
+          descricao: "Farofinha crocante amanteigada de biscoito maisena e manteiga sem sal, recheada com creme aveludado de limão fresco (leite condensado, creme de leite e suco natural de limão), finalizada com raspas de limão verde. Equilíbrio perfeito entre o doce e o cítrico! Acompanha colherzinha lacrada! (~161g).",
           preco: 10.90,
           destaque: true,
           isSobremesa: true
         },
         {
           id: "sobremesa-escondidinho-nutella",
-          nome: "Escondidinho de Nutella com Brownie (170ml)",
-          descricao: "Base e cobertura de brigadeiro cremoso de Leite Ninho®, recheado com pedaços generosos de brownie artesanal e Nutella® Ferrero pura. Uma explosão de sabor! Acompanha colherzinha lacrada! (~155g).",
+          nome: "Escondidinho de Ninho com Nutella e Brownie (170ml)",
+          descricao: "Camadas cremosas de brigadeiro de Leite Ninho® (leite condensado, creme de leite, Leite Ninho puro e manteiga sem sal), pedaços generosos de brownie artesanal (chocolate meio amargo nobre, cacau 50%, ovos, farinha e manteiga) e muita Nutella® Ferrero pura. Uma explosão aveludada! Acompanha colherzinha lacrada! (~155g).",
           preco: 15.90,
           destaque: true,
           isSobremesa: true

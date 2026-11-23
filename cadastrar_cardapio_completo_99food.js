@@ -156,7 +156,7 @@ async function sincronizarCardapioCompleto() {
       price: 9690,
       status: 1,
       is_sold_separately: true,
-      short_desc: '2 Mordidaços em Dobro + 2 Refrigerantes Lata + 1 Tortinha de Limão (170ml) + 1 Escondidinho de Nutella c/ Brownie (170ml) + 2 Potes de Maionese da Casa (30ml). A experiência completa a dois!',
+      short_desc: '2 Mordidaços em Dobro + 2 Refrigerantes Lata + 1 Tortinha de Limão (170ml) + 1 Escondidinho de Ninho com Nutella e Brownie (170ml) + 2 Potes de Maionese da Casa (30ml). A experiência completa a dois!',
       app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_refri_1', 'mg_refri_2', 'mg_adicionais']
     },
 
@@ -223,15 +223,15 @@ async function sincronizarCardapioCompleto() {
       price: 1490,
       status: 1,
       is_sold_separately: true,
-      short_desc: 'Camadas de farofa amanteigada de biscoito, creme aveludado de limão fresco e raspas de limão verde. Acompanha colherzinha lacrada! (~161g).'
+      short_desc: 'Farofa crocante de biscoito maisena e manteiga, creme aveludado de limão fresco e raspas de limão verde. Acompanha colherzinha lacrada! (~161g).'
     },
     {
       app_item_id: 'sobremesa_escondidinho_nutella',
-      item_name: 'Escondidinho de Nutella com Brownie (170ml)',
+      item_name: 'Escondidinho de Ninho com Nutella e Brownie (170ml)',
       price: 2190,
       status: 1,
       is_sold_separately: true,
-      short_desc: 'Base e topo de brigadeiro de Leite Ninho®, recheado com brownie artesanal e Nutella® Ferrero pura. Acompanha colherzinha lacrada! (~155g).'
+      short_desc: 'Brigadeiro cremoso de Leite Ninho® (leite condensado, creme de leite e manteiga), brownie artesanal nobre e Nutella® Ferrero pura. Acompanha colherzinha lacrada! (~155g).'
     },
 
     // 3. ADICIONAIS EXTRAS (Vendidos avulsos e como opcionais)
