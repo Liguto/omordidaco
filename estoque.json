@@ -5,9 +5,9 @@
       "nome": "Pão de Hot Dog (Panificadora Bambini 70g)",
       "categoria": "Insumos",
       "unidade": "un",
-      "quantidade": 50,
-      "minimo": 15,
-      "custoUnitario": 0.90
+      "quantidade": 90,
+      "minimo": 20,
+      "custoUnitario": 1.58
     },
     {
       "id": "salsicha_sadia",
@@ -352,5 +352,20 @@
       "custoUnitario": 5.50
     }
   ],
-  "movimentacoes": []
+  "movimentacoes": [
+    {
+      "id": "mov_bambini_727486",
+      "dataHora": "23/11/2026, 10:27:35",
+      "pedidoId": "PEDIDO_COMPRA_BAMBINI_727486",
+      "origem": "Entrada de Mercadoria - Panificadora Bambini",
+      "detalhes": [
+        {
+          "insumo": "Pão de Hot Dog (Panificadora Bambini 70g)",
+          "baixado": -90,
+          "saldoRestante": 90,
+          "motivo": "Compra 3 cx c/ 30un (Pedido nº 727486 - R$ 142,20 à vista, R$ 1,58/un, entrega 25/11 c/ motorista Francisco)"
+        }
+      ]
+    }
+  ]
 }
