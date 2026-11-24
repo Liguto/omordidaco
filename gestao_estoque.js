@@ -53,73 +53,206 @@ function deduzirEstoquePorPedido(pedido) {
     const isNoPrato = formato.includes('prato') || nome.includes('prato');
     const isCombo = nome.includes('combo');
 
-    // 1. ANÁLISE DE COMBOS
+    // 1. ANÁLISE DE COMBOS E LANCHES
     if (isCombo) {
-      if (nome.includes('dupla') || nome.includes('casal') || nome.includes('mordida')) {
-        // 2 Mordidaços Duplos + 2 Refris + 2 Molhos da Casa (50ml) + Saco Kraft G
+      if (nome.includes('casal vip') || (nome.includes('casal') && (nome.includes('vip') || nome.includes('sobremesa')))) {
+        // Combo Casal VIP: 2 Mordidaços em Dobro + 2 Refris + 1 Tortinha + 1 Escondidinho + 2 Molhos da Casa
         totalDogsNoPedido += (2 * qtdItem);
-        registrarBaixa('salsicha_sadia', 4 * qtdItem); // 2 dogs com 2 salsichas cada
-        registrarBaixa('queijo_mussarela', 0.076 * qtdItem); // 4 fatias de muçarela
-        registrarBaixa('queijo_parmesao', 0.024 * qtdItem);
+        registrarBaixa('salsicha_sadia', 4 * qtdItem);
+        registrarBaixa('queijo_mussarela', 0.080 * qtdItem);
+        registrarBaixa('queijo_parmesao', 0.020 * qtdItem);
         registrarBaixa('milho_conserva', 0.040 * qtdItem);
         registrarBaixa('ervilha_conserva', 0.040 * qtdItem);
+        registrarBaixa('vinagrete_artesanal', 0.060 * qtdItem);
         registrarBaixa('batata_palha', 0.040 * qtdItem);
-        registrarBaixa('maionese_verde', 0.040 * qtdItem);
-        registrarBaixa('pote_maionese_50ml', 2 * qtdItem);
+        registrarBaixa('maionese_verde', 0.060 * qtdItem);
+        registrarBaixa('pote_molho_30ml', 2 * qtdItem);
+        registrarBaixa('sobremesa_tortinha_limao', 1 * qtdItem);
+        registrarBaixa('sobremesa_escondidinho_nutella', 1 * qtdItem);
+        registrarBaixa('pote_cristal_170ml', 2 * qtdItem);
+        registrarBaixa('colher_sobremesa_lacrada', 2 * qtdItem);
         registrarBaixa('saco_kraft_g', 1 * qtdItem);
 
         if (isNoPrato) {
+          registrarBaixa('marmitinha_500ml_prato', 2 * qtdItem);
           registrarBaixa('garfo_reforcado', 2 * qtdItem);
-          registrarBaixa('pure_batata', 0.240 * qtdItem); // 120g cada
+          registrarBaixa('pure_batata', 0.240 * qtdItem);
           registrarBaixa('molho_tomate', 0.080 * qtdItem);
-          registrarBaixa('pote_berco', 2 * qtdItem);
         } else {
+          registrarBaixa('dogueira_bh05', 2 * qtdItem);
           registrarBaixa('pao_bambini', 2 * qtdItem);
-          registrarBaixa('pure_batata', 0.160 * qtdItem); // 80g cada
+          registrarBaixa('pure_batata', 0.160 * qtdItem);
           registrarBaixa('molho_tomate', 0.060 * qtdItem);
-          registrarBaixa('pote_berco', 2 * qtdItem);
         }
+      } else if (nome.includes('casal') || nome.includes('dupla')) {
+        // Combo Casal: 2 Mordidaços em Dobro + 2 Refris + 2 Molhos da Casa
+        totalDogsNoPedido += (2 * qtdItem);
+        registrarBaixa('salsicha_sadia', 4 * qtdItem);
+        registrarBaixa('queijo_mussarela', 0.080 * qtdItem);
+        registrarBaixa('queijo_parmesao', 0.020 * qtdItem);
+        registrarBaixa('milho_conserva', 0.040 * qtdItem);
+        registrarBaixa('ervilha_conserva', 0.040 * qtdItem);
+        registrarBaixa('vinagrete_artesanal', 0.060 * qtdItem);
+        registrarBaixa('batata_palha', 0.040 * qtdItem);
+        registrarBaixa('maionese_verde', 0.060 * qtdItem);
+        registrarBaixa('pote_molho_30ml', 2 * qtdItem);
+        registrarBaixa('saco_kraft_g', 1 * qtdItem);
 
-        // Se for o Combo Casal VIP (com Sobremesas): baixa também as 2 sobremesas e colheres
-        if (nome.includes('vip') || nome.includes('sobremesa')) {
-          registrarBaixa('sobremesa_tortinha_limao', 1 * qtdItem);
-          registrarBaixa('sobremesa_escondidinho_nutella', 1 * qtdItem);
-          registrarBaixa('pote_cristal_170ml', 2 * qtdItem);
-          registrarBaixa('colher_sobremesa_lacrada', 2 * qtdItem);
+        if (isNoPrato) {
+          registrarBaixa('marmitinha_500ml_prato', 2 * qtdItem);
+          registrarBaixa('garfo_reforcado', 2 * qtdItem);
+          registrarBaixa('pure_batata', 0.240 * qtdItem);
+          registrarBaixa('molho_tomate', 0.080 * qtdItem);
+        } else {
+          registrarBaixa('dogueira_bh05', 2 * qtdItem);
+          registrarBaixa('pao_bambini', 2 * qtdItem);
+          registrarBaixa('pure_batata', 0.160 * qtdItem);
+          registrarBaixa('molho_tomate', 0.060 * qtdItem);
         }
       } else if (nome.includes('família') || nome.includes('familia')) {
-        // Combo Família: 2 Mordidaços Duplos + 1 Mordidaço Clássico + 1 Guaraná 2L + 3 Molhos da Casa
+        // Combo Família: 2 Mordidaços Duplos + 1 Mordidaço Clássico + 1 Refri 2L + 3 Molhos da Casa
         totalDogsNoPedido += (3 * qtdItem);
         registrarBaixa('salsicha_sadia', 5 * qtdItem);
-        registrarBaixa('queijo_mussarela', 0.076 * qtdItem);
-        registrarBaixa('queijo_parmesao', 0.024 * qtdItem);
+        registrarBaixa('queijo_mussarela', 0.080 * qtdItem);
+        registrarBaixa('queijo_parmesao', 0.020 * qtdItem);
         registrarBaixa('milho_conserva', 0.060 * qtdItem);
         registrarBaixa('ervilha_conserva', 0.060 * qtdItem);
+        registrarBaixa('vinagrete_artesanal', 0.090 * qtdItem);
         registrarBaixa('batata_palha', 0.060 * qtdItem);
-        registrarBaixa('maionese_verde', 0.060 * qtdItem);
-        registrarBaixa('pote_maionese_50ml', 3 * qtdItem);
+        registrarBaixa('maionese_verde', 0.090 * qtdItem);
+        registrarBaixa('pote_molho_30ml', 3 * qtdItem);
         registrarBaixa('guarana_2l', 1 * qtdItem);
         registrarBaixa('saco_kraft_g', 1 * qtdItem);
-        registrarBaixa('pao_bambini', 3 * qtdItem);
-        registrarBaixa('pure_batata', 0.240 * qtdItem);
-        registrarBaixa('molho_tomate', 0.090 * qtdItem);
-        registrarBaixa('pote_berco', 3 * qtdItem);
+        
+        if (isNoPrato) {
+          registrarBaixa('marmitinha_500ml_prato', 3 * qtdItem);
+          registrarBaixa('garfo_reforcado', 3 * qtdItem);
+          registrarBaixa('pure_batata', 0.360 * qtdItem);
+          registrarBaixa('molho_tomate', 0.120 * qtdItem);
+        } else {
+          registrarBaixa('dogueira_bh05', 3 * qtdItem);
+          registrarBaixa('pao_bambini', 3 * qtdItem);
+          registrarBaixa('pure_batata', 0.240 * qtdItem);
+          registrarBaixa('molho_tomate', 0.090 * qtdItem);
+        }
+      } else if (nome.includes('completo') && nome.includes('sobremesa')) {
+        // Combo Completo c/ Sobremesa: 1 Mordidaço em Dobro + 1 Refri + 1 Tortinha de Limão + 2 Molhos
+        totalDogsNoPedido += (1 * qtdItem);
+        registrarBaixa('salsicha_sadia', 2 * qtdItem);
+        registrarBaixa('queijo_mussarela', 0.040 * qtdItem);
+        registrarBaixa('queijo_parmesao', 0.010 * qtdItem);
+        registrarBaixa('milho_conserva', 0.020 * qtdItem);
+        registrarBaixa('ervilha_conserva', 0.020 * qtdItem);
+        registrarBaixa('vinagrete_artesanal', 0.030 * qtdItem);
+        registrarBaixa('batata_palha', 0.020 * qtdItem);
+        registrarBaixa('maionese_verde', 0.060 * qtdItem);
+        registrarBaixa('pote_molho_30ml', 2 * qtdItem);
+        registrarBaixa('sobremesa_tortinha_limao', 1 * qtdItem);
+        registrarBaixa('pote_cristal_170ml', 1 * qtdItem);
+        registrarBaixa('colher_sobremesa_lacrada', 1 * qtdItem);
+
+        if (isNoPrato) {
+          registrarBaixa('marmitinha_500ml_prato', 1 * qtdItem);
+          registrarBaixa('garfo_reforcado', 1 * qtdItem);
+          registrarBaixa('pure_batata', 0.120 * qtdItem);
+          registrarBaixa('molho_tomate', 0.040 * qtdItem);
+        } else {
+          registrarBaixa('dogueira_bh05', 1 * qtdItem);
+          registrarBaixa('pao_bambini', 1 * qtdItem);
+          registrarBaixa('pure_batata', 0.080 * qtdItem);
+          registrarBaixa('molho_tomate', 0.030 * qtdItem);
+        }
+      } else if (nome.includes('solo tudão') || nome.includes('solo tudao')) {
+        // Combo Solo Tudão: 1 Tudão + 1 Refri + 2 Molhos
+        totalDogsNoPedido += (1 * qtdItem);
+        registrarBaixa('salsicha_sadia', 1 * qtdItem);
+        registrarBaixa('frango_desfiado', 0.050 * qtdItem);
+        registrarBaixa('catupiry_original', 0.035 * qtdItem);
+        registrarBaixa('calabresa_fatiada', 0.040 * qtdItem);
+        registrarBaixa('bacon_cubos', 0.060 * qtdItem);
+        registrarBaixa('queijo_mussarela', 0.040 * qtdItem);
+        registrarBaixa('queijo_parmesao', 0.015 * qtdItem);
+        registrarBaixa('milho_conserva', 0.020 * qtdItem);
+        registrarBaixa('ervilha_conserva', 0.020 * qtdItem);
+        registrarBaixa('vinagrete_artesanal', 0.030 * qtdItem);
+        registrarBaixa('batata_palha', 0.020 * qtdItem);
+        registrarBaixa('maionese_verde', 0.060 * qtdItem);
+        registrarBaixa('pote_molho_30ml', 2 * qtdItem);
+
+        if (isNoPrato) {
+          registrarBaixa('marmitinha_500ml_prato', 1 * qtdItem);
+          registrarBaixa('garfo_reforcado', 1 * qtdItem);
+          registrarBaixa('pure_batata', 0.120 * qtdItem);
+          registrarBaixa('molho_tomate', 0.040 * qtdItem);
+        } else {
+          registrarBaixa('dogueira_bh05', 1 * qtdItem);
+          registrarBaixa('pao_bambini', 1 * qtdItem);
+          registrarBaixa('pure_batata', 0.080 * qtdItem);
+          registrarBaixa('molho_tomate', 0.030 * qtdItem);
+        }
+      } else if (nome.includes('solo campeão') || nome.includes('solo campeao')) {
+        // Combo Solo Campeão: 1 Dog em Dobro + 1 Refri + 2 Molhos
+        totalDogsNoPedido += (1 * qtdItem);
+        registrarBaixa('salsicha_sadia', 2 * qtdItem);
+        registrarBaixa('queijo_mussarela', 0.040 * qtdItem);
+        registrarBaixa('queijo_parmesao', 0.010 * qtdItem);
+        registrarBaixa('milho_conserva', 0.020 * qtdItem);
+        registrarBaixa('ervilha_conserva', 0.020 * qtdItem);
+        registrarBaixa('vinagrete_artesanal', 0.030 * qtdItem);
+        registrarBaixa('batata_palha', 0.020 * qtdItem);
+        registrarBaixa('maionese_verde', 0.060 * qtdItem);
+        registrarBaixa('pote_molho_30ml', 2 * qtdItem);
+
+        if (isNoPrato) {
+          registrarBaixa('marmitinha_500ml_prato', 1 * qtdItem);
+          registrarBaixa('garfo_reforcado', 1 * qtdItem);
+          registrarBaixa('pure_batata', 0.120 * qtdItem);
+          registrarBaixa('molho_tomate', 0.040 * qtdItem);
+        } else {
+          registrarBaixa('dogueira_bh05', 1 * qtdItem);
+          registrarBaixa('pao_bambini', 1 * qtdItem);
+          registrarBaixa('pure_batata', 0.080 * qtdItem);
+          registrarBaixa('molho_tomate', 0.030 * qtdItem);
+        }
+      } else {
+        // Combo Solo Clássico: 1 Dog Clássico + 1 Refri + 2 Molhos
+        totalDogsNoPedido += (1 * qtdItem);
+        registrarBaixa('salsicha_sadia', 1 * qtdItem);
+        registrarBaixa('milho_conserva', 0.020 * qtdItem);
+        registrarBaixa('ervilha_conserva', 0.020 * qtdItem);
+        registrarBaixa('vinagrete_artesanal', 0.030 * qtdItem);
+        registrarBaixa('batata_palha', 0.020 * qtdItem);
+        registrarBaixa('maionese_verde', 0.060 * qtdItem);
+        registrarBaixa('pote_molho_30ml', 2 * qtdItem);
+
+        if (isNoPrato) {
+          registrarBaixa('marmitinha_500ml_prato', 1 * qtdItem);
+          registrarBaixa('garfo_reforcado', 1 * qtdItem);
+          registrarBaixa('pure_batata', 0.120 * qtdItem);
+          registrarBaixa('molho_tomate', 0.040 * qtdItem);
+        } else {
+          registrarBaixa('dogueira_bh05', 1 * qtdItem);
+          registrarBaixa('pao_bambini', 1 * qtdItem);
+          registrarBaixa('pure_batata', 0.080 * qtdItem);
+          registrarBaixa('molho_tomate', 0.030 * qtdItem);
+        }
       }
       return;
     }
 
     // 2. ANÁLISE DE DOGS INDIVIDUAIS
-    const isDog = nome.includes('mordidaço') || nome.includes('mordidaco') || nome.includes('dog') || nome.includes('cachorro') || nome.includes('clássico') || nome.includes('duplo') || nome.includes('dobro') || nome.includes('cremoso') || nome.includes('tudão') || nome.includes('veg') || nome.includes('queijudo');
+    const isDog = nome.includes('mordidaço') || nome.includes('mordidaco') || nome.includes('dog') || nome.includes('cachorro') || nome.includes('clássico') || nome.includes('duplo') || nome.includes('dobro') || nome.includes('cremoso') || nome.includes('tudão') || nome.includes('veg') || nome.includes('queijudo') || nome.includes('bacon');
     if (isDog) {
       totalDogsNoPedido += qtdItem;
-      registrarBaixa('pote_berco', 1 * qtdItem);
 
       // Base do Formato
       if (isNoPrato) {
+        registrarBaixa('marmitinha_500ml_prato', 1 * qtdItem);
         registrarBaixa('garfo_reforcado', 1 * qtdItem);
         registrarBaixa('pure_batata', 0.120 * qtdItem); // 120g purê no prato
         registrarBaixa('molho_tomate', 0.040 * qtdItem);
       } else {
+        registrarBaixa('dogueira_bh05', 1 * qtdItem);
         registrarBaixa('pao_bambini', 1 * qtdItem);
         registrarBaixa('pure_batata', 0.080 * qtdItem); // 80g purê no pão
         registrarBaixa('molho_tomate', 0.030 * qtdItem);
@@ -144,12 +277,14 @@ function deduzirEstoquePorPedido(pedido) {
         registrarBaixa('queijo_mussarela', 0.040 * qtdItem);
         registrarBaixa('queijo_parmesao', 0.015 * qtdItem);
         registrarBaixa('ervilha_conserva', 0.020 * qtdItem);
+        registrarBaixa('vinagrete_artesanal', 0.030 * qtdItem);
       } else if (nome.includes('duplo') || nome.includes('dobro')) {
         // Mordidaço em Dobro: 2 Salsichas, Muçarela dobro, Ervilha, Parmesão
         registrarBaixa('salsicha_sadia', 2 * qtdItem);
-        registrarBaixa('queijo_mussarela', 0.038 * qtdItem);
+        registrarBaixa('queijo_mussarela', 0.040 * qtdItem);
         registrarBaixa('queijo_parmesao', 0.012 * qtdItem);
         registrarBaixa('ervilha_conserva', 0.020 * qtdItem);
+        registrarBaixa('vinagrete_artesanal', 0.030 * qtdItem);
       } else if (nome.includes('bacon')) {
         // Mordidaço Bacon: 2 Salsichas, Bacon, Muçarela, Ervilha, Parmesão
         registrarBaixa('salsicha_sadia', 2 * qtdItem);
@@ -162,10 +297,12 @@ function deduzirEstoquePorPedido(pedido) {
         registrarBaixa('salsicha_sadia', 1 * qtdItem);
         registrarBaixa('frango_desfiado', 0.050 * qtdItem);
         registrarBaixa('catupiry_original', 0.035 * qtdItem);
+        registrarBaixa('vinagrete_artesanal', 0.030 * qtdItem);
       } else {
         // Mordidaço Clássico: 1 Salsicha, Ervilha, Purê, Batata Palha
         registrarBaixa('salsicha_sadia', 1 * qtdItem);
         registrarBaixa('ervilha_conserva', 0.020 * qtdItem);
+        registrarBaixa('vinagrete_artesanal', 0.030 * qtdItem);
       }
       return;
     }
@@ -180,7 +317,7 @@ function deduzirEstoquePorPedido(pedido) {
     if (nome.includes('purê extra') || nome.includes('pure extra')) registrarBaixa('pure_batata', 0.080 * qtdItem);
     if (nome.includes('milho extra')) registrarBaixa('milho_conserva', 0.030 * qtdItem);
     if (nome.includes('ervilha extra')) registrarBaixa('ervilha_conserva', 0.030 * qtdItem);
-    if (nome.includes('pote') || nome.includes('molho da casa')) registrarBaixa('pote_maionese_50ml', 1 * qtdItem);
+    if (nome.includes('pote') || nome.includes('molho da casa')) registrarBaixa('pote_molho_30ml', 1 * qtdItem);
 
     // 4. ANÁLISE DE BEBIDAS INDIVIDUAIS
     if (nome.includes('coca') && nome.includes('zero') && (nome.includes('2l') || nome.includes('2 litros'))) {
@@ -232,10 +369,17 @@ function deduzirEstoquePorPedido(pedido) {
 
   // Embalagens gerais do pedido
   registrarBaixa('lacre_seguranca', 1);
+  registrarBaixa('guardanapos_sache', 2);
   if (totalDogsNoPedido > 2) {
     registrarBaixa('saco_kraft_g', 1);
   } else if (totalDogsNoPedido > 0) {
     registrarBaixa('saco_kraft_m', 1);
+  }
+
+  // Cortesia Secreta Overdelivery (se o pedido avulso não era combo e não baixou os molhos):
+  if (!baixas['pote_molho_30ml'] && totalDogsNoPedido > 0) {
+    registrarBaixa('pote_molho_30ml', 2);
+    registrarBaixa('maionese_verde', 0.060);
   }
 
   // Aplica as baixas nos insumos do estoque
