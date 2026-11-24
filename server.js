@@ -492,7 +492,7 @@ function salvarStatusLoja(novoStatus, mensagem = '') {
   if (novoStatus === 'pausada') {
     msgPadrao = 'Cozinha em pausa temporária devido à alta demanda. Voltamos em instantes!';
   } else if (novoStatus === 'fechada') {
-    msgPadrao = 'Loja fechada no momento. Atendimento de Quinta a Domingo a partir das 18h30.';
+    msgPadrao = 'Loja fechada no momento. Atendimento no site de Segunda a Segunda das 17h30 às 21h30.';
   }
 
   statusLojaCache = {
@@ -553,6 +553,7 @@ const CARDAPIO = {
     slogan: "Uma mordida e você entende!",
     sloganSecundario: "A mordida mais caprichada de Campinas !",
     endereco: "Jardim Tamoio, Campinas - SP",
+    horarioFuncionamento: "Segunda a Segunda das 17h30 às 21h30",
     tempoEntrega: "35 a 50 min",
     taxaEntregaPadrao: 5.00,
     whatsapp: "5519997881550"
@@ -915,7 +916,7 @@ app.get(['/pedido/:id', '/acompanhar/:id'], (req, res) => {
 // Receber Novo Pedido
 app.post(['/api/pedidos', '/pedidos'], async (req, res) => {
   if (statusLojaCache.status === 'fechada') {
-    return res.status(400).json({ error: 'Loja fechada no momento. Nosso horário de atendimento é de Quinta a Domingo a partir das 18h30.' });
+    return res.status(400).json({ error: 'Loja fechada no momento. Nosso horário de atendimento no site é de Segunda a Segunda das 17h30 às 21h30.' });
   }
   if (statusLojaCache.status === 'pausada') {
     return res.status(400).json({ error: 'Cozinha em pausa temporária devido à alta demanda. Aguarde alguns instantes e tente novamente!' });

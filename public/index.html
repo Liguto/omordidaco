@@ -1349,8 +1349,42 @@
         </div>
       </div>
 
-      <!-- DADOS DO CLIENTE E ENTREGA -->
-      <h4 style="font-size: 15px; font-weight: 800; margin-bottom: 10px; color: var(--dark);">📍 Dados para Entrega</h4>
+      <!-- SELETOR DE MODALIDADE: ENTREGA VS RETIRADA NO BALCÃO -->
+      <div style="margin-bottom: 16px;">
+        <label class="form-label" style="font-size: 13.5px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+          <span>📦</span> <span>Como deseja receber seu pedido?</span>
+        </label>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <button type="button" id="btnTipoEntrega" onclick="definirTipoPedido('entrega')" style="padding: 12px 8px; border-radius: 10px; border: 2px solid #ea1d2c; background: #fff1f2; color: #9f1239; font-weight: 900; font-size: 13px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: all 0.2s;">
+            <span style="font-size: 22px;">🛵</span>
+            <span>Entrega (Delivery)</span>
+            <small style="font-size: 10.5px; font-weight: 700; opacity: 0.85;">Raio até 2,5km (R$ 5,00)</small>
+          </button>
+          <button type="button" id="btnTipoRetirada" onclick="definirTipoPedido('retirada')" style="padding: 12px 8px; border-radius: 10px; border: 2px solid #cbd5e1; background: #ffffff; color: #475569; font-weight: 900; font-size: 13px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: all 0.2s;">
+            <span style="font-size: 22px;">🛍️</span>
+            <span>Retirada no Balcão</span>
+            <small style="font-size: 10.5px; font-weight: 800; color: #15803d;">Grátis (Sem Taxa)</small>
+          </button>
+        </div>
+      </div>
+
+      <!-- CARD EXPLICATIVO DE RETIRADA (QUANDO ATIVO) -->
+      <div id="secaoInfoRetirada" style="display: none; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; padding: 14px; margin-bottom: 16px;">
+        <div style="font-size: 14px; font-weight: 900; color: #166534; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+          <span>📍</span> <span>Retirada no Balcão — O Mordidaço</span>
+        </div>
+        <p style="font-size: 12.5px; color: #14532d; line-height: 1.45; margin: 0 0 6px 0;">
+          <strong>Localização:</strong> Jardim Tamoio, Campinas - SP.<br>
+          <strong>Tempo de preparo estimado:</strong> ~20 a 30 minutos após confirmação.<br>
+          <strong>Taxa:</strong> <span style="color: #15803d; font-weight: 900;">R$ 0,00 (Grátis)</span>
+        </p>
+        <small style="display: block; font-size: 11.5px; color: #15803d; font-weight: 800;">
+          📲 Assim que o pedido estiver pronto, avisaremos no seu WhatsApp com a rota e instruções exatas de retirada!
+        </small>
+      </div>
+
+      <!-- DADOS DO CLIENTE -->
+      <h4 style="font-size: 15px; font-weight: 800; margin-bottom: 10px; color: var(--dark);" id="tituloDadosCliente">📍 Seus Dados</h4>
       
       <!-- AVISO DE DADOS PREENCHIDOS DO ÚLTIMO PEDIDO -->
       <div id="avisoDadosSalvos" style="display: none; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px 12px; border-radius: 8px; margin-bottom: 12px; font-size: 12.5px; color: #166534; justify-content: space-between; align-items: center;">
@@ -1369,35 +1403,61 @@
         <small style="display:block; font-size:11.5px; color:#64748b; margin-top:4px;">📲 Enviamos o comprovante e atualizações da entrega no seu WhatsApp.</small>
       </div>
 
-      <!-- AUTOCOMPLETAR DE ENDEREÇO POR CEP (VIACEP) -->
-      <div class="form-group" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; margin-bottom: 14px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-          <label class="form-label" style="margin-bottom: 0; color: var(--dark);">🔍 CEP de Entrega (Campinas):*</label>
-          <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank" style="font-size: 11px; color: var(--primary-dark); font-weight: 700; text-decoration: none;">Não sei o CEP</a>
+      <!-- SEÇÃO EXCLUSIVA DE ENDEREÇO DE ENTREGA (OCULTA NA RETIRADA) -->
+      <div id="secaoEnderecoEntrega">
+        <!-- AUTOCOMPLETAR DE ENDEREÇO POR CEP (VIACEP) -->
+        <div class="form-group" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label class="form-label" style="margin-bottom: 0; color: var(--dark);">🔍 CEP de Entrega (Campinas):*</label>
+            <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank" style="font-size: 11px; color: var(--primary-dark); font-weight: 700; text-decoration: none;">Não sei o CEP</a>
+          </div>
+          <input type="tel" class="form-control" id="clienteCep" placeholder="Digite o CEP (Ex: 13094-000)" maxlength="9" oninput="formatarEConsultarCep(this)" autocomplete="postal-code" style="font-weight: 700; font-size: 15px; letter-spacing: 0.5px; background: #ffffff;">
+          <div id="cepStatus" style="font-size: 12px; margin-top: 5px; font-weight: 600; display: none;"></div>
         </div>
-        <input type="tel" class="form-control" id="clienteCep" placeholder="Digite o CEP (Ex: 13094-000)" maxlength="9" oninput="formatarEConsultarCep(this)" autocomplete="postal-code" style="font-weight: 700; font-size: 15px; letter-spacing: 0.5px; background: #ffffff;">
-        <div id="cepStatus" style="font-size: 12px; margin-top: 5px; font-weight: 600; display: none;"></div>
-      </div>
 
-      <div style="display: grid; grid-template-columns: 1fr 100px; gap: 10px; margin-bottom: 14px;">
-        <div class="form-group" style="margin-bottom: 0;">
-          <label class="form-label">Rua / Avenida:*</label>
-          <input type="text" class="form-control" id="clienteRua" placeholder="Preenchido pelo CEP" required>
+        <div style="display: grid; grid-template-columns: 1fr 100px; gap: 10px; margin-bottom: 14px;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Rua / Avenida:*</label>
+            <input type="text" class="form-control" id="clienteRua" placeholder="Preenchido pelo CEP" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Número:*</label>
+            <input type="text" class="form-control" id="clienteNumero" placeholder="Ex: 123" required>
+          </div>
         </div>
-        <div class="form-group" style="margin-bottom: 0;">
-          <label class="form-label">Número:*</label>
-          <input type="text" class="form-control" id="clienteNumero" placeholder="Ex: 123" required>
+
+        <div class="form-group">
+          <label class="form-label">Bairro (Campinas):*</label>
+          <input type="text" class="form-control" id="clienteBairro" placeholder="Preenchido pelo CEP (Ex: Jardim Tamoio, Swift...)" required>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label class="form-label">Bairro (Campinas):*</label>
-        <input type="text" class="form-control" id="clienteBairro" placeholder="Preenchido pelo CEP (Ex: Jardim Tamoio, Swift...)" required>
-      </div>
+        <div class="form-group">
+          <label class="form-label">Ponto de Referência / Complemento:*</label>
+          <input type="text" class="form-control" id="clienteRef" placeholder="Ex: Apto 22 / Portão marrom, em frente à padaria">
+        </div>
 
-      <div class="form-group">
-        <label class="form-label">Ponto de Referência / Complemento:*</label>
-        <input type="text" class="form-control" id="clienteRef" placeholder="Ex: Apto 22 / Portão marrom, em frente à padaria">
+        <!-- ALERTA DE BAIRRO FORA DO RAIO DE 2.5KM -->
+        <div id="alertaRaioDistante" style="display: none; background: #fffbeb; border: 2px solid #f59e0b; border-radius: 12px; padding: 14px; margin-top: 14px; margin-bottom: 14px; color: #92400e;">
+          <div style="font-weight: 800; font-size: 14px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+            <span style="font-size: 18px;">📍</span> <span>Endereço Fora do Raio de Entrega Direta (2,5km)</span>
+          </div>
+          <p style="font-size: 12.5px; line-height: 1.45; margin-bottom: 12px; color: #78350f;">
+            No momento, nossas entregas diretas de carro são exclusivas para o raio de até 2,5km do <strong>Jardim Tamoio</strong> (Tamoio, Swift, São Gabriel, Santa Eudóxia, Jambeiro, Vila Lemos, etc.) para garantir que seu cachorro-quente chegue pelando de quente!
+            <br><br>
+            Para o seu bairro (<strong id="nomeBairroDistante" style="text-decoration: underline;"></strong>), faça seu pedido pelo <strong>iFood</strong> ou <strong>99Food</strong>, ou opte por retirar no balcão caso não queira pedir pelos apps:
+          </p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <a href="https://www.ifood.com.br" target="_blank" style="flex: 1; min-width: 140px; background: #ea1d2c; color: #ffffff; text-align: center; padding: 11px 14px; border-radius: 8px; font-weight: 800; font-size: 13px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 3px 8px rgba(234, 29, 44, 0.3);">
+              🔴 Pedir pelo iFood
+            </a>
+            <a href="https://food.99app.com" target="_blank" style="flex: 1; min-width: 140px; background: #f59e0b; color: #0f172a; text-align: center; padding: 11px 14px; border-radius: 8px; font-weight: 900; font-size: 13px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 3px 8px rgba(245, 158, 11, 0.3);">
+              🟡 Pedir no 99Food
+            </a>
+            <button type="button" onclick="definirTipoPedido('retirada')" style="background: #ffffff; color: #0f172a; border: 1.5px solid #cbd5e1; padding: 11px 14px; border-radius: 8px; font-weight: 800; font-size: 12.5px; cursor: pointer;">
+              🚶 Retirar no Balcão
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- FORMA DE PAGAMENTO (NA ENTREGA) -->
@@ -1661,7 +1721,7 @@
           banner.style.background = '#fee2e2';
           banner.style.color = '#991b1b';
           banner.style.border = '1.5px solid #fecaca';
-          banner.innerHTML = `🌙 <strong>Loja Fechada no Momento</strong><br><span style="font-size:12px; font-weight:600;">${mensagem || 'Nosso atendimento é de Quinta a Domingo a partir das 18h30. Fique à vontade para explorar o cardápio!'}</span>`;
+          banner.innerHTML = `🌙 <strong>Loja Fechada no Momento</strong><br><span style="font-size:12px; font-weight:600;">${mensagem || 'Nosso atendimento no site é de Segunda a Segunda das 17h30 às 21h30. Fique à vontade para explorar o cardápio!'}</span>`;
         }
         if (btnCheckout) {
           btnCheckout.disabled = true;
@@ -2508,32 +2568,66 @@
 
     let isRetiradaBalcao = false;
 
-    function selecionarRetiradaBalcao() {
-      isRetiradaBalcao = true;
-      document.getElementById('clienteRua').value = 'Retirada no Balcão';
-      document.getElementById('clienteNumero').value = 'S/N';
-      document.getElementById('clienteBairro').value = 'Jardim Tamoio';
-      document.getElementById('clienteCep').value = '13101-259';
+    function definirTipoPedido(tipo) {
+      const btnEntrega = document.getElementById('btnTipoEntrega');
+      const btnRetirada = document.getElementById('btnTipoRetirada');
+      const secaoEndereco = document.getElementById('secaoEnderecoEntrega');
+      const secaoRetirada = document.getElementById('secaoInfoRetirada');
+      const resumoTaxa = document.getElementById('resumoTaxa');
+      const resumoTotal = document.getElementById('resumoTotal');
+      const tituloDados = document.getElementById('tituloDadosCliente');
 
-      const alerta = document.getElementById('alertaRaioDistante');
-      if (alerta) alerta.style.display = 'none';
+      if (tipo === 'retirada') {
+        isRetiradaBalcao = true;
+        if (btnRetirada) {
+          btnRetirada.style.borderColor = '#15803d';
+          btnRetirada.style.background = '#f0fdf4';
+          btnRetirada.style.color = '#166534';
+        }
+        if (btnEntrega) {
+          btnEntrega.style.borderColor = '#cbd5e1';
+          btnEntrega.style.background = '#ffffff';
+          btnEntrega.style.color = '#475569';
+        }
+        if (secaoEndereco) secaoEndereco.style.display = 'none';
+        if (secaoRetirada) secaoRetirada.style.display = 'block';
+        if (tituloDados) tituloDados.innerText = '👤 Seus Dados (p/ Retirada no Balcão)';
 
-      const btnConfirmar = document.getElementById('btnConfirmarPedidoCheckout');
-      if (btnConfirmar) btnConfirmar.style.display = 'flex';
+        const alerta = document.getElementById('alertaRaioDistante');
+        if (alerta) alerta.style.display = 'none';
 
-      const statusEl = document.getElementById('cepStatus');
-      if (statusEl) {
-        statusEl.style.display = 'block';
-        statusEl.innerHTML = '✓ Opção selecionada: Retirada no Balcão (Jardim Tamoio)';
-        statusEl.style.color = '#16a34a';
+        const btnConfirmar = document.getElementById('btnConfirmarPedidoCheckout');
+        if (btnConfirmar) btnConfirmar.style.display = 'flex';
+
+        if (resumoTaxa) resumoTaxa.innerText = 'R$ 0,00 (Grátis)';
+        const subtotal = carrinho.reduce((acc, item) => acc + item.preco, 0);
+        if (resumoTotal) resumoTotal.innerText = 'R$ ' + subtotal.toFixed(2).replace('.', ',');
+        mostrarToast('🛍️ Retirada no Balcão selecionada (Sem taxa de entrega)!');
+      } else {
+        isRetiradaBalcao = false;
+        if (btnEntrega) {
+          btnEntrega.style.borderColor = '#ea1d2c';
+          btnEntrega.style.background = '#fff1f2';
+          btnEntrega.style.color = '#9f1239';
+        }
+        if (btnRetirada) {
+          btnRetirada.style.borderColor = '#cbd5e1';
+          btnRetirada.style.background = '#ffffff';
+          btnRetirada.style.color = '#475569';
+        }
+        if (secaoEndereco) secaoEndereco.style.display = 'block';
+        if (secaoRetirada) secaoRetirada.style.display = 'none';
+        if (tituloDados) tituloDados.innerText = '📍 Dados para Entrega em Domicílio';
+
+        const taxa = cardapioGlobal ? cardapioGlobal.restaurante.taxaEntregaPadrao : 5.00;
+        if (resumoTaxa) resumoTaxa.innerText = 'R$ ' + taxa.toFixed(2).replace('.', ',');
+        const subtotal = carrinho.reduce((acc, item) => acc + item.preco, 0);
+        if (resumoTotal) resumoTotal.innerText = 'R$ ' + (subtotal + taxa).toFixed(2).replace('.', ',');
       }
+    }
 
-      // Zera taxa de entrega
-      document.getElementById('resumoTaxa').innerText = 'R$ 0,00 (Grátis)';
-      const subtotal = carrinho.reduce((acc, item) => acc + item.preco, 0);
-      document.getElementById('resumoTotal').innerText = 'R$ ' + subtotal.toFixed(2).replace('.', ',');
-
-      mostrarToast('✓ Retirada no Balcão selecionada!');
+    function selecionarRetiradaBalcao() {
+      definirTipoPedido('retirada');
     }
 
     // Autocompletar de Endereço por CEP (ViaCEP)
@@ -2665,6 +2759,7 @@
       } catch (e) {}
 
       dispararPixel('InitiateCheckout', { value: total, currency: 'BRL', num_items: carrinho.length });
+      definirTipoPedido(isRetiradaBalcao ? 'retirada' : 'entrega');
       abrirModal('checkoutModal');
     }
 
@@ -3061,7 +3156,7 @@
 
     async function finalizarPedido() {
       if (statusLojaAtual === 'fechada') {
-        alert('A loja está fechada no momento! Nosso horário de atendimento é de Quinta a Domingo a partir das 18h30.');
+        alert('A loja está fechada no momento! Nosso horário de atendimento no site é de Segunda a Segunda das 17h30 às 21h30.');
         return;
       }
       if (statusLojaAtual === 'pausada') {
@@ -3077,17 +3172,23 @@
       const bairro = document.getElementById('clienteBairro').value.trim();
       const ref = document.getElementById('clienteRef').value.trim();
 
-      if (!nome || !telefone || !rua || !numero || !bairro) {
-        alert('Por favor, preencha todos os campos obrigatórios de entrega (Nome, Telefone, Rua, Número e Bairro).');
-        return;
+      if (!isRetiradaBalcao) {
+        if (!nome || !telefone || !rua || !numero || !bairro) {
+          alert('Por favor, preencha todos os campos obrigatórios de entrega (Nome, Telefone, Rua, Número e Bairro).');
+          return;
+        }
+        if (!ehBairroPermitido(bairro)) {
+          alert('No momento, nossas entregas diretas são exclusivas para o raio de até 2,5km do Jardim Tamoio. Para distâncias maiores, faça seu pedido através do iFood ou 99Food, ou selecione a opção "Retirar no Balcão"!');
+          return;
+        }
+      } else {
+        if (!nome || !telefone) {
+          alert('Por favor, informe seu Nome e WhatsApp com DDD para a retirada no balcão.');
+          return;
+        }
       }
 
-      if (!isRetiradaBalcao && !ehBairroPermitido(bairro)) {
-        alert('No momento, nossas entregas diretas são exclusivas para o raio de até 2,5km do Jardim Tamoio. Para distâncias maiores, faça seu pedido através do iFood ou 99Food, ou selecione a opção "Retirar no Balcão"!');
-        return;
-      }
-
-      const enderecoCompleto = isRetiradaBalcao ? 'Retirada no Balcão' : `${rua}, nº ${numero}`;
+      const enderecoCompleto = isRetiradaBalcao ? 'Retirada no Balcão (Jardim Tamoio)' : `${rua}, nº ${numero}`;
       const subtotal = carrinho.reduce((acc, item) => acc + item.preco, 0);
       const taxa = isRetiradaBalcao ? 0.00 : (cardapioGlobal ? cardapioGlobal.restaurante.taxaEntregaPadrao : 5.00);
       const total = subtotal + taxa;
@@ -3100,7 +3201,14 @@
 
       const pedidoPayload = {
         cliente: { nome, telefone },
-        entrega: { endereco: enderecoCompleto, bairro, referencia: ref, cep },
+        entrega: {
+          tipo: isRetiradaBalcao ? 'Retirada' : 'Entrega',
+          endereco: enderecoCompleto,
+          bairro: isRetiradaBalcao ? 'Jardim Tamoio' : bairro,
+          referencia: isRetiradaBalcao ? 'Retirada no Balcão' : ref,
+          cep: isRetiradaBalcao ? '13101-259' : cep,
+          taxa
+        },
         itens: carrinho,
         pagamento: pagtoDetalhe,
         subtotal,

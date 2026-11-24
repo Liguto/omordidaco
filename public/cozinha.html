@@ -2147,9 +2147,10 @@
           </div>
         `;
       } else if (p.status === 'Em Preparo') {
+        const isRetirada = p.entrega && (p.entrega.tipo === 'Retirada' || (p.entrega.endereco && p.entrega.endereco.includes('Balcão')));
         acoesFluxoHtml = `
-          <button type="button" onclick="alterarStatus('${p.id}', 'Saiu p/ Entrega')" style="width: 100%; background: #7c3aed; color: #ffffff; padding: 14px; font-weight: 900; border-radius: 10px; border: none; cursor: pointer; font-size: 15px; margin-bottom: 8px; box-shadow: 0 4px 14px rgba(124,58,237,0.3); display: flex; align-items: center; justify-content: center; gap: 8px;">
-            <span>🛵 Despachar (Com Motoboy)</span> ➔
+          <button type="button" onclick="alterarStatus('${p.id}', '${isRetirada ? 'Entregue' : 'Saiu p/ Entrega'}')" style="width: 100%; background: ${isRetirada ? '#16a34a' : '#7c3aed'}; color: #ffffff; padding: 14px; font-weight: 900; border-radius: 10px; border: none; cursor: pointer; font-size: 15px; margin-bottom: 8px; box-shadow: 0 4px 14px ${isRetirada ? 'rgba(22,163,74,0.3)' : 'rgba(124,58,237,0.3)'}; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <span>${isRetirada ? '🛍️ Entregar ao Cliente no Balcão' : '🛵 Despachar (Com Motoboy)'}</span> ➔
           </button>
           <div style="display: flex; gap: 8px;">
             <button type="button" onclick="imprimirComanda('${p.id}')" style="flex: 1; background: #f1f5f9; color: #0f172a; border: 1.5px solid #cbd5e1; padding: 10px; font-weight: 800; border-radius: 8px; cursor: pointer; font-size: 13px;">
@@ -2258,10 +2259,13 @@
               <div style="font-size: 22px; font-weight: 950; color: ${isIFood ? '#dc2626' : (is99Food ? '#d97706' : '#15803d')}; margin-top: 4px;">R$ ${Number(p.total || 0).toFixed(2).replace('.', ',')}</div>
             </div>
 
-            <div class="client-info" style="border-left: 5px solid ${isIFood ? '#ea1d2c' : (is99Food ? '#f59e0b' : '#0f172a')}; padding: 10px 12px; margin-bottom: 12px; background: ${isIFood ? '#fff8f8' : (is99Food ? '#fffdf7' : '#f8fafc')}; border-radius: 0 8px 8px 0;">
-              <div style="font-size: 15.5px; font-weight: 900; color: #0f172a;">👤 ${(p.cliente && p.cliente.nome) ? (p.cliente.nome.includes('PEDIDO DE TESTE') ? 'Luiz Augusto (Cliente de Testes iFood)' : p.cliente.nome) : 'Cliente'}</div>
-              <div style="font-size: 14px; font-weight: 700; color: #1e293b; margin-top: 3px;">📍 ${p.entrega ? p.entrega.endereco : 'Balcão'} - <strong>${p.entrega ? p.entrega.bairro : ''}</strong></div>
-              ${p.entrega && p.entrega.referencia ? `<div style="font-size: 12px; color: #64748b; margin-top: 2px;"><em>Ref: ${p.entrega.referencia}</em></div>` : ''}
+            <div class="client-info" style="border-left: 5px solid ${isRetirada ? '#86198f' : (isIFood ? '#ea1d2c' : (is99Food ? '#f59e0b' : '#0f172a'))}; padding: 10px 12px; margin-bottom: 12px; background: ${isRetirada ? '#fdf4ff' : (isIFood ? '#fff8f8' : (is99Food ? '#fffdf7' : '#f8fafc'))}; border-radius: 0 8px 8px 0;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
+                <div style="font-size: 15.5px; font-weight: 900; color: #0f172a;">👤 ${(p.cliente && p.cliente.nome) ? (p.cliente.nome.includes('PEDIDO DE TESTE') ? 'Luiz Augusto (Cliente de Testes iFood)' : p.cliente.nome) : 'Cliente'}</div>
+                ${isRetirada ? '<span style="background: #f3e8ff; color: #7e22ce; border: 1.5px solid #d8b4fe; font-size: 11px; font-weight: 900; padding: 2px 8px; border-radius: 6px;">🛍️ RETIRADA</span>' : '<span style="background: #e0f2fe; color: #0369a1; border: 1.5px solid #bae6fd; font-size: 11px; font-weight: 900; padding: 2px 8px; border-radius: 6px;">🛵 ENTREGA</span>'}
+              </div>
+              <div style="font-size: 14px; font-weight: 700; color: #1e293b; margin-top: 3px;">📍 ${isRetirada ? 'Retirada no Balcão (Jardim Tamoio)' : `${p.entrega ? p.entrega.endereco : 'Balcão'} - <strong>${p.entrega ? p.entrega.bairro : ''}</strong>`}</div>
+              ${p.entrega && p.entrega.referencia && !isRetirada ? `<div style="font-size: 12px; color: #64748b; margin-top: 2px;"><em>Ref: ${p.entrega.referencia}</em></div>` : ''}
               <div style="font-size: 13.5px; color: #2563eb; font-weight: 800; margin-top: 3px;">📞 ${p.cliente ? p.cliente.telefone : ''}</div>
             </div>
 
@@ -2904,22 +2908,43 @@
         <div class="ticket-divider"></div>
         <div class="ticket-center ticket-large ticket-bold">PEDIDO #${p.numero}</div>
         <div class="ticket-center" style="font-size: 8.5pt;">${p.dataHora}</div>
-        ${p.origem === 'iFood' ? `
-          <div class="ticket-center ticket-bold" style="background: #000000; color: #ffffff; padding: 3px 0; margin: 4px 0; font-size: 10.5pt; letter-spacing: 0.5px;">
-            *** CANAL: IFOOD MARKETPLACE ***
-          </div>
-        ` : (p.origem === '99Food' ? `
-          <div class="ticket-center ticket-bold" style="background: #000000; color: #ffffff; padding: 3px 0; margin: 4px 0; font-size: 10.5pt; letter-spacing: 0.5px;">
-            *** CANAL: 99FOOD MARKETPLACE ***
-          </div>
-        ` : '')}
+        ${(() => {
+          const isRetirada = p.entrega && (p.entrega.tipo === 'Retirada' || (p.entrega.endereco && p.entrega.endereco.includes('Balcão')));
+          if (isRetirada) {
+            return `
+              <div class="ticket-center ticket-bold" style="background: #000000; color: #ffffff; padding: 4px 0; margin: 4px 0; font-size: 11pt; letter-spacing: 0.5px;">
+                *** 🛍️ RETIRADA NO BALCÃO ***
+              </div>
+            `;
+          }
+          if (p.origem === 'iFood') {
+            return `
+              <div class="ticket-center ticket-bold" style="background: #000000; color: #ffffff; padding: 3px 0; margin: 4px 0; font-size: 10.5pt; letter-spacing: 0.5px;">
+                *** CANAL: IFOOD MARKETPLACE ***
+              </div>
+            `;
+          }
+          if (p.origem === '99Food') {
+            return `
+              <div class="ticket-center ticket-bold" style="background: #000000; color: #ffffff; padding: 3px 0; margin: 4px 0; font-size: 10.5pt; letter-spacing: 0.5px;">
+                *** CANAL: 99FOOD MARKETPLACE ***
+              </div>
+            `;
+          }
+          return '';
+        })()}
         <div class="ticket-divider"></div>
         
-        <div><span class="ticket-bold">CLIENTE:</span> ${p.cliente.nome}</div>
-        <div><span class="ticket-bold">TEL/ZAP:</span> ${p.cliente.telefone}</div>
-        <div><span class="ticket-bold">ENDEREÇO:</span> ${p.entrega.endereco}</div>
-        <div><span class="ticket-bold">BAIRRO:</span> ${p.entrega.bairro}</div>
-        ${p.entrega.referencia ? `<div><span class="ticket-bold">REF:</span> ${p.entrega.referencia}</div>` : ''}
+        <div><span class="ticket-bold">CLIENTE:</span> ${p.cliente ? p.cliente.nome : 'Cliente'}</div>
+        <div><span class="ticket-bold">TEL/ZAP:</span> ${p.cliente ? p.cliente.telefone : ''}</div>
+        ${(p.entrega && (p.entrega.tipo === 'Retirada' || (p.entrega.endereco && p.entrega.endereco.includes('Balcão')))) ? `
+          <div><span class="ticket-bold">MODALIDADE:</span> 🛍️ RETIRADA NO BALCÃO</div>
+          <div><span class="ticket-bold">LOCAL:</span> O Mordidaço (Jardim Tamoio)</div>
+        ` : `
+          <div><span class="ticket-bold">ENDEREÇO:</span> ${p.entrega ? p.entrega.endereco : 'Balcão'}</div>
+          <div><span class="ticket-bold">BAIRRO:</span> ${p.entrega ? p.entrega.bairro : ''}</div>
+          ${p.entrega && p.entrega.referencia ? `<div><span class="ticket-bold">REF:</span> ${p.entrega.referencia}</div>` : ''}
+        `}
         
         <div class="ticket-double-divider"></div>
         <div class="ticket-bold">ITENS DO PEDIDO:</div>
@@ -2983,10 +3008,10 @@
 
       html += `
         <div class="ticket-divider"></div>
-        <div>Subtotal: R$ ${p.subtotal.toFixed(2).replace('.', ',')}</div>
-        <div>Taxa Entrega: R$ ${p.taxaEntrega.toFixed(2).replace('.', ',')}</div>
+        <div>Subtotal: R$ ${(Number(p.subtotal) || 0).toFixed(2).replace('.', ',')}</div>
+        <div>Taxa Entrega: ${(p.entrega && (p.entrega.tipo === 'Retirada' || (p.entrega.endereco && p.entrega.endereco.includes('Balcão')))) ? 'R$ 0,00 (Grátis - Retirada)' : 'R$ ' + (Number(p.taxaEntrega) || 0).toFixed(2).replace('.', ',')}</div>
         <div class="ticket-large ticket-bold ticket-right" style="margin-top: 4px;">
-          TOTAL: R$ ${p.total.toFixed(2).replace('.', ',')}
+          TOTAL: R$ ${(Number(p.total) || 0).toFixed(2).replace('.', ',')}
         </div>
         <div class="ticket-double-divider"></div>
         
