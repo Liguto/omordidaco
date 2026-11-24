@@ -2000,6 +2000,7 @@
     }
 
     function gerarHtmlCardPedido(p, modo = 'kanban') {
+      const isRetirada = p.entrega && (p.entrega.tipo === 'Retirada' || (p.entrega.endereco && p.entrega.endereco.includes('Balcão')));
       const isIFood = p.origem === 'iFood';
       const is99Food = p.origem === '99Food';
       const molduraClass = isIFood ? 'moldura-ifood' : (is99Food ? 'moldura-99food' : 'moldura-site');
@@ -2147,7 +2148,6 @@
           </div>
         `;
       } else if (p.status === 'Em Preparo') {
-        const isRetirada = p.entrega && (p.entrega.tipo === 'Retirada' || (p.entrega.endereco && p.entrega.endereco.includes('Balcão')));
         acoesFluxoHtml = `
           <button type="button" onclick="alterarStatus('${p.id}', '${isRetirada ? 'Entregue' : 'Saiu p/ Entrega'}')" style="width: 100%; background: ${isRetirada ? '#16a34a' : '#7c3aed'}; color: #ffffff; padding: 14px; font-weight: 900; border-radius: 10px; border: none; cursor: pointer; font-size: 15px; margin-bottom: 8px; box-shadow: 0 4px 14px ${isRetirada ? 'rgba(22,163,74,0.3)' : 'rgba(124,58,237,0.3)'}; display: flex; align-items: center; justify-content: center; gap: 8px;">
             <span>${isRetirada ? '🛍️ Entregar ao Cliente no Balcão' : '🛵 Despachar (Com Motoboy)'}</span> ➔
