@@ -7,7 +7,8 @@
       "unidade": "un",
       "quantidade": 90,
       "minimo": 20,
-      "custoUnitario": 1.58
+      "custoUnitario": 1.58,
+      "rendimento": "Rende 90 lanches no pão (1 un por lanche)"
     },
     {
       "id": "salsicha_sadia",
@@ -16,7 +17,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 20,
-      "custoUnitario": 0.78
+      "custoUnitario": 0.78,
+      "rendimento": "Rende ~14 lanches por kg (mix de 1 e 2 salsichas)"
     },
     {
       "id": "pure_batata",
@@ -24,8 +26,9 @@
       "categoria": "Insumos",
       "unidade": "kg",
       "quantidade": 0,
-      "minimo": 2.0,
-      "custoUnitario": 8.00
+      "minimo": 2,
+      "custoUnitario": 8,
+      "rendimento": "Rende ~12 lanches por kg (porção 80g pão / 120g prato)"
     },
     {
       "id": "molho_tomate",
@@ -33,17 +36,19 @@
       "categoria": "Insumos",
       "unidade": "kg",
       "quantidade": 0,
-      "minimo": 1.0,
-      "custoUnitario": 10.00
+      "minimo": 1,
+      "custoUnitario": 10,
+      "rendimento": "Rende ~33 lanches por kg (porção 30g molho refogado)"
     },
     {
       "id": "queijo_mussarela",
       "nome": "Queijo Muçarela Ralada Fresca (Loja do Lancheiro)",
       "categoria": "Insumos",
       "unidade": "kg",
-      "quantidade": 1.0,
+      "quantidade": 1,
       "minimo": 0.5,
-      "custoUnitario": 34.90
+      "custoUnitario": 34.9,
+      "rendimento": "Rende 25 lanches no dobro por kg (porção 40g)"
     },
     {
       "id": "queijo_parmesao",
@@ -52,16 +57,18 @@
       "unidade": "kg",
       "quantidade": 0,
       "minimo": 0.3,
-      "custoUnitario": 55.00
+      "custoUnitario": 55,
+      "rendimento": "Rende ~100 lanches por kg (chuva fresca 10g na hora)"
     },
     {
       "id": "bacon_cubos",
       "nome": "Bacon Mister Beef em Cubos (Loja do Lancheiro)",
       "categoria": "Insumos",
       "unidade": "kg",
-      "quantidade": 1.0,
+      "quantidade": 1,
       "minimo": 0.4,
-      "custoUnitario": 35.90
+      "custoUnitario": 35.9,
+      "rendimento": "Rende 25 lanches por kg (porção 40g em cubos)"
     },
     {
       "id": "calabresa_fatiada",
@@ -70,7 +77,8 @@
       "unidade": "kg",
       "quantidade": 0,
       "minimo": 0.4,
-      "custoUnitario": 28.00
+      "custoUnitario": 28,
+      "rendimento": "Rende 25 Tudões por kg (porção 40g ralada)"
     },
     {
       "id": "frango_desfiado",
@@ -79,7 +87,8 @@
       "unidade": "kg",
       "quantidade": 0,
       "minimo": 0.4,
-      "custoUnitario": 22.00
+      "custoUnitario": 22,
+      "rendimento": "Rende ~20 lanches por kg cozido (porção 50g)"
     },
     {
       "id": "catupiry_original",
@@ -88,7 +97,8 @@
       "unidade": "kg",
       "quantidade": 0,
       "minimo": 0.5,
-      "custoUnitario": 35.00
+      "custoUnitario": 35,
+      "rendimento": "Rende 37 lanches por bisnaga 1,5kg (porção 40g)"
     },
     {
       "id": "batata_palha",
@@ -97,7 +107,8 @@
       "unidade": "kg",
       "quantidade": 0,
       "minimo": 0.6,
-      "custoUnitario": 16.00
+      "custoUnitario": 16,
+      "rendimento": "Rende 50 lanches por kg (porção 20g crocante)"
     },
     {
       "id": "milho_conserva",
@@ -106,7 +117,8 @@
       "unidade": "kg",
       "quantidade": 1.7,
       "minimo": 0.5,
-      "custoUnitario": 15.24
+      "custoUnitario": 15.24,
+      "rendimento": "Rende ~40 lanches por lata 1,7kg (porção 25g)"
     },
     {
       "id": "ervilha_conserva",
@@ -115,7 +127,8 @@
       "unidade": "kg",
       "quantidade": 1.7,
       "minimo": 0.5,
-      "custoUnitario": 11.71
+      "custoUnitario": 11.71,
+      "rendimento": "Rende ~40 lanches por lata 1,7kg (porção 25g)"
     },
     {
       "id": "maionese_verde",
@@ -124,7 +137,8 @@
       "unidade": "kg",
       "quantidade": 0,
       "minimo": 0.7,
-      "custoUnitario": 15.00
+      "custoUnitario": 15,
+      "rendimento": "Rende ~33 potinhos 30ml/kg (16 pedidos overdelivery)"
     },
     {
       "id": "palito_queijo_empanado",
@@ -133,7 +147,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 10,
-      "custoUnitario": 2.12
+      "custoUnitario": 2.12,
+      "rendimento": "Rende 17 lanches Queijudo VEG por kg (2 un/lanche)"
     },
     {
       "id": "vinagrete_artesanal",
@@ -142,7 +157,8 @@
       "unidade": "kg",
       "quantidade": 0,
       "minimo": 0.5,
-      "custoUnitario": 11.50
+      "custoUnitario": 11.5,
+      "rendimento": "Rende ~33 lanches por kg (porção 30g fresca)"
     },
     {
       "id": "sobremesa_tortinha_limao",
@@ -151,7 +167,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 5,
-      "custoUnitario": 2.70
+      "custoUnitario": 2.7,
+      "rendimento": "15 tortinhas montadas prontas para venda"
     },
     {
       "id": "sobremesa_escondidinho_nutella",
@@ -160,7 +177,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 5,
-      "custoUnitario": 4.93
+      "custoUnitario": 4.93,
+      "rendimento": "15 escondidinhos montados prontos para venda"
     },
     {
       "id": "leite_condensado",
@@ -169,7 +187,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 4,
-      "custoUnitario": 5.40
+      "custoUnitario": 5.4,
+      "rendimento": "Rende ~2,5 potes de 170ml por caixinha 395g"
     },
     {
       "id": "creme_leite",
@@ -178,7 +197,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 4,
-      "custoUnitario": 3.10
+      "custoUnitario": 3.1,
+      "rendimento": "Rende ~2,5 potes de 170ml por caixinha 200g"
     },
     {
       "id": "leite_ninho",
@@ -187,7 +207,8 @@
       "unidade": "lata",
       "quantidade": 0,
       "minimo": 1,
-      "custoUnitario": 17.90
+      "custoUnitario": 17.9,
+      "rendimento": "Rende ~30 potes de brigadeiro de Ninho por lata 380g"
     },
     {
       "id": "nutella_ferrero",
@@ -195,8 +216,9 @@
       "categoria": "Sobremesas",
       "unidade": "kg",
       "quantidade": 0,
-      "minimo": 1.0,
-      "custoUnitario": 56.00
+      "minimo": 1,
+      "custoUnitario": 56,
+      "rendimento": "Rende ~28 potes de 170ml por kg (porção 35g pura)"
     },
     {
       "id": "chocolate_meio_amargo",
@@ -205,7 +227,8 @@
       "unidade": "kg",
       "quantidade": 0,
       "minimo": 0.5,
-      "custoUnitario": 42.00
+      "custoUnitario": 42,
+      "rendimento": "Rende ~50 brownies nobres por barra de 1kg"
     },
     {
       "id": "chocolate_po_50",
@@ -214,7 +237,8 @@
       "unidade": "kg",
       "quantidade": 0,
       "minimo": 0.3,
-      "custoUnitario": 28.00
+      "custoUnitario": 28,
+      "rendimento": "Rende ~40 brownies nobres por pacote de 1kg"
     },
     {
       "id": "manteiga_sem_sal",
@@ -223,7 +247,8 @@
       "unidade": "barra",
       "quantidade": 0,
       "minimo": 1,
-      "custoUnitario": 16.00
+      "custoUnitario": 16,
+      "rendimento": "Rende ~15 tortinhas + 1 tabuleiro brownie por barra 500g"
     },
     {
       "id": "acucar_refinado",
@@ -231,8 +256,9 @@
       "categoria": "Sobremesas",
       "unidade": "kg",
       "quantidade": 0,
-      "minimo": 1.0,
-      "custoUnitario": 4.80
+      "minimo": 1,
+      "custoUnitario": 4.8,
+      "rendimento": "Rende ~4 fornadas de brownie por kg"
     },
     {
       "id": "ovos_frescos",
@@ -241,7 +267,8 @@
       "unidade": "dz",
       "quantidade": 0,
       "minimo": 1,
-      "custoUnitario": 11.00
+      "custoUnitario": 11,
+      "rendimento": "Rende 3 fornadas de brownie por dúzia (4 ovos/fornada)"
     },
     {
       "id": "farinha_trigo",
@@ -249,8 +276,9 @@
       "categoria": "Sobremesas",
       "unidade": "kg",
       "quantidade": 0,
-      "minimo": 1.0,
-      "custoUnitario": 4.90
+      "minimo": 1,
+      "custoUnitario": 4.9,
+      "rendimento": "Rende ~8 fornadas de brownie por kg"
     },
     {
       "id": "limao_taiti",
@@ -258,8 +286,9 @@
       "categoria": "Sobremesas",
       "unidade": "kg",
       "quantidade": 0,
-      "minimo": 1.0,
-      "custoUnitario": 5.00
+      "minimo": 1,
+      "custoUnitario": 5,
+      "rendimento": "Rende ~12 a 15 tortinhas de 170ml por kg fresco"
     },
     {
       "id": "biscoito_maisena",
@@ -268,7 +297,8 @@
       "unidade": "pct",
       "quantidade": 0,
       "minimo": 1,
-      "custoUnitario": 5.20
+      "custoUnitario": 5.2,
+      "rendimento": "Rende ~13 tortinhas de limão por pacote de 400g"
     },
     {
       "id": "dogueira_bh05",
@@ -277,7 +307,8 @@
       "unidade": "un",
       "quantidade": 100,
       "minimo": 25,
-      "custoUnitario": 0.599
+      "custoUnitario": 0.599,
+      "rendimento": "100 lanches no pão (1 por lanche)"
     },
     {
       "id": "pote_congelamento_700ml",
@@ -286,7 +317,8 @@
       "unidade": "un",
       "quantidade": 20,
       "minimo": 5,
-      "custoUnitario": 1.69
+      "custoUnitario": 1.69,
+      "rendimento": "20 porções de salsicha no freezer (mise en place)"
     },
     {
       "id": "marmitinha_500ml_prato",
@@ -295,7 +327,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 15,
-      "custoUnitario": 0.85
+      "custoUnitario": 0.85,
+      "rendimento": "25 a 50 lanches no prato (1 por pedido marmita)"
     },
     {
       "id": "pote_molho_30ml",
@@ -304,7 +337,8 @@
       "unidade": "un",
       "quantidade": 100,
       "minimo": 20,
-      "custoUnitario": 0.219
+      "custoUnitario": 0.219,
+      "rendimento": "50 pedidos (kit de cortesia com 2 potes por pedido)"
     },
     {
       "id": "saco_kraft_m",
@@ -313,7 +347,8 @@
       "unidade": "un",
       "quantidade": 100,
       "minimo": 20,
-      "custoUnitario": 0.439
+      "custoUnitario": 0.439,
+      "rendimento": "100 pedidos individuais e duplos (1 por entrega)"
     },
     {
       "id": "saco_kraft_g",
@@ -322,7 +357,8 @@
       "unidade": "un",
       "quantidade": 100,
       "minimo": 20,
-      "custoUnitario": 0.519
+      "custoUnitario": 0.519,
+      "rendimento": "100 pedidos de combos grandes e família (1 por entrega)"
     },
     {
       "id": "lacre_seguranca",
@@ -331,7 +367,8 @@
       "unidade": "un",
       "quantidade": 500,
       "minimo": 50,
-      "custoUnitario": 0.0338
+      "custoUnitario": 0.0338,
+      "rendimento": "500 pedidos lacrados (1 por saco kraft)"
     },
     {
       "id": "guardanapos_sache",
@@ -340,7 +377,8 @@
       "unidade": "un",
       "quantidade": 500,
       "minimo": 50,
-      "custoUnitario": 0.0738
+      "custoUnitario": 0.0738,
+      "rendimento": "250 a 500 pedidos (1 a 2 sachês por pedido)"
     },
     {
       "id": "sache_ketchup_heinz",
@@ -349,7 +387,8 @@
       "unidade": "un",
       "quantidade": 144,
       "minimo": 30,
-      "custoUnitario": 0.2076
+      "custoUnitario": 0.2076,
+      "rendimento": "144 pedidos (1 sachê cortesia Heinz)"
     },
     {
       "id": "sache_mostarda_heinz",
@@ -358,7 +397,8 @@
       "unidade": "un",
       "quantidade": 144,
       "minimo": 30,
-      "custoUnitario": 0.1868
+      "custoUnitario": 0.1868,
+      "rendimento": "144 pedidos (1 sachê cortesia Heinz)"
     },
     {
       "id": "sache_maionese_heinz",
@@ -367,7 +407,8 @@
       "unidade": "un",
       "quantidade": 144,
       "minimo": 30,
-      "custoUnitario": 0.2076
+      "custoUnitario": 0.2076,
+      "rendimento": "144 pedidos (1 sachê cortesia Heinz)"
     },
     {
       "id": "pote_cristal_170ml",
@@ -376,7 +417,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 15,
-      "custoUnitario": 0.55
+      "custoUnitario": 0.55,
+      "rendimento": "50 sobremesas no pote (1 por venda)"
     },
     {
       "id": "colher_sobremesa_lacrada",
@@ -385,7 +427,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 15,
-      "custoUnitario": 0.12
+      "custoUnitario": 0.12,
+      "rendimento": "50 sobremesas no pote (1 por venda)"
     },
     {
       "id": "garfo_reforcado",
@@ -394,7 +437,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 20,
-      "custoUnitario": 0.15
+      "custoUnitario": 0.15,
+      "rendimento": "50 a 100 lanches no prato (1 por pedido marmita)"
     },
     {
       "id": "coca_lata",
@@ -403,7 +447,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 8,
-      "custoUnitario": 2.30
+      "custoUnitario": 2.3,
+      "rendimento": "1 unidade = 1 venda de bebida"
     },
     {
       "id": "coca_zero_lata",
@@ -412,7 +457,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 6,
-      "custoUnitario": 2.30
+      "custoUnitario": 2.3,
+      "rendimento": "1 unidade = 1 venda de bebida"
     },
     {
       "id": "guarana_lata",
@@ -421,7 +467,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 6,
-      "custoUnitario": 2.20
+      "custoUnitario": 2.2,
+      "rendimento": "1 unidade = 1 venda de bebida"
     },
     {
       "id": "guarana_zero_lata",
@@ -430,7 +477,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 4,
-      "custoUnitario": 2.20
+      "custoUnitario": 2.2,
+      "rendimento": "1 unidade = 1 venda de bebida"
     },
     {
       "id": "fanta_lata",
@@ -439,7 +487,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 4,
-      "custoUnitario": 2.20
+      "custoUnitario": 2.2,
+      "rendimento": "1 unidade = 1 venda de bebida"
     },
     {
       "id": "delvalle_uva_lata",
@@ -448,7 +497,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 4,
-      "custoUnitario": 2.40
+      "custoUnitario": 2.4,
+      "rendimento": "1 unidade = 1 venda de bebida"
     },
     {
       "id": "delvalle_maracuja_lata",
@@ -457,7 +507,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 4,
-      "custoUnitario": 2.40
+      "custoUnitario": 2.4,
+      "rendimento": "1 unidade = 1 venda de bebida"
     },
     {
       "id": "coca_2l",
@@ -466,7 +517,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 3,
-      "custoUnitario": 7.50
+      "custoUnitario": 7.5,
+      "rendimento": "1 garrafa = 1 venda ou combo família"
     },
     {
       "id": "coca_zero_2l",
@@ -475,7 +527,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 2,
-      "custoUnitario": 7.50
+      "custoUnitario": 7.5,
+      "rendimento": "1 garrafa = 1 venda ou combo família"
     },
     {
       "id": "guarana_2l",
@@ -484,7 +537,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 4,
-      "custoUnitario": 6.50
+      "custoUnitario": 6.5,
+      "rendimento": "1 garrafa = 1 venda ou combo família"
     },
     {
       "id": "agua_sem_gas",
@@ -493,7 +547,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 6,
-      "custoUnitario": 1.10
+      "custoUnitario": 1.1,
+      "rendimento": "1 unidade = 1 venda de bebida"
     },
     {
       "id": "agua_com_gas",
@@ -502,7 +557,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 4,
-      "custoUnitario": 1.25
+      "custoUnitario": 1.25,
+      "rendimento": "1 unidade = 1 venda de bebida"
     },
     {
       "id": "cerveja_original",
@@ -511,7 +567,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 8,
-      "custoUnitario": 3.80
+      "custoUnitario": 3.8,
+      "rendimento": "1 unidade = 1 venda de bebida"
     },
     {
       "id": "cerveja_heineken",
@@ -520,7 +577,8 @@
       "unidade": "un",
       "quantidade": 0,
       "minimo": 8,
-      "custoUnitario": 5.50
+      "custoUnitario": 5.5,
+      "rendimento": "1 unidade = 1 venda de bebida"
     }
   ],
   "movimentacoes": [
@@ -530,20 +588,90 @@
       "pedidoId": "PEDIDO_COMPRA_LANCHEIRO_12118",
       "origem": "Entrada de Mercadoria - Loja do Lancheiro Campinas",
       "detalhes": [
-        { "insumo": "Dogueira Térmica BH 05", "baixado": -100, "saldoRestante": 100, "motivo": "100 un (R$ 59,90)" },
-        { "insumo": "Saco Kraft G 24x14x31", "baixado": -100, "saldoRestante": 100, "motivo": "100 un (R$ 51,90)" },
-        { "insumo": "Saco Kraft M 22x12x32", "baixado": -100, "saldoRestante": 100, "motivo": "100 un (R$ 43,90)" },
-        { "insumo": "Pote Marmita 700ml G302", "baixado": -20, "saldoRestante": 20, "motivo": "20 un (R$ 33,80)" },
-        { "insumo": "Pote Molho 30ml G695", "baixado": -100, "saldoRestante": 100, "motivo": "100 un (R$ 21,90)" },
-        { "insumo": "Lacre de Segurança Preto", "baixado": -500, "saldoRestante": 500, "motivo": "500 un (R$ 16,90)" },
-        { "insumo": "Guardanapos Sachê Líder", "baixado": -500, "saldoRestante": 500, "motivo": "500 un (R$ 36,90)" },
-        { "insumo": "Sachê Ketchup Heinz", "baixado": -144, "saldoRestante": 144, "motivo": "144 un (R$ 29,90)" },
-        { "insumo": "Sachê Mostarda Heinz", "baixado": -144, "saldoRestante": 144, "motivo": "144 un (R$ 26,90)" },
-        { "insumo": "Sachê Maionese Heinz", "baixado": -144, "saldoRestante": 144, "motivo": "144 un (R$ 29,90)" },
-        { "insumo": "Milho Quero Lata 1,7kg", "baixado": -1.7, "saldoRestante": 1.7, "motivo": "1 lata 1,7kg (R$ 25,90)" },
-        { "insumo": "Ervilha Quero Lata 1,7kg", "baixado": -1.7, "saldoRestante": 1.7, "motivo": "1 lata 1,7kg (R$ 19,90)" },
-        { "insumo": "Bacon Mister Beef em Cubos", "baixado": -1.0, "saldoRestante": 1.0, "motivo": "1kg (R$ 35,90)" },
-        { "insumo": "Muçarela Ralada Fresca", "baixado": -1.0, "saldoRestante": 1.0, "motivo": "1kg (R$ 34,90)" }
+        {
+          "insumo": "Dogueira Térmica BH 05",
+          "baixado": -100,
+          "saldoRestante": 100,
+          "motivo": "100 un (R$ 59,90)"
+        },
+        {
+          "insumo": "Saco Kraft G 24x14x31",
+          "baixado": -100,
+          "saldoRestante": 100,
+          "motivo": "100 un (R$ 51,90)"
+        },
+        {
+          "insumo": "Saco Kraft M 22x12x32",
+          "baixado": -100,
+          "saldoRestante": 100,
+          "motivo": "100 un (R$ 43,90)"
+        },
+        {
+          "insumo": "Pote Marmita 700ml G302",
+          "baixado": -20,
+          "saldoRestante": 20,
+          "motivo": "20 un (R$ 33,80)"
+        },
+        {
+          "insumo": "Pote Molho 30ml G695",
+          "baixado": -100,
+          "saldoRestante": 100,
+          "motivo": "100 un (R$ 21,90)"
+        },
+        {
+          "insumo": "Lacre de Segurança Preto",
+          "baixado": -500,
+          "saldoRestante": 500,
+          "motivo": "500 un (R$ 16,90)"
+        },
+        {
+          "insumo": "Guardanapos Sachê Líder",
+          "baixado": -500,
+          "saldoRestante": 500,
+          "motivo": "500 un (R$ 36,90)"
+        },
+        {
+          "insumo": "Sachê Ketchup Heinz",
+          "baixado": -144,
+          "saldoRestante": 144,
+          "motivo": "144 un (R$ 29,90)"
+        },
+        {
+          "insumo": "Sachê Mostarda Heinz",
+          "baixado": -144,
+          "saldoRestante": 144,
+          "motivo": "144 un (R$ 26,90)"
+        },
+        {
+          "insumo": "Sachê Maionese Heinz",
+          "baixado": -144,
+          "saldoRestante": 144,
+          "motivo": "144 un (R$ 29,90)"
+        },
+        {
+          "insumo": "Milho Quero Lata 1,7kg",
+          "baixado": -1.7,
+          "saldoRestante": 1.7,
+          "motivo": "1 lata 1,7kg (R$ 25,90)"
+        },
+        {
+          "insumo": "Ervilha Quero Lata 1,7kg",
+          "baixado": -1.7,
+          "saldoRestante": 1.7,
+          "motivo": "1 lata 1,7kg (R$ 19,90)"
+        },
+        {
+          "insumo": "Bacon Mister Beef em Cubos",
+          "baixado": -1,
+          "saldoRestante": 1,
+          "motivo": "1kg (R$ 35,90)"
+        },
+        {
+          "insumo": "Muçarela Ralada Fresca",
+          "baixado": -1,
+          "saldoRestante": 1,
+          "motivo": "1kg (R$ 34,90)"
+        }
       ]
     },
     {
