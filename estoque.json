@@ -280,13 +280,22 @@
       "custoUnitario": 0.599
     },
     {
-      "id": "pote_berco",
-      "nome": "Marmita Térmica 700ml Galvanotek G302 (Loja do Lancheiro)",
+      "id": "pote_congelamento_700ml",
+      "nome": "Pote Térmico 700ml Galvanotek G302 (Mise en place / Congelamento de Salsichas)",
       "categoria": "Embalagens",
       "unidade": "un",
       "quantidade": 20,
       "minimo": 5,
       "custoUnitario": 1.69
+    },
+    {
+      "id": "marmitinha_500ml_prato",
+      "nome": "Marmitinha Térmica 500ml Descartável c/ Tampa (Dog No Prato)",
+      "categoria": "Embalagens",
+      "unidade": "un",
+      "quantidade": 0,
+      "minimo": 15,
+      "custoUnitario": 0.85
     },
     {
       "id": "pote_molho_30ml",
