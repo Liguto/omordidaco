@@ -1019,9 +1019,14 @@
           <h3 style="font-size: 16px; font-weight: 900; color: #0f172a;">Clientes Fidelizados (Lista VIP)</h3>
           <p style="font-size: 12.5px; color: #64748b;">Clientes capturados automaticamente no site próprio e campanhas de WhatsApp.</p>
         </div>
-        <button onclick="exportarClientesCsv()" style="background: #15803d; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 800; font-size: 12.5px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-          📥 Exportar Contatos (CSV)
-        </button>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button type="button" onclick="exportarClientesCsv()" style="background: #15803d; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 800; font-size: 12.5px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            📥 Exportar Contatos (CSV)
+          </button>
+          <button type="button" onclick="limparListaVip()" style="background: #ffffff; color: #dc2626; border: 1.5px solid #fca5a5; padding: 8px 14px; border-radius: 8px; font-weight: 800; font-size: 12.5px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            🗑️ Limpar Lista VIP
+          </button>
+        </div>
       </div>
 
       <div class="mobile-scroll-hint" style="display: none; font-size: 11px; color: #94a3b8; text-align: right; margin-bottom: 6px; font-weight: 700;">👉 Deslize a tabela para os lados ➔</div>
@@ -1287,6 +1292,24 @@
         `;
         tbody.appendChild(tr);
       });
+    }
+
+    async function limparListaVip() {
+      if (!confirm('Deseja realmente limpar todos os contatos da Lista VIP? (Esta ação removerá clientes de teste)')) return;
+      try {
+        const res = await fetch('/api/clientes/limpar', { method: 'POST' });
+        if (res.ok) {
+          if (dadosBusinessGlobais) {
+            dadosBusinessGlobais.clientes = [];
+          }
+          renderizarClientes([]);
+          const countEl = document.getElementById('tabClientesCount');
+          if (countEl) countEl.innerText = '0';
+          alert('Lista VIP limpa com sucesso!');
+        }
+      } catch(e) {
+        alert('Erro ao limpar a Lista VIP.');
+      }
     }
 
     function renderizarMovimentacoes(movs) {

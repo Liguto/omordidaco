@@ -1021,6 +1021,16 @@ app.get(['/api/clientes', '/clientes'], async (req, res) => {
   res.json(clientes);
 });
 
+// Limpar Lista VIP de Clientes
+app.post(['/api/clientes/limpar', '/clientes/limpar', '/api/clientes/reset'], async (req, res) => {
+  clientes = [];
+  salvarClientes();
+  if (KV_URL && KV_TOKEN) {
+    await salvarClientesNuvem();
+  }
+  res.json({ success: true, message: 'Lista VIP limpa com sucesso.' });
+});
+
 // Atualizar Status do Pedido (Ex: Em Preparo, Saiu para Entrega)
 app.patch(['/api/pedidos/:id/status', '/pedidos/:id/status'], async (req, res) => {
   recarregarPedidosDoDisco();
