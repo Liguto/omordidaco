@@ -407,6 +407,109 @@
     }
 
     /* ==================================================== */
+    /* LISTA DE COMPRAS INTERATIVA (CEASA & TENDA)          */
+    /* ==================================================== */
+    .checklist-card {
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+    .checklist-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 1.5px solid #f1f5f9;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .checklist-section-title {
+      font-size: 16px;
+      font-weight: 950;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1.5px solid #f1f5f9;
+      margin-bottom: 8px;
+      background: #ffffff;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+    .checklist-item:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+    .checklist-item.checked {
+      background: #f8fafc;
+      border-color: #e2e8f0;
+      opacity: 0.55;
+    }
+    .checklist-item.checked .item-main-title {
+      text-decoration: line-through;
+      color: #64748b;
+    }
+    .checklist-checkbox {
+      width: 22px;
+      height: 22px;
+      accent-color: #15803d;
+      cursor: pointer;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    .badge-loc {
+      font-size: 11px;
+      font-weight: 900;
+      padding: 2px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .badge-loc.ceasa {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+    .badge-loc.tenda {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+    .badge-loc.comprado {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+    .progress-bar-container {
+      background: #e2e8f0;
+      height: 12px;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 10px 0 16px 0;
+    }
+    .progress-bar-fill {
+      background: linear-gradient(90deg, #eab308 0%, #22c55e 100%);
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* ==================================================== */
     /* RESPONSIVIDADE MOBILE SENIOR (SMARTPHONES & TABLETS) */
     /* ==================================================== */
     @media (max-width: 992px) {
@@ -736,6 +839,9 @@
       <button class="tab-item-btn active" onclick="trocarAbaBusiness('estoque')">
         <span>📦</span> <span>Estoque Inteligente</span>
       </button>
+      <button class="tab-item-btn" onclick="trocarAbaBusiness('listaCompras')">
+        <span>🛒</span> <span>Lista de Compras (CEASA & TENDA)</span>
+      </button>
       <button class="tab-item-btn" onclick="trocarAbaBusiness('clientes')">
         <span>👥</span> <span>Lista VIP & CRM (<span id="tabClientesCount">0</span>)</span>
       </button>
@@ -785,6 +891,124 @@
             <tr><td colspan="7" style="text-align:center; padding: 30px; color: #94a3b8;">Carregando dados de estoque...</td></tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- VIEW NOVA: LISTA DE COMPRAS INTERATIVA (CEASA & TENDA ATACADO) -->
+    <div id="viewListaCompras" style="display: none;">
+      <!-- CABEÇALHO DA MISSÃO DE COMPRAS -->
+      <div class="checklist-card" style="background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
+        <div class="checklist-header">
+          <div>
+            <div class="checklist-section-title">
+              <span style="font-size: 22px;">🛒</span> <span>Missão de Compras Inaugural — O Mordidaço</span>
+            </div>
+            <p style="font-size: 13px; color: #64748b; margin-top: 4px;">
+              Lista viva e interativa dividida por local. Toque no item conforme colocar no carrinho! O progresso fica salvo no seu celular.
+            </p>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" onclick="copiarListaComprasZap()" style="background: #22c55e; color: #ffffff; border: none; padding: 9px 15px; border-radius: 9px; font-weight: 850; font-size: 12.5px; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(34,197,94,0.3);">
+              <span>📋</span> <span>Copiar p/ WhatsApp</span>
+            </button>
+            <button type="button" onclick="desmarcarTodasCompras()" style="background: #f1f5f9; color: #475569; border: 1.5px solid #cbd5e1; padding: 9px 13px; border-radius: 9px; font-weight: 800; font-size: 12.5px; cursor: pointer;">
+              🔄 Desmarcar Tudo
+            </button>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; font-weight: 900; color: #0f172a;">
+          <span>PROGRESSO DAS COMPRAS:</span>
+          <span id="comprasProgressoTexto" style="color: #15803d;">0 de 32 itens no carrinho (0%)</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="comprasBarFill" style="width: 0%;"></div>
+        </div>
+
+        <!-- FILTROS POR LOCAL -->
+        <div class="stock-filters" style="margin-bottom: 0;">
+          <button type="button" class="filter-chip active" onclick="filtrarLocalCompras('todos', this)">🏢 Ver Todos os Locais</button>
+          <button type="button" class="filter-chip" onclick="filtrarLocalCompras('ceasa', this)">🥬 1. CEASA Campinas</button>
+          <button type="button" class="filter-chip" onclick="filtrarLocalCompras('tenda', this)">🏬 2. TENDA Atacado</button>
+          <button type="button" class="filter-chip" onclick="filtrarLocalCompras('comprados', this)">✅ 3. Já Comprados (15 itens)</button>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 1: CEASA CAMPINAS -->
+      <div class="compras-secao" id="secaoCeasa">
+        <div class="checklist-card">
+          <div class="checklist-header">
+            <div class="checklist-section-title">
+              <span>🥬</span> <span>1. CEASA CAMPINAS (Hortifrúti, Legumes e Frescos)</span>
+              <span class="badge-loc ceasa">Hortifrúti Fresco</span>
+            </div>
+            <span style="font-size: 12px; font-weight: 800; color: #047857; background: #ecfdf5; padding: 4px 10px; border-radius: 8px;">
+              7 Itens Essenciais
+            </span>
+          </div>
+
+          <div id="listaItensCeasa"></div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 2: TENDA ATACADO -->
+      <div class="compras-secao" id="secaoTenda">
+        <div class="checklist-card">
+          <div class="checklist-header">
+            <div class="checklist-section-title">
+              <span>🏬</span> <span>2. TENDA ATACADO CAMPINAS (Frios, Confeitaria, Mercearia e Bebidas)</span>
+              <span class="badge-loc tenda">Atacado de Secos & Molhados</span>
+            </div>
+            <span style="font-size: 12px; font-weight: 800; color: #1d4ed8; background: #eff6ff; padding: 4px 10px; border-radius: 8px;">
+              25 Itens Essenciais
+            </span>
+          </div>
+
+          <!-- SUB-SEÇÃO FRIOS & CARNES -->
+          <div style="font-size: 13px; font-weight: 900; color: #475569; text-transform: uppercase; margin: 14px 0 8px 4px; display: flex; align-items: center; gap: 6px;">
+            <span>🥩</span> <span>Corredor de Frios, Laticínios e Carnes:</span>
+          </div>
+          <div id="listaItensTendaFrios"></div>
+
+          <!-- SUB-SEÇÃO CONFEITARIA MONIQUE -->
+          <div style="font-size: 13px; font-weight: 900; color: #475569; text-transform: uppercase; margin: 18px 0 8px 4px; display: flex; align-items: center; gap: 6px;">
+            <span>🍰</span> <span>Corredor de Confeitaria & Sobremesas da Monique:</span>
+          </div>
+          <div id="listaItensTendaDoces"></div>
+
+          <!-- SUB-SEÇÃO MERCEARIA & MOLHOS -->
+          <div style="font-size: 13px; font-weight: 900; color: #475569; text-transform: uppercase; margin: 18px 0 8px 4px; display: flex; align-items: center; gap: 6px;">
+            <span>🥫</span> <span>Corredor de Mercearia, Molhos e Descartáveis:</span>
+          </div>
+          <div id="listaItensTendaMercearia"></div>
+
+          <!-- SUB-SEÇÃO BEBIDAS GELADAS -->
+          <div style="font-size: 13px; font-weight: 900; color: #475569; text-transform: uppercase; margin: 18px 0 8px 4px; display: flex; align-items: center; gap: 6px;">
+            <span>🥤</span> <span>Corredor de Bebidas (Latas, 2 Litros e Cervejas):</span>
+          </div>
+          <div id="listaItensTendaBebidas"></div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 3: JÁ COMPRADOS -->
+      <div class="compras-secao" id="secaoComprados">
+        <div class="checklist-card" style="background: #f8fafc;">
+          <div class="checklist-header">
+            <div class="checklist-section-title">
+              <span>✅</span> <span>3. JÁ COMPRADOS & EM CASA (Panificadora Bambini + Loja do Lancheiro)</span>
+              <span class="badge-loc comprado">Comprovado por Nota</span>
+            </div>
+            <span style="font-size: 12px; font-weight: 800; color: #15803d; background: #f0fdf4; padding: 4px 10px; border-radius: 8px;">
+              15 Itens Homologados
+            </span>
+          </div>
+
+          <p style="font-size: 12.5px; color: #64748b; margin-bottom: 12px;">
+            Estes itens já foram comprados, faturados e estão com estoque físico registrado no sistema. Não precisa comprar amanhã!
+          </p>
+
+          <div id="listaItensComprados"></div>
+        </div>
       </div>
     </div>
 
@@ -1097,9 +1321,255 @@
       event.currentTarget.classList.add('active');
 
       document.getElementById('viewEstoque').style.display = aba === 'estoque' ? 'block' : 'none';
+      const viewCompras = document.getElementById('viewListaCompras');
+      if (viewCompras) viewCompras.style.display = aba === 'listaCompras' ? 'block' : 'none';
       document.getElementById('viewClientes').style.display = aba === 'clientes' ? 'block' : 'none';
       document.getElementById('viewCanais').style.display = aba === 'canais' ? 'block' : 'none';
       document.getElementById('viewMovimentacoes').style.display = aba === 'movimentacoes' ? 'block' : 'none';
+
+      if (aba === 'listaCompras') {
+        renderizarListaCompras();
+      }
+    }
+
+    // DADOS MESTRES DA LISTA DE COMPRAS INAUGURAL (POR LOCAL)
+    const DADOS_COMPRAS_CEASA = [
+      { id: 'c_batata', nome: 'Batata Asterix / Especial p/ Purê', qtd: '15 kg (saco)', dica: 'Casca firme e lisa, sem água, ideal p/ purê de ouro aveludado da casa', estimativa: '~R$ 75,00' },
+      { id: 'c_tomate', nome: 'Tomate Italiano Maduro', qtd: '5 kg', dica: 'Maduros e firmes para o molho especial de tomate refogado e vinagrete', estimativa: '~R$ 25,00' },
+      { id: 'c_cebola', nome: 'Cebola Branca e Roxa', qtd: '3 kg (2kg branca + 1kg roxa)', dica: 'Para a base dos refogados e o vinagrete fresco artesanal', estimativa: '~R$ 13,50' },
+      { id: 'c_limao', nome: 'Limão Taiti Fresco', qtd: '2,5 kg', dica: 'Casca fina, verde e brilhante para o creme e raspas da Tortinha de Limão no Pote', estimativa: '~R$ 12,50' },
+      { id: 'c_cheiro', nome: 'Cheiro-Verde (Salsinha & Cebolinha)', qtd: '3 maços frescos', dica: 'Para a Maionese Temperada de Ervas Frescas da casa (Overdelivery Secreto)', estimativa: '~R$ 9,00' },
+      { id: 'c_ovos', nome: 'Ovos Frescos Selecionados', qtd: '2 a 3 dúzias (ou bandeja 30un)', dica: 'Para a fornada do Brownie artesanal nobre da Monique', estimativa: '~R$ 20,00' },
+      { id: 'c_alho', nome: 'Alho Roxo Descascado/Cabeça', qtd: '500g a 1 kg', dica: 'Para o refogado do molho especial caseiro e purê', estimativa: '~R$ 15,00' }
+    ];
+
+    const DADOS_COMPRAS_TENDA_FRIOS = [
+      { id: 't_salsicha', nome: 'Salsicha Sadia Oficial Hot Dog', qtd: '1 pacote de 3kg ou 5kg', dica: '100% Sadia (firme e sem soltar água). O coração de todos os lanches!', estimativa: '~R$ 55,00 a R$ 85,00' },
+      { id: 't_catupiry', nome: 'Legítimo Catupiry® Original', qtd: '1 a 2 bisnagas de 1,5kg', dica: 'Exclusivamente Catupiry legítimo (sem amido e sem mistura vegetal)', estimativa: '~R$ 54,00 / un' },
+      { id: 't_calabresa', nome: 'Calabresa Defumada Sadia/Perdigão', qtd: '1 a 2 kg', dica: 'Peça para ralar fininha e dourar para o Mordidaço Tudão', estimativa: '~R$ 28,00 / kg' },
+      { id: 't_frango', nome: 'Peito de Frango (Filé congelado)', qtd: '2 kg', dica: 'Para cozinhar e desfiar temperado bem úmido da casa', estimativa: '~R$ 36,00 total' },
+      { id: 't_parmesao', nome: 'Queijo Parmesão (Pedaço/Cunha)', qtd: '1 peça de 500g a 1kg', dica: 'Parmesão fresco para ralar na hora na finalização dos dogs', estimativa: '~R$ 35,00' },
+      { id: 't_stick_queijo', nome: 'Palito Stick Mussarela McCain', qtd: '1 pacote de 1kg', dica: 'Stick de mussarela empanado crocante para o Mordidaço Queijudo (VEG)', estimativa: '~R$ 49,00' }
+    ];
+
+    const DADOS_COMPRAS_TENDA_DOCES = [
+      { id: 't_leite_cond', nome: 'Leite Condensado 395g (Moça / Itambé / Piracanjuba)', qtd: '8 a 12 caixinhas/latas', dica: 'Para o brigadeiro de Leite Ninho e creme aveludado de limão', estimativa: '~R$ 5,40 / un' },
+      { id: 't_creme_leite', nome: 'Creme de Leite 200g (Itambé / Piracanjuba / Italac)', qtd: '8 a 12 caixinhas', dica: 'Ponto aveludado do brigadeiro de Ninho e creme de limão', estimativa: '~R$ 3,10 / un' },
+      { id: 't_leite_ninho', nome: 'Leite em Pó Ninho Integral Nestlé', qtd: '2 a 3 latas de 380g', dica: 'Leite Ninho oficial para o brigadeiro cremoso de colher', estimativa: '~R$ 17,90 / un' },
+      { id: 't_nutella', nome: 'Nutella Ferrero Legítima Pura', qtd: '1 balde 3kg institucional (ou 2 potes de 650g)', dica: 'Recheio central nobre do Escondidinho de Ninho com Brownie', estimativa: '~R$ 56,00 / kg' },
+      { id: 't_choc_meio_amargo', nome: 'Chocolate Meio Amargo Nobre (Barra 1kg)', qtd: '1 barra de 1kg', dica: 'Harald Melken, Sicao ou Nestlé para a massa densa do Brownie', estimativa: '~R$ 42,00' },
+      { id: 't_choc_po_50', nome: 'Chocolate em Pó 50% Cacau', qtd: '1 pacote de 500g ou 1kg', dica: 'Para cor e sabor marcante do brownie artesanal da Monique', estimativa: '~R$ 28,00 / kg' },
+      { id: 't_manteiga', nome: 'Manteiga Sem Sal', qtd: '2 a 3 barras de 500g', dica: 'Farofinha da torta, massa do brownie e brigadeiro de Ninho', estimativa: '~R$ 16,00 / un' },
+      { id: 't_maisena', nome: 'Biscoito Maisena 400g (Marilan / Triunfo)', qtd: '3 a 4 pacotes', dica: 'Para triturar na farofa amanteigada da Tortinha de Limão no Pote', estimativa: '~R$ 5,20 / un' },
+      { id: 't_acucar_farinha', nome: 'Açúcar Refinado & Farinha de Trigo Especial', qtd: '2kg de açúcar + 2kg de farinha', dica: 'Para a estrutura e casquinha craquelada do brownie', estimativa: '~R$ 19,00 total' },
+      { id: 't_potes_sobremesa', nome: 'Potes Cristal 170ml c/ Tampa e Colherzinhas', qtd: 'Pct 50un potes + 50un colheres', dica: 'Galvanotek G640/G645 ou similar cristal com colherzinha lacrada', estimativa: '~R$ 35,00 total' }
+    ];
+
+    const DADOS_COMPRAS_TENDA_MERCEARIA = [
+      { id: 't_palha', nome: 'Batata Palha Tradicional Extra Fina', qtd: '2 a 3 pacotes de 500g ou 1kg', dica: 'Visconti, Yoki ou Predilecta bem sequinha e crocante', estimativa: '~R$ 16,00 / un' },
+      { id: 't_hellmanns', nome: 'Maionese Hellmann\'s Legítima', qtd: '1 balde 3kg ou 3 potes 500g', dica: 'Base dos lanches e emulsão das maioneses temperadas da casa', estimativa: '~R$ 38,00 balde' },
+      { id: 't_azeitonas', nome: 'Azeitonas Pretas sem Caroço', qtd: '1 sachê/vidro drenado', dica: 'Para a Maionese Temperada de Azeitonas da casa (Overdelivery Secreto)', estimativa: '~R$ 12,00' },
+      { id: 't_pacocas', nome: 'Paçocas Rolha (Pote c/ 50 ou 100un)', qtd: '1 pote (Santa Helena)', dica: 'Mimo doce de cortesia para os Combos Solos e Combo Casal', estimativa: '~R$ 24,00' },
+      { id: 't_garfos', nome: 'Garfo Reforçado Descartável (No Prato)', qtd: '1 pacote c/ 50 ou 100un', dica: 'Garfo plástico reforçado branco para a Marmitinha 500ml', estimativa: '~R$ 12,00' }
+    ];
+
+    const DADOS_COMPRAS_TENDA_BEBIDAS = [
+      { id: 't_coca_lata', nome: 'Coca-Cola 350ml Lata (Original e Zero)', qtd: '1 pack de cada c/ 12un', dica: 'Refrigerante mais pedido da casa', estimativa: '~R$ 2,30 / un' },
+      { id: 't_guarana_lata', nome: 'Guaraná Antarctica 350ml Lata (Original e Zero)', qtd: '1 pack de cada c/ 12un', dica: 'Refrigerante oficial dos combos', estimativa: '~R$ 2,20 / un' },
+      { id: 't_fanta_delvalle', nome: 'Fanta Laranja Lata & Suco Del Valle Lata (Uva/Maracujá)', qtd: '6 a 12un de cada', dica: 'Opções variadas para os clientes e famílias', estimativa: '~R$ 2,20 a R$ 2,40 / un' },
+      { id: 't_refris_2l', nome: 'Guaraná Antarctica 2L & Coca-Cola 2L (Normal e Zero)', qtd: '4 a 6 garrafas de cada', dica: 'Bebidas inclusas e de upgrade no Combo Família', estimativa: '~R$ 6,50 a R$ 7,50 / un' },
+      { id: 't_agua', nome: 'Água Mineral 500ml (Sem Gás e Com Gás)', qtd: '1 fardo de cada c/ 12un', dica: 'Água gelada para o delivery', estimativa: '~R$ 1,10 a R$ 1,25 / un' },
+      { id: 't_cervejas', nome: 'Cerveja Original 350ml Lata & Heineken Long Neck 330ml', qtd: '1 pack de cada', dica: 'Cervejas geladas para o público adulto do final de semana', estimativa: '~R$ 3,80 a R$ 5,50 / un' }
+    ];
+
+    const DADOS_JA_COMPRADOS = [
+      { nome: 'Pão de Hot Dog 70g (18cm)', qtd: '90 unidades (3 caixas c/ 30un)', fornecedor: 'Panificadora Bambini (Pedido nº 727486 - R$ 142,20 à vista)', valor: 'R$ 1,58 / un' },
+      { nome: 'Dogueira Térmica Bom Apetite BH 05', qtd: '100 unidades', fornecedor: 'Loja do Lancheiro (Pedido nº 12118)', valor: 'R$ 59,90' },
+      { nome: 'Saco Kraft G 24x14x31', qtd: '100 unidades', fornecedor: 'Loja do Lancheiro (Pedido nº 12118)', valor: 'R$ 51,90' },
+      { nome: 'Saco Kraft M 22x12x32', qtd: '100 unidades', fornecedor: 'Loja do Lancheiro (Pedido nº 12118)', valor: 'R$ 43,90' },
+      { nome: 'Marmita Térmica 700ml Galvanotek G302 (No Prato)', qtd: '20 unidades', fornecedor: 'Loja do Lancheiro (Pedido nº 12118)', valor: 'R$ 33,80' },
+      { nome: 'Pote Molho 30ml Preto Galvanotek G695 c/ Tampa', qtd: '100 unidades', fornecedor: 'Loja do Lancheiro (Pedido nº 12118)', valor: 'R$ 21,90' },
+      { nome: 'Lacre de Segurança Preto', qtd: '500 unidades', fornecedor: 'Loja do Lancheiro (Pedido nº 12118)', valor: 'R$ 16,90' },
+      { nome: 'Guardanapos em Sachê Individual Líder', qtd: '500 unidades', fornecedor: 'Loja do Lancheiro (Pedido nº 12118)', valor: 'R$ 36,90' },
+      { nome: 'Sachês Ketchup Heinz 7g', qtd: '144 unidades', fornecedor: 'Loja do Lancheiro (Pedido nº 12118)', valor: 'R$ 29,90' },
+      { nome: 'Sachês Mostarda Heinz 5g', qtd: '144 unidades', fornecedor: 'Loja do Lancheiro (Pedido nº 12118)', valor: 'R$ 26,90' },
+      { nome: 'Sachês Maionese Heinz 7g', qtd: '144 unidades', fornecedor: 'Loja do Lancheiro (Pedido nº 12118)', valor: 'R$ 29,90' },
+      { nome: 'Milho Verde Quero (Lata 1,7kg)', qtd: '1,7 kg', fornecedor: 'Loja do Lancheiro (Pedido nº 12118)', valor: 'R$ 25,90' },
+      { nome: 'Ervilha Quero (Lata 1,7kg)', qtd: '1,7 kg', fornecedor: 'Loja do Lancheiro (Pedido nº 12118)', valor: 'R$ 19,90' },
+      { nome: 'Bacon Mister Beef em Cubos', qtd: '1,0 kg', fornecedor: 'Loja do Lancheiro (Pedido nº 12118)', valor: 'R$ 35,90' },
+      { nome: 'Muçarela Ralada Fresca', qtd: '1,0 kg', fornecedor: 'Loja do Lancheiro (Pedido nº 12118)', valor: 'R$ 34,90' }
+    ];
+
+    function obterChecksCompras() {
+      try {
+        return JSON.parse(localStorage.getItem('mordidaco_compras_checks') || '{}');
+      } catch(e) {
+        return {};
+      }
+    }
+
+    function salvarChecksCompras(checks) {
+      try {
+        localStorage.setItem('mordidaco_compras_checks', JSON.stringify(checks));
+      } catch(e) {}
+    }
+
+    function toggleCheckCompra(id) {
+      const checks = obterChecksCompras();
+      checks[id] = !checks[id];
+      salvarChecksCompras(checks);
+      renderizarListaCompras();
+    }
+
+    function renderizarListaCompras() {
+      const checks = obterChecksCompras();
+
+      function gerarHtmlItens(itens) {
+        return itens.map(item => {
+          const isChecked = !!checks[item.id];
+          return `
+            <div class="checklist-item ${isChecked ? 'checked' : ''}" onclick="toggleCheckCompra('${item.id}')">
+              <input type="checkbox" class="checklist-checkbox" ${isChecked ? 'checked' : ''} onclick="event.stopPropagation(); toggleCheckCompra('${item.id}')">
+              <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px;">
+                  <span class="item-main-title" style="font-size: 14.5px; font-weight: 900; color: #0f172a;">${item.nome}</span>
+                  <span style="font-size: 12.5px; font-weight: 900; color: #15803d; background: #dcfce7; padding: 2px 8px; border-radius: 6px;">Qtd: ${item.qtd}</span>
+                </div>
+                <div style="font-size: 12.5px; color: #64748b; margin-top: 3px;">
+                  💡 ${item.dica} • <strong style="color: #475569;">${item.estimativa}</strong>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // 1. CEASA
+      const containerCeasa = document.getElementById('listaItensCeasa');
+      if (containerCeasa) containerCeasa.innerHTML = gerarHtmlItens(DADOS_COMPRAS_CEASA);
+
+      // 2. TENDA
+      const cFrios = document.getElementById('listaItensTendaFrios');
+      if (cFrios) cFrios.innerHTML = gerarHtmlItens(DADOS_COMPRAS_TENDA_FRIOS);
+
+      const cDoces = document.getElementById('listaItensTendaDoces');
+      if (cDoces) cDoces.innerHTML = gerarHtmlItens(DADOS_COMPRAS_TENDA_DOCES);
+
+      const cMerc = document.getElementById('listaItensTendaMercearia');
+      if (cMerc) cMerc.innerHTML = gerarHtmlItens(DADOS_COMPRAS_TENDA_MERCEARIA);
+
+      const cBeb = document.getElementById('listaItensTendaBebidas');
+      if (cBeb) cBeb.innerHTML = gerarHtmlItens(DADOS_COMPRAS_TENDA_BEBIDAS);
+
+      // 3. JÁ COMPRADOS
+      const containerComprados = document.getElementById('listaItensComprados');
+      if (containerComprados) {
+        containerComprados.innerHTML = DADOS_JA_COMPRADOS.map(item => `
+          <div class="checklist-item checked" style="cursor: default; opacity: 0.85; background: #ffffff;">
+            <span style="font-size: 18px; color: #15803d; margin-top: 1px;">✅</span>
+            <div style="flex: 1;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px;">
+                <span style="font-size: 14px; font-weight: 850; color: #0f172a;">${item.nome}</span>
+                <span style="font-size: 12px; font-weight: 900; color: #15803d; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 2px 7px; border-radius: 6px;">${item.qtd}</span>
+              </div>
+              <div style="font-size: 12px; color: #64748b; margin-top: 2px;">
+                🏢 ${item.fornecedor} • <strong style="color: #0f172a;">${item.valor}</strong>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // PROGRESSO
+      const todosPendentes = [
+        ...DADOS_COMPRAS_CEASA,
+        ...DADOS_COMPRAS_TENDA_FRIOS,
+        ...DADOS_COMPRAS_TENDA_DOCES,
+        ...DADOS_COMPRAS_TENDA_MERCEARIA,
+        ...DADOS_COMPRAS_TENDA_BEBIDAS
+      ];
+
+      const totalItens = todosPendentes.length;
+      let totalMarcados = 0;
+      todosPendentes.forEach(it => {
+        if (checks[it.id]) totalMarcados++;
+      });
+
+      const pct = totalItens > 0 ? Math.round((totalMarcados / totalItens) * 100) : 0;
+      const elTexto = document.getElementById('comprasProgressoTexto');
+      const elBarra = document.getElementById('comprasBarFill');
+
+      if (elTexto) elTexto.innerText = `${totalMarcados} de ${totalItens} itens no carrinho (${pct}%)`;
+      if (elBarra) elBarra.style.width = pct + '%';
+    }
+
+    function filtrarLocalCompras(local, btn) {
+      if (btn) {
+        btn.parentElement.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+      }
+
+      const sCeasa = document.getElementById('secaoCeasa');
+      const sTenda = document.getElementById('secaoTenda');
+      const sComp = document.getElementById('secaoComprados');
+
+      if (local === 'todos') {
+        if (sCeasa) sCeasa.style.display = 'block';
+        if (sTenda) sTenda.style.display = 'block';
+        if (sComp) sComp.style.display = 'block';
+      } else if (local === 'ceasa') {
+        if (sCeasa) sCeasa.style.display = 'block';
+        if (sTenda) sTenda.style.display = 'none';
+        if (sComp) sComp.style.display = 'none';
+      } else if (local === 'tenda') {
+        if (sCeasa) sCeasa.style.display = 'none';
+        if (sTenda) sTenda.style.display = 'block';
+        if (sComp) sComp.style.display = 'none';
+      } else if (local === 'comprados') {
+        if (sCeasa) sCeasa.style.display = 'none';
+        if (sTenda) sTenda.style.display = 'none';
+        if (sComp) sComp.style.display = 'block';
+      }
+    }
+
+    function desmarcarTodasCompras() {
+      if (!confirm('Deseja desmarcar todos os itens da lista de compras?')) return;
+      salvarChecksCompras({});
+      renderizarListaCompras();
+    }
+
+    function copiarListaComprasZap() {
+      const checks = obterChecksCompras();
+      let texto = `🛒 *LISTA DE COMPRAS INAUGURAL — O MORDIDAÇO* 🌭\n\n`;
+
+      texto += `🥬 *1. CEASA CAMPINAS (Hortifrúti):*\n`;
+      DADOS_COMPRAS_CEASA.forEach(i => {
+        const status = checks[i.id] ? '✅' : '⬜';
+        texto += `${status} ${i.nome} — Qtd: ${i.qtd}\n`;
+      });
+
+      texto += `\n🏬 *2. TENDA ATACADO (Frios, Doces & Bebidas):*\n`;
+      const tendaTodos = [
+        ...DADOS_COMPRAS_TENDA_FRIOS,
+        ...DADOS_COMPRAS_TENDA_DOCES,
+        ...DADOS_COMPRAS_TENDA_MERCEARIA,
+        ...DADOS_COMPRAS_TENDA_BEBIDAS
+      ];
+      tendaTodos.forEach(i => {
+        const status = checks[i.id] ? '✅' : '⬜';
+        texto += `${status} ${i.nome} — Qtd: ${i.qtd}\n`;
+      });
+
+      texto += `\n---\n✅ *JÁ COMPRADOS (Bambini + Loja do Lancheiro):*\n`;
+      DADOS_JA_COMPRADOS.forEach(i => {
+        texto += `✔ ${i.nome} (${i.qtd})\n`;
+      });
+
+      navigator.clipboard.writeText(texto).then(() => {
+        alert('📋 Lista de compras copiada com sucesso! Cole no WhatsApp para você e para a Monique acompanharem.');
+      }).catch(() => {
+        prompt('Copie o texto abaixo para o seu WhatsApp:', texto);
+      });
     }
 
     function filtrarEstoque(categoria, btn) {
