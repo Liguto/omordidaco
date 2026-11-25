@@ -69,9 +69,23 @@ async function sincronizarCardapioCompleto() {
     { app_item_id: 'mod_pao', item_name: '🥖 No Pão', price: 0, status: 1, is_sold_separately: false, short_desc: 'Pão macio Bambini (18cm)' },
     { app_item_id: 'mod_prato', item_name: '🥣 No Prato', price: 200, status: 1, is_sold_separately: false, short_desc: 'Sem pão! +40g de purê artesanal e kit talheres (garfo + faca)' },
 
-    // Molhos Cortesia da Casa (Grátis)
-    { app_item_id: 'mod_molho_ervas', item_name: '🌿 1x Molho Verde da Casa - Ervas Frescas (30ml)', price: 0, status: 1, is_sold_separately: false },
-    { app_item_id: 'mod_molho_azeitona', item_name: '🫒 1x Molho Especial - Azeitonas Pretas Azapa (30ml)', price: 0, status: 1, is_sold_separately: false },
+    // Molhos Cortesia da Casa - Solos e Dogs (1 lanche)
+    { app_item_id: 'mod_molho_solo_misto', item_name: '🌿 1x Molho Verde + 🫒 1x Molho Azeitona', price: 0, status: 1, is_sold_separately: false },
+    { app_item_id: 'mod_molho_solo_verde', item_name: '🌿 2x Molho Verde de Ervas (Só Verde)', price: 0, status: 1, is_sold_separately: false },
+    { app_item_id: 'mod_molho_solo_azeitona', item_name: '🫒 2x Molho de Azeitona Azapa (Só Azeitona)', price: 0, status: 1, is_sold_separately: false },
+
+    // Molhos Cortesia da Casa - Casal e Casal VIP (2 lanches)
+    { app_item_id: 'mod_molho_casal_misto', item_name: '🌿 2x Molho Verde + 🫒 2x Molho Azeitona', price: 0, status: 1, is_sold_separately: false },
+    { app_item_id: 'mod_molho_casal_verde', item_name: '🌿 4x Molho Verde de Ervas (Só Verde)', price: 0, status: 1, is_sold_separately: false },
+    { app_item_id: 'mod_molho_casal_azeitona', item_name: '🫒 4x Molho de Azeitona Azapa (Só Azeitona)', price: 0, status: 1, is_sold_separately: false },
+
+    // Molhos Cortesia da Casa - Família (3 lanches)
+    { app_item_id: 'mod_molho_familia_misto', item_name: '🌿 3x Molho Verde + 🫒 3x Molho Azeitona', price: 0, status: 1, is_sold_separately: false },
+    { app_item_id: 'mod_molho_familia_verde', item_name: '🌿 6x Molho Verde de Ervas (Só Verde)', price: 0, status: 1, is_sold_separately: false },
+    { app_item_id: 'mod_molho_familia_azeitona', item_name: '🫒 6x Molho de Azeitona Azapa (Só Azeitona)', price: 0, status: 1, is_sold_separately: false },
+
+    // Opção de Dispensar Molhos (Comum a todos)
+    { app_item_id: 'mod_molho_dispensar', item_name: '❌ Não enviar molhos (Dispensar cortesia)', price: 0, status: 1, is_sold_separately: false },
 
     // Retiradas (Grátis)
     { app_item_id: 'ret_milho', item_name: 'Sem Milho', price: 0, status: 1, is_sold_separately: false },
@@ -104,7 +118,7 @@ async function sincronizarCardapioCompleto() {
       status: 1,
       is_sold_separately: true,
       short_desc: '1 Mordidaço Clássico (escolha No Pão ou No Prato) + 1 Bebida Gelada Lata/Água + 2 Potes de Maionese da Casa.',
-      app_modifier_group_ids: ['mg_formato', 'mg_refri_1', 'mg_molhos_cortesia', 'mg_retirar', 'mg_adicionais']
+      app_modifier_group_ids: ['mg_formato', 'mg_refri_1', 'mg_molhos_solo', 'mg_retirar', 'mg_adicionais']
     },
     {
       app_item_id: 'combo_solo_campeao',
@@ -113,7 +127,7 @@ async function sincronizarCardapioCompleto() {
       status: 1,
       is_sold_separately: true,
       short_desc: '1 Mordidaço em Dobro (2 salsichas Sadia e dobro de muçarela) + 1 Bebida Gelada Lata/Água + 2 Potes de Maionese da Casa. O campeão de vendas individual!',
-      app_modifier_group_ids: ['mg_formato', 'mg_refri_1', 'mg_molhos_cortesia', 'mg_retirar', 'mg_adicionais']
+      app_modifier_group_ids: ['mg_formato', 'mg_refri_1', 'mg_molhos_solo', 'mg_retirar', 'mg_adicionais']
     },
     {
       app_item_id: 'combo_completo_sobremesa',
@@ -122,7 +136,7 @@ async function sincronizarCardapioCompleto() {
       status: 1,
       is_sold_separately: true,
       short_desc: '1 Mordidaço em Dobro (No Pão ou No Prato) + 1 Bebida Gelada Lata/Água + 1 Tortinha de Limão no Pote (170ml) + 2 Potes de Maionese da Casa (30ml). A janta completa com sobremesa!',
-      app_modifier_group_ids: ['mg_formato', 'mg_refri_1', 'mg_molhos_cortesia', 'mg_retirar', 'mg_adicionais']
+      app_modifier_group_ids: ['mg_formato', 'mg_refri_1', 'mg_molhos_solo', 'mg_retirar', 'mg_adicionais']
     },
     {
       app_item_id: 'combo_solo_tudao',
@@ -131,7 +145,7 @@ async function sincronizarCardapioCompleto() {
       status: 1,
       is_sold_separately: true,
       short_desc: '1 Mordidaço Tudão (o gigante da casa!) + 1 Bebida Gelada Lata/Água + 2 Potes de Maionese da Casa (30ml). Fartura máxima!',
-      app_modifier_group_ids: ['mg_formato', 'mg_refri_1', 'mg_molhos_cortesia', 'mg_retirar', 'mg_adicionais']
+      app_modifier_group_ids: ['mg_formato', 'mg_refri_1', 'mg_molhos_solo', 'mg_retirar', 'mg_adicionais']
     },
     {
       app_item_id: 'combo_casal',
@@ -140,7 +154,7 @@ async function sincronizarCardapioCompleto() {
       status: 1,
       is_sold_separately: true,
       short_desc: '2 Mordidaços em Dobro (escolha no Pão ou no Prato para cada um) + 2 Bebidas Geladas Lata/Água (escolha Coca, Del Valle ou Água) + 2 Potes de Molho Especial da Casa (30ml). A pedida perfeita para duas pessoas!',
-      app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_refri_1', 'mg_refri_2', 'mg_molhos_cortesia', 'mg_adicionais']
+      app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_refri_1', 'mg_refri_2', 'mg_molhos_casal', 'mg_adicionais']
     },
     {
       app_item_id: 'combo_familia',
@@ -149,7 +163,7 @@ async function sincronizarCardapioCompleto() {
       status: 1,
       is_sold_separately: true,
       short_desc: '2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha No Pão ou No Prato) + 1 Refrigerante 1,5L (Guaraná 1,5L incluso ou upgrade Coca 2,5L) + 3 Potes de Molho da Casa (30ml). Fartura garantida!',
-      app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_formato_dog3', 'mg_bebida_familia', 'mg_molhos_cortesia_familia', 'mg_adicionais']
+      app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_formato_dog3', 'mg_bebida_familia', 'mg_molhos_familia', 'mg_adicionais']
     },
     {
       app_item_id: 'combo_casal_vip',
@@ -158,7 +172,7 @@ async function sincronizarCardapioCompleto() {
       status: 1,
       is_sold_separately: true,
       short_desc: '2 Mordidaços em Dobro + 2 Bebidas Geladas Lata/Água + 1 Tortinha de Limão (170ml) + 1 Escondidinho de Ninho com Nutella e Brownie (170ml) + 2 Potes de Maionese da Casa (30ml). A experiência completa a dois!',
-      app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_refri_1', 'mg_refri_2', 'mg_molhos_cortesia', 'mg_adicionais']
+      app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_refri_1', 'mg_refri_2', 'mg_molhos_casal', 'mg_adicionais']
     },
 
     // 2. 6 HOT DOGS ARTESANAIS OFICIAIS (Com Escolha No Pão/No Prato, Molhos Cortesia, Retiradas e Adicionais)
@@ -169,7 +183,7 @@ async function sincronizarCardapioCompleto() {
       status: 1,
       is_sold_separately: true,
       short_desc: 'Pão macio Bambini (70g/18cm), 1 salsicha Sadia, purê artesanal, maionese Hellmann\'s, ketchup, mostarda, milho, ervilha, vinagrete e batata palha.',
-      app_modifier_group_ids: ['mg_formato', 'mg_molhos_cortesia', 'mg_retirar', 'mg_adicionais']
+      app_modifier_group_ids: ['mg_formato', 'mg_molhos_solo', 'mg_retirar', 'mg_adicionais']
     },
     {
       app_item_id: 'dog_em_dobro',
@@ -178,7 +192,7 @@ async function sincronizarCardapioCompleto() {
       status: 1,
       is_sold_separately: true,
       short_desc: 'O campeão de vendas! Pão macio Bambini (70g/18cm), 2 salsichas Sadia, o verdadeiro dobro de muçarela derretida, purê artesanal, maionese Hellmann\'s, vinagrete, milho, ervilha e batata palha.',
-      app_modifier_group_ids: ['mg_formato', 'mg_molhos_cortesia', 'mg_retirar', 'mg_adicionais']
+      app_modifier_group_ids: ['mg_formato', 'mg_molhos_solo', 'mg_retirar', 'mg_adicionais']
     },
     {
       app_item_id: 'dog_veg',
@@ -187,7 +201,7 @@ async function sincronizarCardapioCompleto() {
       status: 1,
       is_sold_separately: true,
       short_desc: '🌱 Opção Vegetariana! Pão macio Bambini (70g/18cm), 2 palitos de queijo empanados crocantes puxa-puxa (Air Fryer sem óleo), purê artesanal, vinagrete, milho e batata palha.',
-      app_modifier_group_ids: ['mg_formato', 'mg_molhos_cortesia', 'mg_retirar', 'mg_adicionais']
+      app_modifier_group_ids: ['mg_formato', 'mg_molhos_solo', 'mg_retirar', 'mg_adicionais']
     },
     {
       app_item_id: 'dog_bacon',
@@ -196,7 +210,7 @@ async function sincronizarCardapioCompleto() {
       status: 1,
       is_sold_separately: true,
       short_desc: 'Pão macio Bambini (70g/18cm), 2 salsichas Sadia, bacon crocante em cubos, muçarela derretida, purê artesanal, maionese Hellmann\'s, milho, ervilha e batata palha.',
-      app_modifier_group_ids: ['mg_formato', 'mg_molhos_cortesia', 'mg_retirar', 'mg_adicionais']
+      app_modifier_group_ids: ['mg_formato', 'mg_molhos_solo', 'mg_retirar', 'mg_adicionais']
     },
     {
       app_item_id: 'dog_cremoso',
@@ -205,7 +219,7 @@ async function sincronizarCardapioCompleto() {
       status: 1,
       is_sold_separately: true,
       short_desc: 'Pão macio Bambini (70g/18cm), 1 salsicha Sadia, frango desfiado temperado, Catupiry® Original cremoso, purê artesanal, maionese Hellmann\'s, milho, vinagrete e batata palha.',
-      app_modifier_group_ids: ['mg_formato', 'mg_molhos_cortesia', 'mg_retirar', 'mg_adicionais']
+      app_modifier_group_ids: ['mg_formato', 'mg_molhos_solo', 'mg_retirar', 'mg_adicionais']
     },
     {
       app_item_id: 'dog_tudao',
@@ -214,7 +228,7 @@ async function sincronizarCardapioCompleto() {
       status: 1,
       is_sold_separately: true,
       short_desc: 'O gigante da casa! Pão macio Bambini (70g/18cm), 1 salsicha Sadia, frango desfiado, Catupiry® Original, bacon em dobro, calabresa, muçarela dobro, purê artesanal e batata palha.',
-      app_modifier_group_ids: ['mg_formato', 'mg_molhos_cortesia', 'mg_retirar', 'mg_adicionais']
+      app_modifier_group_ids: ['mg_formato', 'mg_molhos_solo', 'mg_retirar', 'mg_adicionais']
     },
 
     // 3. SOBREMESAS ARTESANAIS NO POTE (170ML)
@@ -276,27 +290,45 @@ async function sincronizarCardapioCompleto() {
       ]
     },
     {
-      app_modifier_group_id: 'mg_molhos_cortesia',
-      modifier_group_name: '🎁 Molhos da Casa (Escolha até 2 Grátis)',
-      is_required: 2,
-      quantity_min_permitted: 0,
-      quantity_max_permitted: 2,
-      buy_mode: 1,
+      app_modifier_group_id: 'mg_molhos_solo',
+      modifier_group_name: '🎁 Escolha os Molhos Cortesia (Obrigatório)',
+      is_required: 1,
+      quantity_min_permitted: 1,
+      quantity_max_permitted: 1,
+      buy_mode: 0,
       app_mg_items: [
-        { app_item_id: 'mod_molho_ervas', price: 0 },
-        { app_item_id: 'mod_molho_azeitona', price: 0 }
+        { app_item_id: 'mod_molho_solo_misto', price: 0 },
+        { app_item_id: 'mod_molho_solo_verde', price: 0 },
+        { app_item_id: 'mod_molho_solo_azeitona', price: 0 },
+        { app_item_id: 'mod_molho_dispensar', price: 0 }
       ]
     },
     {
-      app_modifier_group_id: 'mg_molhos_cortesia_familia',
-      modifier_group_name: '🎁 Molhos da Casa (Escolha até 3 Grátis)',
-      is_required: 2,
-      quantity_min_permitted: 0,
-      quantity_max_permitted: 3,
-      buy_mode: 1,
+      app_modifier_group_id: 'mg_molhos_casal',
+      modifier_group_name: '🎁 Escolha os Molhos Cortesia (Obrigatório)',
+      is_required: 1,
+      quantity_min_permitted: 1,
+      quantity_max_permitted: 1,
+      buy_mode: 0,
       app_mg_items: [
-        { app_item_id: 'mod_molho_ervas', price: 0 },
-        { app_item_id: 'mod_molho_azeitona', price: 0 }
+        { app_item_id: 'mod_molho_casal_misto', price: 0 },
+        { app_item_id: 'mod_molho_casal_verde', price: 0 },
+        { app_item_id: 'mod_molho_casal_azeitona', price: 0 },
+        { app_item_id: 'mod_molho_dispensar', price: 0 }
+      ]
+    },
+    {
+      app_modifier_group_id: 'mg_molhos_familia',
+      modifier_group_name: '🎁 Escolha os Molhos Cortesia (Obrigatório)',
+      is_required: 1,
+      quantity_min_permitted: 1,
+      quantity_max_permitted: 1,
+      buy_mode: 0,
+      app_mg_items: [
+        { app_item_id: 'mod_molho_familia_misto', price: 0 },
+        { app_item_id: 'mod_molho_familia_verde', price: 0 },
+        { app_item_id: 'mod_molho_familia_azeitona', price: 0 },
+        { app_item_id: 'mod_molho_dispensar', price: 0 }
       ]
     },
     {

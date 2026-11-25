@@ -70,8 +70,10 @@ const ADICIONAIS_DEFS = [
 ];
 
 const MOLHOS_CORTESIA_DEFS = [
-  { id: '55555555-0001-4000-8000-000000000001', name: '🌿 1x Molho Verde da Casa - Ervas (30ml)', preco: 0 },
-  { id: '55555555-0002-4000-8000-000000000002', name: '🫒 1x Molho Especial - Azeitonas Azapa (30ml)', preco: 0 }
+  { id: '55555555-0001-4000-8000-000000000001', name: '🌿 1x Molho Verde + 🫒 1x Molho Azeitona', preco: 0 },
+  { id: '55555555-0002-4000-8000-000000000002', name: '🌿 2x Molho Verde de Ervas (Só Verde)', preco: 0 },
+  { id: '55555555-0003-4000-8000-000000000003', name: '🫒 2x Molho de Azeitona Azapa (Só Azeitona)', preco: 0 },
+  { id: '55555555-0004-4000-8000-000000000004', name: '❌ Não enviar molhos (Dispensar cortesia)', preco: 0 }
 ];
 
 async function vincularComplementosItem(itemInfo) {
@@ -147,7 +149,7 @@ async function vincularComplementosItem(itemInfo) {
       serving: 'SERVES_1',
       optionGroups: [
         { id: ogFormatoId, min: 1, max: 1, index: 0 },
-        { id: ogMolhosId, min: 0, max: 2, index: 1 },
+        { id: ogMolhosId, min: 1, max: 1, index: 1 },
         { id: ogRetirarId, min: 0, max: 10, index: 2 },
         { id: ogAdicionaisId, min: 0, max: 10, index: 3 }
       ]
@@ -189,10 +191,10 @@ async function vincularComplementosItem(itemInfo) {
     },
     {
       id: ogMolhosId,
-      name: '🎁 Molhos da Casa (Escolha até 2 Grátis)',
+      name: '🎁 Escolha os Molhos Cortesia da Casa (Obrigatório)',
       status: 'AVAILABLE',
-      min: 0,
-      max: 2,
+      min: 1,
+      max: 1,
       index: 1,
       optionIds: molhosOptions.map(o => o.id)
     },

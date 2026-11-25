@@ -81,6 +81,27 @@ const ADICIONAIS_DEFS = [
   { id: '22222222-0010-4000-8000-000000000010', name: 'Batata Palha Crocante Extra', preco: 3.50 }
 ];
 
+const MOLHOS_SOLO_DEFS = [
+  { id: '55555555-0001-4000-8000-000000000001', name: '🌿 1x Molho Verde + 🫒 1x Molho Azeitona', preco: 0 },
+  { id: '55555555-0002-4000-8000-000000000002', name: '🌿 2x Molho Verde de Ervas (Só Verde)', preco: 0 },
+  { id: '55555555-0003-4000-8000-000000000003', name: '🫒 2x Molho de Azeitona Azapa (Só Azeitona)', preco: 0 },
+  { id: '55555555-0004-4000-8000-000000000004', name: '❌ Não enviar molhos (Dispensar cortesia)', preco: 0 }
+];
+
+const MOLHOS_CASAL_DEFS = [
+  { id: '55555555-0005-4000-8000-000000000001', name: '🌿 2x Molho Verde + 🫒 2x Molho Azeitona', preco: 0 },
+  { id: '55555555-0005-4000-8000-000000000002', name: '🌿 4x Molho Verde de Ervas (Só Verde)', preco: 0 },
+  { id: '55555555-0005-4000-8000-000000000003', name: '🫒 4x Molho de Azeitona Azapa (Só Azeitona)', preco: 0 },
+  { id: '55555555-0005-4000-8000-000000000004', name: '❌ Não enviar molhos (Dispensar cortesia)', preco: 0 }
+];
+
+const MOLHOS_FAMILIA_DEFS = [
+  { id: '55555555-0006-4000-8000-000000000001', name: '🌿 3x Molho Verde + 🫒 3x Molho Azeitona', preco: 0 },
+  { id: '55555555-0006-4000-8000-000000000002', name: '🌿 6x Molho Verde de Ervas (Só Verde)', preco: 0 },
+  { id: '55555555-0006-4000-8000-000000000003', name: '🫒 6x Molho de Azeitona Azapa (Só Azeitona)', preco: 0 },
+  { id: '55555555-0006-4000-8000-000000000004', name: '❌ Não enviar molhos (Dispensar cortesia)', preco: 0 }
+];
+
 async function configurarComboFamilia() {
   console.log('⭐ Configurando Combo Família Mordidaço com Bebida 2L e Upgrade...');
   const itemId = '356850e2-d87d-4261-bcdc-b5794469afdf';
@@ -88,6 +109,7 @@ async function configurarComboFamilia() {
 
   const ogFormatoId = genUuid();
   const ogBebida2LId = genUuid();
+  const ogMolhosId = genUuid();
   const ogAdicionaisId = genUuid();
 
   const formatoOptions = [
@@ -102,6 +124,15 @@ async function configurarComboFamilia() {
     status: 'AVAILABLE',
     index: idx,
     price: { value: b.preco }
+  }));
+
+  const molhosOptions = MOLHOS_FAMILIA_DEFS.map((m, idx) => ({
+    id: genUuid(),
+    productId: m.id,
+    optionGroupId: ogMolhosId,
+    status: 'AVAILABLE',
+    index: idx,
+    price: { value: 0 }
   }));
 
   const adicionaisOptions = ADICIONAIS_DEFS.map((a, idx) => ({
@@ -122,7 +153,8 @@ async function configurarComboFamilia() {
       optionGroups: [
         { id: ogFormatoId, min: 3, max: 3, index: 0 },
         { id: ogBebida2LId, min: 1, max: 1, index: 1 },
-        { id: ogAdicionaisId, min: 0, max: 10, index: 2 }
+        { id: ogMolhosId, min: 1, max: 1, index: 2 },
+        { id: ogAdicionaisId, min: 0, max: 10, index: 3 }
       ]
     },
     { id: PROD_PAO_ID, name: '🥖 Tradicional de Rua (No Pão Bambini 70g)', serving: 'NOT_APPLICABLE' },
@@ -130,6 +162,7 @@ async function configurarComboFamilia() {
   ];
 
   BEBIDAS_2L_DEFS.forEach(b => products.push({ id: b.id, name: b.name, serving: 'NOT_APPLICABLE' }));
+  MOLHOS_FAMILIA_DEFS.forEach(m => products.push({ id: m.id, name: m.name, serving: 'NOT_APPLICABLE' }));
   ADICIONAIS_DEFS.forEach(a => products.push({ id: a.id, name: a.name, serving: 'NOT_APPLICABLE' }));
 
   const optionGroups = [
@@ -152,17 +185,26 @@ async function configurarComboFamilia() {
       optionIds: bebida2LOptions.map(o => o.id)
     },
     {
+      id: ogMolhosId,
+      name: '🎁 Escolha os Molhos Cortesia da Casa (Obrigatório)',
+      status: 'AVAILABLE',
+      min: 1,
+      max: 1,
+      index: 2,
+      optionIds: molhosOptions.map(o => o.id)
+    },
+    {
       id: ogAdicionaisId,
       name: 'Turbine seu Combo com Adicionais Extras? (Opcional)',
       status: 'AVAILABLE',
       min: 0,
       max: 10,
-      index: 2,
+      index: 3,
       optionIds: adicionaisOptions.map(o => o.id)
     }
   ];
 
-  const options = [...formatoOptions, ...bebida2LOptions, ...adicionaisOptions];
+  const options = [...formatoOptions, ...bebida2LOptions, ...molhosOptions, ...adicionaisOptions];
 
   await request('/items', 'PUT', {
     item: { id: itemId, productId, categoryId: CAT_COMBOS, status: 'AVAILABLE', price: { value: 86.90 } },
@@ -178,6 +220,7 @@ async function configurarComboDuplo(itemId, productId, nomeCombo, preco, serving
   const ogFormatoId = genUuid();
   const ogRefri1Id = genUuid();
   const ogRefri2Id = genUuid();
+  const ogMolhosId = genUuid();
   const ogAdicionaisId = genUuid();
 
   const formatoOptions = [
@@ -203,6 +246,15 @@ async function configurarComboDuplo(itemId, productId, nomeCombo, preco, serving
     price: { value: 0 }
   }));
 
+  const molhosOptions = MOLHOS_CASAL_DEFS.map((m, idx) => ({
+    id: genUuid(),
+    productId: m.id,
+    optionGroupId: ogMolhosId,
+    status: 'AVAILABLE',
+    index: idx,
+    price: { value: 0 }
+  }));
+
   const adicionaisOptions = ADICIONAIS_DEFS.map((a, idx) => ({
     id: genUuid(),
     productId: a.id,
@@ -222,7 +274,8 @@ async function configurarComboDuplo(itemId, productId, nomeCombo, preco, serving
         { id: ogFormatoId, min: 2, max: 2, index: 0 },
         { id: ogRefri1Id, min: 1, max: 1, index: 1 },
         { id: ogRefri2Id, min: 1, max: 1, index: 2 },
-        { id: ogAdicionaisId, min: 0, max: 10, index: 3 }
+        { id: ogMolhosId, min: 1, max: 1, index: 3 },
+        { id: ogAdicionaisId, min: 0, max: 10, index: 4 }
       ]
     },
     { id: PROD_PAO_ID, name: '🥖 Tradicional de Rua (No Pão Bambini 70g)', serving: 'NOT_APPLICABLE' },
@@ -230,6 +283,7 @@ async function configurarComboDuplo(itemId, productId, nomeCombo, preco, serving
   ];
 
   REFRIS_DEFS.forEach(r => products.push({ id: r.id, name: r.name, serving: 'NOT_APPLICABLE' }));
+  MOLHOS_CASAL_DEFS.forEach(m => products.push({ id: m.id, name: m.name, serving: 'NOT_APPLICABLE' }));
   ADICIONAIS_DEFS.forEach(a => products.push({ id: a.id, name: a.name, serving: 'NOT_APPLICABLE' }));
 
   const optionGroups = [
@@ -261,17 +315,26 @@ async function configurarComboDuplo(itemId, productId, nomeCombo, preco, serving
       optionIds: refri2Options.map(o => o.id)
     },
     {
+      id: ogMolhosId,
+      name: '🎁 Escolha os Molhos Cortesia da Casa (Obrigatório)',
+      status: 'AVAILABLE',
+      min: 1,
+      max: 1,
+      index: 3,
+      optionIds: molhosOptions.map(o => o.id)
+    },
+    {
       id: ogAdicionaisId,
       name: 'Turbine seu Combo com Adicionais Extras? (Opcional)',
       status: 'AVAILABLE',
       min: 0,
       max: 10,
-      index: 3,
+      index: 4,
       optionIds: adicionaisOptions.map(o => o.id)
     }
   ];
 
-  const options = [...formatoOptions, ...refri1Options, ...refri2Options, ...adicionaisOptions];
+  const options = [...formatoOptions, ...refri1Options, ...refri2Options, ...molhosOptions, ...adicionaisOptions];
 
   await request('/items', 'PUT', {
     item: { id: itemId, productId, categoryId: CAT_COMBOS, status: 'AVAILABLE', price: { value: preco } },
@@ -286,6 +349,7 @@ async function configurarComboSolo(itemId, productId, nomeCombo, preco) {
   console.log(`⭐ Configurando ${nomeCombo}...`);
   const ogFormatoId = genUuid();
   const ogRefriId = genUuid();
+  const ogMolhosId = genUuid();
   const ogRetirarId = genUuid();
   const ogAdicionaisId = genUuid();
 
@@ -298,6 +362,15 @@ async function configurarComboSolo(itemId, productId, nomeCombo, preco) {
     id: genUuid(),
     productId: r.id,
     optionGroupId: ogRefriId,
+    status: 'AVAILABLE',
+    index: idx,
+    price: { value: 0 }
+  }));
+
+  const molhosOptions = MOLHOS_SOLO_DEFS.map((m, idx) => ({
+    id: genUuid(),
+    productId: m.id,
+    optionGroupId: ogMolhosId,
     status: 'AVAILABLE',
     index: idx,
     price: { value: 0 }
@@ -330,8 +403,9 @@ async function configurarComboSolo(itemId, productId, nomeCombo, preco) {
       optionGroups: [
         { id: ogFormatoId, min: 1, max: 1, index: 0 },
         { id: ogRefriId, min: 1, max: 1, index: 1 },
-        { id: ogRetirarId, min: 0, max: 10, index: 2 },
-        { id: ogAdicionaisId, min: 0, max: 10, index: 3 }
+        { id: ogMolhosId, min: 1, max: 1, index: 2 },
+        { id: ogRetirarId, min: 0, max: 10, index: 3 },
+        { id: ogAdicionaisId, min: 0, max: 10, index: 4 }
       ]
     },
     { id: PROD_PAO_ID, name: '🥖 Tradicional de Rua (No Pão Bambini 70g)', serving: 'NOT_APPLICABLE' },
@@ -339,6 +413,7 @@ async function configurarComboSolo(itemId, productId, nomeCombo, preco) {
   ];
 
   REFRIS_DEFS.forEach(r => products.push({ id: r.id, name: r.name, serving: 'NOT_APPLICABLE' }));
+  MOLHOS_SOLO_DEFS.forEach(m => products.push({ id: m.id, name: m.name, serving: 'NOT_APPLICABLE' }));
   RETIRADAS_DEFS.forEach(r => products.push({ id: r.id, name: r.name, serving: 'NOT_APPLICABLE' }));
   ADICIONAIS_DEFS.forEach(a => products.push({ id: a.id, name: a.name, serving: 'NOT_APPLICABLE' }));
 
@@ -362,12 +437,21 @@ async function configurarComboSolo(itemId, productId, nomeCombo, preco) {
       optionIds: refriOptions.map(o => o.id)
     },
     {
+      id: ogMolhosId,
+      name: '🎁 Escolha os Molhos Cortesia da Casa (Obrigatório)',
+      status: 'AVAILABLE',
+      min: 1,
+      max: 1,
+      index: 2,
+      optionIds: molhosOptions.map(o => o.id)
+    },
+    {
       id: ogRetirarId,
       name: 'Deseja Retirar Algum Ingrediente? (Opcional)',
       status: 'AVAILABLE',
       min: 0,
       max: 10,
-      index: 2,
+      index: 3,
       optionIds: retirarOptions.map(o => o.id)
     },
     {
@@ -376,12 +460,12 @@ async function configurarComboSolo(itemId, productId, nomeCombo, preco) {
       status: 'AVAILABLE',
       min: 0,
       max: 10,
-      index: 3,
+      index: 4,
       optionIds: adicionaisOptions.map(o => o.id)
     }
   ];
 
-  const options = [...formatoOptions, ...refriOptions, ...retirarOptions, ...adicionaisOptions];
+  const options = [...formatoOptions, ...refriOptions, ...molhosOptions, ...retirarOptions, ...adicionaisOptions];
 
   await request('/items', 'PUT', {
     item: { id: itemId, productId, categoryId: CAT_COMBOS, status: 'AVAILABLE', price: { value: preco } },
