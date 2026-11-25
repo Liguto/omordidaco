@@ -741,34 +741,34 @@ const CARDAPIO = {
       id: "adicionais",
       nome: "➕ Adicionais Extras",
       itens: [
-        { id: "add-salsicha", nome: "1 Salsicha Sadia Extra", preco: 3.50 },
-        { id: "add-catupiry", nome: "Catupiry Original Extra (40g)", preco: 5.00 },
-        { id: "add-bacon", nome: "Bacon Crocante Extra em Cubos (40g)", preco: 5.00 },
-        { id: "add-calabresa", nome: "Calabresa Ralada Douradinha (40g)", preco: 4.50 },
-        { id: "add-parmesao", nome: "Parmesão Ralado Fresco (20g)", preco: 3.50 },
-        { id: "add-pure", nome: "Purê de Batata Artesanal Extra (80g)", preco: 3.50 },
         { id: "add-milho", nome: "Milho Verde Extra", preco: 2.50 },
         { id: "add-ervilha", nome: "Ervilha Extra", preco: 2.50 },
+        { id: "add-batata-palha", nome: "Batata Palha Crocante Extra", preco: 2.50 },
+        { id: "add-salsicha", nome: "1 Salsicha Sadia Extra", preco: 3.50 },
+        { id: "add-parmesao", nome: "Parmesão Ralado Fresco (20g)", preco: 3.50 },
+        { id: "add-pure", nome: "Purê de Batata Artesanal Extra (80g)", preco: 3.50 },
         { id: "add-molho-ervas", nome: "Pote de Maionese de Ervas Frescas (30ml)", preco: 3.50 },
         { id: "add-molho-azeitona", nome: "Pote de Maionese de Azeitonas Azapa (30ml)", preco: 3.50 },
-        { id: "add-batata-palha", nome: "Batata Palha Crocante Extra", preco: 2.50 }
+        { id: "add-calabresa", nome: "Calabresa Ralada Douradinha (40g)", preco: 4.50 },
+        { id: "add-catupiry", nome: "Catupiry Original Extra (40g)", preco: 5.00 },
+        { id: "add-bacon", nome: "Bacon Crocante Extra em Cubos (40g)", preco: 5.00 }
       ]
     },
     {
       id: "bebidas",
       nome: "🥤 Bebidas Geladas",
       itens: [
+        { id: "agua-mineral-sem-gas", nome: "Água Mineral Cristal Gold 510ml (sem gás)", preco: 3.50, imagem: "assets/produtos/agua.jpg" },
+        { id: "agua-mineral-com-gas", nome: "Água Mineral Nestlé Pureza Vital 510ml (com gás)", preco: 4.50, imagem: "assets/produtos/agua.jpg" },
         { id: "refri-coca-lata", nome: "Coca-Cola Original 350ml (Lata)", preco: 6.00, imagem: "assets/produtos/coca-lata.jpg" },
         { id: "refri-coca-zero-lata", nome: "Coca-Cola Zero 350ml (Lata)", preco: 6.00, imagem: "assets/produtos/coca-zero-lata.jpg" },
         { id: "suco-delvalle-goiaba", nome: "Suco Del Valle Goiaba 290ml (Lata)", preco: 6.50, imagem: "assets/produtos/delvalle-maracuja.jpg" },
         { id: "suco-delvalle-limon", nome: "Refresco Del Valle Limon Tropical 290ml", preco: 6.50, imagem: "assets/produtos/delvalle-maracuja.jpg" },
+        { id: "cerveja-original-lata", nome: "Cerveja Original 350ml (Lata)", preco: 7.50, imagem: "assets/produtos/cerveja-original.jpg" },
+        { id: "cerveja-heineken-ln", nome: "Cerveja Heineken 330ml (Long Neck)", preco: 10.00, imagem: "assets/produtos/heineken.jpg" },
         { id: "refri-guarana-1500ml", nome: "Guaraná Antarctica 1,5 Litros (Normal ou Diet)", preco: 11.00, imagem: "assets/produtos/guarana-2l.jpg" },
         { id: "refri-coca-2500ml", nome: "Coca-Cola 2,5 Litros Original", preco: 15.00, imagem: "assets/produtos/coca-2l.jpg" },
-        { id: "refri-coca-zero-2500ml", nome: "Coca-Cola 2,5 Litros Zero", preco: 15.00, imagem: "assets/produtos/coca-2l.jpg" },
-        { id: "agua-mineral-sem-gas", nome: "Água Mineral Cristal Gold 510ml (sem gás)", preco: 3.50, imagem: "assets/produtos/agua.jpg" },
-        { id: "agua-mineral-com-gas", nome: "Água Mineral Nestlé Pureza Vital 510ml (com gás)", preco: 4.50, imagem: "assets/produtos/agua.jpg" },
-        { id: "cerveja-original-lata", nome: "Cerveja Original 350ml (Lata)", preco: 7.50, imagem: "assets/produtos/cerveja-original.jpg" },
-        { id: "cerveja-heineken-ln", nome: "Cerveja Heineken 330ml (Long Neck)", preco: 10.00, imagem: "assets/produtos/heineken.jpg" }
+        { id: "refri-coca-zero-2500ml", nome: "Coca-Cola 2,5 Litros Zero", preco: 15.00, imagem: "assets/produtos/coca-2l.jpg" }
       ]
     }
   ]

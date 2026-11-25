@@ -1820,7 +1820,8 @@
         const grid = document.createElement('div');
         grid.className = 'category-grid';
 
-        cat.itens.forEach(item => {
+        const itensOrdenados = [...(cat.itens || [])].sort((a, b) => (Number(a.preco) || 0) - (Number(b.preco) || 0));
+        itensOrdenados.forEach(item => {
           const card = document.createElement('div');
           card.className = `item-card ${item.destaque ? 'destaque' : ''}`;
 

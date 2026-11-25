@@ -47,19 +47,22 @@ async function sincronizarCardapioCompleto() {
       app_category_id: 'cat_adicionais',
       category_name: '➕ Adicionais Extras',
       app_item_ids: [
-        'add_salsicha', 'add_catupiry', 'add_bacon', 'add_calabresa',
-        'add_parmesao', 'add_pure', 'add_milho', 'add_ervilha',
-        'add_molho_ervas', 'add_molho_azeitona', 'add_batata_palha'
+        'add_milho', 'add_ervilha', 'add_batata_palha',
+        'add_parmesao', 'add_molho_ervas', 'add_molho_azeitona',
+        'add_salsicha', 'add_pure', 'add_calabresa',
+        'add_catupiry', 'add_bacon'
       ]
     },
     {
       app_category_id: 'cat_bebidas',
       category_name: '🥤 Bebidas Geladas',
       app_item_ids: [
-        'refri_coca_lata', 'refri_coca_zero_lata', 'suco_delvalle_goiaba',
-        'suco_delvalle_limon', 'refri_guarana_1500ml', 'refri_coca_2500ml',
-        'refri_coca_zero_2500ml', 'agua_mineral_sem_gas', 'agua_mineral_com_gas',
-        'cerveja_original_lata', 'cerveja_heineken_ln'
+        'agua_mineral_sem_gas', 'agua_mineral_com_gas',
+        'refri_coca_lata', 'refri_coca_zero_lata',
+        'suco_delvalle_goiaba', 'suco_delvalle_limon',
+        'cerveja_original_lata', 'cerveja_heineken_ln',
+        'refri_guarana_1500ml', 'refri_coca_2500ml',
+        'refri_coca_zero_2500ml'
       ]
     }
   ];
