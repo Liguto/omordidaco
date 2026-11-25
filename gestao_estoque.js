@@ -390,8 +390,28 @@ function deduzirEstoquePorPedido(pedido) {
     registrarBaixa('saco_kraft_m', 1);
   }
 
-  // Cortesia Secreta Overdelivery (se o pedido avulso não era combo e não baixou os molhos):
-  if (!baixas['pote_molho_30ml'] && totalDogsNoPedido > 0) {
+  // Análise de Potes Extras de Molho (+R$ 3,50)
+  pedido.itens.forEach(i => {
+    const obs = (i.observacoes || '');
+    const matchExtra = obs.match(/\+\s*(\d+)x\s*Pote Extra de Molho/i);
+    if (matchExtra) {
+      const qtdExtra = Number(matchExtra[1]) || 0;
+      if (qtdExtra > 0) {
+        registrarBaixa('pote_molho_30ml', qtdExtra);
+        registrarBaixa('maionese_verde', qtdExtra * 0.030);
+      }
+    }
+  });
+
+  // Verificação de dispensa de molhos pelo cliente
+  const dispensouMolhos = pedido.itens.some(i => (i.observacoes || '').includes('Sem Molhos da Casa') || (i.observacoes || '').includes('dispensada'));
+  if (dispensouMolhos) {
+    // Cliente optou conscientemente por não receber molhos de cortesia (Evita desperdício)
+    if (!pedido.itens.some(i => (i.observacoes || '').includes('Pote Extra de Molho'))) {
+      delete baixas['pote_molho_30ml'];
+    }
+  } else if (!baixas['pote_molho_30ml'] && totalDogsNoPedido > 0) {
+    // Cortesia padrão de 2 molhos por pedido se não foi dispensado
     registrarBaixa('pote_molho_30ml', 2);
     registrarBaixa('maionese_verde', 0.060);
   }

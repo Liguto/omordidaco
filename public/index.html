@@ -1288,6 +1288,9 @@
       <!-- Seleção de Bebida do Combo (Latas ou 2L c/ Upgrade) -->
       <div class="form-group" id="comboBebidaGroup" style="display: none;"></div>
 
+      <!-- Cortesia da Casa: Escolha de Molhos Artesanais (Até 2 por lanche grátis) -->
+      <div class="form-group" id="molhosCortesiaGroup" style="display: none;"></div>
+
       <!-- Observações / Retirar ingredientes (Renderizado dinamicamente com base no lanche) -->
       <div class="form-group" id="retirarGroup"></div>
 
@@ -1935,6 +1938,15 @@
       abrirModalPersonalizacao(item, catId);
     }
 
+    let qtdMolhoExtraModal = 0;
+
+    function alterarQtdMolhoExtra(delta) {
+      qtdMolhoExtraModal = Math.max(0, qtdMolhoExtraModal + delta);
+      const label = document.getElementById('qtdMolhoExtraLabel');
+      if (label) label.innerText = qtdMolhoExtraModal;
+      recalcularPrecoModal();
+    }
+
     function recalcularPrecoModal() {
       if (!itemSelecionadoTemp) return;
       let total = itemSelecionadoTemp.preco || 0;
@@ -1974,6 +1986,11 @@
       const radioUpgrade2L = document.querySelector('input[name="comboBebida2L"]:checked');
       if (radioUpgrade2L) {
         total += Number(radioUpgrade2L.dataset.upgrade) || 0;
+      }
+
+      // Molhos extras além da cortesia
+      if (qtdMolhoExtraModal > 0) {
+        total += (qtdMolhoExtraModal * 3.50);
       }
 
       document.getElementById('modalItemPrice').innerText = 'R$ ' + total.toFixed(2).replace('.', ',');
@@ -2268,6 +2285,89 @@
         comboBebidaGroup.innerHTML = '';
       }
 
+      // CORTESIA DA CASA: MOLHOS ARTESANAIS (ATÉ 2 POR LANCHE GRÁTIS)
+      const molhosGroup = document.getElementById('molhosCortesiaGroup');
+      qtdMolhoExtraModal = 0;
+      if (molhosGroup) {
+        if (catId === 'hotdogs' || catId === 'combos') {
+          molhosGroup.style.display = 'block';
+          const isFamilia = item.id === 'combo-familia-mordidaco';
+          const isCasal = item.id === 'combo-casal' || item.id === 'combo-casal-vip';
+
+          let cotaTexto = 'Até 2 Grátis';
+          let opt1 = '🌿 1x Maionese de Ervas + 🫒 1x Azeitona Azapa';
+          let val1 = '1x Ervas + 1x Azeitona';
+          let opt2 = '🌿 2x Maionese de Ervas Frescas (Só Molho Verde)';
+          let val2 = '2x Ervas';
+          let opt3 = '🫒 2x Maionese de Azeitona Azapa (Só Azeitona)';
+          let val3 = '2x Azeitona';
+
+          if (isFamilia) {
+            cotaTexto = 'Até 6 Grátis (2 por lanche)';
+            opt1 = '🌿 3x Maionese de Ervas + 🫒 3x Azeitona Azapa';
+            val1 = '3x Ervas + 3x Azeitona';
+            opt2 = '🌿 6x Maionese de Ervas Frescas (Só Verde)';
+            val2 = '6x Ervas';
+            opt3 = '🫒 6x Maionese de Azeitona Azapa (Só Azeitona)';
+            val3 = '6x Azeitona';
+          } else if (isCasal) {
+            cotaTexto = 'Até 4 Grátis (2 por lanche)';
+            opt1 = '🌿 2x Maionese de Ervas + 🫒 2x Azeitona Azapa';
+            val1 = '2x Ervas + 2x Azeitona';
+            opt2 = '🌿 4x Maionese de Ervas Frescas (Só Verde)';
+            val2 = '4x Ervas';
+            opt3 = '🫒 4x Maionese de Azeitona Azapa (Só Azeitona)';
+            val3 = '4x Azeitona';
+          }
+
+          molhosGroup.innerHTML = `
+            <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px; margin-bottom: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <label style="font-size: 13px; font-weight: 900; color: #0f172a; margin-bottom: 0;">
+                  🎁 Cortesia: Molhos Artesanais (30ml)
+                </label>
+                <span style="font-size: 11px; font-weight: 800; color: #15803d; background: #dcfce7; padding: 2px 8px; border-radius: 6px;">${cotaTexto}</span>
+              </div>
+              <p style="font-size: 11.5px; color: #64748b; margin: 0 0 8px 0;">Selecione os molhos artesanais inclusos gratuitamente:</p>
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; border-radius: 8px; background: #ffffff; border: 1.5px solid #cbd5e1;">
+                  <input type="radio" name="opcaoMolhoCortesia" value="${val1}" checked onchange="recalcularPrecoModal()">
+                  <span style="font-size: 12px;">${opt1} • <strong style="color:#15803d;">Grátis</strong></span>
+                </label>
+                <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; border-radius: 8px; background: #ffffff; border: 1.5px solid #cbd5e1;">
+                  <input type="radio" name="opcaoMolhoCortesia" value="${val2}" onchange="recalcularPrecoModal()">
+                  <span style="font-size: 12px;">${opt2} • <strong style="color:#15803d;">Grátis</strong></span>
+                </label>
+                <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; border-radius: 8px; background: #ffffff; border: 1.5px solid #cbd5e1;">
+                  <input type="radio" name="opcaoMolhoCortesia" value="${val3}" onchange="recalcularPrecoModal()">
+                  <span style="font-size: 12px;">${opt3} • <strong style="color:#15803d;">Grátis</strong></span>
+                </label>
+                <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; border-radius: 8px; background: #ffffff; border: 1.5px solid #cbd5e1;">
+                  <input type="radio" name="opcaoMolhoCortesia" value="Sem Molhos" onchange="recalcularPrecoModal()">
+                  <span style="font-size: 12px;">❌ <strong>Não enviar molhos desta vez</strong> <small style="color: #64748b;">(Evitar desperdício)</small></span>
+                </label>
+              </div>
+
+              <!-- Potes Extras além da cortesia -->
+              <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #cbd5e1; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <span style="font-size: 12px; font-weight: 800; color: #334155;">Deseja mais molho além da cortesia?</span><br>
+                  <small style="font-size: 11px; color: #64748b;">+ R$ 3,50 por pote extra de 30ml</small>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <button type="button" onclick="alterarQtdMolhoExtra(-1)" style="width: 28px; height: 28px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; font-weight: 900; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center;">-</button>
+                  <span id="qtdMolhoExtraLabel" style="font-size: 13.5px; font-weight: 900; min-width: 16px; text-align: center;">0</span>
+                  <button type="button" onclick="alterarQtdMolhoExtra(1)" style="width: 28px; height: 28px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; font-weight: 900; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center;">+</button>
+                </div>
+              </div>
+            </div>
+          `;
+        } else {
+          molhosGroup.style.display = 'none';
+          molhosGroup.innerHTML = '';
+        }
+      }
+
       // UPSELL INTELIGENTE (Para Hot Dogs Avulsos)
       const upsellGroup = document.getElementById('upsellGroup');
       if (catId === 'hotdogs') {
@@ -2403,6 +2503,21 @@
           precoCalculado += pUpg;
           observacoes.push(`Upsell: ${chk.dataset.nome} (+ R$ ${pUpg.toFixed(2).replace('.', ',')})`);
         });
+      }
+
+      // Captura escolha de Molhos da Casa (Cortesia e Extras)
+      const radioMolho = document.querySelector('input[name="opcaoMolhoCortesia"]:checked');
+      if (radioMolho) {
+        if (radioMolho.value === 'Sem Molhos') {
+          observacoes.push('Sem Molhos da Casa (Cortesia dispensada)');
+        } else {
+          observacoes.push(`Molhos: ${radioMolho.value}`);
+        }
+      }
+      if (qtdMolhoExtraModal > 0) {
+        const valExtra = qtdMolhoExtraModal * 3.50;
+        precoCalculado += valExtra;
+        observacoes.push(`+ ${qtdMolhoExtraModal}x Pote Extra de Molho (+R$ ${valExtra.toFixed(2).replace('.', ',')})`);
       }
 
       carrinho.push({
