@@ -302,33 +302,23 @@
     },
     {
       "id": "dogueira_bh05",
-      "nome": "Dogueira Térmica Bom Apetite BH 05 (Loja do Lancheiro)",
+      "nome": "Dogueira Térmica Bom Apetite BH 05 (Atende No Pão e No Prato - Lancheiro)",
       "categoria": "Embalagens",
       "unidade": "un",
       "quantidade": 100,
       "minimo": 25,
       "custoUnitario": 0.599,
-      "rendimento": "100 lanches no pão (1 por lanche)"
+      "rendimento": "100 lanches (embalagem térmica padrão para No Pão e No Prato)"
     },
     {
       "id": "pote_congelamento_700ml",
-      "nome": "Marmita Fit Retangular PP 750ml (Mise en place / Congelamento de Salsichas - M.A. Embalagens)",
+      "nome": "Marmita Fit Retangular PP 750ml (Mise en place / Congelamento de Salsichas no Freezer - M.A. Embalagens)",
       "categoria": "Embalagens",
       "unidade": "un",
       "quantidade": 24,
       "minimo": 5,
       "custoUnitario": 1.33,
       "rendimento": "24 porções de salsicha no freezer (mise en place)"
-    },
-    {
-      "id": "marmitinha_500ml_prato",
-      "nome": "Marmita Fit Retangular PP 750ml c/ Tampa (Dog No Prato - M.A. Embalagens)",
-      "categoria": "Embalagens",
-      "unidade": "un",
-      "quantidade": 24,
-      "minimo": 10,
-      "custoUnitario": 1.33,
-      "rendimento": "24 lanches no prato quentinhos (1 por pedido marmita)"
     },
     {
       "id": "pote_molho_30ml",

@@ -74,7 +74,7 @@ function deduzirEstoquePorPedido(pedido) {
         registrarBaixa('saco_kraft_g', 1 * qtdItem);
 
         if (isNoPrato) {
-          registrarBaixa('marmitinha_500ml_prato', 2 * qtdItem);
+          registrarBaixa('dogueira_bh05', 2 * qtdItem);
           registrarBaixa('garfo_reforcado', 2 * qtdItem);
           registrarBaixa('pure_batata', 0.240 * qtdItem);
           registrarBaixa('molho_tomate', 0.080 * qtdItem);
@@ -99,7 +99,7 @@ function deduzirEstoquePorPedido(pedido) {
         registrarBaixa('saco_kraft_g', 1 * qtdItem);
 
         if (isNoPrato) {
-          registrarBaixa('marmitinha_500ml_prato', 2 * qtdItem);
+          registrarBaixa('dogueira_bh05', 2 * qtdItem);
           registrarBaixa('garfo_reforcado', 2 * qtdItem);
           registrarBaixa('pure_batata', 0.240 * qtdItem);
           registrarBaixa('molho_tomate', 0.080 * qtdItem);
@@ -125,7 +125,7 @@ function deduzirEstoquePorPedido(pedido) {
         registrarBaixa('saco_kraft_g', 1 * qtdItem);
         
         if (isNoPrato) {
-          registrarBaixa('marmitinha_500ml_prato', 3 * qtdItem);
+          registrarBaixa('dogueira_bh05', 3 * qtdItem);
           registrarBaixa('garfo_reforcado', 3 * qtdItem);
           registrarBaixa('pure_batata', 0.360 * qtdItem);
           registrarBaixa('molho_tomate', 0.120 * qtdItem);
@@ -152,7 +152,7 @@ function deduzirEstoquePorPedido(pedido) {
         registrarBaixa('colher_sobremesa_lacrada', 1 * qtdItem);
 
         if (isNoPrato) {
-          registrarBaixa('marmitinha_500ml_prato', 1 * qtdItem);
+          registrarBaixa('dogueira_bh05', 1 * qtdItem);
           registrarBaixa('garfo_reforcado', 1 * qtdItem);
           registrarBaixa('pure_batata', 0.120 * qtdItem);
           registrarBaixa('molho_tomate', 0.040 * qtdItem);
@@ -180,7 +180,7 @@ function deduzirEstoquePorPedido(pedido) {
         registrarBaixa('pote_molho_30ml', 2 * qtdItem);
 
         if (isNoPrato) {
-          registrarBaixa('marmitinha_500ml_prato', 1 * qtdItem);
+          registrarBaixa('dogueira_bh05', 1 * qtdItem);
           registrarBaixa('garfo_reforcado', 1 * qtdItem);
           registrarBaixa('pure_batata', 0.120 * qtdItem);
           registrarBaixa('molho_tomate', 0.040 * qtdItem);
@@ -204,7 +204,7 @@ function deduzirEstoquePorPedido(pedido) {
         registrarBaixa('pote_molho_30ml', 2 * qtdItem);
 
         if (isNoPrato) {
-          registrarBaixa('marmitinha_500ml_prato', 1 * qtdItem);
+          registrarBaixa('dogueira_bh05', 1 * qtdItem);
           registrarBaixa('garfo_reforcado', 1 * qtdItem);
           registrarBaixa('pure_batata', 0.120 * qtdItem);
           registrarBaixa('molho_tomate', 0.040 * qtdItem);
@@ -226,7 +226,7 @@ function deduzirEstoquePorPedido(pedido) {
         registrarBaixa('pote_molho_30ml', 2 * qtdItem);
 
         if (isNoPrato) {
-          registrarBaixa('marmitinha_500ml_prato', 1 * qtdItem);
+          registrarBaixa('dogueira_bh05', 1 * qtdItem);
           registrarBaixa('garfo_reforcado', 1 * qtdItem);
           registrarBaixa('pure_batata', 0.120 * qtdItem);
           registrarBaixa('molho_tomate', 0.040 * qtdItem);
@@ -247,7 +247,7 @@ function deduzirEstoquePorPedido(pedido) {
 
       // Base do Formato
       if (isNoPrato) {
-        registrarBaixa('marmitinha_500ml_prato', 1 * qtdItem);
+        registrarBaixa('dogueira_bh05', 1 * qtdItem);
         registrarBaixa('garfo_reforcado', 1 * qtdItem);
         registrarBaixa('pure_batata', 0.120 * qtdItem); // 120g purê no prato
         registrarBaixa('molho_tomate', 0.040 * qtdItem);
