@@ -12,33 +12,33 @@
     },
     {
       "id": "salsicha_sadia",
-      "nome": "Salsicha Sadia Oficial",
+      "nome": "Salsicha Sadia Oficial Hot Dog",
       "categoria": "Insumos",
       "unidade": "un",
-      "quantidade": 0,
+      "quantidade": 60,
       "minimo": 20,
-      "custoUnitario": 0.78,
-      "rendimento": "Rende ~14 lanches por kg (mix de 1 e 2 salsichas)"
+      "custoUnitario": 0.5,
+      "rendimento": "Rende ~40 a 50 lanches (mix de 1 e 2 salsichas Sadia)"
     },
     {
       "id": "pure_batata",
-      "nome": "Purê de Batata Artesanal da Casa (Batata Asterix/Inglesa)",
+      "nome": "Purê de Batata Artesanal da Casa (Saco 25kg Rossi CEASA)",
       "categoria": "Insumos",
       "unidade": "kg",
-      "quantidade": 0,
-      "minimo": 2,
-      "custoUnitario": 8,
-      "rendimento": "Rende ~12 lanches por kg (porção 80g pão / 120g prato)"
+      "quantidade": 25,
+      "minimo": 5,
+      "custoUnitario": 4.8,
+      "rendimento": "Rende ~200 a 250 lanches com purê de ouro (saco 25kg batata especial CEASA)"
     },
     {
       "id": "molho_tomate",
-      "nome": "Molho Especial da Casa (Tomates Frescos Refogados)",
+      "nome": "Molho Especial da Casa (Tomates Frescos & Sachês Quero Refogados)",
       "categoria": "Insumos",
       "unidade": "kg",
-      "quantidade": 0,
-      "minimo": 1,
-      "custoUnitario": 10,
-      "rendimento": "Rende ~33 lanches por kg (porção 30g molho refogado)"
+      "quantidade": 0.96,
+      "minimo": 0.5,
+      "custoUnitario": 8.5,
+      "rendimento": "Rende ~32 lanches (4 sachês Quero 240g refogados artesanalmente)"
     },
     {
       "id": "queijo_mussarela",
@@ -52,13 +52,13 @@
     },
     {
       "id": "queijo_parmesao",
-      "nome": "Queijo Parmesão Fresco Ralado na Hora",
+      "nome": "Queijo Parmesão Scala Cilindro Fresco Ralado na Hora",
       "categoria": "Insumos",
       "unidade": "kg",
-      "quantidade": 0,
-      "minimo": 0.3,
-      "custoUnitario": 55,
-      "rendimento": "Rende ~100 lanches por kg (chuva fresca 10g na hora)"
+      "quantidade": 0.36,
+      "minimo": 0.1,
+      "custoUnitario": 124.39,
+      "rendimento": "Rende ~36 lanches (chuva fresca 10g de Parmesão Scala ralado na hora)"
     },
     {
       "id": "bacon_cubos",
@@ -72,43 +72,43 @@
     },
     {
       "id": "calabresa_fatiada",
-      "nome": "Calabresa Defumada Ralada Douradinha",
+      "nome": "Linguiça Calabresa Defumada Sadia Ralada Douradinha",
       "categoria": "Insumos",
       "unidade": "kg",
-      "quantidade": 0,
-      "minimo": 0.4,
-      "custoUnitario": 28,
-      "rendimento": "Rende 25 Tudões por kg (porção 40g ralada)"
+      "quantidade": 0.952,
+      "minimo": 0.3,
+      "custoUnitario": 28.9,
+      "rendimento": "Rende 24 Tudões (porção 40g ralada dourada na chapa)"
     },
     {
       "id": "frango_desfiado",
-      "nome": "Frango Desfiado Temperado da Casa",
+      "nome": "Filé de Peito de Frango Congelado Seara IQF (Desfiado)",
       "categoria": "Insumos",
       "unidade": "kg",
-      "quantidade": 0,
+      "quantidade": 2,
       "minimo": 0.4,
-      "custoUnitario": 22,
-      "rendimento": "Rende ~20 lanches por kg cozido (porção 50g)"
+      "custoUnitario": 22.5,
+      "rendimento": "Rende ~40 lanches cremosos (2kg peito Seara cozido e temperado)"
     },
     {
       "id": "catupiry_original",
       "nome": "Legítimo Catupiry® Original (Bisnaga 1,5kg sem amido)",
       "categoria": "Insumos",
       "unidade": "kg",
-      "quantidade": 0,
+      "quantidade": 1.5,
       "minimo": 0.5,
-      "custoUnitario": 35,
-      "rendimento": "Rende 37 lanches por bisnaga 1,5kg (porção 40g)"
+      "custoUnitario": 39.19,
+      "rendimento": "Rende 37 lanches por bisnaga 1,5kg (porção 40g legítima)"
     },
     {
       "id": "batata_palha",
-      "nome": "Batata Palha Extra Crocante",
+      "nome": "Batata Palha Select Extra Crocante (2x 400g)",
       "categoria": "Insumos",
       "unidade": "kg",
-      "quantidade": 0,
-      "minimo": 0.6,
-      "custoUnitario": 16,
-      "rendimento": "Rende 50 lanches por kg (porção 20g crocante)"
+      "quantidade": 0.8,
+      "minimo": 0.3,
+      "custoUnitario": 37.25,
+      "rendimento": "Rende 40 lanches por 800g (porção 20g crocante)"
     },
     {
       "id": "milho_conserva",
@@ -132,153 +132,153 @@
     },
     {
       "id": "maionese_verde",
-      "nome": "Molho Especial da Casa (Maioneses Artesanais Azeitona/Ervas)",
+      "nome": "Molho Especial da Casa (Hellmann's Sachê 2kg + Ervas Verdes + Azeitona Azapa)",
       "categoria": "Insumos",
       "unidade": "kg",
-      "quantidade": 0,
-      "minimo": 0.7,
-      "custoUnitario": 15,
-      "rendimento": "Rende ~33 potinhos 30ml/kg (16 pedidos overdelivery)"
+      "quantidade": 2.335,
+      "minimo": 0.5,
+      "custoUnitario": 19.9,
+      "rendimento": "Rende ~75 potinhos 30ml de molhos artesanais overdelivery"
     },
     {
       "id": "palito_queijo_empanado",
-      "nome": "Palito Stick Mussarela McCain / Artesanal (un)",
+      "nome": "Empanitos Stick Lar 1,5kg (Queijudo VEG)",
       "categoria": "Insumos",
       "unidade": "un",
-      "quantidade": 0,
+      "quantidade": 30,
       "minimo": 10,
-      "custoUnitario": 2.12,
-      "rendimento": "Rende 17 lanches Queijudo VEG por kg (2 un/lanche)"
+      "custoUnitario": 0.7,
+      "rendimento": "Rende 15 lanches Queijudo VEG (2 palitos por lanche)"
     },
     {
       "id": "vinagrete_artesanal",
-      "nome": "Vinagrete Artesanal da Casa (Tomate/Cebola frescos)",
+      "nome": "Vinagrete Artesanal da Casa (Tomate/Cebola frescos + Vinagre Castelo)",
       "categoria": "Insumos",
       "unidade": "kg",
-      "quantidade": 0,
-      "minimo": 0.5,
-      "custoUnitario": 11.5,
+      "quantidade": 1,
+      "minimo": 0.3,
+      "custoUnitario": 8.5,
       "rendimento": "Rende ~33 lanches por kg (porção 30g fresca)"
     },
     {
       "id": "sobremesa_tortinha_limao",
-      "nome": "Tortinha de Limão no Pote (170ml) [Montada/Pronta]",
+      "nome": "Tortinha de Limão no Pote (170ml/250ml) [Montada/Pronta]",
       "categoria": "Sobremesas",
       "unidade": "un",
       "quantidade": 0,
       "minimo": 5,
       "custoUnitario": 2.7,
-      "rendimento": "15 tortinhas montadas prontas para venda"
+      "rendimento": "Insumos em estoque prontos p/ montagem de até 27 unidades"
     },
     {
       "id": "sobremesa_escondidinho_nutella",
-      "nome": "Escondidinho de Ninho com Nutella e Brownie (170ml) [Montado/Pronto]",
+      "nome": "Escondidinho de Ninho com Nutella e Brownie [Montado/Pronto]",
       "categoria": "Sobremesas",
       "unidade": "un",
       "quantidade": 0,
       "minimo": 5,
       "custoUnitario": 4.93,
-      "rendimento": "15 escondidinhos montados prontos para venda"
+      "rendimento": "Insumos em estoque prontos p/ montagem de até 27 unidades"
     },
     {
       "id": "leite_condensado",
-      "nome": "Leite Condensado (Lata/Caixa 395g - Moça/Itambé/Italac)",
+      "nome": "Leite Condensado Semidesnatado Italac TP 395g (Caixa Fechada 27un)",
       "categoria": "Sobremesas",
       "unidade": "un",
-      "quantidade": 0,
-      "minimo": 4,
-      "custoUnitario": 5.4,
-      "rendimento": "Rende ~2,5 potes de 170ml por caixinha 395g"
+      "quantidade": 27,
+      "minimo": 5,
+      "custoUnitario": 5.99,
+      "rendimento": "Rende ~67 sobremesas nos potes (27 caixinhas de 395g)"
     },
     {
       "id": "creme_leite",
-      "nome": "Creme de Leite (Caixa 200g - Italac/Piracanjuba)",
+      "nome": "Creme de Leite Piracanjuba TP 200g (Caixa Fechada 27un)",
       "categoria": "Sobremesas",
       "unidade": "un",
-      "quantidade": 0,
-      "minimo": 4,
-      "custoUnitario": 3.1,
-      "rendimento": "Rende ~2,5 potes de 170ml por caixinha 200g"
+      "quantidade": 27,
+      "minimo": 5,
+      "custoUnitario": 3.59,
+      "rendimento": "Rende ~67 sobremesas nos potes (27 caixinhas de 200g)"
     },
     {
       "id": "leite_ninho",
-      "nome": "Leite em Pó Ninho Integral Instantâneo (Nestlé 380g)",
+      "nome": "Leite em Pó Ninho Instantâneo Nestlé (Sachê Gigante 975g)",
       "categoria": "Sobremesas",
-      "unidade": "lata",
-      "quantidade": 0,
-      "minimo": 1,
-      "custoUnitario": 17.9,
-      "rendimento": "Rende ~30 potes de brigadeiro de Ninho por lata 380g"
+      "unidade": "kg",
+      "quantidade": 0.975,
+      "minimo": 0.3,
+      "custoUnitario": 56.31,
+      "rendimento": "Rende ~75 potes de brigadeiro cremoso de Ninho"
     },
     {
       "id": "nutella_ferrero",
-      "nome": "Nutella Ferrero Legítima Pura (Pote/Balde)",
+      "nome": "Nutella Ferrero Legítima Pura (2 Potes de 700g = 1,4kg)",
       "categoria": "Sobremesas",
       "unidade": "kg",
-      "quantidade": 0,
-      "minimo": 1,
-      "custoUnitario": 56,
-      "rendimento": "Rende ~28 potes de 170ml por kg (porção 35g pura)"
+      "quantidade": 1.4,
+      "minimo": 0.4,
+      "custoUnitario": 64.13,
+      "rendimento": "Rende ~40 potes de Escondidinho (porção 35g de pura Nutella)"
     },
     {
       "id": "chocolate_meio_amargo",
-      "nome": "Chocolate Meio Amargo Nobre p/ Brownie (Barra Confeitaria)",
+      "nome": "Cobertura Chocolate Mavalerio Meio Amargo (Barra 1,01kg)",
       "categoria": "Sobremesas",
       "unidade": "kg",
-      "quantidade": 0,
-      "minimo": 0.5,
-      "custoUnitario": 42,
-      "rendimento": "Rende ~50 brownies nobres por barra de 1kg"
+      "quantidade": 1.01,
+      "minimo": 0.3,
+      "custoUnitario": 40.5,
+      "rendimento": "Rende ~50 brownies nobres da Monique por barra 1,01kg"
     },
     {
       "id": "chocolate_po_50",
-      "nome": "Chocolate em Pó 50% Cacau p/ Brownie",
+      "nome": "Chocolate em Pó Cacau Foods 55% Cacau (Pacote 1,005kg)",
       "categoria": "Sobremesas",
       "unidade": "kg",
-      "quantidade": 0,
+      "quantidade": 1.005,
       "minimo": 0.3,
-      "custoUnitario": 28,
-      "rendimento": "Rende ~40 brownies nobres por pacote de 1kg"
+      "custoUnitario": 58.6,
+      "rendimento": "Rende ~40 fornadas densas de brownie nobre"
     },
     {
       "id": "manteiga_sem_sal",
-      "nome": "Manteiga Sem Sal (Barra 500g Confeitaria)",
+      "nome": "Margarina Doriana c/ Sal 1kg (Culinária Brownie e Purê)",
       "categoria": "Sobremesas",
-      "unidade": "barra",
-      "quantidade": 0,
-      "minimo": 1,
-      "custoUnitario": 16,
-      "rendimento": "Rende ~15 tortinhas + 1 tabuleiro brownie por barra 500g"
+      "unidade": "kg",
+      "quantidade": 1,
+      "minimo": 0.3,
+      "custoUnitario": 14.9,
+      "rendimento": "Rende ~30 tortinhas + 3 tabuleiros de brownie + purê de ouro"
     },
     {
       "id": "acucar_refinado",
-      "nome": "Açúcar Refinado Especial p/ Brownie",
+      "nome": "Açúcar Refinado Da Barra (2x 1kg = 2kg)",
       "categoria": "Sobremesas",
       "unidade": "kg",
-      "quantidade": 0,
-      "minimo": 1,
-      "custoUnitario": 4.8,
-      "rendimento": "Rende ~4 fornadas de brownie por kg"
+      "quantidade": 2,
+      "minimo": 0.5,
+      "custoUnitario": 3.49,
+      "rendimento": "Rende ~8 fornadas de brownie com casquinha craquelada"
     },
     {
       "id": "ovos_frescos",
-      "nome": "Ovos Frescos Selecionados p/ Brownie",
+      "nome": "Ovos Selecionados Vera CEASA (Bandeja 30 un)",
       "categoria": "Sobremesas",
-      "unidade": "dz",
-      "quantidade": 0,
-      "minimo": 1,
-      "custoUnitario": 11,
-      "rendimento": "Rende 3 fornadas de brownie por dúzia (4 ovos/fornada)"
+      "unidade": "un",
+      "quantidade": 30,
+      "minimo": 8,
+      "custoUnitario": 0.833,
+      "rendimento": "Rende ~7 fornadas de brownie nobre (4 ovos por fornada)"
     },
     {
       "id": "farinha_trigo",
-      "nome": "Farinha de Trigo Especial p/ Brownie",
+      "nome": "Farinha de Trigo Especial Nita (2x 1kg = 2kg)",
       "categoria": "Sobremesas",
       "unidade": "kg",
-      "quantidade": 0,
-      "minimo": 1,
-      "custoUnitario": 4.9,
-      "rendimento": "Rende ~8 fornadas de brownie por kg"
+      "quantidade": 2,
+      "minimo": 0.5,
+      "custoUnitario": 4.59,
+      "rendimento": "Rende ~8 fornadas de brownie com textura aveludada"
     },
     {
       "id": "limao_taiti",
@@ -292,13 +292,13 @@
     },
     {
       "id": "biscoito_maisena",
-      "nome": "Biscoito Maisena (Pacote 400g - Marilan/Triunfo)",
+      "nome": "Biscoito Maisena Marilan 300g (2x 300g = 600g)",
       "categoria": "Sobremesas",
       "unidade": "pct",
-      "quantidade": 0,
+      "quantidade": 2,
       "minimo": 1,
-      "custoUnitario": 5.2,
-      "rendimento": "Rende ~13 tortinhas de limão por pacote de 400g"
+      "custoUnitario": 6.49,
+      "rendimento": "Rende ~25 tortinhas de limão (farofinha crocante amanteigada)"
     },
     {
       "id": "dogueira_bh05",
@@ -322,23 +322,63 @@
     },
     {
       "id": "marmitinha_500ml_prato",
-      "nome": "Marmitinha Térmica 500ml Descartável c/ Tampa (Dog No Prato)",
+      "nome": "Marmita Fit Retangular PP 750ml c/ Tampa (Dog No Prato - M.A. Embalagens)",
       "categoria": "Embalagens",
       "unidade": "un",
-      "quantidade": 0,
-      "minimo": 15,
-      "custoUnitario": 0.85,
-      "rendimento": "25 a 50 lanches no prato (1 por pedido marmita)"
+      "quantidade": 24,
+      "minimo": 10,
+      "custoUnitario": 1.33,
+      "rendimento": "24 lanches no prato quentinhos (1 por pedido marmita)"
     },
     {
       "id": "pote_molho_30ml",
-      "nome": "Pote Molho 30ml Preto Galvanotek G695 c/ Tampa (Loja do Lancheiro)",
+      "nome": "Pote Molho 30ml Preto G695 c/ Tampa (100un Lancheiro + 700un M.A. Embalagens)",
       "categoria": "Embalagens",
       "unidade": "un",
-      "quantidade": 100,
-      "minimo": 20,
-      "custoUnitario": 0.219,
-      "rendimento": "50 pedidos (kit de cortesia com 2 potes por pedido)"
+      "quantidade": 800,
+      "minimo": 50,
+      "custoUnitario": 0.156,
+      "rendimento": "400 pedidos de delivery (kit overdelivery com 2 potes por pedido)"
+    },
+    {
+      "id": "pote_cristal_170ml",
+      "nome": "PF-642A Pote Pet Articulado 250ml c/ Tampa (Caixa 300un - M.A. Embalagens)",
+      "categoria": "Embalagens",
+      "unidade": "un",
+      "quantidade": 300,
+      "minimo": 30,
+      "custoUnitario": 0.2,
+      "rendimento": "300 sobremesas no pote (Tortinha e Escondidinho)"
+    },
+    {
+      "id": "colher_sobremesa_lacrada",
+      "nome": "Colher Sobremesa Ice Branca (Pacote 50un - M.A. Embalagens)",
+      "categoria": "Embalagens",
+      "unidade": "un",
+      "quantidade": 50,
+      "minimo": 15,
+      "custoUnitario": 0.08,
+      "rendimento": "50 sobremesas no pote (1 por venda)"
+    },
+    {
+      "id": "garfo_reforcado",
+      "nome": "Garfo Refeição Master Branco (Pacote 50un - M.A. Embalagens)",
+      "categoria": "Embalagens",
+      "unidade": "un",
+      "quantidade": 50,
+      "minimo": 15,
+      "custoUnitario": 0.2,
+      "rendimento": "50 lanches no prato (1 por pedido marmita)"
+    },
+    {
+      "id": "faca_refeicao",
+      "nome": "Faca Refeição Master Branca (Pacote 50un - M.A. Embalagens)",
+      "categoria": "Embalagens",
+      "unidade": "un",
+      "quantidade": 50,
+      "minimo": 10,
+      "custoUnitario": 0.2,
+      "rendimento": "50 cortes e apoio operacional"
     },
     {
       "id": "saco_kraft_m",
@@ -411,54 +451,24 @@
       "rendimento": "144 pedidos (1 sachê cortesia Heinz)"
     },
     {
-      "id": "pote_cristal_170ml",
-      "nome": "Pote Cristal 170ml com Tampa Vedada (Galvanotek)",
-      "categoria": "Embalagens",
-      "unidade": "un",
-      "quantidade": 0,
-      "minimo": 15,
-      "custoUnitario": 0.55,
-      "rendimento": "50 sobremesas no pote (1 por venda)"
-    },
-    {
-      "id": "colher_sobremesa_lacrada",
-      "nome": "Colherzinha de Sobremesa Reforçada Lacrada Individual",
-      "categoria": "Embalagens",
-      "unidade": "un",
-      "quantidade": 0,
-      "minimo": 15,
-      "custoUnitario": 0.12,
-      "rendimento": "50 sobremesas no pote (1 por venda)"
-    },
-    {
-      "id": "garfo_reforcado",
-      "nome": "Garfo Reforçado Descartável (No Prato)",
-      "categoria": "Embalagens",
-      "unidade": "un",
-      "quantidade": 0,
-      "minimo": 20,
-      "custoUnitario": 0.15,
-      "rendimento": "50 a 100 lanches no prato (1 por pedido marmita)"
-    },
-    {
       "id": "coca_lata",
       "nome": "Coca-Cola Original 350ml (Lata)",
       "categoria": "Bebidas",
       "unidade": "un",
-      "quantidade": 0,
-      "minimo": 8,
-      "custoUnitario": 2.3,
-      "rendimento": "1 unidade = 1 venda de bebida"
+      "quantidade": 12,
+      "minimo": 4,
+      "custoUnitario": 2.99,
+      "rendimento": "12 vendas individuais de Coca Lata"
     },
     {
       "id": "coca_zero_lata",
       "nome": "Coca-Cola Zero 350ml (Lata)",
       "categoria": "Bebidas",
       "unidade": "un",
-      "quantidade": 0,
-      "minimo": 6,
-      "custoUnitario": 2.3,
-      "rendimento": "1 unidade = 1 venda de bebida"
+      "quantidade": 12,
+      "minimo": 4,
+      "custoUnitario": 2.99,
+      "rendimento": "12 vendas individuais de Coca Zero Lata"
     },
     {
       "id": "guarana_lata",
@@ -466,7 +476,7 @@
       "categoria": "Bebidas",
       "unidade": "un",
       "quantidade": 0,
-      "minimo": 6,
+      "minimo": 4,
       "custoUnitario": 2.2,
       "rendimento": "1 unidade = 1 venda de bebida"
     },
@@ -491,97 +501,389 @@
       "rendimento": "1 unidade = 1 venda de bebida"
     },
     {
-      "id": "delvalle_uva_lata",
-      "nome": "Suco Del Valle Uva 290ml (Lata)",
-      "categoria": "Bebidas",
-      "unidade": "un",
-      "quantidade": 0,
-      "minimo": 4,
-      "custoUnitario": 2.4,
-      "rendimento": "1 unidade = 1 venda de bebida"
-    },
-    {
       "id": "delvalle_maracuja_lata",
-      "nome": "Suco Del Valle Maracujá 290ml (Lata)",
+      "nome": "Néctar Del Valle 290ml Lata (Goiaba & Limon Tropical)",
       "categoria": "Bebidas",
       "unidade": "un",
-      "quantidade": 0,
+      "quantidade": 12,
       "minimo": 4,
-      "custoUnitario": 2.4,
-      "rendimento": "1 unidade = 1 venda de bebida"
+      "custoUnitario": 3.99,
+      "rendimento": "12 vendas de suco Del Valle em lata (6 Goiaba + 6 Limon)"
     },
     {
       "id": "coca_2l",
-      "nome": "Coca-Cola 2 Litros Normal",
+      "nome": "Coca-Cola 2,5 Litros Original Garrafa",
       "categoria": "Bebidas",
       "unidade": "un",
-      "quantidade": 0,
-      "minimo": 3,
-      "custoUnitario": 7.5,
-      "rendimento": "1 garrafa = 1 venda ou combo família"
+      "quantidade": 3,
+      "minimo": 2,
+      "custoUnitario": 12.5,
+      "rendimento": "3 combos família ou upgrades de refrigerante grande"
     },
     {
       "id": "coca_zero_2l",
-      "nome": "Coca-Cola 2 Litros Zero",
+      "nome": "Coca-Cola 2,5 Litros Zero Garrafa",
       "categoria": "Bebidas",
       "unidade": "un",
-      "quantidade": 0,
+      "quantidade": 6,
       "minimo": 2,
-      "custoUnitario": 7.5,
-      "rendimento": "1 garrafa = 1 venda ou combo família"
+      "custoUnitario": 11.49,
+      "rendimento": "6 combos família ou upgrades de refrigerante grande zero"
     },
     {
       "id": "guarana_2l",
-      "nome": "Guaraná Antarctica 2 Litros",
+      "nome": "Guaraná Antarctica 1,5 Litros (Normal e Diet)",
       "categoria": "Bebidas",
       "unidade": "un",
-      "quantidade": 0,
+      "quantidade": 12,
       "minimo": 4,
-      "custoUnitario": 6.5,
-      "rendimento": "1 garrafa = 1 venda ou combo família"
+      "custoUnitario": 7.19,
+      "rendimento": "12 combos família com Guaraná garrafa (6 Normal + 6 Diet)"
     },
     {
       "id": "agua_sem_gas",
-      "nome": "Água Mineral 500ml (sem gás)",
+      "nome": "Água Mineral Cristal Gold 510ml (Sem Gás)",
       "categoria": "Bebidas",
       "unidade": "un",
-      "quantidade": 0,
-      "minimo": 6,
-      "custoUnitario": 1.1,
-      "rendimento": "1 unidade = 1 venda de bebida"
+      "quantidade": 12,
+      "minimo": 4,
+      "custoUnitario": 0.99,
+      "rendimento": "12 vendas de água mineral sem gás bem gelada"
     },
     {
       "id": "agua_com_gas",
-      "nome": "Água Mineral 500ml (com gás)",
+      "nome": "Água Mineral 510ml (Com Gás)",
       "categoria": "Bebidas",
       "unidade": "un",
-      "quantidade": 0,
+      "quantidade": 12,
       "minimo": 4,
-      "custoUnitario": 1.25,
-      "rendimento": "1 unidade = 1 venda de bebida"
+      "custoUnitario": 2.19,
+      "rendimento": "12 vendas de água mineral com gás bem gelada"
     },
     {
       "id": "cerveja_original",
       "nome": "Cerveja Original 350ml (Lata)",
       "categoria": "Bebidas",
       "unidade": "un",
-      "quantidade": 0,
-      "minimo": 8,
-      "custoUnitario": 3.8,
-      "rendimento": "1 unidade = 1 venda de bebida"
+      "quantidade": 12,
+      "minimo": 4,
+      "custoUnitario": 4.79,
+      "rendimento": "12 latas geladas de cerveja Original"
     },
     {
       "id": "cerveja_heineken",
       "nome": "Cerveja Heineken 330ml (Long Neck)",
       "categoria": "Bebidas",
       "unidade": "un",
-      "quantidade": 0,
-      "minimo": 8,
-      "custoUnitario": 5.5,
-      "rendimento": "1 unidade = 1 venda de bebida"
+      "quantidade": 6,
+      "minimo": 4,
+      "custoUnitario": 6.99,
+      "rendimento": "6 garrafas trincando de cerveja Heineken Long Neck"
     }
   ],
   "movimentacoes": [
+    {
+      "id": "mov_tenda_atacado_2511",
+      "dataHora": "25/11/2026, 13:45:00",
+      "pedidoId": "COMPRA_TENDA_ATACADO_25112026",
+      "origem": "Entrada de Mercadoria - Tenda Atacado Ceasa Campinas",
+      "detalhes": [
+        {
+          "insumo": "Leite Condensado Semidesnatado Italac TP 395g",
+          "baixado": -27,
+          "saldoRestante": 27,
+          "motivo": "Caixa Fechada c/ 27un a R$ 5,99 (Total R$ 161,73)"
+        },
+        {
+          "insumo": "Creme de Leite Piracanjuba TP 200g",
+          "baixado": -27,
+          "saldoRestante": 27,
+          "motivo": "Caixa Fechada c/ 27un a R$ 3,59 (Total R$ 96,93)"
+        },
+        {
+          "insumo": "Nutella Ferrero Creme de Avelã 700g",
+          "baixado": -2,
+          "saldoRestante": 1.4,
+          "motivo": "2 potes de 700g (1,4kg total a R$ 89,78 - R$ 44,89/un)"
+        },
+        {
+          "insumo": "Catupiry Legítimo Original Bisnaga 1,5kg",
+          "baixado": -1,
+          "saldoRestante": 1.5,
+          "motivo": "1 bisnaga 1,5kg legítima Catupiry sem amido (R$ 58,79)"
+        },
+        {
+          "insumo": "Leite em Pó Ninho Instantâneo Sachê 975g",
+          "baixado": -1,
+          "saldoRestante": 0.975,
+          "motivo": "1 sachê gigante 975g Leite Ninho (R$ 54,90)"
+        },
+        {
+          "insumo": "Chocolate em Pó Cacau Foods 55% 1,005kg",
+          "baixado": -1,
+          "saldoRestante": 1.005,
+          "motivo": "1 pacote 1,005kg Cacau Foods 55% p/ Brownie (R$ 58,90)"
+        },
+        {
+          "insumo": "Cobertura Mavalerio Meio Amargo Barra 1,01kg",
+          "baixado": -1,
+          "saldoRestante": 1.01,
+          "motivo": "1 barra nobre 1,01kg Mavalerio p/ Brownie (R$ 40,90)"
+        },
+        {
+          "insumo": "Filé de Peito de Frango Seara IQF 1kg",
+          "baixado": -2,
+          "saldoRestante": 2,
+          "motivo": "2 pacotes de 1kg (2kg total a R$ 45,00 - R$ 22,50/kg)"
+        },
+        {
+          "insumo": "Queijo Parmesão Scala Cilindro 180g",
+          "baixado": -2,
+          "saldoRestante": 0.36,
+          "motivo": "2 queijos cilindro 180g (360g a R$ 44,78 - R$ 22,39/un)"
+        },
+        {
+          "insumo": "Maionese Hellmann's Sachê 1kg",
+          "baixado": -2,
+          "saldoRestante": 2,
+          "motivo": "2 sachês de 1kg (2kg a R$ 39,80 - R$ 19,90/kg)"
+        },
+        {
+          "insumo": "Batata Palha Select 400g",
+          "baixado": -2,
+          "saldoRestante": 0.8,
+          "motivo": "2 pacotes de 400g (800g a R$ 29,80 - R$ 14,90/un)"
+        },
+        {
+          "insumo": "Salsicha Hot Dog Sadia Pacote kg",
+          "baixado": -1,
+          "saldoRestante": 60,
+          "motivo": "1 pacote Sadia (R$ 29,97 - ~60 salsichas)"
+        },
+        {
+          "insumo": "Linguiça Calabresa Defumada Sadia",
+          "baixado": -0.952,
+          "saldoRestante": 0.952,
+          "motivo": "0,952 kg Sadia defumada (R$ 27,51)"
+        },
+        {
+          "insumo": "Ketchup Cepera Tradicional Bombona 3,5kg",
+          "baixado": -1,
+          "saldoRestante": 3.5,
+          "motivo": "1 bombona 3,5kg Cepera (R$ 28,90)"
+        },
+        {
+          "insumo": "Mostarda Cepera Frasco 1,01kg",
+          "baixado": -1,
+          "saldoRestante": 1.01,
+          "motivo": "1 frasco 1,01kg Cepera (R$ 10,59)"
+        },
+        {
+          "insumo": "Empanitos Lar Stick 1,5kg (Queijudo VEG)",
+          "baixado": -1,
+          "saldoRestante": 30,
+          "motivo": "1 pacote 1,5kg Empanitos Lar (R$ 20,99 - ~30 palitos)"
+        },
+        {
+          "insumo": "Azeitona Preta Azapa Select Vidro 300g",
+          "baixado": -1,
+          "saldoRestante": 0.3,
+          "motivo": "1 vidro 300g Azapa p/ maionese azeitonas (R$ 22,90)"
+        },
+        {
+          "insumo": "Maionese Hellmann's Ervas Verdes 335g",
+          "baixado": -1,
+          "saldoRestante": 0.335,
+          "motivo": "1 frasco 335g Hellmann's Ervas Verdes (R$ 11,90)"
+        },
+        {
+          "insumo": "Molho de Tomate Quero Sachê 240g",
+          "baixado": -4,
+          "saldoRestante": 0.96,
+          "motivo": "4 sachês de 240g (960g total a R$ 8,16 - R$ 2,04/un)"
+        },
+        {
+          "insumo": "Biscoito Maisena Marilan 300g",
+          "baixado": -2,
+          "saldoRestante": 2,
+          "motivo": "2 pacotes de 300g (600g a R$ 12,98 - R$ 6,49/un)"
+        },
+        {
+          "insumo": "Farinha de Trigo Nita 1kg",
+          "baixado": -2,
+          "saldoRestante": 2,
+          "motivo": "2 pacotes de 1kg (2kg a R$ 9,18 - R$ 4,59/kg)"
+        },
+        {
+          "insumo": "Açúcar Refinado Da Barra 1kg",
+          "baixado": -2,
+          "saldoRestante": 2,
+          "motivo": "2 pacotes de 1kg (2kg a R$ 6,98 - R$ 3,49/kg)"
+        },
+        {
+          "insumo": "Margarina Doriana c/ Sal 1kg",
+          "baixado": -1,
+          "saldoRestante": 1,
+          "motivo": "1 pote 1kg Doriana culinária (R$ 14,90)"
+        },
+        {
+          "insumo": "Leite Desnatado Italac Zero Lactose 1L",
+          "baixado": -2,
+          "saldoRestante": 2,
+          "motivo": "2 caixas de 1L (R$ 11,58)"
+        },
+        {
+          "insumo": "Sal Refinado Cisne 1kg + Vinagre Castelo 750ml",
+          "baixado": -2,
+          "saldoRestante": 2,
+          "motivo": "Sal R$ 4,29 + Vinagre R$ 4,59 (R$ 8,88 total)"
+        },
+        {
+          "insumo": "Refrigerantes Lata Coca-Cola e Coca Zero 350ml",
+          "baixado": -24,
+          "saldoRestante": 24,
+          "motivo": "12 Coca normal + 12 Coca Zero (24 latas a R$ 71,84)"
+        },
+        {
+          "insumo": "Refrigerantes 2,5L Coca-Cola Original e Zero",
+          "baixado": -9,
+          "saldoRestante": 9,
+          "motivo": "3 Coca 2,5L + 6 Coca Zero 2,5L (9 garrafas a R$ 106,44)"
+        },
+        {
+          "insumo": "Guaraná Antarctica 1,5L Normal e Diet",
+          "baixado": -12,
+          "saldoRestante": 12,
+          "motivo": "6 Guaraná 1,5L + 6 Guaraná Diet 1,5L (12 garrafas a R$ 86,28)"
+        },
+        {
+          "insumo": "Água Mineral 510ml Com Gás e Sem Gás Cristal Gold",
+          "baixado": -24,
+          "saldoRestante": 24,
+          "motivo": "12 Com Gás (R$ 26,28) + 12 Sem Gás Cristal (R$ 11,88 - R$ 0,99/un!)"
+        },
+        {
+          "insumo": "Cervejas Original 350ml e Heineken Long Neck 330ml",
+          "baixado": -18,
+          "saldoRestante": 18,
+          "motivo": "12 Original lata (R$ 57,48) + 6 Heineken LN (R$ 41,94)"
+        },
+        {
+          "insumo": "Néctar Del Valle 290ml Goiaba & Limon Tropical",
+          "baixado": -12,
+          "saldoRestante": 12,
+          "motivo": "6 Goiaba + 6 Limon Tropical (12 latas a R$ 47,88)"
+        },
+        {
+          "insumo": "Materiais de Limpeza e Higienização",
+          "baixado": -3,
+          "saldoRestante": 3,
+          "motivo": "Lava Roupa Ypê (R$ 10,99) + Sanol 2L (R$ 5,99) + Veja Multiuso (R$ 4,19)"
+        }
+      ]
+    },
+    {
+      "id": "mov_ceasa_embalagens_2511",
+      "dataHora": "25/11/2026, 11:30:00",
+      "pedidoId": "COMPRA_MA_EMBALAGENS_CEASA_25112026",
+      "origem": "Entrada de Mercadoria - M.A. Embalagens (CEASA Campinas)",
+      "detalhes": [
+        {
+          "insumo": "G695 Pote Molho 30ml Preto CX c/ 700 Conjuntos",
+          "baixado": -700,
+          "saldoRestante": 800,
+          "motivo": "Caixa com 700 potes + tampas a R$ 109,00 (R$ 0,1557/un)"
+        },
+        {
+          "insumo": "PF-642A Pote Pet Articulado 250ml CX c/ 300 Conjuntos",
+          "baixado": -300,
+          "saldoRestante": 300,
+          "motivo": "Caixa com 300 potes sobremesa articulados a R$ 60,00 (R$ 0,20/un)"
+        },
+        {
+          "insumo": "Marmita Fit Retangular PP 750ml c/ Tampa (Pct 24un)",
+          "baixado": -24,
+          "saldoRestante": 24,
+          "motivo": "Pacote c/ 24 unidades térmicas Dog No Prato a R$ 32,00 (R$ 1,33/un)"
+        },
+        {
+          "insumo": "Colher Sobremesa Ice Branca (Pct 50un)",
+          "baixado": -50,
+          "saldoRestante": 50,
+          "motivo": "Pacote c/ 50 colheres sobremesa a R$ 4,00 (R$ 0,08/un)"
+        },
+        {
+          "insumo": "Garfo Refeição Master Branco (Pct 50un)",
+          "baixado": -50,
+          "saldoRestante": 50,
+          "motivo": "Pacote c/ 50 garfos refeição a R$ 10,00 (R$ 0,20/un)"
+        },
+        {
+          "insumo": "Faca Refeição Master Branca (Pct 50un)",
+          "baixado": -50,
+          "saldoRestante": 50,
+          "motivo": "Pacote c/ 50 facas refeição a R$ 10,00 (R$ 0,20/un)"
+        },
+        {
+          "insumo": "Álcool 70% Líquido Hospitalar 5 Litros",
+          "baixado": -1,
+          "saldoRestante": 5,
+          "motivo": "Galão 5L Álcool 70% a R$ 38,00"
+        },
+        {
+          "insumo": "Pano Multiuso Perfex Rolo",
+          "baixado": -1,
+          "saldoRestante": 1,
+          "motivo": "Rolo Perfex a R$ 17,00"
+        },
+        {
+          "insumo": "Pulverizador 500ml",
+          "baixado": -1,
+          "saldoRestante": 1,
+          "motivo": "Pulverizador spray a R$ 10,00"
+        },
+        {
+          "insumo": "Sacos de Lixo 60L + 100L",
+          "baixado": -2,
+          "saldoRestante": 2,
+          "motivo": "1kg 60L (R$ 13,00) + 1kg 100L (R$ 13,00)"
+        },
+        {
+          "insumo": "Sacola Lisa Leitosa 30x40 (Pct)",
+          "baixado": -1,
+          "saldoRestante": 1,
+          "motivo": "Pacote sacolas leitosas a R$ 30,00"
+        }
+      ]
+    },
+    {
+      "id": "mov_ceasa_batata_2511",
+      "dataHora": "25/11/2026, 10:45:00",
+      "pedidoId": "COMPRA_ROSSI_HORTIFRUTI_CEASA_25112026",
+      "origem": "Entrada de Mercadoria - Rossi Hortifruti (CEASA Campinas)",
+      "detalhes": [
+        {
+          "insumo": "Batata Especial p/ Purê de Ouro da Casa",
+          "baixado": -25,
+          "saldoRestante": 25,
+          "motivo": "Saco com 25kg de batata especial a R$ 120,00 à vista (R$ 4,80/kg)"
+        }
+      ]
+    },
+    {
+      "id": "mov_ceasa_ovos_2511",
+      "dataHora": "25/11/2026, 10:15:00",
+      "pedidoId": "COMPRA_VERA_OVOS_CEASA_25112026",
+      "origem": "Entrada de Mercadoria - Vera Ovos (CEASA Campinas)",
+      "detalhes": [
+        {
+          "insumo": "Ovos Selecionados p/ Brownie da Monique",
+          "baixado": -30,
+          "saldoRestante": 30,
+          "motivo": "Bandeja com 30 ovos selecionados a R$ 25,00 à vista (R$ 0,833/un)"
+        }
+      ]
+    },
     {
       "id": "mov_lancheiro_12118",
       "dataHora": "16/11/2026, 14:30:00",

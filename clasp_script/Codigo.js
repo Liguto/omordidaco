@@ -7,7 +7,7 @@
 function onOpen() {
   const ui = SpreadsheetApp.getUi();
   ui.createMenu('🌭 O Mordidaço')
-    .addItem('🚀 Atualizar Planilha c/ Portal Business', 'preencherListaDeCompras')
+    .addItem('🚀 Atualizar Planilha c/ Compras Realizadas', 'preencherListaDeCompras')
     .addToUi();
 }
 
@@ -32,7 +32,7 @@ function preencherListaDeCompras() {
     [true, '🏛️ Burocracia', 'Contrato Vouchers PAT (VR/VA)', 'Contrato homologado a 3,60% e R$ 0,00 taxa (Alelo, Ticket, Sodexo, VR)', 'PagBank Vouchers', '1 un', 0.00, 'Aceitação de vales refeição', 'Concluído ✅'],
 
     // 🥖 COMPRADO NA PANIFICADORA BAMBINI (Pedido nº 727486 - R$ 142,20 à vista)
-    [true, '🥖 Pães Artesanais', 'Pão de Hot Dog 70g (18cm)', '3 caixas c/ 30un a R$ 47,40/cx (Cód 13.377) - Entrega 25/11 motorista Francisco', 'Panificadora Bambini', '90 un (3 cx)', 142.20, 'Rende 90 lanches no pão', 'Comprado ✅'],
+    [true, '🥖 Pães Artesanais', 'Pão de Hot Dog 70g (18cm)', '3 caixas c/ 30un a R$ 47,40/cx (Cód 13.377) - Entregue 25/11 motorista Francisco', 'Panificadora Bambini', '90 un (3 cx)', 142.20, 'Rende 90 lanches no pão', 'Comprado ✅'],
 
     // 📦 COMPRADOS NA LOJA DO LANCHEIRO (Pedido nº 12118 - R$ 468,50)
     [true, '📦 Embalagens', 'Dogueira Térmica Bom Apetite BH 05', 'Embalagem térmica individual para hot dog tradicional no pão (Cód 97)', 'Loja do Lancheiro', '100 un', 59.90, 'Rende 100 lanches no pão', 'Comprado ✅'],
@@ -50,49 +50,54 @@ function preencherListaDeCompras() {
     [true, '🌭 Insumos', 'Bacon Mister Beef em Cubos 1kg', 'Pacote de bacon em cubos douradinhos e sequinhos (Cód 170)', 'Loja do Lancheiro', '1,0 kg', 35.90, 'Rende ~25 lanches no bacon', 'Comprado ✅'],
     [true, '🌭 Insumos', 'Muçarela Ralada Fresca 1kg', 'Queijo muçarela ralado fresco para a estreia (Cód 121589)', 'Loja do Lancheiro', '1,0 kg', 34.90, 'Rende ~25 lanches no dobro', 'Comprado ✅'],
 
-    // 🥬 PENDENTES PARA COMPRA: CEASA CAMPINAS (Amanhã)
-    [false, '🥬 Hortifrúti', 'Batata Asterix / Especial p/ Purê', 'Casca firme e lisa, sem água, para o Purê de Ouro artesanal aveludado', 'CEASA Campinas', '15 kg (saco)', 75.00, 'Rende ~180 a 220 lanches', 'Pendente (Amanhã)'],
-    [false, '🥬 Hortifrúti', 'Tomate Italiano Maduro', 'Maduros e firmes para o molho especial caseiro refogado e vinagrete', 'CEASA Campinas', '5 kg', 25.00, 'Rende ~100 lanches', 'Pendente (Amanhã)'],
-    [false, '🥬 Hortifrúti', 'Cebola Branca e Roxa', 'Cebolas selecionadas para a base de refogados e vinagrete fresco', 'CEASA Campinas', '3 kg', 13.50, 'Rende ~100 lanches', 'Pendente (Amanhã)'],
-    [false, '🥬 Hortifrúti', 'Limão Taiti Fresco', 'Casca fina, verde e brilhante para o creme e raspas da Tortinha de Limão', 'CEASA Campinas', '2,5 kg', 12.50, 'Rende ~30 a 40 tortinhas', 'Pendente (Amanhã)'],
-    [false, '🥬 Hortifrúti', 'Cheiro-Verde Fresco', 'Salsinha e cebolinha frescas para a Maionese de Ervas (Overdelivery)', 'CEASA Campinas', '3 maços', 9.00, 'Rende ~80 potes maionese ervas', 'Pendente (Amanhã)'],
-    [false, '🥬 Hortifrúti', 'Ovos Frescos Selecionados', 'Bandeja com ovos frescos para a fornada de Brownie da Monique', 'CEASA Campinas', '2 a 3 dúzias', 20.00, 'Rende 2 a 3 tabuleiros brownie', 'Pendente (Amanhã)'],
-    [false, '🥬 Hortifrúti', 'Alho Roxo', 'Alho fresco para o refogado do molho especial caseiro e purê', 'CEASA Campinas', '1 kg', 15.00, 'Rende ~150 lanches', 'Pendente (Amanhã)'],
-    [false, '📦 Embalagens', 'Potes Cristal 170ml c/ Tampa + Colheres', 'Potes cristal descartáveis herméticos com colherzinhas de sobremesa', 'Lojas Embalagens CEASA', 'Pct 50un potes + 50 colheres', 35.00, 'Rende 50 sobremesas no pote', 'Pendente (Amanhã)'],
-    [false, '📦 Embalagens', 'Marmitinhas Térmicas 500ml c/ Tampa', 'Marmitinha térmica descartável para servir o Dog No Prato quentinho', 'Lojas Embalagens CEASA', 'Pct 25 ou 50un', 30.00, 'Rende 25 a 50 dogs no prato', 'Pendente (Amanhã)'],
-    [false, '📦 Embalagens', 'Garfo Reforçado Descartável Branco', 'Garfo plástico reforçado linha refeição para o formato No Prato', 'Lojas Embalagens CEASA', 'Pct 50 ou 100un', 12.00, 'Rende 50 a 100 dogs no prato', 'Pendente (Amanhã)'],
+    // 🥬 COMPRADOS HOJE NO CEASA CAMPINAS (25/11/2026 - Total R$ 491,00 à vista)
+    [true, '🥬 Hortifrúti', 'Batata Especial p/ Purê de Ouro', 'Saco fechado com 25kg de batata especial para purê da casa a R$ 4,80/kg', 'Rossi Hortifruti (CEASA)', '25 kg (saco)', 120.00, 'Rende ~200 a 250 lanches purê', 'Comprado ✅'],
+    [true, '🥬 Hortifrúti', 'Ovos Selecionados p/ Brownie Monique', 'Bandeja com 30 ovos selecionados a R$ 0,833/un para brownie denso', 'Vera Ovos (CEASA)', '30 un (2,5 dz)', 25.00, 'Rende ~7 fornadas de brownie', 'Comprado ✅'],
+    [true, '📦 Embalagens', 'Pote Molho 30ml Preto G695 c/ Tampa', 'Caixa fechada com 700 conjuntos a R$ 0,1557/un para overdelivery secreto', 'M.A. Embalagens (CEASA)', '700 un (caixa)', 109.00, 'Rende 350 kits overdelivery', 'Comprado ✅'],
+    [true, '📦 Embalagens', 'Pote Pet Articulado PF-642A 250ml', 'Caixa com 300 conjuntos articulados a R$ 0,20/un para sobremesas no pote', 'M.A. Embalagens (CEASA)', '300 un (caixa)', 60.00, 'Rende 300 sobremesas no pote', 'Comprado ✅'],
+    [true, '📦 Embalagens', 'Marmita Fit Retangular PP 750ml c/ Tampa', 'Pacote c/ 24 marmitinhas térmicas para o formato Dog No Prato a R$ 1,33/un', 'M.A. Embalagens (CEASA)', '24 un (pct)', 32.00, 'Rende 24 dogs no prato quentes', 'Comprado ✅'],
+    [true, '📦 Embalagens', 'Colher Sobremesa Ice Branca', 'Pacote c/ 50 colheres sobremesa reforçadas a R$ 0,08/un', 'M.A. Embalagens (CEASA)', '50 un (pct)', 4.00, 'Rende 50 sobremesas', 'Comprado ✅'],
+    [true, '📦 Embalagens', 'Garfo Refeição Master Branco', 'Pacote c/ 50 garfos refeição resistentes a R$ 0,20/un para Dog No Prato', 'M.A. Embalagens (CEASA)', '50 un (pct)', 10.00, 'Rende 50 dogs no prato', 'Comprado ✅'],
+    [true, '📦 Embalagens', 'Faca Refeição Master Branca', 'Pacote c/ 50 facas refeição a R$ 0,20/un para corte e apoio da cozinha', 'M.A. Embalagens (CEASA)', '50 un (pct)', 10.00, 'Apoio e corte operacional', 'Comprado ✅'],
+    [true, '🧼 Higiene & Limpeza', 'Álcool 70% Líquido Hospitalar 5L', 'Galão de 5 Litros para assepsia total de bancadas e utensílios sanitários', 'M.A. Embalagens (CEASA)', '1 galão (5L)', 38.00, 'Higienização RDC 216', 'Comprado ✅'],
+    [true, '📦 Embalagens', 'Sacola Lisa Leitosa 30x40', 'Pacote de sacolas leitosas reforçadas para entregas diretas e balcão', 'M.A. Embalagens (CEASA)', '1 pacote', 30.00, 'Entregas e balcão', 'Comprado ✅'],
+    [true, '🧼 Higiene & Limpeza', 'Pano Multiuso Perfex Rolo', 'Rolo de pano multiuso descartável para higienização ágil da bancada', 'M.A. Embalagens (CEASA)', '1 rolo', 17.00, 'Higienização contínua', 'Comprado ✅'],
+    [true, '🧼 Higiene & Limpeza', 'Sacos de Lixo 60L + 100L Reforçados', '1kg saco lixo 60L (R$ 13) + 1kg saco lixo 100L (R$ 13)', 'M.A. Embalagens (CEASA)', '2 kg (2 pct)', 26.00, 'Descarte sanitário', 'Comprado ✅'],
+    [true, '🧼 Higiene & Limpeza', 'Pulverizador Spray 500ml', 'Pulverizador para borrifar álcool 70% na linha de montagem e balcão', 'M.A. Embalagens (CEASA)', '1 un', 10.00, 'Higienização spray', 'Comprado ✅'],
 
-    // 🏬 PENDENTES PARA COMPRA: TENDA ATACADO (Amanhã)
-    [false, '🌭 Frios & Carnes', 'Salsicha Sadia Oficial Hot Dog', '100% Sadia (firme e sem soltar água). O coração de todos os lanches!', 'TENDA Atacado', 'Pacote 3kg ou 5kg', 65.00, 'Rende ~42 a 70 lanches', 'Pendente (Amanhã)'],
-    [false, '🌭 Frios & Carnes', 'Queijo Muçarela Extra (Peça/Fatiada)', 'Muçarela extra para somar ao 1kg do Lancheiro e garantir fartura nos testes', 'TENDA Atacado', '1,5 kg', 52.00, 'Rende ~37 lanches no dobro', 'Pendente (Amanhã)'],
-    [false, '🌭 Frios & Carnes', 'Legítimo Catupiry® Original', 'Bisnaga legítima de 1,5kg sem amido para o Cremoso e Tudão', 'TENDA Atacado', '1 bisnaga (1,5kg)', 54.00, 'Rende 37 lanches', 'Pendente (Amanhã)'],
-    [false, '🌭 Frios & Carnes', 'Calabresa Defumada Sadia/Perdigão', 'Calabresa para ralar fininha e dourar para o Mordidaço Tudão', 'TENDA Atacado', '1,5 kg', 39.00, 'Rende ~37 Tudões', 'Pendente (Amanhã)'],
-    [false, '🌭 Frios & Carnes', 'Peito de Frango Congelado', 'Peito de frango para cozinhar e desfiar temperado bem úmido', 'TENDA Atacado', '2 kg', 36.00, 'Rende ~30 lanches cremosos', 'Pendente (Amanhã)'],
-    [false, '🌭 Frios & Carnes', 'Queijo Parmesão (Pedaço/Cunha)', 'Parmesão fresco para ralar na hora na finalização de todos os dogs', 'TENDA Atacado', '500g a 1kg', 42.00, 'Rende ~50 a 100 lanches', 'Pendente (Amanhã)'],
-    [false, '🌭 Frios & Carnes', 'Palito Stick Mussarela McCain', 'Stick de mussarela empanado crocante para o Mordidaço Queijudo (VEG)', 'TENDA Atacado', '1 pacote (1kg)', 49.00, 'Rende 17 lanches Queijudo', 'Pendente (Amanhã)'],
-
-    // 🍰 CONFEITARIA & SOBREMESAS DA MONIQUE (TENDA Atacado)
-    [false, '🍰 Confeitaria', 'Leite Condensado 395g (Moça/Itambé/Italac)', 'Pack fechado com 12 caixinhas de 395g (zero desperdício e longa validade)', 'TENDA Atacado', 'Pack c/ 12un', 62.00, 'Rende ~30 sobremesas no pote', 'Pendente (Amanhã)'],
-    [false, '🍰 Confeitaria', 'Creme de Leite 200g (Itambé/Italac/Piracanjuba)', 'Pack com 12 caixinhas de 200g para ponto aveludado', 'TENDA Atacado', 'Pack c/ 12un', 37.00, 'Rende ~30 sobremesas no pote', 'Pendente (Amanhã)'],
-    [false, '🍰 Confeitaria', 'Leite em Pó Ninho Integral Nestlé', 'Leite Ninho oficial para o brigadeiro cremoso de colher', 'TENDA Atacado', '2 latas 380g (ou 1 sachê 800g)', 35.80, 'Rende ~60 escondidinhos', 'Pendente (Amanhã)'],
-    [false, '🍰 Confeitaria', 'Nutella Ferrero Legítima Pura', 'Recheio central nobre do Escondidinho de Ninho com Brownie', 'TENDA Atacado', 'Balde 3kg ou 2 potes 650g', 85.00, 'Rende ~30 a 85 potes', 'Pendente (Amanhã)'],
-    [false, '🍰 Confeitaria', 'Chocolate Meio Amargo Nobre (Barra 1kg)', 'Harald Melken, Sicao ou Nestlé para a massa densa do Brownie', 'TENDA Atacado', 'Barra 1kg', 42.00, 'Rende ~50 brownies nobres', 'Pendente (Amanhã)'],
-    [false, '🍰 Confeitaria', 'Chocolate em Pó 50% Cacau', 'Para cor e sabor marcante do brownie artesanal da Monique', 'TENDA Atacado', 'Pct 500g ou 1kg', 26.00, 'Rende ~40 brownies', 'Pendente (Amanhã)'],
-    [false, '🍰 Confeitaria', 'Manteiga Sem Sal', 'Barras de 500g para farofinha da torta, brownie e brigadeiro', 'TENDA Atacado', '2 barras (1kg)', 32.00, 'Rende tortas e brownies', 'Pendente (Amanhã)'],
-    [false, '🍰 Confeitaria', 'Biscoito Maisena 400g (Marilan/Triunfo)', 'Biscoito maisena para triturar na farofa amanteigada da tortinha', 'TENDA Atacado', '3 pacotes', 15.60, 'Rende ~40 tortinhas', 'Pendente (Amanhã)'],
-    [false, '🍰 Confeitaria', 'Açúcar Refinado & Farinha de Trigo', 'Para a estrutura e casquinha craquelada do brownie artesanal', 'TENDA Atacado', '2kg açúcar + 2kg farinha', 19.00, 'Rende ~8 fornadas', 'Pendente (Amanhã)'],
-
-    // 🥫 MERCEARIA, MOLHOS E BEBIDAS (TENDA Atacado)
-    [false, '🥫 Mercearia', 'Batata Palha Tradicional Extra Fina', 'Batata palha crocante pacote profissional grande', 'TENDA Atacado', '2 pacotes (1kg a 1,5kg)', 32.00, 'Rende ~75 lanches', 'Pendente (Amanhã)'],
-    [false, '🥫 Mercearia', 'Maionese Hellmann\'s Legítima', 'Balde de 3kg para a base dos lanches e molhos especiais da casa', 'TENDA Atacado', '1 balde (3kg)', 38.00, 'Rende ~100 potes e lanches', 'Pendente (Amanhã)'],
-    [false, '🥫 Mercearia', 'Azeitonas Pretas sem Caroço', 'Para a Maionese Temperada de Azeitonas da casa (Overdelivery Secreto)', 'TENDA Atacado', '1 sachê/vidro', 12.00, 'Rende ~50 potes molho', 'Pendente (Amanhã)'],
-    [false, '🥫 Mercearia', 'Paçocas Rolha Santa Helena', 'Pote c/ 50 ou 100un para mimos doces de cortesia dos combos', 'TENDA Atacado', '1 pote', 24.00, 'Rende 50 a 100 mimos combos', 'Pendente (Amanhã)'],
-    [false, '🥤 Bebidas', 'Coca-Cola 350ml Lata (Original e Zero)', 'Packs com 12 latinhas de cada para o estoque de bebidas', 'TENDA Atacado', '2 packs (24 latas)', 55.20, '24 vendas de bebida', 'Pendente (Amanhã)'],
-    [false, '🥤 Bebidas', 'Guaraná Antarctica 350ml Lata (Original e Zero)', 'Packs com 12 latinhas de cada para os combos oficiais', 'TENDA Atacado', '2 packs (24 latas)', 52.80, '24 vendas de bebida', 'Pendente (Amanhã)'],
-    [false, '🥤 Bebidas', 'Fanta Laranja Lata & Suco Del Valle Lata', 'Latinhas de Fanta e Sucos de Uva/Maracujá para variedade', 'TENDA Atacado', '12 latas variadas', 28.00, '12 vendas de bebida', 'Pendente (Amanhã)'],
-    [false, '🥤 Bebidas', 'Guaraná Antarctica 2L & Coca-Cola 2L (Orig./Zero)', 'Garrafas de 2 Litros para os Combos Família', 'TENDA Atacado', '6 garrafas variadas', 42.00, '6 combos família', 'Pendente (Amanhã)'],
-    [false, '🥤 Bebidas', 'Água Mineral 500ml (Com e Sem Gás)', 'Fardos de água mineral gelada para o delivery', 'TENDA Atacado', '2 fardos (24 garrafas)', 27.00, '24 vendas de água', 'Pendente (Amanhã)'],
-    [false, '🥤 Bebidas', 'Cerveja Original 350ml Lata & Heineken 330ml', 'Cervejas geladas para o público adulto do final de semana', 'TENDA Atacado', '2 packs (18un total)', 72.00, '18 vendas de cerveja', 'Pendente (Amanhã)']
+    // 🏬 COMPRADOS HOJE NO TENDA ATACADO CEASA CAMPINAS (25/11/2026 - Total R$ 1.500,14 à vista)
+    [true, '🍰 Confeitaria', 'Leite Condensado Semidesnatado Italac TP 395g', 'Caixa Fechada com 27 caixinhas a R$ 5,99 cada! Economia brutal de atacado', 'TENDA Atacado', '27 un (caixa)', 161.73, 'Rende ~67 sobremesas no pote', 'Comprado ✅'],
+    [true, '🍰 Confeitaria', 'Creme de Leite Piracanjuba TP 200g', 'Caixa Fechada com 27 caixinhas a R$ 3,59 cada! Textura aveludada doces', 'TENDA Atacado', '27 un (caixa)', 96.93, 'Rende ~67 sobremesas no pote', 'Comprado ✅'],
+    [true, '🍰 Confeitaria', 'Nutella Ferrero Legítima Pura 700g', '2 potes de 700g (1,4kg total a R$ 44,89/pote) para o Escondidinho de Nutella', 'TENDA Atacado', '2 un (1,4 kg)', 89.78, 'Rende ~40 escondidinhos', 'Comprado ✅'],
+    [true, '🥤 Bebidas', 'Coca-Cola 2,5 Litros (3 Orig. + 6 Zero)', '3 garrafas 2,5L Orig. (R$ 37,50) + 6 garrafas 2,5L Zero (R$ 68,94)', 'TENDA Atacado', '9 garrafas 2,5L', 106.44, '9 combos família/upgrades', 'Comprado ✅'],
+    [true, '🥤 Bebidas', 'Cerveja Original 350ml Lata + Heineken LN 330ml', 'Caixa c/ 12 latas Original (R$ 57,48) + 6 Long Necks Heineken (R$ 41,94)', 'TENDA Atacado', '18 un (geladas)', 99.42, '18 vendas de cervejas', 'Comprado ✅'],
+    [true, '🥤 Bebidas', 'Guaraná Antarctica 1,5L (6 Normal + 6 Diet)', '12 garrafas de 1,5L a R$ 7,19 cada para os combos família da casa', 'TENDA Atacado', '12 garrafas 1,5L', 86.28, '12 combos família', 'Comprado ✅'],
+    [true, '🥤 Bebidas', 'Coca-Cola 350ml Lata (12 Orig. + 12 Zero)', '12 latas Coca normal (R$ 35,92) + 12 latas Coca Zero (R$ 35,92) a R$ 2,99/un', 'TENDA Atacado', '24 latas 350ml', 71.84, '24 vendas refrigerante lata', 'Comprado ✅'],
+    [true, '🍰 Confeitaria', 'Chocolate em Pó Cacau Foods 55% Cacau 1,005kg', 'Pacote 1,005kg Cacau Foods 55% a R$ 58,60/kg para cor intensa do brownie', 'TENDA Atacado', '1 pct (1,005 kg)', 58.90, 'Rende ~40 fornadas densas', 'Comprado ✅'],
+    [true, '🌭 Frios & Carnes', 'Legítimo Catupiry® Original Bisnaga 1,5kg', 'Bisnaga 1,5kg de Catupiry legítimo sem amido para o Cremoso e Tudão', 'TENDA Atacado', '1 un (1,5 kg)', 58.79, 'Rende 37 lanches legítimos', 'Comprado ✅'],
+    [true, '🍰 Confeitaria', 'Leite em Pó Ninho Instantâneo Nestlé 975g', 'Sachê gigante institucional de 975g Leite Ninho para brigadeiro cremoso', 'TENDA Atacado', '1 sachê (975g)', 54.90, 'Rende ~75 potes Ninho puro', 'Comprado ✅'],
+    [true, '🥤 Bebidas', 'Néctar Del Valle 290ml Lata (Goiaba & Limon)', '6 latas Del Valle Goiaba (R$ 23,94) + 6 latas Limon Tropical (R$ 23,94)', 'TENDA Atacado', '12 latas 290ml', 47.88, '12 vendas suco em lata', 'Comprado ✅'],
+    [true, '🌭 Frios & Carnes', 'Filé Peito Frango Cong Seara IQF 1kg (2 pct)', '2 pacotes de 1kg (2kg total a R$ 22,50/kg) para desfiar suculento da casa', 'TENDA Atacado', '2 kg (2 pct)', 45.00, 'Rende ~40 lanches cremosos', 'Comprado ✅'],
+    [true, '🌭 Frios & Carnes', 'Queijo Parmesão Scala Cilindro 180g (2 un)', '2 cilindros 180g (360g total a R$ 22,39/un) para ralar fresco na hora', 'TENDA Atacado', '2 un (360g)', 44.78, 'Rende ~36 chuvas de queijo', 'Comprado ✅'],
+    [true, '🍰 Confeitaria', 'Cobertura Chocolate Mavalerio Barra 1,01kg', 'Barra 1,01kg nobre meio amargo para a massa aveludada do brownie', 'TENDA Atacado', '1 barra (1,01 kg)', 40.90, 'Rende ~50 brownies nobres', 'Comprado ✅'],
+    [true, '🥫 Mercearia', 'Maionese Hellmann\'s Sachê 1kg (2 pct)', '2 sachês de 1kg (2kg total a R$ 19,90/kg) para base e molhos artesanais', 'TENDA Atacado', '2 kg (2 pct)', 39.80, 'Rende ~75 potes e lanches', 'Comprado ✅'],
+    [true, '🥤 Bebidas', 'Água Mineral Cristal Gold 510ml (24 un)', '12 s/ gás Cristal Gold a R$ 0,99/un (R$ 11,88) + 12 c/ gás a R$ 2,19/un (R$ 26,28)', 'TENDA Atacado', '24 garrafas', 38.16, '24 vendas de água gelada', 'Comprado ✅'],
+    [true, '🌭 Frios & Carnes', 'Salsicha Hot Dog Sadia Pacote kg', 'Pacote profissional de salsicha Sadia (firme e sem soltar água)', 'TENDA Atacado', '1 pct (~60 un)', 29.97, 'Rende ~40 a 50 lanches', 'Comprado ✅'],
+    [true, '🥫 Mercearia', 'Batata Palha Select Extra Crocante 400g (2 pct)', '2 pacotes de 400g (800g a R$ 14,90/un) sequinha e extra crocante', 'TENDA Atacado', '2 pct (800g)', 29.80, 'Rende 40 lanches nobres', 'Comprado ✅'],
+    [true, '🥫 Mercearia', 'Ketchup Cepera Tradicional Bombona 3,5kg', 'Bombona profissional de 3,5kg para recheio dos dogs artesanais', 'TENDA Atacado', '1 un (3,5 kg)', 28.90, 'Rende ~100 lanches', 'Comprado ✅'],
+    [true, '🌭 Frios & Carnes', 'Linguiça Calabresa Defumada Sadia 0,952kg', 'Calabresa defumada Sadia para ralar fininha e dourar no Tudão', 'TENDA Atacado', '0,952 kg', 27.51, 'Rende 24 Tudões especiais', 'Comprado ✅'],
+    [true, '🥫 Mercearia', 'Azeitona Preta Azapa Select Vidro 300g', 'Vidro de azeitona preta Azapa pura para Maionese de Azeitonas da Casa', 'TENDA Atacado', '1 vidro (300g)', 22.90, 'Rende ~50 potinhos molho', 'Comprado ✅'],
+    [true, '🧼 Higiene & Limpeza', 'Kit Limpeza (Lava Roupa Ypê + Sanol + Veja)', 'Ypê 900ml (R$ 10,99) + Sanol 2L (R$ 5,99) + Multiuso Veja 500ml (R$ 4,19)', 'TENDA Atacado', '3 unidades', 21.17, 'Higienização operacional', 'Comprado ✅'],
+    [true, '🌭 Frios & Carnes', 'Empanitos Stick Lar 1,5kg (Queijudo VEG)', 'Pacote de 1,5kg stick empanado super crocante para o Mordidaço Queijudo', 'TENDA Atacado', '1 pct (1,5 kg)', 20.99, 'Rende 15 lanches Queijudo VEG', 'Comprado ✅'],
+    [true, '🍰 Confeitaria', 'Margarina Doriana c/ Sal 1kg', 'Pote de 1kg culinária para farofinha da torta, brownie e purê de ouro', 'TENDA Atacado', '1 un (1,0 kg)', 14.90, 'Tortas, brownies e purê', 'Comprado ✅'],
+    [true, '🍰 Confeitaria', 'Biscoito Maisena Marilan 300g (2 pct)', '2 pacotes de 300g (600g a R$ 6,49/un) para farofa crocante amanteigada', 'TENDA Atacado', '2 pct (600g)', 12.98, 'Rende ~25 tortinhas limão', 'Comprado ✅'],
+    [true, '🥫 Mercearia', 'Maionese Hellmann\'s Ervas Verdes Frasco 335g', 'Frasco 335g toque aromático para a Maionese de Ervas Frescas (Overdelivery)', 'TENDA Atacado', '1 frasco (335g)', 11.90, 'Rende ~30 potinhos ervas', 'Comprado ✅'],
+    [true, '🍰 Confeitaria', 'Leite Desnatado Italac Zero Lactose 1L (2 un)', '2 litros de leite desnatado zero lactose para preparos culinários', 'TENDA Atacado', '2 litros', 11.58, 'Preparo de cremes', 'Comprado ✅'],
+    [true, '🥫 Mercearia', 'Mostarda Cepera Tradicional Frasco 1,01kg', 'Frasco de 1,01kg mostarda tradicional suave da casa', 'TENDA Atacado', '1 frasco (1,01 kg)', 10.59, 'Rende ~100 lanches', 'Comprado ✅'],
+    [true, '🍰 Confeitaria', 'Farinha de Trigo Especial Nita 1kg (2 pct)', '2 pacotes de 1kg (2kg total a R$ 4,59/kg) para estrutura do brownie', 'TENDA Atacado', '2 kg (2 pct)', 9.18, 'Rende ~8 fornadas brownie', 'Comprado ✅'],
+    [true, '🥫 Mercearia', 'Molho de Tomate Quero Sachê 240g (4 pct)', '4 sachês de 240g (960g total a R$ 2,04/un) para o molho fervilhante', 'TENDA Atacado', '4 pct (960g)', 8.16, 'Rende ~32 lanches molho', 'Comprado ✅'],
+    [true, '🥫 Mercearia', 'Sal Refinado Cisne 1kg + Vinagre Castelo 750ml', 'Sal Cisne (R$ 4,29) + Vinagre Álcool Castelo (R$ 4,59)', 'TENDA Atacado', '1kg Sal + 750ml Vin.', 8.88, 'Vinagrete fresco e purê', 'Comprado ✅'],
+    [true, '🍰 Confeitaria', 'Açúcar Refinado Da Barra 1kg (2 pct)', '2 pacotes de 1kg (2kg total a R$ 3,49/kg) para casquinha do brownie', 'TENDA Atacado', '2 kg (2 pct)', 6.98, 'Rende ~8 fornadas brownie', 'Comprado ✅']
   ];
 
   // 1. Cabeçalho Vermelho O Mordidaço
@@ -112,17 +117,17 @@ function preencherListaDeCompras() {
   // 4. Formatação de Moeda na Coluna G (Custo)
   sheet.getRange(2, 7, dados.length, 1).setNumberFormat('R$ #,##0.00');
 
-  // 5. Linhas de Totalizadores no Rodapé (Fórmulas Corrigidas)
+  // 5. Linhas de Totalizadores no Rodapé (Fórmulas Automáticas)
   const totalRow = dados.length + 2;
-  sheet.getRange(totalRow, 6).setValue('TOTAL GERAL (INVESTIMENTO GLOBAL):').setFontWeight('bold').setHorizontalAlignment('right');
-  sheet.getRange(totalRow, 7).setFormula(`=SUM(G2:G${dados.length + 1})`).setFontWeight('bold').setNumberFormat('R$ #,##0.00').setBackground('#fef08a');
+  sheet.getRange(totalRow, 6).setValue('TOTAL GERAL INVESTIDO (100% CONSOLIDADO):').setFontWeight('bold').setHorizontalAlignment('right');
+  sheet.getRange(totalRow, 7).setFormula(`=SUM(G2:G${dados.length + 1})`).setFontWeight('bold').setNumberFormat('R$ #,##0.00').setBackground('#bbf7d0');
 
   const compradoRow = dados.length + 3;
-  sheet.getRange(compradoRow, 6).setValue('TOTAL JÁ COMPRADO (BAMBINI + LANCHEIRO):').setFontWeight('bold').setHorizontalAlignment('right');
-  sheet.getRange(compradoRow, 7).setFormula(`=SUMIF(A2:A${dados.length + 1}; true; G2:G${dados.length + 1})`).setFontWeight('bold').setNumberFormat('R$ #,##0.00').setBackground('#bbf7d0');
+  sheet.getRange(compradoRow, 6).setValue('TOTAL JÁ COMPRADO & FATURADO:').setFontWeight('bold').setHorizontalAlignment('right');
+  sheet.getRange(compradoRow, 7).setFormula(`=SUMIF(A2:A${dados.length + 1}; true; G2:G${dados.length + 1})`).setFontWeight('bold').setNumberFormat('R$ #,##0.00').setBackground('#86efac');
 
   const pendenteRow = dados.length + 4;
-  sheet.getRange(pendenteRow, 6).setValue('TOTAL ESTIMADO P/ COMPRA DE AMANHÃ:').setFontWeight('bold').setHorizontalAlignment('right');
+  sheet.getRange(pendenteRow, 6).setValue('TOTAL PENDENTE DE COMPRA:').setFontWeight('bold').setHorizontalAlignment('right');
   sheet.getRange(pendenteRow, 7).setFormula(`=SUMIF(A2:A${dados.length + 1}; false; G2:G${dados.length + 1})`).setFontWeight('bold').setNumberFormat('R$ #,##0.00').setBackground('#fed7aa');
 
   // 6. Alinhamentos e Cores de Linha
@@ -136,15 +141,16 @@ function preencherListaDeCompras() {
   // Destaque de cor nas linhas de compras realizadas
   for (let r = 0; r < dados.length; r++) {
     const rowNum = r + 2;
-    const isComprado = dados[r][0] === true;
     const fornecedor = dados[r][4];
 
-    if (isComprado && (fornecedor.includes('Bambini') || fornecedor.includes('Lancheiro'))) {
+    if (fornecedor.includes('Bambini') || fornecedor.includes('Lancheiro')) {
       sheet.getRange(rowNum, 1, 1, 9).setBackground('#f0fdf4');
     } else if (fornecedor.includes('CEASA')) {
-      sheet.getRange(rowNum, 1, 1, 9).setBackground('#fffbeb');
+      sheet.getRange(rowNum, 1, 1, 9).setBackground('#ecfdf5');
     } else if (fornecedor.includes('TENDA')) {
       sheet.getRange(rowNum, 1, 1, 9).setBackground('#f8fafc');
+    } else {
+      sheet.getRange(rowNum, 1, 1, 9).setBackground('#fffbeb');
     }
   }
 
