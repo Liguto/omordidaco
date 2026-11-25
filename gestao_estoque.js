@@ -320,16 +320,16 @@ function deduzirEstoquePorPedido(pedido) {
     if (nome.includes('pote') || nome.includes('molho da casa')) registrarBaixa('pote_molho_30ml', 1 * qtdItem);
 
     // 4. ANÁLISE DE BEBIDAS INDIVIDUAIS
-    if (nome.includes('coca') && nome.includes('zero') && (nome.includes('2l') || nome.includes('2 litros'))) {
+    if (nome.includes('coca') && nome.includes('zero') && (nome.includes('2l') || nome.includes('2 litros') || nome.includes('2,5') || nome.includes('2.5'))) {
       registrarBaixa('coca_zero_2l', 1 * qtdItem);
-    } else if (nome.includes('coca') && (nome.includes('2l') || nome.includes('2 litros'))) {
+    } else if (nome.includes('coca') && (nome.includes('2l') || nome.includes('2 litros') || nome.includes('2,5') || nome.includes('2.5'))) {
       registrarBaixa('coca_2l', 1 * qtdItem);
     } else if (nome.includes('coca') && nome.includes('zero')) {
       registrarBaixa('coca_zero_lata', 1 * qtdItem);
     } else if (nome.includes('coca')) {
       registrarBaixa('coca_lata', 1 * qtdItem);
     } else if (nome.includes('guaraná') || nome.includes('guarana')) {
-      if (nome.includes('2l') || nome.includes('2 litros')) {
+      if (nome.includes('2l') || nome.includes('2 litros') || nome.includes('1,5') || nome.includes('1.5')) {
         registrarBaixa('guarana_2l', 1 * qtdItem);
       } else if (nome.includes('zero')) {
         registrarBaixa('guarana_zero_lata', 1 * qtdItem);
@@ -338,13 +338,19 @@ function deduzirEstoquePorPedido(pedido) {
       }
     } else if (nome.includes('fanta')) {
       registrarBaixa('fanta_lata', 1 * qtdItem);
-    } else if (nome.includes('del valle') || nome.includes('delvalle') || nome.includes('suco')) {
-      if (nome.includes('uva')) {
+    } else if (nome.includes('del valle') || nome.includes('delvalle') || nome.includes('suco') || nome.includes('limon')) {
+      if (nome.includes('goiaba')) {
+        registrarBaixa('delvalle_goiaba_lata', 1 * qtdItem);
+      } else if (nome.includes('limon') || nome.includes('tropical')) {
+        registrarBaixa('delvalle_limon_lata', 1 * qtdItem);
+      } else if (nome.includes('uva')) {
         registrarBaixa('delvalle_uva_lata', 1 * qtdItem);
       } else if (nome.includes('maracujá') || nome.includes('maracuja')) {
         registrarBaixa('delvalle_maracuja_lata', 1 * qtdItem);
       } else if (nome.includes('laranja')) {
         registrarBaixa('delvalle_laranja_lata', 1 * qtdItem);
+      } else {
+        registrarBaixa('delvalle_goiaba_lata', 1 * qtdItem);
       }
     } else if (nome.includes('heineken')) {
       registrarBaixa('cerveja_heineken', 1 * qtdItem);

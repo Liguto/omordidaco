@@ -606,7 +606,7 @@ const CARDAPIO = {
         {
           id: "combo-casal",
           nome: "Combo Mordidaço Casal",
-          descricao: "2 Mordidaços em Dobro (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata (escolha Coca, Guaraná ou Fanta) + 2 Potes de Molho da Casa (30ml). A janta perfeita para dois!",
+          descricao: "2 Mordidaços em Dobro (escolha individual no Pão ou no Prato para cada um) + 2 Bebidas Geladas Lata/Água (escolha Coca-Cola, Del Valle ou Água) + 2 Potes de Molho da Casa (30ml). A janta perfeita para dois!",
           preco: 49.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -620,7 +620,7 @@ const CARDAPIO = {
         {
           id: "combo-familia-mordidaco",
           nome: "Combo Família Mordidaço",
-          descricao: "2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha individual no Pão ou no Prato para cada um) + 1 Refrigerante 2 Litros (Guaraná incluso ou upgrade Coca 2L) + 3 Potes de Molho da Casa (30ml). Fartura garantida para toda a família!",
+          descricao: "2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha individual no Pão ou no Prato para cada um) + 1 Refrigerante 1,5L (Guaraná Antarctica 1,5L incluso ou Upgrade Coca-Cola 2,5L) + 3 Potes de Molho da Casa (30ml). Fartura garantida para toda a família!",
           preco: 64.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -759,17 +759,13 @@ const CARDAPIO = {
       itens: [
         { id: "refri-coca-lata", nome: "Coca-Cola Original 350ml (Lata)", preco: 6.00, imagem: "assets/produtos/coca-lata.jpg" },
         { id: "refri-coca-zero-lata", nome: "Coca-Cola Zero 350ml (Lata)", preco: 6.00, imagem: "assets/produtos/coca-zero-lata.jpg" },
-        { id: "refri-guarana-lata", nome: "Guaraná Antarctica 350ml (Lata)", preco: 6.00, imagem: "assets/produtos/guarana-lata.jpg" },
-        { id: "refri-guarana-zero-lata", nome: "Guaraná Antarctica Zero 350ml (Lata)", preco: 6.00, imagem: "assets/produtos/guarana-zero-lata.jpg" },
-        { id: "refri-fanta-lata", nome: "Fanta Laranja 350ml (Lata)", preco: 6.00, imagem: "assets/produtos/fanta-lata.jpg" },
-        { id: "suco-delvalle-uva", nome: "Suco Del Valle Uva 290ml (Lata)", preco: 6.50, imagem: "assets/produtos/delvalle-uva.jpg" },
-        { id: "suco-delvalle-maracuja", nome: "Suco Del Valle Maracujá 290ml (Lata)", preco: 6.50, imagem: "assets/produtos/delvalle-maracuja.jpg" },
-        { id: "suco-delvalle-laranja", nome: "Suco Del Valle Laranja 290ml (Lata)", preco: 6.50, imagem: "assets/produtos/delvalle-uva.jpg" },
-        { id: "refri-coca-2l", nome: "Coca-Cola 2 Litros Normal", preco: 14.00, imagem: "assets/produtos/coca-2l.jpg" },
-        { id: "refri-coca-zero-2l", nome: "Coca-Cola 2 Litros Zero", preco: 14.00, imagem: "assets/produtos/coca-2l.jpg" },
-        { id: "refri-guarana-2l", nome: "Guaraná Antarctica 2 Litros", preco: 12.00, imagem: "assets/produtos/guarana-2l.jpg" },
-        { id: "agua-mineral-sem-gas", nome: "Água Mineral 500ml (sem gás)", preco: 4.00, imagem: "assets/produtos/agua.jpg" },
-        { id: "agua-mineral-com-gas", nome: "Água Mineral 500ml (com gás)", preco: 4.50, imagem: "assets/produtos/agua.jpg" },
+        { id: "suco-delvalle-goiaba", nome: "Suco Del Valle Goiaba 290ml (Lata)", preco: 6.50, imagem: "assets/produtos/delvalle-maracuja.jpg" },
+        { id: "suco-delvalle-limon", nome: "Refresco Del Valle Limon Tropical 290ml", preco: 6.50, imagem: "assets/produtos/delvalle-maracuja.jpg" },
+        { id: "refri-guarana-1500ml", nome: "Guaraná Antarctica 1,5 Litros (Normal ou Diet)", preco: 11.00, imagem: "assets/produtos/guarana-2l.jpg" },
+        { id: "refri-coca-2500ml", nome: "Coca-Cola 2,5 Litros Original", preco: 15.00, imagem: "assets/produtos/coca-2l.jpg" },
+        { id: "refri-coca-zero-2500ml", nome: "Coca-Cola 2,5 Litros Zero", preco: 15.00, imagem: "assets/produtos/coca-2l.jpg" },
+        { id: "agua-mineral-sem-gas", nome: "Água Mineral Cristal Gold 510ml (sem gás)", preco: 3.50, imagem: "assets/produtos/agua.jpg" },
+        { id: "agua-mineral-com-gas", nome: "Água Mineral Nestlé Pureza Vital 510ml (com gás)", preco: 4.50, imagem: "assets/produtos/agua.jpg" },
         { id: "cerveja-original-lata", nome: "Cerveja Original 350ml (Lata)", preco: 7.50, imagem: "assets/produtos/cerveja-original.jpg" },
         { id: "cerveja-heineken-ln", nome: "Cerveja Heineken 330ml (Long Neck)", preco: 10.00, imagem: "assets/produtos/heineken.jpg" }
       ]

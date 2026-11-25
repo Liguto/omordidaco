@@ -2191,81 +2191,75 @@
       // SELEÇÃO DE BEBIDA DO COMBO (SE APLICÁVEL)
       const comboBebidaGroup = document.getElementById('comboBebidaGroup');
       if (item.permiteUpgradeBebida) {
-        // Combo Família: Escolha do 2L com opção de Upgrade para Coca-Cola 2L
+        // Combo Família: Escolha do 1,5L com opção de Upgrade para Coca-Cola 2,5L
         comboBebidaGroup.style.display = 'block';
         comboBebidaGroup.innerHTML = `
           <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px; margin-bottom: 12px;">
             <label style="font-size: 12.5px; font-weight: 900; color: #0f172a; display: block; margin-bottom: 6px;">
-              🥤 Escolha o Refrigerante de 2 Litros da Família:
+              🥤 Escolha o Refrigerante da Família (1,5L / 2,5L):
             </label>
             <div style="display: grid; grid-template-columns: 1fr; gap: 6px;">
               <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; font-size: 13px; border-radius: 8px; background: #ffffff; border: 1.5px solid #cbd5e1;">
-                <input type="radio" name="comboBebida2L" value="Guaraná Antarctica 2L (Tradicional)" data-upgrade="0" checked onchange="recalcularPrecoModal()">
-                <span><strong>🟢 Guaraná Antarctica 2 Litros (Tradicional)</strong> • <span style="color:#15803d; font-weight:800;">Incluso</span></span>
+                <input type="radio" name="comboBebida2L" value="Guaraná Antarctica 1,5L (Tradicional ou Diet)" data-upgrade="0" checked onchange="recalcularPrecoModal()">
+                <span><strong>🟢 Guaraná Antarctica 1,5L (Tradicional ou Diet)</strong> • <span style="color:#15803d; font-weight:800;">Incluso</span></span>
               </label>
               <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; font-size: 13px; border-radius: 8px; background: #fffbeb; border: 1.5px solid #fde68a;">
-                <input type="radio" name="comboBebida2L" value="Upgrade: Coca-Cola 2L (Original)" data-upgrade="2.00" onchange="recalcularPrecoModal()">
-                <span><strong>🔴 Upgrade: Coca-Cola 2 Litros (Original)</strong> • <strong style="color:#b45309;">+ R$ 2,00</strong></span>
+                <input type="radio" name="comboBebida2L" value="Upgrade: Coca-Cola 2,5L Original" data-upgrade="3.00" onchange="recalcularPrecoModal()">
+                <span><strong>🔴 Upgrade: Coca-Cola 2,5L Original</strong> • <strong style="color:#b45309;">+ R$ 3,00</strong></span>
               </label>
               <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; font-size: 13px; border-radius: 8px; background: #fffbeb; border: 1.5px solid #fde68a;">
-                <input type="radio" name="comboBebida2L" value="Upgrade: Coca-Cola 2L Zero" data-upgrade="2.00" onchange="recalcularPrecoModal()">
-                <span><strong>🔴 Upgrade: Coca-Cola 2 Litros Zero</strong> • <strong style="color:#b45309;">+ R$ 2,00</strong></span>
+                <input type="radio" name="comboBebida2L" value="Upgrade: Coca-Cola 2,5L Zero" data-upgrade="3.00" onchange="recalcularPrecoModal()">
+                <span><strong>🔴 Upgrade: Coca-Cola 2,5L Zero</strong> • <strong style="color:#b45309;">+ R$ 3,00</strong></span>
               </label>
             </div>
           </div>
         `;
       } else if (item.id === 'combo-casal' || item.id === 'combo-casal-vip') {
-        // Combo Casal e Casal VIP: Escolha dos 2 Refris Lata
+        // Combo Casal e Casal VIP: Escolha das 2 Bebidas
         comboBebidaGroup.style.display = 'block';
         comboBebidaGroup.innerHTML = `
           <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px; margin-bottom: 12px;">
             <label style="font-size: 12.5px; font-weight: 900; color: #0f172a; display: block; margin-bottom: 6px;">
-              🥤 Escolha os 2 Refrigerantes Lata (350ml):
+              🥤 Escolha as 2 Bebidas Geladas inclusas:
             </label>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
               <div>
-                <span style="font-size:11px; font-weight:800; color:#64748b;">1º Refri:</span>
+                <span style="font-size:11px; font-weight:800; color:#64748b;">1ª Bebida:</span>
                 <select id="comboRefri1" class="form-control" style="font-size:12px; padding:6px 8px; margin-top:2px;">
-                  <option value="Coca-Cola Original 350ml">Coca-Cola Original 350ml</option>
-                  <option value="Coca-Cola Zero 350ml">Coca-Cola Zero 350ml</option>
-                  <option value="Guaraná Antarctica 350ml">Guaraná Antarctica 350ml</option>
-                  <option value="Guaraná Antarctica Zero 350ml">Guaraná Zero 350ml</option>
-                  <option value="Fanta Laranja 350ml">Fanta Laranja 350ml</option>
-                  <option value="Suco Del Valle Uva 290ml">Suco Del Valle Uva 290ml</option>
-                  <option value="Água Mineral 500ml">Água Mineral 500ml</option>
+                  <option value="Coca-Cola Original 350ml (Lata)">Coca-Cola Original 350ml (Lata)</option>
+                  <option value="Coca-Cola Zero 350ml (Lata)">Coca-Cola Zero 350ml (Lata)</option>
+                  <option value="Suco Del Valle Goiaba 290ml (Lata)">Suco Del Valle Goiaba 290ml (Lata)</option>
+                  <option value="Del Valle Limon Tropical 290ml">Del Valle Limon Tropical 290ml</option>
+                  <option value="Água Mineral 510ml s/ Gás">Água Mineral 510ml s/ Gás</option>
                 </select>
               </div>
               <div>
-                <span style="font-size:11px; font-weight:800; color:#64748b;">2º Refri:</span>
+                <span style="font-size:11px; font-weight:800; color:#64748b;">2ª Bebida:</span>
                 <select id="comboRefri2" class="form-control" style="font-size:12px; padding:6px 8px; margin-top:2px;">
-                  <option value="Guaraná Antarctica 350ml">Guaraná Antarctica 350ml</option>
-                  <option value="Coca-Cola Original 350ml">Coca-Cola Original 350ml</option>
-                  <option value="Coca-Cola Zero 350ml">Coca-Cola Zero 350ml</option>
-                  <option value="Guaraná Antarctica Zero 350ml">Guaraná Zero 350ml</option>
-                  <option value="Fanta Laranja 350ml">Fanta Laranja 350ml</option>
-                  <option value="Suco Del Valle Uva 290ml">Suco Del Valle Uva 290ml</option>
-                  <option value="Água Mineral 500ml">Água Mineral 500ml</option>
+                  <option value="Coca-Cola Original 350ml (Lata)">Coca-Cola Original 350ml (Lata)</option>
+                  <option value="Coca-Cola Zero 350ml (Lata)">Coca-Cola Zero 350ml (Lata)</option>
+                  <option value="Suco Del Valle Goiaba 290ml (Lata)">Suco Del Valle Goiaba 290ml (Lata)</option>
+                  <option value="Del Valle Limon Tropical 290ml">Del Valle Limon Tropical 290ml</option>
+                  <option value="Água Mineral 510ml s/ Gás">Água Mineral 510ml s/ Gás</option>
                 </select>
               </div>
             </div>
           </div>
         `;
       } else if (item.id && (item.id.startsWith('combo-solo-') || item.id === 'combo-completo-sobremesa')) {
-        // Combos Solos: Escolha de 1 Refri Lata
+        // Combos Solos: Escolha de 1 Bebida inclusa
         comboBebidaGroup.style.display = 'block';
         comboBebidaGroup.innerHTML = `
           <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px; margin-bottom: 12px;">
             <label style="font-size: 12.5px; font-weight: 900; color: #0f172a; display: block; margin-bottom: 6px;">
-              🥤 Escolha o Refrigerante Lata (350ml) incluso:
+              🥤 Escolha a Bebida Gelada inclusa:
             </label>
             <select id="comboRefriSolo" class="form-control" style="font-size:13px; padding:8px 10px;">
-              <option value="Coca-Cola Original 350ml">Coca-Cola Original 350ml (Lata)</option>
-              <option value="Coca-Cola Zero 350ml">Coca-Cola Zero 350ml (Lata)</option>
-              <option value="Guaraná Antarctica 350ml">Guaraná Antarctica 350ml (Lata)</option>
-              <option value="Guaraná Antarctica Zero 350ml">Guaraná Antarctica Zero 350ml (Lata)</option>
-              <option value="Fanta Laranja 350ml">Fanta Laranja 350ml (Lata)</option>
-              <option value="Suco Del Valle Uva 290ml">Suco Del Valle Uva 290ml (Lata)</option>
-              <option value="Água Mineral 500ml">Água Mineral 500ml (sem gás)</option>
+              <option value="Coca-Cola Original 350ml (Lata)">Coca-Cola Original 350ml (Lata)</option>
+              <option value="Coca-Cola Zero 350ml (Lata)">Coca-Cola Zero 350ml (Lata)</option>
+              <option value="Suco Del Valle Goiaba 290ml (Lata)">Suco Del Valle Goiaba 290ml (Lata)</option>
+              <option value="Del Valle Limon Tropical 290ml">Del Valle Limon Tropical 290ml</option>
+              <option value="Água Mineral 510ml s/ Gás">Água Mineral 510ml s/ Gás</option>
             </select>
           </div>
         `;
