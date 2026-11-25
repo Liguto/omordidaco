@@ -49,7 +49,7 @@ async function sincronizarCardapioCompleto() {
       app_item_ids: [
         'add_salsicha', 'add_catupiry', 'add_bacon', 'add_calabresa',
         'add_parmesao', 'add_pure', 'add_milho', 'add_ervilha',
-        'add_maionese', 'add_batata_palha'
+        'add_molho_ervas', 'add_molho_azeitona', 'add_batata_palha'
       ]
     },
     {
@@ -258,7 +258,8 @@ async function sincronizarCardapioCompleto() {
     { app_item_id: 'add_pure', item_name: 'Purê de Batata Artesanal Extra (80g)', price: 490, status: 1, is_sold_separately: true, short_desc: 'Purê de batata artesanal cremoso' },
     { app_item_id: 'add_milho', item_name: 'Milho Verde Extra', price: 350, status: 1, is_sold_separately: true, short_desc: 'Milho verde selecionado' },
     { app_item_id: 'add_ervilha', item_name: 'Ervilha Extra', price: 350, status: 1, is_sold_separately: true, short_desc: 'Ervilha fresca tenra' },
-    { app_item_id: 'add_maionese', item_name: 'Pote de Molho Especial da Casa (30ml)', price: 450, status: 1, is_sold_separately: true, short_desc: 'Molho verde especial da casa em potinho' },
+    { app_item_id: 'add_molho_ervas', item_name: 'Pote de Maionese de Ervas Frescas (30ml)', price: 450, status: 1, is_sold_separately: true, short_desc: 'Maionese temperada com ervas frescas em potinho de 30ml' },
+    { app_item_id: 'add_molho_azeitona', item_name: 'Pote de Maionese de Azeitonas Azapa (30ml)', price: 450, status: 1, is_sold_separately: true, short_desc: 'Maionese temperada com azeitonas pretas Azapa em potinho de 30ml' },
     { app_item_id: 'add_batata_palha', item_name: 'Batata Palha Crocante Extra', price: 350, status: 1, is_sold_separately: true, short_desc: 'Batata palha fininha crocante' },
 
     // 4. BEBIDAS GELADAS
@@ -366,7 +367,8 @@ async function sincronizarCardapioCompleto() {
         { app_item_id: 'add_pure', price: 490 },
         { app_item_id: 'add_milho', price: 350 },
         { app_item_id: 'add_ervilha', price: 350 },
-        { app_item_id: 'add_maionese', price: 450 },
+        { app_item_id: 'add_molho_ervas', price: 450 },
+        { app_item_id: 'add_molho_azeitona', price: 450 },
         { app_item_id: 'add_batata_palha', price: 350 }
       ]
     },

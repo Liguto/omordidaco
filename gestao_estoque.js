@@ -325,7 +325,14 @@ function deduzirEstoquePorPedido(pedido) {
     if (nome.includes('purê extra') || nome.includes('pure extra')) registrarBaixa('pure_batata', 0.080 * qtdItem);
     if (nome.includes('milho extra')) registrarBaixa('milho_conserva', 0.030 * qtdItem);
     if (nome.includes('ervilha extra')) registrarBaixa('ervilha_conserva', 0.030 * qtdItem);
-    if (nome.includes('pote') || nome.includes('molho da casa')) registrarBaixa('pote_molho_30ml', 1 * qtdItem);
+    if (nome.includes('pote') || (nome.includes('maionese') && (nome.includes('ervas') || nome.includes('azeitona')))) {
+      registrarBaixa('pote_molho_30ml', 1 * qtdItem);
+      if (nome.includes('azeitona')) {
+        registrarBaixa('azeitonas_pretas', 0.030 * qtdItem);
+      } else {
+        registrarBaixa('maionese_verde', 0.030 * qtdItem);
+      }
+    }
 
     // 4. ANÁLISE DE BEBIDAS INDIVIDUAIS
     if (nome.includes('coca') && nome.includes('zero') && (nome.includes('2l') || nome.includes('2 litros') || nome.includes('2,5') || nome.includes('2.5'))) {
