@@ -58,11 +58,10 @@ async function sincronizarCardapioCompleto() {
       category_name: '🥤 Bebidas Geladas',
       app_item_ids: [
         'agua_mineral_sem_gas', 'agua_mineral_com_gas',
-        'refri_coca_lata', 'refri_coca_zero_lata',
+        'refri_coca_lata',
         'suco_delvalle_goiaba', 'suco_delvalle_limon',
         'cerveja_original_lata', 'cerveja_heineken_ln',
-        'refri_guarana_1500ml', 'refri_coca_2500ml',
-        'refri_coca_zero_2500ml'
+        'refri_guarana_1500ml', 'refri_coca_2500ml'
       ]
     }
   ];
@@ -107,6 +106,12 @@ async function sincronizarCardapioCompleto() {
     { app_item_id: 'mod_delvalle_goiaba', item_name: '1x Suco Del Valle Goiaba 290ml (Lata)', price: 0, status: 1, is_sold_separately: false },
     { app_item_id: 'mod_delvalle_limon', item_name: '1x Refresco Del Valle Limon Tropical 290ml', price: 0, status: 1, is_sold_separately: false },
     { app_item_id: 'mod_agua_mineral', item_name: '1x Água Mineral Cristal Gold 510ml (sem gás)', price: 0, status: 1, is_sold_separately: false },
+
+    // Opções de Versão de Refrigerantes (Normal vs Zero)
+    { app_item_id: 'mod_versao_coca_normal', item_name: '🔴 Original (Normal)', price: 0, status: 1, is_sold_separately: false },
+    { app_item_id: 'mod_versao_coca_zero', item_name: '⚫ Zero Açúcar', price: 0, status: 1, is_sold_separately: false },
+    { app_item_id: 'mod_versao_guarana_normal', item_name: '🟢 Tradicional (Normal)', price: 0, status: 1, is_sold_separately: false },
+    { app_item_id: 'mod_versao_guarana_zero', item_name: '⚪ Zero Açúcar / Diet', price: 0, status: 1, is_sold_separately: false },
 
     // Bebidas Garrafa do Combo Família
     { app_item_id: 'mod_guarana_1500ml', item_name: '🟢 1x Guaraná Antarctica 1,5L (Normal ou Diet)', price: 0, status: 1, is_sold_separately: false },
@@ -266,21 +271,55 @@ async function sincronizarCardapioCompleto() {
     { app_item_id: 'add_batata_palha', item_name: 'Batata Palha Crocante Extra', price: 350, status: 1, is_sold_separately: true, short_desc: 'Batata palha fininha crocante' },
 
     // 4. BEBIDAS GELADAS
-    { app_item_id: 'refri_coca_lata', item_name: 'Coca-Cola Original 350ml (Lata)', price: 790, status: 1, is_sold_separately: true, short_desc: 'Lata 350ml gelada' },
-    { app_item_id: 'refri_coca_zero_lata', item_name: 'Coca-Cola Zero 350ml (Lata)', price: 790, status: 1, is_sold_separately: true, short_desc: 'Lata 350ml gelada' },
-    { app_item_id: 'suco_delvalle_goiaba', item_name: 'Suco Del Valle Goiaba 290ml (Lata)', price: 850, status: 1, is_sold_separately: true, short_desc: 'Lata 290ml gelada' },
-    { app_item_id: 'suco_delvalle_limon', item_name: 'Refresco Del Valle Limon Tropical 290ml', price: 850, status: 1, is_sold_separately: true, short_desc: 'Lata 290ml refrescante e gelada' },
-    { app_item_id: 'refri_guarana_1500ml', item_name: 'Guaraná Antarctica 1,5 Litros (Tradicional ou Diet)', price: 1390, status: 1, is_sold_separately: true, short_desc: 'Garrafa 1,5 Litros gelada' },
-    { app_item_id: 'refri_coca_2500ml', item_name: 'Coca-Cola 2,5 Litros Original', price: 1890, status: 1, is_sold_separately: true, short_desc: 'Garrafa 2,5 Litros tamanho família bem gelada' },
-    { app_item_id: 'refri_coca_zero_2500ml', item_name: 'Coca-Cola 2,5 Litros Zero', price: 1890, status: 1, is_sold_separately: true, short_desc: 'Garrafa 2,5 Litros sem açúcar bem gelada' },
     { app_item_id: 'agua_mineral_sem_gas', item_name: 'Água Mineral Cristal Gold 510ml (sem gás)', price: 500, status: 1, is_sold_separately: true, short_desc: 'Garrafa 510ml gelada' },
     { app_item_id: 'agua_mineral_com_gas', item_name: 'Água Mineral Nestlé Pureza Vital 510ml (com gás)', price: 550, status: 1, is_sold_separately: true, short_desc: 'Garrafa 510ml gelada' },
+    { app_item_id: 'refri_coca_lata', item_name: 'Coca-Cola 350ml Lata (Normal ou Zero)', price: 790, status: 1, is_sold_separately: true, short_desc: 'Lata 350ml gelada. Escolha Normal (Original) ou Zero Açúcar.', app_modifier_group_ids: ['mg_versao_coca_lata'] },
+    { app_item_id: 'suco_delvalle_goiaba', item_name: 'Suco Del Valle Goiaba 290ml (Lata)', price: 850, status: 1, is_sold_separately: true, short_desc: 'Lata 290ml gelada' },
+    { app_item_id: 'suco_delvalle_limon', item_name: 'Refresco Del Valle Limon Tropical 290ml', price: 850, status: 1, is_sold_separately: true, short_desc: 'Lata 290ml refrescante e gelada' },
     { app_item_id: 'cerveja_original_lata', item_name: 'Cerveja Original 350ml (Lata)', price: 990, status: 1, is_sold_separately: true, short_desc: 'Lata 350ml trincando de gelada' },
-    { app_item_id: 'cerveja_heineken_ln', item_name: 'Cerveja Heineken 330ml (Long Neck)', price: 1290, status: 1, is_sold_separately: true, short_desc: 'Long Neck 330ml gelada' }
+    { app_item_id: 'cerveja_heineken_ln', item_name: 'Cerveja Heineken 330ml (Long Neck)', price: 1290, status: 1, is_sold_separately: true, short_desc: 'Long Neck 330ml gelada' },
+    { app_item_id: 'refri_guarana_1500ml', item_name: 'Guaraná Antarctica 1,5 Litros (Normal ou Zero)', price: 1390, status: 1, is_sold_separately: true, short_desc: 'Garrafa 1,5 Litros gelada. Escolha Tradicional ou Zero Açúcar/Diet.', app_modifier_group_ids: ['mg_versao_guarana_15'] },
+    { app_item_id: 'refri_coca_2500ml', item_name: 'Coca-Cola 2,5 Litros (Normal ou Zero)', price: 1890, status: 1, is_sold_separately: true, short_desc: 'Garrafa 2,5 Litros tamanho família gelada. Escolha Normal (Original) ou Zero Açúcar.', app_modifier_group_ids: ['mg_versao_coca_25'] }
   ];
 
   // Grupos de Modificadores (Formatos, Molhos Cortesia, Retiradas e Adicionais)
   const modifier_groups = [
+    {
+      app_modifier_group_id: 'mg_versao_coca_lata',
+      modifier_group_name: 'Escolha a Versão da Coca-Cola (Obrigatório)',
+      is_required: 1,
+      quantity_min_permitted: 1,
+      quantity_max_permitted: 1,
+      buy_mode: 0,
+      app_mg_items: [
+        { app_item_id: 'mod_versao_coca_normal', price: 0 },
+        { app_item_id: 'mod_versao_coca_zero', price: 0 }
+      ]
+    },
+    {
+      app_modifier_group_id: 'mg_versao_guarana_15',
+      modifier_group_name: 'Escolha a Versão do Guaraná (Obrigatório)',
+      is_required: 1,
+      quantity_min_permitted: 1,
+      quantity_max_permitted: 1,
+      buy_mode: 0,
+      app_mg_items: [
+        { app_item_id: 'mod_versao_guarana_normal', price: 0 },
+        { app_item_id: 'mod_versao_guarana_zero', price: 0 }
+      ]
+    },
+    {
+      app_modifier_group_id: 'mg_versao_coca_25',
+      modifier_group_name: 'Escolha a Versão da Coca-Cola 2,5L (Obrigatório)',
+      is_required: 1,
+      quantity_min_permitted: 1,
+      quantity_max_permitted: 1,
+      buy_mode: 0,
+      app_mg_items: [
+        { app_item_id: 'mod_versao_coca_normal', price: 0 },
+        { app_item_id: 'mod_versao_coca_zero', price: 0 }
+      ]
+    },
     {
       app_modifier_group_id: 'mg_formato',
       modifier_group_name: 'Escolha o Formato do Hot Dog',

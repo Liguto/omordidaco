@@ -1311,6 +1311,21 @@
     </div>
   </div>
 
+  <!-- MODAL: ESCOLHA DE VERSÃO DE BEBIDA (NORMAL OU ZERO) -->
+  <div class="modal-overlay" id="bebidaVariacaoModal">
+    <div class="modal-box" style="max-width: 380px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalBebidaTitle">Escolha a Versão</h3>
+        <button class="btn-close" onclick="fecharModal('bebidaVariacaoModal')">✕</button>
+      </div>
+      <p id="modalBebidaDesc" style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">Selecione entre Normal ou Zero Açúcar:</p>
+      
+      <div id="modalBebidaOpcoes" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px;">
+        <!-- Botões de escolha rápida de versão -->
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL: SACOLA / CHECKOUT -->
   <div class="modal-overlay" id="checkoutModal">
     <div class="modal-box">
@@ -1905,6 +1920,10 @@
       }
 
       if (catId === 'bebidas') {
+        if (item.variacoes && Array.isArray(item.variacoes) && item.variacoes.length > 0) {
+          abrirModalVariacaoBebida(item);
+          return;
+        }
         carrinho.push({
           id: item.id,
           nome: item.nome,
@@ -1937,6 +1956,54 @@
 
       // Hot Dogs e Combos abrem a personalização
       abrirModalPersonalizacao(item, catId);
+    }
+
+    let bebidaSelecionadaTemp = null;
+
+    function abrirModalVariacaoBebida(item) {
+      bebidaSelecionadaTemp = item;
+      const titleEl = document.getElementById('modalBebidaTitle');
+      const descEl = document.getElementById('modalBebidaDesc');
+      const opcoesEl = document.getElementById('modalBebidaOpcoes');
+
+      if (titleEl) titleEl.innerText = item.nome;
+      if (descEl) descEl.innerText = item.descricao || 'Escolha a versão desejada:';
+
+      if (opcoesEl && item.variacoes) {
+        opcoesEl.innerHTML = '';
+        item.variacoes.forEach(v => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.style.cssText = 'width: 100%; text-align: left; padding: 14px 16px; border-radius: 12px; border: 2px solid #e2e8f0; background: #ffffff; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 900; color: #0f172a; transition: all 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.03);';
+          btn.innerHTML = `
+            <span>${v.nome}</span>
+            <span style="color: #15803d; font-weight: 950; font-size: 14.5px;">R$ ${item.preco.toFixed(2).replace('.', ',')}</span>
+          `;
+          btn.onmouseover = () => { btn.style.borderColor = '#ea1d2c'; btn.style.background = '#fff1f2'; };
+          btn.onmouseout = () => { btn.style.borderColor = '#e2e8f0'; btn.style.background = '#ffffff'; };
+          btn.onclick = () => {
+            selecionarVersaoBebida(v.refriNome, item.preco, item.id);
+          };
+          opcoesEl.appendChild(btn);
+        });
+      }
+
+      abrirModal('bebidaVariacaoModal');
+    }
+
+    function selecionarVersaoBebida(nomeFormatado, preco, idBase) {
+      carrinho.push({
+        id: idBase,
+        nome: nomeFormatado,
+        formato: '',
+        preco: preco,
+        observacoes: '',
+        isLanche: false,
+        catId: 'bebidas'
+      });
+      atualizarBarraCarrinho();
+      fecharModal('bebidaVariacaoModal');
+      mostrarToast(`✓ ${nomeFormatado} adicionado!`);
     }
 
     let qtdMolhoExtraModal = 0;
