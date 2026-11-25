@@ -66,7 +66,7 @@ async function sincronizarCardapioCompleto() {
 
   const items = [
     // Opções de modificador internas (não vendidas soltas)
-    { app_item_id: 'mod_pao', item_name: '🥖 Tradicional de Rua (No Pão Bambini 70g)', price: 0, status: 1, is_sold_separately: false, short_desc: 'Aberto farto no autêntico Pão Bambini (18cm), selado e quentinho' },
+    { app_item_id: 'mod_pao', item_name: '🥖 No Pão', price: 0, status: 1, is_sold_separately: false, short_desc: 'Pão macio Bambini (18cm)' },
     { app_item_id: 'mod_prato', item_name: '🥣 No Prato', price: 200, status: 1, is_sold_separately: false, short_desc: 'Sem pão! +40g de purê artesanal e garfo descartável reforçado' },
 
     // Retiradas (Grátis)
@@ -144,7 +144,7 @@ async function sincronizarCardapioCompleto() {
       price: 8690,
       status: 1,
       is_sold_separately: true,
-      short_desc: '2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha no Pão ou no Prato para cada um) + 1 Refrigerante 1,5L (Guaraná 1,5L incluso ou upgrade Coca 2,5L) + 3 Potes de Molho da Casa (30ml). Fartura garantida!',
+      short_desc: '2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha No Pão ou No Prato) + 1 Refrigerante 1,5L (Guaraná 1,5L incluso ou upgrade Coca 2,5L) + 3 Potes de Molho da Casa (30ml). Fartura garantida!',
       app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_formato_dog3', 'mg_bebida_familia', 'mg_adicionais']
     },
     {

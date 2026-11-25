@@ -606,7 +606,7 @@ const CARDAPIO = {
         {
           id: "combo-casal",
           nome: "Combo Mordidaço Casal",
-          descricao: "2 Mordidaços em Dobro (escolha individual no Pão ou no Prato para cada um) + 2 Bebidas Geladas Lata/Água (escolha Coca-Cola, Del Valle ou Água) + 2 Potes de Molho da Casa (30ml). A janta perfeita para dois!",
+          descricao: "2 Mordidaços em Dobro (escolha No Pão ou No Prato) + 2 Bebidas Geladas Lata/Água (escolha Coca-Cola, Del Valle ou Água) + 2 Potes de Molho da Casa (30ml). A janta perfeita para dois!",
           preco: 49.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -620,7 +620,7 @@ const CARDAPIO = {
         {
           id: "combo-familia-mordidaco",
           nome: "Combo Família Mordidaço",
-          descricao: "2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha individual no Pão ou no Prato para cada um) + 1 Refrigerante 1,5L (Guaraná Antarctica 1,5L incluso ou Upgrade Coca-Cola 2,5L) + 3 Potes de Molho da Casa (30ml). Fartura garantida para toda a família!",
+          descricao: "2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha No Pão ou No Prato) + 1 Refrigerante 1,5L (Guaraná Antarctica 1,5L incluso ou Upgrade Coca-Cola 2,5L) + 3 Potes de Molho da Casa (30ml). Fartura garantida para toda a família!",
           preco: 64.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
@@ -636,7 +636,7 @@ const CARDAPIO = {
         {
           id: "combo-casal-vip",
           nome: "Mordidaço Casal VIP (com Sobremesas)",
-          descricao: "2 Mordidaços em Dobro (escolha individual no Pão ou no Prato para cada um) + 2 Refrigerantes Lata 350ml + 1 Tortinha de Limão (170ml) + 1 Escondidinho de Ninho com Nutella e Brownie (170ml) + 2 Potes de Maionese da Casa (30ml). A experiência completa a dois!",
+          descricao: "2 Mordidaços em Dobro (escolha No Pão ou No Prato) + 2 Refrigerantes Lata 350ml + 1 Tortinha de Limão (170ml) + 1 Escondidinho de Ninho com Nutella e Brownie (170ml) + 2 Potes de Maionese da Casa (30ml). A experiência completa a dois!",
           preco: 69.90,
           adicionalPrato: 2.00,
           permiteFormato: true,
