@@ -76,6 +76,7 @@ function deduzirEstoquePorPedido(pedido) {
         if (isNoPrato) {
           registrarBaixa('dogueira_bh05', 2 * qtdItem);
           registrarBaixa('garfo_reforcado', 2 * qtdItem);
+          registrarBaixa('faca_refeicao', 2 * qtdItem);
           registrarBaixa('pure_batata', 0.240 * qtdItem);
           registrarBaixa('molho_tomate', 0.080 * qtdItem);
         } else {
@@ -101,6 +102,7 @@ function deduzirEstoquePorPedido(pedido) {
         if (isNoPrato) {
           registrarBaixa('dogueira_bh05', 2 * qtdItem);
           registrarBaixa('garfo_reforcado', 2 * qtdItem);
+          registrarBaixa('faca_refeicao', 2 * qtdItem);
           registrarBaixa('pure_batata', 0.240 * qtdItem);
           registrarBaixa('molho_tomate', 0.080 * qtdItem);
         } else {
@@ -127,6 +129,7 @@ function deduzirEstoquePorPedido(pedido) {
         if (isNoPrato) {
           registrarBaixa('dogueira_bh05', 3 * qtdItem);
           registrarBaixa('garfo_reforcado', 3 * qtdItem);
+          registrarBaixa('faca_refeicao', 3 * qtdItem);
           registrarBaixa('pure_batata', 0.360 * qtdItem);
           registrarBaixa('molho_tomate', 0.120 * qtdItem);
         } else {
@@ -154,6 +157,7 @@ function deduzirEstoquePorPedido(pedido) {
         if (isNoPrato) {
           registrarBaixa('dogueira_bh05', 1 * qtdItem);
           registrarBaixa('garfo_reforcado', 1 * qtdItem);
+          registrarBaixa('faca_refeicao', 1 * qtdItem);
           registrarBaixa('pure_batata', 0.120 * qtdItem);
           registrarBaixa('molho_tomate', 0.040 * qtdItem);
         } else {
@@ -182,6 +186,7 @@ function deduzirEstoquePorPedido(pedido) {
         if (isNoPrato) {
           registrarBaixa('dogueira_bh05', 1 * qtdItem);
           registrarBaixa('garfo_reforcado', 1 * qtdItem);
+          registrarBaixa('faca_refeicao', 1 * qtdItem);
           registrarBaixa('pure_batata', 0.120 * qtdItem);
           registrarBaixa('molho_tomate', 0.040 * qtdItem);
         } else {
@@ -206,6 +211,7 @@ function deduzirEstoquePorPedido(pedido) {
         if (isNoPrato) {
           registrarBaixa('dogueira_bh05', 1 * qtdItem);
           registrarBaixa('garfo_reforcado', 1 * qtdItem);
+          registrarBaixa('faca_refeicao', 1 * qtdItem);
           registrarBaixa('pure_batata', 0.120 * qtdItem);
           registrarBaixa('molho_tomate', 0.040 * qtdItem);
         } else {
@@ -228,6 +234,7 @@ function deduzirEstoquePorPedido(pedido) {
         if (isNoPrato) {
           registrarBaixa('dogueira_bh05', 1 * qtdItem);
           registrarBaixa('garfo_reforcado', 1 * qtdItem);
+          registrarBaixa('faca_refeicao', 1 * qtdItem);
           registrarBaixa('pure_batata', 0.120 * qtdItem);
           registrarBaixa('molho_tomate', 0.040 * qtdItem);
         } else {
@@ -249,6 +256,7 @@ function deduzirEstoquePorPedido(pedido) {
       if (isNoPrato) {
         registrarBaixa('dogueira_bh05', 1 * qtdItem);
         registrarBaixa('garfo_reforcado', 1 * qtdItem);
+        registrarBaixa('faca_refeicao', 1 * qtdItem);
         registrarBaixa('pure_batata', 0.120 * qtdItem); // 120g purê no prato
         registrarBaixa('molho_tomate', 0.040 * qtdItem);
       } else {
