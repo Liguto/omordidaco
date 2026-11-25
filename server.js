@@ -741,46 +741,46 @@ const CARDAPIO = {
       id: "adicionais",
       nome: "➕ Adicionais Extras",
       itens: [
-        { id: "add-milho", nome: "Milho Verde Extra", preco: 2.50 },
-        { id: "add-ervilha", nome: "Ervilha Extra", preco: 2.50 },
-        { id: "add-batata-palha", nome: "Batata Palha Crocante Extra", preco: 2.50 },
-        { id: "add-salsicha", nome: "1 Salsicha Sadia Extra", preco: 3.50 },
-        { id: "add-parmesao", nome: "Parmesão Ralado Fresco (20g)", preco: 3.50 },
-        { id: "add-pure", nome: "Purê de Batata Artesanal Extra (80g)", preco: 3.50 },
-        { id: "add-molho-ervas", nome: "Pote de Maionese de Ervas Frescas (30ml)", preco: 3.50 },
-        { id: "add-molho-azeitona", nome: "Pote de Maionese de Azeitonas Azapa (30ml)", preco: 3.50 },
-        { id: "add-calabresa", nome: "Calabresa Ralada Douradinha (40g)", preco: 4.50 },
-        { id: "add-catupiry", nome: "Catupiry Original Extra (40g)", preco: 5.00 },
-        { id: "add-bacon", nome: "Bacon Crocante Extra em Cubos (40g)", preco: 5.00 }
+        { id: "add-milho", nome: "Milho Verde Extra", preco: 2.50, imagem: "assets/produtos/milho_extra.jpg" },
+        { id: "add-ervilha", nome: "Ervilha Extra", preco: 2.50, imagem: "assets/produtos/ervilha_extra.jpg" },
+        { id: "add-batata-palha", nome: "Batata Palha Crocante Extra", preco: 2.50, imagem: "assets/produtos/batata_palha-Extra.webp" },
+        { id: "add-salsicha", nome: "1 Salsicha Sadia Extra", preco: 3.50, imagem: "assets/produtos/salsicha_extra.jpg" },
+        { id: "add-parmesao", nome: "Parmesão Ralado Fresco (20g)", preco: 3.50, imagem: "assets/produtos/parmesao_extra.jpg" },
+        { id: "add-pure", nome: "Purê de Batata Artesanal Extra (80g)", preco: 3.50, imagem: "assets/produtos/pure_extra.png" },
+        { id: "add-molho-ervas", nome: "Pote de Maionese de Ervas Frescas (30ml)", preco: 3.50, imagem: "assets/produtos/maionese_verde_extra.webp" },
+        { id: "add-molho-azeitona", nome: "Pote de Maionese de Azeitonas Azapa (30ml)", preco: 3.50, imagem: "assets/produtos/maionese_azeitona_extra.webp" },
+        { id: "add-calabresa", nome: "Calabresa Ralada Douradinha (40g)", preco: 4.50, imagem: "assets/produtos/calabresa_ralada.jpg" },
+        { id: "add-catupiry", nome: "Catupiry Original Extra (40g)", preco: 5.00, imagem: "assets/produtos/catupiry_extra.jpg" },
+        { id: "add-bacon", nome: "Bacon Crocante Extra em Cubos (40g)", preco: 5.00, imagem: "assets/produtos/bacon_cubos.jpg" }
       ]
     },
     {
       id: "bebidas",
       nome: "🥤 Bebidas Geladas",
       itens: [
-        { id: "agua-mineral-sem-gas", nome: "Água Mineral Cristal Gold 510ml (sem gás)", preco: 3.50, imagem: "assets/produtos/agua.jpg" },
-        { id: "agua-mineral-com-gas", nome: "Água Mineral Nestlé Pureza Vital 510ml (com gás)", preco: 4.50, imagem: "assets/produtos/agua.jpg" },
+        { id: "agua-mineral-sem-gas", nome: "Água Mineral Cristal Gold 510ml (sem gás)", preco: 3.50, imagem: "assets/produtos/agua_sem_gas.jpg" },
+        { id: "agua-mineral-com-gas", nome: "Água Mineral Nestlé Pureza Vital 510ml (com gás)", preco: 4.50, imagem: "assets/produtos/agua_com_gas.jpg" },
         {
           id: "refri-coca-lata",
           nome: "Coca-Cola 350ml Lata (Normal ou Zero)",
           descricao: "Lata 350ml trincando de gelada. Escolha Normal (Original) ou Zero Açúcar.",
           preco: 6.00,
-          imagem: "assets/produtos/coca-lata.jpg",
+          imagem: "assets/produtos/coca-normal_lata.jpg",
           variacoes: [
             { id: "coca-lata-normal", nome: "🔴 Original (Normal)", refriNome: "Coca-Cola Original 350ml (Lata)" },
             { id: "coca-lata-zero", nome: "⚫ Zero Açúcar", refriNome: "Coca-Cola Zero 350ml (Lata)" }
           ]
         },
-        { id: "suco-delvalle-goiaba", nome: "Suco Del Valle Goiaba 290ml (Lata)", preco: 6.50, imagem: "assets/produtos/delvalle-maracuja.jpg" },
-        { id: "suco-delvalle-limon", nome: "Refresco Del Valle Limon Tropical 290ml", preco: 6.50, imagem: "assets/produtos/delvalle-maracuja.jpg" },
-        { id: "cerveja-original-lata", nome: "Cerveja Original 350ml (Lata)", preco: 7.50, imagem: "assets/produtos/cerveja-original.jpg" },
-        { id: "cerveja-heineken-ln", nome: "Cerveja Heineken 330ml (Long Neck)", preco: 10.00, imagem: "assets/produtos/heineken.jpg" },
+        { id: "suco-delvalle-goiaba", nome: "Suco Del Valle Goiaba 290ml (Lata)", preco: 6.50, imagem: "assets/produtos/dell_valle_goiaba.jpg" },
+        { id: "suco-delvalle-limon", nome: "Refresco Del Valle Limon Tropical 290ml", preco: 6.50, imagem: "assets/produtos/dell_valle_limonada.jpg" },
+        { id: "cerveja-original-lata", nome: "Cerveja Original 350ml (Lata)", preco: 7.50, imagem: "assets/produtos/original_lata.webp" },
+        { id: "cerveja-heineken-ln", nome: "Cerveja Heineken 330ml (Long Neck)", preco: 10.00, imagem: "assets/produtos/heineken_longneck.jpg" },
         {
           id: "refri-guarana-1500ml",
           nome: "Guaraná Antarctica 1,5 Litros (Normal ou Zero)",
           descricao: "Garrafa de 1,5L geladinha. Escolha Normal (Tradicional) ou Zero Açúcar / Diet.",
           preco: 11.00,
-          imagem: "assets/produtos/guarana-2l.jpg",
+          imagem: "assets/produtos/guarana_15_litros.jpg",
           variacoes: [
             { id: "guarana-15l-normal", nome: "🟢 Tradicional (Normal)", refriNome: "Guaraná Antarctica 1,5L (Tradicional)" },
             { id: "guarana-15l-zero", nome: "⚪ Zero Açúcar / Diet", refriNome: "Guaraná Antarctica 1,5L (Zero/Diet)" }
@@ -791,7 +791,7 @@ const CARDAPIO = {
           nome: "Coca-Cola 2,5 Litros (Normal ou Zero)",
           descricao: "Garrafa gigante de 2,5 Litros gelada. Escolha Normal (Original) ou Zero Açúcar.",
           preco: 15.00,
-          imagem: "assets/produtos/coca-2l.jpg",
+          imagem: "assets/produtos/coca_cola_2_5_litros.webp",
           variacoes: [
             { id: "coca-25l-normal", nome: "🔴 Original (Normal)", refriNome: "Coca-Cola 2,5 Litros (Original)" },
             { id: "coca-25l-zero", nome: "⚫ Zero Açúcar", refriNome: "Coca-Cola 2,5 Litros (Zero Açúcar)" }

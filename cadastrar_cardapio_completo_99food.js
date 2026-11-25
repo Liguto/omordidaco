@@ -258,28 +258,28 @@ async function sincronizarCardapioCompleto() {
     },
 
     // 3. ADICIONAIS EXTRAS (Vendidos avulsos e como opcionais)
-    { app_item_id: 'add_salsicha', item_name: '1 Salsicha Sadia Extra', price: 490, status: 1, is_sold_separately: true, short_desc: 'Salsicha Sadia cozida no molho especial' },
-    { app_item_id: 'add_catupiry', item_name: 'Catupiry Original Extra (40g)', price: 690, status: 1, is_sold_separately: true, short_desc: 'Legítimo Catupiry cremoso' },
-    { app_item_id: 'add_bacon', item_name: 'Bacon Crocante Extra em Cubos (40g)', price: 690, status: 1, is_sold_separately: true, short_desc: 'Bacon em cubos douradinho e sequinho' },
-    { app_item_id: 'add_calabresa', item_name: 'Calabresa Ralada Douradinha (40g)', price: 590, status: 1, is_sold_separately: true, short_desc: 'Calabresa fininha refogada' },
-    { app_item_id: 'add_parmesao', item_name: 'Parmesão Ralado Fresco (20g)', price: 450, status: 1, is_sold_separately: true, short_desc: 'Ralado na hora' },
-    { app_item_id: 'add_pure', item_name: 'Purê de Batata Artesanal Extra (80g)', price: 490, status: 1, is_sold_separately: true, short_desc: 'Purê de batata artesanal cremoso' },
-    { app_item_id: 'add_milho', item_name: 'Milho Verde Extra', price: 350, status: 1, is_sold_separately: true, short_desc: 'Milho verde selecionado' },
-    { app_item_id: 'add_ervilha', item_name: 'Ervilha Extra', price: 350, status: 1, is_sold_separately: true, short_desc: 'Ervilha fresca tenra' },
-    { app_item_id: 'add_molho_ervas', item_name: 'Pote de Maionese de Ervas Frescas (30ml)', price: 450, status: 1, is_sold_separately: true, short_desc: 'Maionese temperada com ervas frescas em potinho de 30ml' },
-    { app_item_id: 'add_molho_azeitona', item_name: 'Pote de Maionese de Azeitonas Azapa (30ml)', price: 450, status: 1, is_sold_separately: true, short_desc: 'Maionese temperada com azeitonas pretas Azapa em potinho de 30ml' },
-    { app_item_id: 'add_batata_palha', item_name: 'Batata Palha Crocante Extra', price: 350, status: 1, is_sold_separately: true, short_desc: 'Batata palha fininha crocante' },
+    { app_item_id: 'add_salsicha', item_name: '1 Salsicha Sadia Extra', price: 490, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/salsicha_extra.jpg', short_desc: 'Salsicha Sadia cozida no molho especial' },
+    { app_item_id: 'add_catupiry', item_name: 'Catupiry Original Extra (40g)', price: 690, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/catupiry_extra.jpg', short_desc: 'Legítimo Catupiry cremoso' },
+    { app_item_id: 'add_bacon', item_name: 'Bacon Crocante Extra em Cubos (40g)', price: 690, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/bacon_cubos.jpg', short_desc: 'Bacon em cubos douradinho e sequinho' },
+    { app_item_id: 'add_calabresa', item_name: 'Calabresa Ralada Douradinha (40g)', price: 590, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/calabresa_ralada.jpg', short_desc: 'Calabresa fininha refogada' },
+    { app_item_id: 'add_parmesao', item_name: 'Parmesão Ralado Fresco (20g)', price: 450, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/parmesao_extra.jpg', short_desc: 'Ralado na hora' },
+    { app_item_id: 'add_pure', item_name: 'Purê de Batata Artesanal Extra (80g)', price: 490, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/pure_extra.png', short_desc: 'Purê de batata artesanal cremoso' },
+    { app_item_id: 'add_milho', item_name: 'Milho Verde Extra', price: 350, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/milho_extra.jpg', short_desc: 'Milho verde selecionado' },
+    { app_item_id: 'add_ervilha', item_name: 'Ervilha Extra', price: 350, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/ervilha_extra.jpg', short_desc: 'Ervilha fresca tenra' },
+    { app_item_id: 'add_molho_ervas', item_name: 'Pote de Maionese de Ervas Frescas (30ml)', price: 450, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/maionese_verde_extra.webp', short_desc: 'Maionese temperada com ervas frescas em potinho de 30ml' },
+    { app_item_id: 'add_molho_azeitona', item_name: 'Pote de Maionese de Azeitonas Azapa (30ml)', price: 450, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/maionese_azeitona_extra.webp', short_desc: 'Maionese temperada com azeitonas pretas Azapa em potinho de 30ml' },
+    { app_item_id: 'add_batata_palha', item_name: 'Batata Palha Crocante Extra', price: 350, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/batata_palha-Extra.webp', short_desc: 'Batata palha fininha crocante' },
 
     // 4. BEBIDAS GELADAS
-    { app_item_id: 'agua_mineral_sem_gas', item_name: 'Água Mineral Cristal Gold 510ml (sem gás)', price: 500, status: 1, is_sold_separately: true, short_desc: 'Garrafa 510ml gelada' },
-    { app_item_id: 'agua_mineral_com_gas', item_name: 'Água Mineral Nestlé Pureza Vital 510ml (com gás)', price: 550, status: 1, is_sold_separately: true, short_desc: 'Garrafa 510ml gelada' },
-    { app_item_id: 'refri_coca_lata', item_name: 'Coca-Cola 350ml Lata (Normal ou Zero)', price: 790, status: 1, is_sold_separately: true, short_desc: 'Lata 350ml gelada. Escolha Normal (Original) ou Zero Açúcar.', app_modifier_group_ids: ['mg_versao_coca_lata'] },
-    { app_item_id: 'suco_delvalle_goiaba', item_name: 'Suco Del Valle Goiaba 290ml (Lata)', price: 850, status: 1, is_sold_separately: true, short_desc: 'Lata 290ml gelada' },
-    { app_item_id: 'suco_delvalle_limon', item_name: 'Refresco Del Valle Limon Tropical 290ml', price: 850, status: 1, is_sold_separately: true, short_desc: 'Lata 290ml refrescante e gelada' },
-    { app_item_id: 'cerveja_original_lata', item_name: 'Cerveja Original 350ml (Lata)', price: 990, status: 1, is_sold_separately: true, short_desc: 'Lata 350ml trincando de gelada' },
-    { app_item_id: 'cerveja_heineken_ln', item_name: 'Cerveja Heineken 330ml (Long Neck)', price: 1290, status: 1, is_sold_separately: true, short_desc: 'Long Neck 330ml gelada' },
-    { app_item_id: 'refri_guarana_1500ml', item_name: 'Guaraná Antarctica 1,5 Litros (Normal ou Zero)', price: 1390, status: 1, is_sold_separately: true, short_desc: 'Garrafa 1,5 Litros gelada. Escolha Tradicional ou Zero Açúcar/Diet.', app_modifier_group_ids: ['mg_versao_guarana_15'] },
-    { app_item_id: 'refri_coca_2500ml', item_name: 'Coca-Cola 2,5 Litros (Normal ou Zero)', price: 1890, status: 1, is_sold_separately: true, short_desc: 'Garrafa 2,5 Litros tamanho família gelada. Escolha Normal (Original) ou Zero Açúcar.', app_modifier_group_ids: ['mg_versao_coca_25'] }
+    { app_item_id: 'agua_mineral_sem_gas', item_name: 'Água Mineral Cristal Gold 510ml (sem gás)', price: 500, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/agua_sem_gas.jpg', short_desc: 'Garrafa 510ml gelada' },
+    { app_item_id: 'agua_mineral_com_gas', item_name: 'Água Mineral Nestlé Pureza Vital 510ml (com gás)', price: 550, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/agua_com_gas.jpg', short_desc: 'Garrafa 510ml gelada' },
+    { app_item_id: 'refri_coca_lata', item_name: 'Coca-Cola 350ml Lata (Normal ou Zero)', price: 790, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/coca-normal_lata.jpg', short_desc: 'Lata 350ml gelada. Escolha Normal (Original) ou Zero Açúcar.', app_modifier_group_ids: ['mg_versao_coca_lata'] },
+    { app_item_id: 'suco_delvalle_goiaba', item_name: 'Suco Del Valle Goiaba 290ml (Lata)', price: 850, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/dell_valle_goiaba.jpg', short_desc: 'Lata 290ml gelada' },
+    { app_item_id: 'suco_delvalle_limon', item_name: 'Refresco Del Valle Limon Tropical 290ml', price: 850, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/dell_valle_limonada.jpg', short_desc: 'Lata 290ml refrescante e gelada' },
+    { app_item_id: 'cerveja_original_lata', item_name: 'Cerveja Original 350ml (Lata)', price: 990, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/original_lata.webp', short_desc: 'Lata 350ml trincando de gelada' },
+    { app_item_id: 'cerveja_heineken_ln', item_name: 'Cerveja Heineken 330ml (Long Neck)', price: 1290, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/heineken_longneck.jpg', short_desc: 'Long Neck 330ml gelada' },
+    { app_item_id: 'refri_guarana_1500ml', item_name: 'Guaraná Antarctica 1,5 Litros (Normal ou Zero)', price: 1390, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/guarana_15_litros.jpg', short_desc: 'Garrafa 1,5 Litros gelada. Escolha Tradicional ou Zero Açúcar/Diet.', app_modifier_group_ids: ['mg_versao_guarana_15'] },
+    { app_item_id: 'refri_coca_2500ml', item_name: 'Coca-Cola 2,5 Litros (Normal ou Zero)', price: 1890, status: 1, is_sold_separately: true, head_img: 'https://omordidaco.com.br/assets/produtos/coca_cola_2_5_litros.webp', short_desc: 'Garrafa 2,5 Litros tamanho família gelada. Escolha Normal (Original) ou Zero Açúcar.', app_modifier_group_ids: ['mg_versao_coca_25'] }
   ];
 
   // Grupos de Modificadores (Formatos, Molhos Cortesia, Retiradas e Adicionais)
