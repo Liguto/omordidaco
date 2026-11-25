@@ -212,13 +212,13 @@
     },
     {
       "id": "nutella_ferrero",
-      "nome": "Nutella Ferrero Legítima Pura (2 Potes de 700g = 1,4kg)",
+      "nome": "Nutella Ferrero Legítima Pura (2 Potes 700g - R$ 44,89/pote = R$ 64,13/kg)",
       "categoria": "Sobremesas",
       "unidade": "kg",
       "quantidade": 1.4,
       "minimo": 0.4,
       "custoUnitario": 64.13,
-      "rendimento": "Rende ~40 potes de Escondidinho (porção 35g de pura Nutella)"
+      "rendimento": "Rende ~40 potes de Escondidinho (porção 35g de pura Nutella a R$ 2,24/porção)"
     },
     {
       "id": "chocolate_meio_amargo",
