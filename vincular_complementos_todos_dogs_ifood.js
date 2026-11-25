@@ -69,11 +69,17 @@ const ADICIONAIS_DEFS = [
   { id: '22222222-0010-4000-8000-000000000010', name: 'Batata Palha Crocante Extra', preco: 3.50 }
 ];
 
+const MOLHOS_CORTESIA_DEFS = [
+  { id: '55555555-0001-4000-8000-000000000001', name: '🌿 1x Molho Verde da Casa - Ervas (30ml)', preco: 0 },
+  { id: '55555555-0002-4000-8000-000000000002', name: '🫒 1x Molho Especial - Azeitonas Azapa (30ml)', preco: 0 }
+];
+
 async function vincularComplementosItem(itemInfo) {
   console.log(`\n🌭 Configurando complementos para ${itemInfo.name}...`);
 
   // IDs únicos para este item
   const ogFormatoId = genUuid();
+  const ogMolhosId = genUuid();
   const ogRetirarId = genUuid();
   const ogAdicionaisId = genUuid();
 
@@ -96,6 +102,16 @@ async function vincularComplementosItem(itemInfo) {
       price: { value: 2.00 }
     }
   ];
+
+  // Opções Molhos Cortesia (Index 0 e 1)
+  const molhosOptions = MOLHOS_CORTESIA_DEFS.map((m, idx) => ({
+    id: genUuid(),
+    productId: m.id,
+    optionGroupId: ogMolhosId,
+    status: 'AVAILABLE',
+    index: idx,
+    price: { value: 0 }
+  }));
 
   // Filtra retiradas
   const retiradasFiltradas = RETIRADAS_DEFS.filter(r => {
@@ -131,8 +147,9 @@ async function vincularComplementosItem(itemInfo) {
       serving: 'SERVES_1',
       optionGroups: [
         { id: ogFormatoId, min: 1, max: 1, index: 0 },
-        { id: ogRetirarId, min: 0, max: 10, index: 1 },
-        { id: ogAdicionaisId, min: 0, max: 10, index: 2 }
+        { id: ogMolhosId, min: 0, max: 2, index: 1 },
+        { id: ogRetirarId, min: 0, max: 10, index: 2 },
+        { id: ogAdicionaisId, min: 0, max: 10, index: 3 }
       ]
     },
     {
@@ -146,6 +163,10 @@ async function vincularComplementosItem(itemInfo) {
       serving: 'NOT_APPLICABLE'
     }
   ];
+
+  MOLHOS_CORTESIA_DEFS.forEach(m => {
+    products.push({ id: m.id, name: m.name, serving: 'NOT_APPLICABLE' });
+  });
 
   retiradasFiltradas.forEach(r => {
     products.push({ id: r.id, name: r.name, serving: 'NOT_APPLICABLE' });
@@ -167,12 +188,21 @@ async function vincularComplementosItem(itemInfo) {
       optionIds: formatoOptions.map(o => o.id)
     },
     {
+      id: ogMolhosId,
+      name: '🎁 Molhos da Casa (Escolha até 2 Grátis)',
+      status: 'AVAILABLE',
+      min: 0,
+      max: 2,
+      index: 1,
+      optionIds: molhosOptions.map(o => o.id)
+    },
+    {
       id: ogRetirarId,
       name: 'Deseja Retirar Algum Ingrediente? (Opcional)',
       status: 'AVAILABLE',
       min: 0,
       max: 10,
-      index: 1,
+      index: 2,
       optionIds: retirarOptions.map(o => o.id)
     },
     {
@@ -181,12 +211,12 @@ async function vincularComplementosItem(itemInfo) {
       status: 'AVAILABLE',
       min: 0,
       max: 10,
-      index: 2,
+      index: 3,
       optionIds: adicionaisOptions.map(o => o.id)
     }
   ];
 
-  const options = [...formatoOptions, ...retirarOptions, ...adicionaisOptions];
+  const options = [...formatoOptions, ...molhosOptions, ...retirarOptions, ...adicionaisOptions];
 
   const payload = {
     item: {
