@@ -312,13 +312,13 @@
     },
     {
       "id": "pote_congelamento_700ml",
-      "nome": "Pote Térmico 700ml Galvanotek G302 (Mise en place / Congelamento de Salsichas)",
+      "nome": "Marmita Fit Retangular PP 750ml (Mise en place / Congelamento de Salsichas - M.A. Embalagens)",
       "categoria": "Embalagens",
       "unidade": "un",
-      "quantidade": 20,
+      "quantidade": 24,
       "minimo": 5,
-      "custoUnitario": 1.69,
-      "rendimento": "20 porções de salsicha no freezer (mise en place)"
+      "custoUnitario": 1.33,
+      "rendimento": "24 porções de salsicha no freezer (mise en place)"
     },
     {
       "id": "marmitinha_500ml_prato",
@@ -332,13 +332,13 @@
     },
     {
       "id": "pote_molho_30ml",
-      "nome": "Pote Molho 30ml Preto G695 c/ Tampa (100un Lancheiro + 700un M.A. Embalagens)",
+      "nome": "G695 Pote Molho 30ml Preto c/ Tampa (Caixa 700un - M.A. Embalagens)",
       "categoria": "Embalagens",
       "unidade": "un",
-      "quantidade": 800,
+      "quantidade": 700,
       "minimo": 50,
-      "custoUnitario": 0.156,
-      "rendimento": "400 pedidos de delivery (kit overdelivery com 2 potes por pedido)"
+      "custoUnitario": 0.155,
+      "rendimento": "350 pedidos de delivery (kit overdelivery com 2 potes por pedido)"
     },
     {
       "id": "pote_cristal_170ml",
