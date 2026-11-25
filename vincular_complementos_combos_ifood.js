@@ -42,19 +42,17 @@ const PROD_PAO_ID = '750e6333-123d-4575-bf41-f79cc7159de0';
 const PROD_PRATO_ID = 'c3e77628-97b0-4630-a9d9-db8aebad85aa';
 
 const BEBIDAS_2L_DEFS = [
-  { id: '44444444-0001-4000-8000-000000000001', name: '🟢 1x Guaraná Antarctica 2L (Tradicional)', preco: 0 },
-  { id: '44444444-0003-4000-8000-000000000003', name: '🔴 Upgrade: 1x Coca-Cola 2L (Original)', preco: 3.00 },
-  { id: '44444444-0004-4000-8000-000000000004', name: '🔴 Upgrade: 1x Coca-Cola 2L Zero', preco: 3.00 }
+  { id: '44444444-0001-4000-8000-000000000001', name: '🟢 1x Guaraná Antarctica 1,5L (Tradicional ou Diet)', preco: 0 },
+  { id: '44444444-0003-4000-8000-000000000003', name: '🔴 Upgrade: 1x Coca-Cola 2,5L (Original)', preco: 3.00 },
+  { id: '44444444-0004-4000-8000-000000000004', name: '🔴 Upgrade: 1x Coca-Cola 2,5L Zero', preco: 3.00 }
 ];
 
 const REFRIS_DEFS = [
   { id: '33333333-0001-4000-8000-000000000001', name: '1x Coca-Cola Original 350ml (Lata)' },
   { id: '33333333-0002-4000-8000-000000000002', name: '1x Coca-Cola Zero 350ml (Lata)' },
-  { id: '33333333-0003-4000-8000-000000000003', name: '1x Guaraná Antarctica 350ml (Lata)' },
-  { id: '33333333-0004-4000-8000-000000000004', name: '1x Guaraná Antarctica Zero 350ml (Lata)' },
-  { id: '33333333-0005-4000-8000-000000000005', name: '1x Fanta Laranja 350ml (Lata)' },
-  { id: '33333333-0006-4000-8000-000000000006', name: '1x Suco Del Valle Uva 290ml (Lata)' },
-  { id: '33333333-0007-4000-8000-000000000007', name: '1x Água Mineral 500ml (sem gás)' }
+  { id: '33333333-0006-4000-8000-000000000006', name: '1x Suco Del Valle Goiaba 290ml (Lata)' },
+  { id: '33333333-0008-4000-8000-000000000008', name: '1x Refresco Del Valle Limon Tropical 290ml' },
+  { id: '33333333-0007-4000-8000-000000000007', name: '1x Água Mineral 510ml (sem gás)' }
 ];
 
 const RETIRADAS_DEFS = [

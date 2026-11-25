@@ -56,11 +56,10 @@ async function sincronizarCardapioCompleto() {
       app_category_id: 'cat_bebidas',
       category_name: '🥤 Bebidas Geladas',
       app_item_ids: [
-        'refri_coca_lata', 'refri_coca_zero_lata', 'refri_guarana_lata',
-        'refri_guarana_zero_lata', 'refri_fanta_lata', 'suco_delvalle_uva',
-        'suco_delvalle_maracuja', 'suco_delvalle_laranja', 'refri_coca_2l',
-        'refri_coca_zero_2l', 'refri_guarana_2l', 'agua_mineral_sem_gas',
-        'agua_mineral_com_gas', 'cerveja_original_lata', 'cerveja_heineken_ln'
+        'refri_coca_lata', 'refri_coca_zero_lata', 'suco_delvalle_goiaba',
+        'suco_delvalle_limon', 'refri_guarana_1500ml', 'refri_coca_2500ml',
+        'refri_coca_zero_2500ml', 'agua_mineral_sem_gas', 'agua_mineral_com_gas',
+        'cerveja_original_lata', 'cerveja_heineken_ln'
       ]
     }
   ];
@@ -81,19 +80,17 @@ async function sincronizarCardapioCompleto() {
     { app_item_id: 'ret_mostarda', item_name: 'Sem Mostarda', price: 0, status: 1, is_sold_separately: false },
     { app_item_id: 'ret_parmesao', item_name: 'Sem Queijo Parmesão', price: 0, status: 1, is_sold_separately: false },
 
-    // Refris Combo
+    // Bebidas Lata / Água dos Combos
     { app_item_id: 'mod_coca_lata', item_name: '1x Coca-Cola Original 350ml (Lata)', price: 0, status: 1, is_sold_separately: false },
     { app_item_id: 'mod_coca_zero_lata', item_name: '1x Coca-Cola Zero 350ml (Lata)', price: 0, status: 1, is_sold_separately: false },
-    { app_item_id: 'mod_guarana_lata', item_name: '1x Guaraná Antarctica 350ml (Lata)', price: 0, status: 1, is_sold_separately: false },
-    { app_item_id: 'mod_guarana_zero_lata', item_name: '1x Guaraná Antarctica Zero 350ml (Lata)', price: 0, status: 1, is_sold_separately: false },
-    { app_item_id: 'mod_fanta_lata', item_name: '1x Fanta Laranja 350ml (Lata)', price: 0, status: 1, is_sold_separately: false },
-    { app_item_id: 'mod_delvalle_uva', item_name: '1x Suco Del Valle Uva 290ml (Lata)', price: 0, status: 1, is_sold_separately: false },
-    { app_item_id: 'mod_agua_mineral', item_name: '1x Água Mineral 500ml (sem gás)', price: 0, status: 1, is_sold_separately: false },
+    { app_item_id: 'mod_delvalle_goiaba', item_name: '1x Suco Del Valle Goiaba 290ml (Lata)', price: 0, status: 1, is_sold_separately: false },
+    { app_item_id: 'mod_delvalle_limon', item_name: '1x Refresco Del Valle Limon Tropical 290ml', price: 0, status: 1, is_sold_separately: false },
+    { app_item_id: 'mod_agua_mineral', item_name: '1x Água Mineral Cristal Gold 510ml (sem gás)', price: 0, status: 1, is_sold_separately: false },
 
-    // Bebidas 2L do Combo Família
-    { app_item_id: 'mod_guarana_2l', item_name: '🟢 1x Guaraná Antarctica 2L (Tradicional)', price: 0, status: 1, is_sold_separately: false },
-    { app_item_id: 'mod_coca_2l', item_name: '🔴 Upgrade: 1x Coca-Cola 2L (Original)', price: 300, status: 1, is_sold_separately: false },
-    { app_item_id: 'mod_coca_zero_2l', item_name: '🔴 Upgrade: 1x Coca-Cola 2L Zero', price: 300, status: 1, is_sold_separately: false },
+    // Bebidas Garrafa do Combo Família
+    { app_item_id: 'mod_guarana_1500ml', item_name: '🟢 1x Guaraná Antarctica 1,5L (Normal ou Diet)', price: 0, status: 1, is_sold_separately: false },
+    { app_item_id: 'mod_coca_2500ml', item_name: '🔴 Upgrade: 1x Coca-Cola 2,5L Original', price: 300, status: 1, is_sold_separately: false },
+    { app_item_id: 'mod_coca_zero_2500ml', item_name: '🔴 Upgrade: 1x Coca-Cola 2,5L Zero', price: 300, status: 1, is_sold_separately: false },
 
     // 1. COMBOS OFICIAIS
     {
@@ -102,7 +99,7 @@ async function sincronizarCardapioCompleto() {
       price: 2890,
       status: 1,
       is_sold_separately: true,
-      short_desc: '1 Mordidaço Clássico (escolha No Pão ou No Prato) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese da Casa.',
+      short_desc: '1 Mordidaço Clássico (escolha No Pão ou No Prato) + 1 Bebida Gelada Lata/Água + 2 Potes de Maionese da Casa.',
       app_modifier_group_ids: ['mg_formato', 'mg_refri_1', 'mg_retirar', 'mg_adicionais']
     },
     {
@@ -111,7 +108,7 @@ async function sincronizarCardapioCompleto() {
       price: 3390,
       status: 1,
       is_sold_separately: true,
-      short_desc: '1 Mordidaço em Dobro (2 salsichas Sadia e dobro de muçarela) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese da Casa. O campeão de vendas individual!',
+      short_desc: '1 Mordidaço em Dobro (2 salsichas Sadia e dobro de muçarela) + 1 Bebida Gelada Lata/Água + 2 Potes de Maionese da Casa. O campeão de vendas individual!',
       app_modifier_group_ids: ['mg_formato', 'mg_refri_1', 'mg_retirar', 'mg_adicionais']
     },
     {
@@ -120,7 +117,7 @@ async function sincronizarCardapioCompleto() {
       price: 4590,
       status: 1,
       is_sold_separately: true,
-      short_desc: '1 Mordidaço em Dobro (No Pão ou No Prato) + 1 Refrigerante Lata + 1 Tortinha de Limão no Pote (170ml) + 2 Potes de Maionese da Casa (30ml). A janta completa com sobremesa!',
+      short_desc: '1 Mordidaço em Dobro (No Pão ou No Prato) + 1 Bebida Gelada Lata/Água + 1 Tortinha de Limão no Pote (170ml) + 2 Potes de Maionese da Casa (30ml). A janta completa com sobremesa!',
       app_modifier_group_ids: ['mg_formato', 'mg_refri_1', 'mg_retirar', 'mg_adicionais']
     },
     {
@@ -129,7 +126,7 @@ async function sincronizarCardapioCompleto() {
       price: 4890,
       status: 1,
       is_sold_separately: true,
-      short_desc: '1 Mordidaço Tudão (o gigante da casa!) + 1 Refrigerante Lata 350ml + 2 Potes de Maionese da Casa (30ml). Fartura máxima!',
+      short_desc: '1 Mordidaço Tudão (o gigante da casa!) + 1 Bebida Gelada Lata/Água + 2 Potes de Maionese da Casa (30ml). Fartura máxima!',
       app_modifier_group_ids: ['mg_formato', 'mg_refri_1', 'mg_retirar', 'mg_adicionais']
     },
     {
@@ -138,7 +135,7 @@ async function sincronizarCardapioCompleto() {
       price: 6890,
       status: 1,
       is_sold_separately: true,
-      short_desc: '2 Mordidaços em Dobro (escolha no Pão ou no Prato para cada um) + 2 Refrigerantes Lata + 2 Potes de Molho Especial da Casa (30ml). A pedida perfeita para duas pessoas!',
+      short_desc: '2 Mordidaços em Dobro (escolha no Pão ou no Prato para cada um) + 2 Bebidas Geladas Lata/Água (escolha Coca, Del Valle ou Água) + 2 Potes de Molho Especial da Casa (30ml). A pedida perfeita para duas pessoas!',
       app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_refri_1', 'mg_refri_2', 'mg_adicionais']
     },
     {
@@ -147,8 +144,8 @@ async function sincronizarCardapioCompleto() {
       price: 8690,
       status: 1,
       is_sold_separately: true,
-      short_desc: '2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha no Pão ou no Prato para cada um) + 1 Refrigerante 2 Litros (Guaraná incluso ou upgrade Coca 2L) + 3 Potes de Molho da Casa (30ml). Fartura garantida!',
-      app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_formato_dog3', 'mg_bebida_2l', 'mg_adicionais']
+      short_desc: '2 Mordidaços em Dobro + 1 Mordidaço Clássico (escolha no Pão ou no Prato para cada um) + 1 Refrigerante 1,5L (Guaraná 1,5L incluso ou upgrade Coca 2,5L) + 3 Potes de Molho da Casa (30ml). Fartura garantida!',
+      app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_formato_dog3', 'mg_bebida_familia', 'mg_adicionais']
     },
     {
       app_item_id: 'combo_casal_vip',
@@ -156,7 +153,7 @@ async function sincronizarCardapioCompleto() {
       price: 9690,
       status: 1,
       is_sold_separately: true,
-      short_desc: '2 Mordidaços em Dobro + 2 Refrigerantes Lata + 1 Tortinha de Limão (170ml) + 1 Escondidinho de Ninho com Nutella e Brownie (170ml) + 2 Potes de Maionese da Casa (30ml). A experiência completa a dois!',
+      short_desc: '2 Mordidaços em Dobro + 2 Bebidas Geladas Lata/Água + 1 Tortinha de Limão (170ml) + 1 Escondidinho de Ninho com Nutella e Brownie (170ml) + 2 Potes de Maionese da Casa (30ml). A experiência completa a dois!',
       app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_refri_1', 'mg_refri_2', 'mg_adicionais']
     },
 
@@ -249,18 +246,14 @@ async function sincronizarCardapioCompleto() {
     // 4. BEBIDAS GELADAS
     { app_item_id: 'refri_coca_lata', item_name: 'Coca-Cola Original 350ml (Lata)', price: 790, status: 1, is_sold_separately: true, short_desc: 'Lata 350ml gelada' },
     { app_item_id: 'refri_coca_zero_lata', item_name: 'Coca-Cola Zero 350ml (Lata)', price: 790, status: 1, is_sold_separately: true, short_desc: 'Lata 350ml gelada' },
-    { app_item_id: 'refri_guarana_lata', item_name: 'Guaraná Antarctica 350ml (Lata)', price: 790, status: 1, is_sold_separately: true, short_desc: 'Lata 350ml gelada' },
-    { app_item_id: 'refri_guarana_zero_lata', item_name: 'Guaraná Antarctica Zero 350ml (Lata)', price: 790, status: 1, is_sold_separately: true, short_desc: 'Lata 350ml gelada' },
-    { app_item_id: 'refri_fanta_lata', item_name: 'Fanta Laranja 350ml (Lata)', price: 790, status: 1, is_sold_separately: true, short_desc: 'Lata 350ml gelada' },
-    { app_item_id: 'suco_delvalle_uva', item_name: 'Suco Del Valle Uva 290ml (Lata)', price: 850, status: 1, is_sold_separately: true, short_desc: 'Lata 290ml gelada' },
-    { app_item_id: 'suco_delvalle_maracuja', item_name: 'Suco Del Valle Maracujá 290ml (Lata)', price: 850, status: 1, is_sold_separately: true, short_desc: 'Lata 290ml gelada' },
-    { app_item_id: 'suco_delvalle_laranja', item_name: 'Suco Del Valle Laranja 290ml (Lata)', price: 850, status: 1, is_sold_separately: true, short_desc: 'Lata 290ml gelada' },
-    { app_item_id: 'refri_coca_2l', item_name: 'Coca-Cola 2 Litros Normal', price: 1790, status: 1, is_sold_separately: true, short_desc: 'Garrafa 2 Litros gelada' },
-    { app_item_id: 'refri_coca_zero_2l', item_name: 'Coca-Cola 2 Litros Zero', price: 1790, status: 1, is_sold_separately: true, short_desc: 'Garrafa 2 Litros gelada' },
-    { app_item_id: 'refri_guarana_2l', item_name: 'Guaraná Antarctica 2 Litros', price: 1590, status: 1, is_sold_separately: true, short_desc: 'Garrafa 2 Litros gelada' },
-    { app_item_id: 'agua_mineral_sem_gas', item_name: 'Água Mineral 500ml (sem gás)', price: 500, status: 1, is_sold_separately: true, short_desc: 'Garrafa 500ml gelada' },
-    { app_item_id: 'agua_mineral_com_gas', item_name: 'Água Mineral 500ml (com gás)', price: 550, status: 1, is_sold_separately: true, short_desc: 'Garrafa 500ml gelada' },
-    { app_item_id: 'cerveja_original_lata', item_name: 'Cerveja Original 350ml (Lata)', price: 950, status: 1, is_sold_separately: true, short_desc: 'Lata 350ml gelada' },
+    { app_item_id: 'suco_delvalle_goiaba', item_name: 'Suco Del Valle Goiaba 290ml (Lata)', price: 850, status: 1, is_sold_separately: true, short_desc: 'Lata 290ml gelada' },
+    { app_item_id: 'suco_delvalle_limon', item_name: 'Refresco Del Valle Limon Tropical 290ml', price: 850, status: 1, is_sold_separately: true, short_desc: 'Lata 290ml refrescante e gelada' },
+    { app_item_id: 'refri_guarana_1500ml', item_name: 'Guaraná Antarctica 1,5 Litros (Tradicional ou Diet)', price: 1390, status: 1, is_sold_separately: true, short_desc: 'Garrafa 1,5 Litros gelada' },
+    { app_item_id: 'refri_coca_2500ml', item_name: 'Coca-Cola 2,5 Litros Original', price: 1890, status: 1, is_sold_separately: true, short_desc: 'Garrafa 2,5 Litros tamanho família bem gelada' },
+    { app_item_id: 'refri_coca_zero_2500ml', item_name: 'Coca-Cola 2,5 Litros Zero', price: 1890, status: 1, is_sold_separately: true, short_desc: 'Garrafa 2,5 Litros sem açúcar bem gelada' },
+    { app_item_id: 'agua_mineral_sem_gas', item_name: 'Água Mineral Cristal Gold 510ml (sem gás)', price: 500, status: 1, is_sold_separately: true, short_desc: 'Garrafa 510ml gelada' },
+    { app_item_id: 'agua_mineral_com_gas', item_name: 'Água Mineral Nestlé Pureza Vital 510ml (com gás)', price: 550, status: 1, is_sold_separately: true, short_desc: 'Garrafa 510ml gelada' },
+    { app_item_id: 'cerveja_original_lata', item_name: 'Cerveja Original 350ml (Lata)', price: 990, status: 1, is_sold_separately: true, short_desc: 'Lata 350ml trincando de gelada' },
     { app_item_id: 'cerveja_heineken_ln', item_name: 'Cerveja Heineken 330ml (Long Neck)', price: 1290, status: 1, is_sold_separately: true, short_desc: 'Long Neck 330ml gelada' }
   ];
 
@@ -355,7 +348,7 @@ async function sincronizarCardapioCompleto() {
     },
     {
       app_modifier_group_id: 'mg_refri_1',
-      modifier_group_name: '1º Refrigerante do Combo',
+      modifier_group_name: '1º Bebida do Combo (Lata 350ml ou Água)',
       is_required: 1,
       quantity_min_permitted: 1,
       quantity_max_permitted: 1,
@@ -363,16 +356,14 @@ async function sincronizarCardapioCompleto() {
       app_mg_items: [
         { app_item_id: 'mod_coca_lata', price: 0 },
         { app_item_id: 'mod_coca_zero_lata', price: 0 },
-        { app_item_id: 'mod_guarana_lata', price: 0 },
-        { app_item_id: 'mod_guarana_zero_lata', price: 0 },
-        { app_item_id: 'mod_fanta_lata', price: 0 },
-        { app_item_id: 'mod_delvalle_uva', price: 0 },
+        { app_item_id: 'mod_delvalle_goiaba', price: 0 },
+        { app_item_id: 'mod_delvalle_limon', price: 0 },
         { app_item_id: 'mod_agua_mineral', price: 0 }
       ]
     },
     {
       app_modifier_group_id: 'mg_refri_2',
-      modifier_group_name: '2º Refrigerante do Combo',
+      modifier_group_name: '2º Bebida do Combo (Lata 350ml ou Água)',
       is_required: 1,
       quantity_min_permitted: 1,
       quantity_max_permitted: 1,
@@ -380,24 +371,22 @@ async function sincronizarCardapioCompleto() {
       app_mg_items: [
         { app_item_id: 'mod_coca_lata', price: 0 },
         { app_item_id: 'mod_coca_zero_lata', price: 0 },
-        { app_item_id: 'mod_guarana_lata', price: 0 },
-        { app_item_id: 'mod_guarana_zero_lata', price: 0 },
-        { app_item_id: 'mod_fanta_lata', price: 0 },
-        { app_item_id: 'mod_delvalle_uva', price: 0 },
+        { app_item_id: 'mod_delvalle_goiaba', price: 0 },
+        { app_item_id: 'mod_delvalle_limon', price: 0 },
         { app_item_id: 'mod_agua_mineral', price: 0 }
       ]
     },
     {
-      app_modifier_group_id: 'mg_bebida_2l',
-      modifier_group_name: 'Escolha a Bebida 2 Litros da Família',
+      app_modifier_group_id: 'mg_bebida_familia',
+      modifier_group_name: 'Escolha a Bebida da Família',
       is_required: 1,
       quantity_min_permitted: 1,
       quantity_max_permitted: 1,
       buy_mode: 0,
       app_mg_items: [
-        { app_item_id: 'mod_guarana_2l', price: 0 },
-        { app_item_id: 'mod_coca_2l', price: 300 },
-        { app_item_id: 'mod_coca_zero_2l', price: 300 }
+        { app_item_id: 'mod_guarana_1500ml', price: 0 },
+        { app_item_id: 'mod_coca_2500ml', price: 300 },
+        { app_item_id: 'mod_coca_zero_2500ml', price: 300 }
       ]
     }
   ];
