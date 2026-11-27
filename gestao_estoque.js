@@ -541,7 +541,14 @@ function adicionarEntradaEstoque(idInsumo, quantidadeEntrada) {
  * Consolida todas as métricas financeiras, margens e status do consignado
  */
 function calcularMetricasBusiness(todosPedidos, estoqueData) {
-  const pedidosValidos = (todosPedidos || []).filter(p => p.status !== 'Cancelado');
+  // Desduplicação estrita de pedidos por ID único para evitar duplicação entre ativos e histórico
+  const mapaUnico = new Map();
+  (todosPedidos || []).forEach(p => {
+    if (p && p.id) {
+      mapaUnico.set(String(p.id), p);
+    }
+  });
+  const pedidosValidos = Array.from(mapaUnico.values()).filter(p => p.status !== 'Cancelado');
 
   let faturamentoTotal = 0;
   let faturamentoSite = 0;

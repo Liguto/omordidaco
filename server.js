@@ -381,7 +381,11 @@ function registrarOuAtualizarCliente(clienteData, entregaData, valorPedido, data
 }
 
 function sincronizarClientesComPedidos() {
-  const todosOsPedidos = [...(historicoPedidos || []), ...(pedidos || [])];
+  const mapaUnico = new Map();
+  [...(historicoPedidos || []), ...(pedidos || [])].forEach(p => {
+    if (p && p.id) mapaUnico.set(String(p.id), p);
+  });
+  const todosOsPedidos = Array.from(mapaUnico.values());
   if (todosOsPedidos.length === 0) return;
 
   // Deduplica primeiro a lista existente
@@ -887,22 +891,30 @@ app.get(['/api/pedidos', '/pedidos'], async (req, res) => {
   res.json(pedidos);
 });
 
-// Gerador de número de pedido sequencial limpo e determinístico
+// Gerador de número de pedido sequencial limpo, determinístico e com trava atômica contra concorrência
+let ultimoNumeroSequencialGlobal = 0;
+
 async function obterProximoNumeroPedido() {
   recarregarPedidosDoDisco();
   recarregarHistoricoDoDisco();
 
   let max = 100;
-  pedidos.forEach(p => {
+  if (ultimoNumeroSequencialGlobal > max) {
+    max = ultimoNumeroSequencialGlobal;
+  }
+
+  (pedidos || []).forEach(p => {
     const n = Number(p.numero);
     if (!isNaN(n) && n > max) max = n;
   });
-  historicoPedidos.forEach(h => {
+  (historicoPedidos || []).forEach(h => {
     const n = Number(h.numero);
     if (!isNaN(n) && n > max) max = n;
   });
 
-  return max + 1;
+  const proximo = max + 1;
+  ultimoNumeroSequencialGlobal = proximo;
+  return proximo;
 }
 
 // Listar Histórico de Pedidos Anteriores (DEVE vir ANTES de :id para não ser interceptado como ID)
@@ -1675,7 +1687,11 @@ app.get(['/api/business/dashboard', '/business/dashboard'], (req, res) => {
   recarregarClientesDoDisco();
   const estoqueData = gestaoEstoque.carregarEstoque();
 
-  const todosPedidos = [...pedidos, ...historicoPedidos];
+  const mapaUnico = new Map();
+  [...(historicoPedidos || []), ...(pedidos || [])].forEach(p => {
+    if (p && p.id) mapaUnico.set(String(p.id), p);
+  });
+  const todosPedidos = Array.from(mapaUnico.values());
   const metricas = gestaoEstoque.calcularMetricasBusiness(todosPedidos, estoqueData);
 
   res.json({
