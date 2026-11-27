@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Guia de Montagem e Combos — O Mordidaço</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 12mm;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #000000;
+    }
+    body {
+      background: #ffffff;
+      padding: 10px;
+    }
+    .page {
+      page-break-after: always;
+      margin-bottom: 25px;
+    }
+    .page:last-child {
+      page-break-after: avoid;
+    }
+    .header {
+      text-align: center;
+      border-bottom: 2px solid #000;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+    }
+    .header h1 {
+      font-size: 20pt;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .header p {
+      font-size: 11pt;
+      font-weight: bold;
+      margin-top: 3px;
+    }
+    .grid-dogs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .card-dog {
+      border: 1.5px solid #000;
+      border-radius: 4px;
+      padding: 10px 12px;
+    }
+    .card-title {
+      font-size: 13pt;
+      font-weight: 900;
+      border-bottom: 1.5px solid #000;
+      padding-bottom: 4px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .step-list {
+      list-style: none;
+      font-size: 10pt;
+      line-height: 1.35;
+    }
+    .step-list li {
+      margin-bottom: 2px;
+    }
+    .step-num {
+      font-weight: bold;
+      display: inline-block;
+      width: 18px;
+    }
+    .footer-note {
+      margin-top: 12px;
+      border: 1.5px dashed #000;
+      padding: 8px 12px;
+      font-size: 10pt;
+      font-weight: bold;
+      line-height: 1.35;
+    }
+    .combo-card {
+      border: 1.5px solid #000;
+      border-radius: 4px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+    }
+    .combo-title {
+      font-size: 13pt;
+      font-weight: 900;
+      text-transform: uppercase;
+      border-bottom: 1.5px solid #000;
+      padding-bottom: 4px;
+      margin-bottom: 6px;
+    }
+    .combo-itens {
+      font-size: 10.5pt;
+      line-height: 1.4;
+      list-style-type: square;
+      padding-left: 20px;
+    }
+    @media print {
+      body {
+        padding: 0;
+      }
+      .no-print {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BOTÃO DE IMPRESSÃO RÁPIDA (NÃO SAI NA IMPRESSORA) -->
+  <div class="no-print" style="margin-bottom: 15px; text-align: center;">
+    <button onclick="window.print()" style="padding: 10px 24px; font-size: 14pt; font-weight: bold; cursor: pointer; background: #000; color: #fff; border: none; border-radius: 6px;">
+      🖨️ IMPRIMIR ESTES GUIAS (Ctrl + P)
+    </button>
+  </div>
+
+  <!-- FOLHA 1: ORDEM DE MONTAGEM DOS 6 HOT DOGS -->
+  <div class="page">
+    <div class="header">
+      <h1>O MORDIDAÇO • GUIA DE MONTAGEM NA BANCADA</h1>
+      <p>Ordem exata de colocação dos ingredientes (de baixo para cima)</p>
+    </div>
+
+    <div class="grid-dogs">
+      
+      <!-- 1. CLÁSSICO -->
+      <div class="card-dog">
+        <div class="card-title">1. MORDIDAÇO CLÁSSICO</div>
+        <ul class="step-list">
+          <li><span class="step-num">1.</span> Dogueira BH 05 + Pão Bambini aberto ao meio</li>
+          <li><span class="step-num">2.</span> Maionese Hellmann's no fundo do pão</li>
+          <li><span class="step-num">3.</span> 1 Salsicha Sadia bem quente (do molho)</li>
+          <li><span class="step-num">4.</span> Purê de Batata Artesanal (80g)</li>
+          <li><span class="step-num">5.</span> Molho de Tomate Refogado (30g)</li>
+          <li><span class="step-num">6.</span> Milho verde (20g)</li>
+          <li><span class="step-num">7.</span> Ervilha verde (20g)</li>
+          <li><span class="step-num">8.</span> Vinagrete fresco artesanal (30g)</li>
+          <li><span class="step-num">9.</span> Fios de Ketchup e Mostarda</li>
+          <li><span class="step-num">10.</span> Batata Palha crocante por cima (20g)</li>
+        </ul>
+      </div>
+
+      <!-- 2. EM DOBRO -->
+      <div class="card-dog">
+        <div class="card-title">2. MORDIDAÇO EM DOBRO (CAMPEÃO)</div>
+        <ul class="step-list">
+          <li><span class="step-num">1.</span> Dogueira BH 05 + Pão Bambini aberto ao meio</li>
+          <li><span class="step-num">2.</span> Maionese Hellmann's no fundo do pão</li>
+          <li><span class="step-num">3.</span> <strong>2 Salsichas Sadia bem quentes</strong></li>
+          <li><span class="step-num">4.</span> <strong>Dobro de Muçarela ralada (40g derretida no calor)</strong></li>
+          <li><span class="step-num">5.</span> Purê de Batata Artesanal (80g)</li>
+          <li><span class="step-num">6.</span> Molho de Tomate Refogado (30g)</li>
+          <li><span class="step-num">7.</span> Milho + Ervilha verde</li>
+          <li><span class="step-num">8.</span> Vinagrete fresco artesanal</li>
+          <li><span class="step-num">9.</span> Fios de Ketchup e Mostarda</li>
+          <li><span class="step-num">10.</span> Batata Palha crocante (20g)</li>
+          <li><span class="step-num">11.</span> <strong>Chuva de Queijo Parmesão fresco ralado</strong></li>
+        </ul>
+      </div>
+
+      <!-- 3. BACON -->
+      <div class="card-dog">
+        <div class="card-title">3. MORDIDAÇO BACON</div>
+        <ul class="step-list">
+          <li><span class="step-num">1.</span> Dogueira BH 05 + Pão Bambini aberto ao meio</li>
+          <li><span class="step-num">2.</span> Maionese Hellmann's no fundo do pão</li>
+          <li><span class="step-num">3.</span> <strong>2 Salsichas Sadia bem quentes</strong></li>
+          <li><span class="step-num">4.</span> Muçarela ralada derretida (20g)</li>
+          <li><span class="step-num">5.</span> Purê de Batata Artesanal (80g)</li>
+          <li><span class="step-num">6.</span> Molho de Tomate Refogado (30g)</li>
+          <li><span class="step-num">7.</span> <strong>Bacon crocante em cubos (40g sequinho)</strong></li>
+          <li><span class="step-num">8.</span> Milho + Ervilha verde</li>
+          <li><span class="step-num">9.</span> Batata Palha crocante (20g)</li>
+          <li><span class="step-num">10.</span> <strong>Chuva de Queijo Parmesão fresco ralado</strong></li>
+        </ul>
+      </div>
+
+      <!-- 4. CREMOSO -->
+      <div class="card-dog">
+        <div class="card-title">4. MORDIDAÇO CREMOSO</div>
+        <ul class="step-list">
+          <li><span class="step-num">1.</span> Dogueira BH 05 + Pão Bambini aberto ao meio</li>
+          <li><span class="step-num">2.</span> Maionese Hellmann's no fundo do pão</li>
+          <li><span class="step-num">3.</span> 1 Salsicha Sadia bem quente</li>
+          <li><span class="step-num">4.</span> <strong>Frango desfiado temperado úmido (50g)</strong></li>
+          <li><span class="step-num">5.</span> <strong>Catupiry® Original cremoso legítimo (35g)</strong></li>
+          <li><span class="step-num">6.</span> Purê de Batata Artesanal (80g)</li>
+          <li><span class="step-num">7.</span> Molho de Tomate Refogado (30g)</li>
+          <li><span class="step-num">8.</span> Milho verde + Vinagrete fresco</li>
+          <li><span class="step-num">9.</span> Fios de Ketchup e Mostarda</li>
+          <li><span class="step-num">10.</span> Batata Palha crocante (20g)</li>
+        </ul>
+      </div>
+
+      <!-- 5. TUDÃO -->
+      <div class="card-dog">
+        <div class="card-title">5. MORDIDAÇO TUDÃO (GIGANTE)</div>
+        <ul class="step-list">
+          <li><span class="step-num">1.</span> Dogueira BH 05 + Pão Bambini aberto ao meio</li>
+          <li><span class="step-num">2.</span> Maionese Hellmann's no fundo do pão</li>
+          <li><span class="step-num">3.</span> 1 Salsicha Sadia bem quente</li>
+          <li><span class="step-num">4.</span> <strong>Frango desfiado (50g) + Catupiry® Original (35g)</strong></li>
+          <li><span class="step-num">5.</span> <strong>Calabresa ralada douradinha (40g)</strong></li>
+          <li><span class="step-num">6.</span> <strong>Bacon em dobro em cubos crocantes (60g)</strong></li>
+          <li><span class="step-num">7.</span> <strong>Dobro de Muçarela derretida (40g)</strong></li>
+          <li><span class="step-num">8.</span> Purê de Batata (80g) + Molho de Tomate (30g)</li>
+          <li><span class="step-num">9.</span> Milho + Ervilha + Vinagrete + Ketchup/Mostarda</li>
+          <li><span class="step-num">10.</span> Batata Palha (20g) + <strong>Chuva de Parmesão ralado</strong></li>
+        </ul>
+      </div>
+
+      <!-- 6. QUEIJUDO VEG -->
+      <div class="card-dog">
+        <div class="card-title">6. MORDIDAÇO QUEIJUDO (VEG)</div>
+        <ul class="step-list">
+          <li><span class="step-num">1.</span> Dogueira BH 05 + Pão Bambini aberto ao meio</li>
+          <li><span class="step-num">2.</span> Maionese Hellmann's no fundo do pão</li>
+          <li><span class="step-num">3.</span> <strong>2 Palitos de queijo empanados crocantes (Air Fryer)</strong></li>
+          <li><span class="step-num">4.</span> Purê de Batata Artesanal (80g)</li>
+          <li><span class="step-num">5.</span> Molho de Tomate Refogado (30g)</li>
+          <li><span class="step-num">6.</span> Vinagrete fresco artesanal (30g)</li>
+          <li><span class="step-num">7.</span> Milho verde (20g)</li>
+          <li><span class="step-num">8.</span> Fios de Ketchup e Mostarda</li>
+          <li><span class="step-num">9.</span> Batata Palha crocante por cima (20g)</li>
+          <li><em>*NÃO LEVA SALSICHA NEM CARNES*</em></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- REGRA DO FORMATO NO PRATO -->
+    <div class="footer-note">
+      ⚠️ REGRA DE MONTAGEM NO PRATO (SEM PÃO):<br>
+      • Usar a mesma Dogueira BH 05 (sem o pão). Iniciar com base de Purê Reforçado (120g) no fundo.<br>
+      • Colocar as salsichas/recheios no calor do molho, finalizar com a batata palha e fechar a dogueira.<br>
+      • OBRIGATÓRIO ENVIAR JUNTO: 1 Garfo Refeição Master + 1 Faca Refeição Master lacrados!
+    </div>
+  </div>
+
+  <!-- FOLHA 2: FORMAÇÃO DOS 7 COMBOS OFICIAIS -->
+  <div class="page">
+    <div class="header">
+      <h1>O MORDIDAÇO • FORMAÇÃO DOS 7 COMBOS OFICIAIS</h1>
+      <p>O que deve ser colocado dentro de cada pedido antes de fechar a sacola kraft</p>
+    </div>
+
+    <!-- 1. SOLO CLÁSSICO -->
+    <div class="combo-card">
+      <div class="combo-title">1. MORDIDAÇO SOLO CLÁSSICO</div>
+      <ul class="combo-itens">
+        <li><strong>1x Mordidaço Clássico</strong> (conferir se é No Pão ou No Prato c/ talheres na comanda)</li>
+        <li><strong>1x Bebida Lata 350ml / Água</strong> (Coca Normal, Coca Zero, Del Valle ou Água)</li>
+        <li><strong>Molhos da Casa (30ml)</strong>: enviar conforme a comanda (padrão: 1x Ervas + 1x Azeitona)</li>
+        <li><strong>1x Paçoca</strong> de cortesia no fundo da sacola</li>
+      </ul>
+    </div>
+
+    <!-- 2. SOLO CAMPEÃO -->
+    <div class="combo-card">
+      <div class="combo-title">2. MORDIDAÇO SOLO CAMPEÃO</div>
+      <ul class="combo-itens">
+        <li><strong>1x Mordidaço em Dobro</strong> (2 salsichas e dobro de queijo muçarela derretido)</li>
+        <li><strong>1x Bebida Lata 350ml / Água</strong> (Coca Normal, Coca Zero, Del Valle ou Água)</li>
+        <li><strong>Molhos da Casa (30ml)</strong>: enviar conforme a comanda (padrão: 1x Ervas + 1x Azeitona)</li>
+        <li><strong>1x Paçoca</strong> de cortesia no fundo da sacola</li>
+      </ul>
+    </div>
+
+    <!-- 3. COMPLETO C/ SOBREMESA -->
+    <div class="combo-card">
+      <div class="combo-title">3. MORDIDAÇO COMPLETO C/ SOBREMESA</div>
+      <ul class="combo-itens">
+        <li><strong>1x Mordidaço em Dobro</strong> (2 salsichas e dobro de queijo muçarela derretido)</li>
+        <li><strong>1x Bebida Lata 350ml / Água</strong> (Coca Normal, Coca Zero, Del Valle ou Água)</li>
+        <li><strong>1x Tortinha de Limão no Pote (160ml) + 1 Colher de Sobremesa lacrada</strong></li>
+        <li><strong>Molhos da Casa (30ml)</strong>: enviar conforme a comanda</li>
+      </ul>
+    </div>
+
+    <!-- 4. SOLO TUDÃO -->
+    <div class="combo-card">
+      <div class="combo-title">4. MORDIDAÇO SOLO TUDÃO</div>
+      <ul class="combo-itens">
+        <li><strong>1x Mordidaço Tudão</strong> (gigante com frango, Catupiry, calabresa, dobro bacon, dobro queijo)</li>
+        <li><strong>1x Bebida Lata 350ml / Água</strong> (Coca Normal, Coca Zero, Del Valle ou Água)</li>
+        <li><strong>Molhos da Casa (30ml)</strong>: enviar conforme a comanda</li>
+        <li><strong>1x Paçoca</strong> de cortesia no fundo da sacola</li>
+      </ul>
+    </div>
+
+    <!-- 5. COMBO CASAL -->
+    <div class="combo-card">
+      <div class="combo-title">5. COMBO MORDIDAÇO CASAL</div>
+      <ul class="combo-itens">
+        <li><strong>2x Mordidaços em Dobro</strong> (conferir formato de cada um: No Pão ou No Prato)</li>
+        <li><strong>2x Bebidas Lata 350ml / Água</strong> (conforme selecionadas pelo cliente)</li>
+        <li><strong>Molhos da Casa (30ml)</strong>: enviar conforme comanda (padrão casal: 2x Ervas + 2x Azeitona)</li>
+        <li><strong>2x Paçocas</strong> no fundo da sacola Kraft G</li>
+      </ul>
+    </div>
+
+    <!-- 6. COMBO FAMÍLIA -->
+    <div class="combo-card">
+      <div class="combo-title">6. COMBO FAMÍLIA MORDIDAÇO (3 LANCHES)</div>
+      <ul class="combo-itens">
+        <li><strong>2x Mordidaços em Dobro</strong> + <strong>1x Mordidaço Clássico</strong> (conferir formatos na comanda)</li>
+        <li><strong>1x Refrigerante Garrafa Grande</strong>: Guaraná Antarctica 1,5L (ou Coca-Cola 2,5L se tiver Upgrade na comanda)</li>
+        <li><strong>Molhos da Casa (30ml)</strong>: enviar conforme comanda (padrão: 3x Ervas + 3x Azeitona)</li>
+        <li><strong>3x Paçocas</strong> no fundo da sacola Kraft G</li>
+      </ul>
+    </div>
+
+    <!-- 7. CASAL VIP -->
+    <div class="combo-card">
+      <div class="combo-title">7. MORDIDAÇO CASAL VIP (COM SOBREMESAS)</div>
+      <ul class="combo-itens">
+        <li><strong>2x Mordidaços em Dobro</strong> (conferir formatos de cada um na comanda)</li>
+        <li><strong>2x Bebidas Lata 350ml / Água</strong> (conforme selecionadas na comanda)</li>
+        <li><strong>1x Tortinha de Limão no Pote (160ml)</strong> + <strong>1x Escondidinho de Ninho c/ Nutella e Brownie (160ml)</strong></li>
+        <li><strong>2x Colheres de Sobremesa lacradas</strong></li>
+        <li><strong>Molhos da Casa (30ml)</strong>: enviar conforme comanda (padrão casal: 2x Ervas + 2x Azeitona)</li>
+      </ul>
+    </div>
+
+    <!-- REGRAS DE EMBALAGEM E DESPACHO -->
+    <div class="footer-note">
+      📦 REGRAS DE EMBALAGEM E DESPACHO PARA TODOS OS PEDIDOS:<br>
+      • Sacola Kraft M: pedidos com 1 ou 2 dogs • Sacola Kraft G: pedidos com 3 dogs ou Combos Família.<br>
+      • OBRIGATÓRIO: Colocar 2 Guardanapos individuais em sachê Líder + 1 Lacre de segurança preto colado na boca da sacola!<br>
+      • Se for "No Prato": colocar sempre 1 Garfo + 1 Faca Master dentro da sacola!
+    </div>
+  </div>
+
+</body>
+</html>
