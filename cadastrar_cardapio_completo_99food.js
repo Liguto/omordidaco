@@ -40,7 +40,7 @@ async function sincronizarCardapioCompleto() {
     },
     {
       app_category_id: 'cat_sobremesas',
-      category_name: '🍰 Sobremesas no Pote (170ml)',
+      category_name: '🍰 Sobremesas no Pote (160ml)',
       app_item_ids: ['sobremesa_tortinha_limao', 'sobremesa_escondidinho_nutella']
     },
     {
@@ -143,7 +143,7 @@ async function sincronizarCardapioCompleto() {
       price: 4590,
       status: 1,
       is_sold_separately: true,
-      short_desc: '1 Mordidaço em Dobro (No Pão ou No Prato) + 1 Bebida Gelada Lata/Água + 1 Tortinha de Limão no Pote (170ml) + 2 Potes de Maionese da Casa (30ml). A janta completa com sobremesa!',
+      short_desc: '1 Mordidaço em Dobro (No Pão ou No Prato) + 1 Bebida Gelada Lata/Água + 1 Tortinha de Limão no Pote (160ml) + 2 Potes de Maionese da Casa (30ml). A janta completa com sobremesa!',
       app_modifier_group_ids: ['mg_formato', 'mg_refri_1', 'mg_molhos_solo', 'mg_retirar', 'mg_adicionais']
     },
     {
@@ -179,7 +179,7 @@ async function sincronizarCardapioCompleto() {
       price: 9690,
       status: 1,
       is_sold_separately: true,
-      short_desc: '2 Mordidaços em Dobro + 2 Bebidas Geladas Lata/Água + 1 Tortinha de Limão (170ml) + 1 Escondidinho de Ninho com Nutella e Brownie (170ml) + 2 Potes de Maionese da Casa (30ml). A experiência completa a dois!',
+      short_desc: '2 Mordidaços em Dobro + 2 Bebidas Geladas Lata/Água + 1 Tortinha de Limão (160ml) + 1 Escondidinho de Ninho com Nutella e Brownie (160ml) + 2 Potes de Maionese da Casa (30ml). A experiência completa a dois!',
       app_modifier_group_ids: ['mg_formato_dog1', 'mg_formato_dog2', 'mg_refri_1', 'mg_refri_2', 'mg_molhos_casal', 'mg_adicionais']
     },
 
@@ -242,7 +242,7 @@ async function sincronizarCardapioCompleto() {
     // 3. SOBREMESAS ARTESANAIS NO POTE (170ML)
     {
       app_item_id: 'sobremesa_tortinha_limao',
-      item_name: 'Tortinha de Limão no Pote (170ml)',
+      item_name: 'Tortinha de Limão no Pote (160ml)',
       price: 1490,
       status: 1,
       is_sold_separately: true,
@@ -250,7 +250,7 @@ async function sincronizarCardapioCompleto() {
     },
     {
       app_item_id: 'sobremesa_escondidinho_nutella',
-      item_name: 'Escondidinho de Ninho com Nutella e Brownie (170ml)',
+      item_name: 'Escondidinho de Ninho com Nutella e Brownie (160ml)',
       price: 2190,
       status: 1,
       is_sold_separately: true,
