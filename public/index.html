@@ -2211,57 +2211,95 @@
         if (comboBebidaGroup) { comboBebidaGroup.style.display = 'none'; comboBebidaGroup.innerHTML = ''; }
 
         formatoGroup.innerHTML = `
-          <div style="background: #fdf2f8; border: 1.5px solid #fbcfe8; border-radius: 12px; padding: 14px; margin-bottom: 12px;">
-            <label class="form-label" style="font-size: 13.5px; font-weight: 900; color: #831843; margin-bottom: 6px;">
-              🌭 1. Escolha o Hot Dog do seu Combo:
-            </label>
-            <select id="degustacaoDogSelect" class="form-control" style="font-size: 13px; font-weight: 800; padding: 10px;" onchange="recalcularPrecoModal()">
-              <option value="Mordidaço em Dobro" selected>⭐ Mordidaço em Dobro (2 salsichas Sadia e dobro de queijo muçarela derretido)</option>
-              <option value="Mordidaço Clássico">🌭 Mordidaço Clássico (1 salsicha Sadia, purê artesanal, vinagrete, milho, ervilha e palha)</option>
-              <option value="Mordidaço Queijudo (VEG)">🌱 Mordidaço Queijudo VEG (2 palitos empanados crocantes puxa-puxa na Air Fryer)</option>
-              <option value="Mordidaço Bacon">🥓 Mordidaço Bacon (2 salsichas, bacon crocante em cubos, muçarela, purê e palha)</option>
-              <option value="Mordidaço Cremoso">🍗 Mordidaço Cremoso (1 salsicha, frango desfiado temperado, Catupiry® Original e purê)</option>
-              <option value="Mordidaço Tudão">👑 Mordidaço Tudão (O Gigante: Salsicha, Frango, Catupiry, Bacon, Calabresa, Queijo)</option>
-            </select>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
 
-            <div style="margin-top: 10px;">
-              <label style="font-size: 11px; font-weight: 900; color: #831843; text-transform: uppercase; display: block; margin-bottom: 4px;">Formato de Servir:</label>
+            <!-- 1. QUAL HOT DOG VOCÊ QUER? -->
+            <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+              <label style="font-size: 13.5px; font-weight: 900; color: #0f172a; display: block; margin-bottom: 6px;">
+                🌭 1. Qual Hot Dog você quer?
+              </label>
+              <select id="degustacaoDogSelect" class="form-control" style="font-size: 13px; font-weight: 800; padding: 10px; background: #fff;">
+                <option value="Mordidaço em Dobro" selected>⭐ Mordidaço em Dobro (2 salsichas Sadia e dobro de queijo muçarela derretido)</option>
+                <option value="Mordidaço Clássico">🌭 Mordidaço Clássico (1 salsicha, purê artesanal, vinagrete, milho, ervilha e palha)</option>
+                <option value="Mordidaço Queijudo (VEG)">🌱 Mordidaço Queijudo VEG (2 palitos de queijo crocantes na Air Fryer)</option>
+                <option value="Mordidaço Bacon">🥓 Mordidaço Bacon (2 salsichas, dobro bacon em cubos, muçarela)</option>
+                <option value="Mordidaço Cremoso">🍗 Mordidaço Cremoso (1 salsicha, frango desfiado temperado, Catupiry® Original)</option>
+                <option value="Mordidaço Tudão">👑 Mordidaço Tudão (O Gigante: Salsicha, Frango, Catupiry, Bacon, Calabresa, Queijo)</option>
+              </select>
+            </div>
+
+            <!-- 2. NO PÃO OU NO PRATO? -->
+            <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+              <label style="font-size: 13.5px; font-weight: 900; color: #0f172a; display: block; margin-bottom: 6px;">
+                🥖 2. No Pão ou No Prato?
+              </label>
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; border-radius: 8px; background: #ffffff; border: 1.5px solid #cbd5e1;">
+                <label class="check-option" style="cursor: pointer; margin: 0; padding: 10px; border-radius: 8px; background: #f8fafc; border: 1.5px solid #cbd5e1;">
                   <input type="radio" name="degustacaoFormato" value="No Pão Bambini (18cm)" checked>
-                  <span style="font-size: 12px;"><strong>🥖 No Pão</strong><br><small style="color:#64748b;">Pão macio Bambini</small></span>
+                  <span style="font-size: 12.5px;"><strong>🥖 No Pão</strong><br><small style="color:#64748b;">Pão macio Bambini</small></span>
                 </label>
-                <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; border-radius: 8px; background: #ffffff; border: 1.5px solid #cbd5e1;">
+                <label class="check-option" style="cursor: pointer; margin: 0; padding: 10px; border-radius: 8px; background: #f8fafc; border: 1.5px solid #cbd5e1;">
                   <input type="radio" name="degustacaoFormato" value="No Prato (Marmita c/ talheres + purê extra)">
-                  <span style="font-size: 12px;"><strong>🍲 No Prato</strong><br><small style="color:#64748b;">Marmita + talheres</small></span>
+                  <span style="font-size: 12.5px;"><strong>🍲 No Prato</strong><br><small style="color:#64748b;">Marmita + talheres</small></span>
                 </label>
               </div>
             </div>
-          </div>
 
-          <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 14px; margin-bottom: 12px;">
-            <label class="form-label" style="font-size: 13.5px; font-weight: 900; color: #1e40af; margin-bottom: 6px;">
-              🥤 2. Escolha sua Bebida em Lata Inclusa:
-            </label>
-            <select id="degustacaoBebidaSelect" class="form-control" style="font-size: 13px; font-weight: 800; padding: 10px;">
-              <option value="Coca-Cola Original 350ml (Lata)">🔴 Coca-Cola Original 350ml (Lata)</option>
-              <option value="Coca-Cola Zero 350ml (Lata)">⚫ Coca-Cola Zero 350ml (Lata)</option>
-              <option value="Suco Del Valle Goiaba 290ml (Lata)">🧃 Suco Del Valle Goiaba 290ml (Lata)</option>
-              <option value="Refresco Del Valle Limon Tropical 290ml">🍋 Refresco Del Valle Limon Tropical 290ml</option>
-              <option value="Cerveja Original 350ml (Lata)">🍺 Cerveja Original 350ml (Lata)</option>
-              <option value="Água Mineral Cristal Gold 510ml (sem gás)">💧 Água Mineral Cristal Gold 510ml (sem gás)</option>
-              <option value="Água Mineral Nestlé 510ml (com gás)">💧 Água Mineral Nestlé 510ml (com gás)</option>
-            </select>
-          </div>
+            <!-- 3. MAIONESES ARTESANAIS DA CASA (VERDE E AZEITONA) -->
+            <div style="background: #f0fdf4; border: 2px solid #86efac; border-radius: 12px; padding: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+              <label style="font-size: 13.5px; font-weight: 900; color: #166534; display: block; margin-bottom: 2px;">
+                🌿 3. Quer as Maioneses da Casa? (Cortesia)
+              </label>
+              <small style="display: block; font-size: 11.5px; color: #15803d; margin-bottom: 8px; font-weight: 700;">
+                Potinhos artesanais de 30ml com tampa:
+              </small>
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; border-radius: 8px; background: #ffffff; border: 1.5px solid #86efac;">
+                  <input type="radio" name="degustacaoMolhos" value="1x Maionese Verde + 1x Maionese de Azeitona" checked>
+                  <span style="font-size: 12.5px;"><strong>🟢 Quero as duas!</strong> (1x Verde + 1x Azeitona)</span>
+                </label>
+                <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; border-radius: 8px; background: #ffffff; border: 1.5px solid #cbd5e1;">
+                  <input type="radio" name="degustacaoMolhos" value="2x Maionese Verde de Ervas">
+                  <span style="font-size: 12.5px;">🌿 <strong>Apenas Maionese Verde de Ervas</strong> (2 potinhos)</span>
+                </label>
+                <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; border-radius: 8px; background: #ffffff; border: 1.5px solid #cbd5e1;">
+                  <input type="radio" name="degustacaoMolhos" value="2x Maionese de Azeitona Azapa">
+                  <span style="font-size: 12.5px;">🫒 <strong>Apenas Maionese de Azeitona</strong> (2 potinhos)</span>
+                </label>
+                <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; border-radius: 8px; background: #ffffff; border: 1.5px solid #cbd5e1;">
+                  <input type="radio" name="degustacaoMolhos" value="Sem maioneses (Dispensar)">
+                  <span style="font-size: 12.5px; color: #64748b;">❌ <strong>Não quero maioneses</strong></span>
+                </label>
+              </div>
+            </div>
 
-          <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 12px; padding: 14px; margin-bottom: 12px;">
-            <label class="check-option" style="cursor: pointer; margin: 0; display: flex; align-items: center; gap: 10px;">
-              <input type="checkbox" id="degustacaoSobremesaCheck" onchange="recalcularPrecoModal()" style="width: 20px; height: 20px;">
-              <span style="font-size: 13px;">
-                <strong style="color: #92400e;">🍰 Quer um docinho?</strong><br>
-                Garantir <strong>1 Tortinha de Limão no Pote (160ml)</strong> • <strong style="color: #15803d; font-size: 14px;">+ R$ 5,00</strong>
-              </span>
-            </label>
+            <!-- 4. BEBIDA EM LATA INCLUSA -->
+            <div style="background: #eff6ff; border: 2px solid #bfdbfe; border-radius: 12px; padding: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+              <label style="font-size: 13.5px; font-weight: 900; color: #1e40af; display: block; margin-bottom: 6px;">
+                🥤 4. Escolha sua Bebida em Lata Inclusa:
+              </label>
+              <select id="degustacaoBebidaSelect" class="form-control" style="font-size: 13px; font-weight: 800; padding: 10px; background: #fff;">
+                <option value="Coca-Cola Original 350ml (Lata)">🔴 Coca-Cola Original 350ml (Lata)</option>
+                <option value="Coca-Cola Zero 350ml (Lata)">⚫ Coca-Cola Zero 350ml (Lata)</option>
+                <option value="Suco Del Valle Goiaba 290ml (Lata)">🧃 Suco Del Valle Goiaba 290ml (Lata)</option>
+                <option value="Refresco Del Valle Limon Tropical 290ml">🍋 Refresco Del Valle Limon Tropical 290ml</option>
+                <option value="Cerveja Original 350ml (Lata)">🍺 Cerveja Original 350ml (Lata)</option>
+                <option value="Água Mineral Cristal Gold 510ml (sem gás)">💧 Água Mineral Cristal Gold 510ml (sem gás)</option>
+                <option value="Água Mineral Nestlé 510ml (com gás)">💧 Água Mineral Nestlé 510ml (com gás)</option>
+              </select>
+            </div>
+
+            <!-- 5. QUER UM DOCINHO? -->
+            <div style="background: #fffbeb; border: 2px solid #fde68a; border-radius: 12px; padding: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+              <label class="check-option" style="cursor: pointer; margin: 0; display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" id="degustacaoSobremesaCheck" onchange="recalcularPrecoModal()" style="width: 22px; height: 22px;">
+                <span style="font-size: 13px;">
+                  <strong style="color: #92400e;">🍰 5. Quer um docinho?</strong><br>
+                  Adicionar <strong>1 Tortinha de Limão no Pote (160ml)</strong> • <strong style="color: #15803d; font-size: 14px;">+ R$ 5,00</strong>
+                </span>
+              </label>
+            </div>
+
           </div>
         `;
       }
@@ -2508,7 +2546,10 @@
       const molhosGroup = document.getElementById('molhosCortesiaGroup');
       qtdMolhoExtraModal = 0;
       if (molhosGroup) {
-        if (catId === 'hotdogs' || catId === 'combos') {
+        if (item.isComboDegustacao || item.id === 'combo-degustacao-familia') {
+          molhosGroup.style.display = 'none';
+          molhosGroup.innerHTML = '';
+        } else if (catId === 'hotdogs' || catId === 'combos') {
           molhosGroup.style.display = 'block';
           const isFamilia = item.id === 'combo-familia-mordidaco';
           const isCasal = item.id === 'combo-casal' || item.id === 'combo-casal-vip';
@@ -2637,12 +2678,9 @@
         obs.push(`🥤 Bebida: ${bebidaEscolhida}`);
         if (temSobremesa) obs.push(`🍰 Sobremesa: 1x Tortinha de Limão no Pote (160ml)`);
 
-        const molhoRadio = document.querySelector('input[name="opcaoMolhoCortesia"]:checked');
-        if (molhoRadio) obs.push(`🌿 Molhos: ${molhoRadio.value}`);
-        if (qtdMolhoExtraModal > 0) {
-          obs.push(`🥫 Potes Extras de Molho: +${qtdMolhoExtraModal}`);
-          precoFinal += (qtdMolhoExtraModal * 3.50);
-        }
+        const molhoRadio = document.querySelector('input[name="degustacaoMolhos"]:checked');
+        const molhoEscolhido = molhoRadio ? molhoRadio.value : '1x Maionese Verde + 1x Maionese de Azeitona';
+        obs.push(`🌿 Maioneses: ${molhoEscolhido}`);
 
         const obsTexto = document.getElementById('itemObs') ? document.getElementById('itemObs').value.trim() : '';
         if (obsTexto) obs.push(`Obs: ${obsTexto}`);

@@ -843,12 +843,12 @@ app.get(['/api/cardapio', '/cardapio'], (req, res) => {
   if (statusLojaCache.modoEvento) {
     const catDegustacao = {
       id: "degustacao",
-      nome: "🎉 Noite de Degustação da Família (R$ 20,00)",
+      nome: "🌭 Monte o seu Combo Degustação (R$ 20,00)",
       itens: [
         {
           id: "combo-degustacao-familia",
           nome: "Combo Degustação da Família",
-          descricao: "1 Hot Dog artesanal à sua escolha (qualquer um do cardápio!) + 1 Bebida em lata à sua escolha. Adicione a Tortinha de Limão no Pote (160ml) por apenas + R$ 5,00!",
+          descricao: "Incluso: 1 Hot Dog à sua escolha (qualquer um do cardápio!) + 1 Bebida em lata à sua escolha + Maioneses artesanais da casa. Adicione a sobremesa Tortinha de Limão por apenas + R$ 5,00!",
           preco: 20.00,
           destaque: true,
           isComboDegustacao: true,
@@ -858,22 +858,25 @@ app.get(['/api/cardapio', '/cardapio'], (req, res) => {
       ]
     };
 
-    const categoriasAdaptadas = CARDAPIO.categorias.map(cat => {
-      if (cat.id === 'sobremesas') {
-        return {
-          ...cat,
-          nome: "🍰 Sobremesa Exclusiva de Hoje",
-          itens: cat.itens.filter(i => i.id.includes('limao')).map(i => ({
-            ...i,
-            preco: 5.00,
-            descricao: "Exclusiva de hoje: Farofinha amanteigada com creme aveludado de limão fresco e raspas verdes no pote de 160ml! (Apenas R$ 5,00!)"
-          }))
-        };
-      }
-      return cat;
-    });
+    // Remove todos os outros combos do cardápio para simplificar 100% no evento presencial
+    const categoriasSemCombos = CARDAPIO.categorias
+      .filter(cat => cat.id !== 'combos')
+      .map(cat => {
+        if (cat.id === 'sobremesas') {
+          return {
+            ...cat,
+            nome: "🍰 Sobremesa de Hoje (Tortinha de Limão)",
+            itens: cat.itens.filter(i => i.id.includes('limao')).map(i => ({
+              ...i,
+              preco: 5.00,
+              descricao: "Exclusiva de hoje: Farofinha amanteigada com creme aveludado de limão fresco e raspas verdes no pote de 160ml! (Apenas R$ 5,00!)"
+            }))
+          };
+        }
+        return cat;
+      });
 
-    categoriasBase = [catDegustacao, ...categoriasAdaptadas];
+    categoriasBase = [catDegustacao, ...categoriasSemCombos];
   }
 
   const categoriasOrdenadas = categoriasBase.map(cat => ({
