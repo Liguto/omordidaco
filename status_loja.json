@@ -1,5 +1,13 @@
 {
   "status": "aberta",
   "mensagem": "",
-  "atualizadoEm": "2026-11-20T20:00:00.000Z"
+  "modoEvento": true,
+  "eventoConfig": {
+    "titulo": "🌭 Noite de Degustação da Família ! 🥤",
+    "subtitulo": "Sábado 28/11 a partir das 19h • Local: Rua Virgínio Vescovi, 400 - Casa A",
+    "precoFixoPessoa": 20.0,
+    "precoSobremesaExtra": 5.0,
+    "chavePix": "omordidaco@gmail.com"
+  },
+  "atualizadoEm": "2026-11-27T18:00:00.000Z"
 }

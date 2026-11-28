@@ -792,6 +792,11 @@
         </button>
       </div>
 
+      <!-- BOTÃO TOGGLE: MODO DEGUSTAÇÃO FAMÍLIA -->
+      <button type="button" id="btnToggleModoEvento" onclick="alternarModoEvento()" title="Alternar Modo Noite de Degustação da Família" style="background: #ea1d2c; border: 1.5px solid #fbbf24; color: #ffffff; padding: 5px 12px; border-radius: 18px; font-size: 11.5px; font-weight: 850; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: all 0.2s; box-shadow: 0 0 10px rgba(234, 29, 44, 0.4);">
+        <span>🎉</span> <span id="labelModoEvento">Degustação: LIGADO</span>
+      </button>
+
       <div id="statusSincronizacao" style="display: flex; align-items: center; gap: 6px; background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); color: #4ade80; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 800;">
         <span style="display: inline-block; width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 6px #22c55e;"></span>
         <span>Online</span>
@@ -3300,6 +3305,8 @@
       } catch (e) {}
     }
 
+    let modoEventoAtivo = true;
+
     // GERENCIAMENTO OPERACIONAL DO STATUS DA LOJA (ABERTA / PAUSADA / FECHADA)
     async function carregarStatusLoja() {
       try {
@@ -3307,8 +3314,48 @@
         if (res.ok) {
           const data = await res.json();
           atualizarBotoesStatusLoja(data.status);
+          modoEventoAtivo = Boolean(data.modoEvento);
+          atualizarBotaoModoEvento(modoEventoAtivo);
         }
       } catch (e) {}
+    }
+
+    async function alternarModoEvento() {
+      const novoModo = !modoEventoAtivo;
+      try {
+        const res = await fetch('/api/status-loja', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ modoEvento: novoModo })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          modoEventoAtivo = Boolean(data.modoEvento);
+          atualizarBotaoModoEvento(modoEventoAtivo);
+          mostrarToastAviso(modoEventoAtivo ? '🎉 Modo Noite de Degustação ATIVADO no Site!' : '🏠 Modo Delivery Normal Restabelecido!', 'sucesso');
+        }
+      } catch (e) {
+        mostrarToastAviso('Erro ao alternar modo degustação: ' + e.message, 'alerta');
+      }
+    }
+
+    function atualizarBotaoModoEvento(ativo) {
+      const btn = document.getElementById('btnToggleModoEvento');
+      const label = document.getElementById('labelModoEvento');
+      if (!btn || !label) return;
+      if (ativo) {
+        btn.style.background = '#ea1d2c';
+        btn.style.borderColor = '#fbbf24';
+        btn.style.color = '#ffffff';
+        btn.style.boxShadow = '0 0 10px rgba(234, 29, 44, 0.5)';
+        label.innerText = 'Degustação: LIGADO';
+      } else {
+        btn.style.background = 'rgba(255,255,255,0.08)';
+        btn.style.borderColor = 'rgba(255,255,255,0.2)';
+        btn.style.color = '#94a3b8';
+        btn.style.boxShadow = 'none';
+        label.innerText = 'Degustação: OFF';
+      }
     }
 
     async function definirStatusLoja(novoStatus) {

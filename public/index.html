@@ -1159,6 +1159,25 @@
       <!-- BANNER DINÂMICO DE STATUS OPERACIONAL DA LOJA (ABERTA / PAUSADA / FECHADA) -->
       <div id="bannerStatusLoja" style="display: none; margin: 14px 16px 0 16px; padding: 13px 20px; border-radius: 12px; font-weight: 800; font-size: 13.5px; text-align: center; box-shadow: 0 4px 14px rgba(0,0,0,0.06); transition: all 0.3s ease;"></div>
 
+      <!-- BANNER EXCLUSIVO: NOITE DE DEGUSTAÇÃO DA FAMÍLIA -->
+      <div id="bannerEventoDegustacao" style="display: none; margin: 14px 16px 0 16px; padding: 18px 22px; border-radius: 14px; background: linear-gradient(135deg, #7c2d12 0%, #ea1d2c 100%); color: #ffffff; box-shadow: 0 4px 16px rgba(234, 29, 44, 0.28); text-align: center;">
+        <div style="font-size: 17px; font-weight: 950; letter-spacing: -0.3px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <span>🌭</span> <span>Noite de Degustação da Família !</span> <span>🥤</span>
+        </div>
+        <p style="font-size: 13px; opacity: 0.95; line-height: 1.45; margin-bottom: 10px;">
+          📅 Sábado 28/11 a partir das 19h • 📍 Rua Virgínio Vescovi, 400 - Casa A (Jd. Tamoio)<br>
+          <strong style="font-size: 14.5px; color: #fde68a;">💰 Valor: R$ 20,00 por pessoa</strong> (Incluso: 1 Hot Dog à sua escolha + 1 Bebida em lata)
+        </p>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; font-size: 12px; font-weight: 800;">
+          <span style="background: rgba(255,255,255,0.18); border: 1px dashed rgba(255,255,255,0.4); padding: 4px 12px; border-radius: 20px;">
+            🍰 Quer um docinho? Adicione a Tortinha de Limão por + R$ 5,00!
+          </span>
+          <span style="background: rgba(255,255,255,0.18); border: 1px dashed rgba(255,255,255,0.4); padding: 4px 12px; border-radius: 20px;">
+            📲 Chave Pix: omordidaco@gmail.com
+          </span>
+        </div>
+      </div>
+
       <!-- 2. DESKTOP APP BAR (SOMENTE NO COMPUTADOR) -->
       <div class="desktop-only">
         <div class="main-desktop-topbar">
@@ -1367,47 +1386,64 @@
         </div>
       </div>
 
-      <!-- AVISO DE RAIO DE 2.5KM NO CHECKOUT -->
-      <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 10px; padding: 10px 12px; margin-bottom: 14px; font-size: 12.5px; color: #92400e; display: flex; align-items: center; gap: 8px;">
-        <span style="font-size: 20px; flex-shrink: 0;">🛵</span>
-        <div>
-          <strong>Entrega própria de carro exclusiva para até 2,5km do Jardim Tamoio.</strong><br>
-          Se o seu endereço for em bairros mais distantes, faça seu pedido pelo <strong>iFood</strong> ou <strong>99Food</strong>, ou retire no balcão!
+      <!-- BLOCO PRESENCIAL: NOITE DE DEGUSTAÇÃO DA FAMÍLIA -->
+      <div id="blocoEventoPresencial" style="display: none; background: #fdf2f8; border: 1.5px solid #fbcfe8; border-radius: 12px; padding: 14px; margin-bottom: 16px;">
+        <div style="font-size: 14px; font-weight: 900; color: #831843; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+          <span>🎉</span> <span>Noite de Degustação da Família (Presencial)</span>
         </div>
-      </div>
-
-      <!-- SELETOR DE MODALIDADE: ENTREGA VS RETIRADA NO BALCÃO -->
-      <div style="margin-bottom: 16px;">
-        <label class="form-label" style="font-size: 13.5px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
-          <span>📦</span> <span>Como deseja receber seu pedido?</span>
-        </label>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-          <button type="button" id="btnTipoEntrega" onclick="definirTipoPedido('entrega')" style="padding: 12px 8px; border-radius: 10px; border: 2px solid #ea1d2c; background: #fff1f2; color: #9f1239; font-weight: 900; font-size: 13px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: all 0.2s;">
-            <span style="font-size: 22px;">🛵</span>
-            <span>Entrega (Delivery)</span>
-            <small style="font-size: 10.5px; font-weight: 700; opacity: 0.85;">Raio até 2,5km (R$ 5,00)</small>
-          </button>
-          <button type="button" id="btnTipoRetirada" onclick="definirTipoPedido('retirada')" style="padding: 12px 8px; border-radius: 10px; border: 2px solid #cbd5e1; background: #ffffff; color: #475569; font-weight: 900; font-size: 13px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: all 0.2s;">
-            <span style="font-size: 22px;">🛍️</span>
-            <span>Retirada no Balcão</span>
-            <small style="font-size: 10.5px; font-weight: 800; color: #15803d;">Grátis (Sem Taxa)</small>
-          </button>
-        </div>
-      </div>
-
-      <!-- CARD EXPLICATIVO DE RETIRADA (QUANDO ATIVO) -->
-      <div id="secaoInfoRetirada" style="display: none; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; padding: 14px; margin-bottom: 16px;">
-        <div style="font-size: 14px; font-weight: 900; color: #166534; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-          <span>📍</span> <span>Retirada no Balcão — O Mordidaço</span>
-        </div>
-        <p style="font-size: 12.5px; color: #14532d; line-height: 1.45; margin: 0 0 6px 0;">
-          <strong>Localização:</strong> Jardim Tamoio, Campinas - SP.<br>
-          <strong>Tempo de preparo estimado:</strong> ~20 a 30 minutos após confirmação.<br>
-          <strong>Taxa:</strong> <span style="color: #15803d; font-weight: 900;">R$ 0,00 (Grátis)</span>
+        <p style="font-size: 12.5px; color: #9d174d; line-height: 1.45; margin: 0 0 6px 0;">
+          <strong>Local:</strong> Rua Virgínio Vescovi, 400 - Casa A (Jardim Tamoio)<br>
+          <strong>Taxa:</strong> <span style="color: #15803d; font-weight: 900;">R$ 0,00 (Sem Taxa de Entrega)</span><br>
+          <strong>Chave Pix:</strong> <code style="background: #ffffff; padding: 2px 6px; border-radius: 4px; font-weight: 800; color: #0f172a;">omordidaco@gmail.com</code>
         </p>
-        <small style="display: block; font-size: 11.5px; color: #15803d; font-weight: 800;">
-          📲 Assim que o pedido estiver pronto, avisaremos no seu WhatsApp com a rota e instruções exatas de retirada!
+        <small style="display: block; font-size: 11.5px; color: #831843; font-weight: 800;">
+          Preencha apenas seu Nome e WhatsApp abaixo para identificarmos sua comanda na bancada!
         </small>
+      </div>
+
+      <div id="blocoEntregaNormal">
+        <!-- AVISO DE RAIO DE 2.5KM NO CHECKOUT -->
+        <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 10px; padding: 10px 12px; margin-bottom: 14px; font-size: 12.5px; color: #92400e; display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 20px; flex-shrink: 0;">🛵</span>
+          <div>
+            <strong>Entrega própria de carro exclusiva para até 2,5km do Jardim Tamoio.</strong><br>
+            Se o seu endereço for em bairros mais distantes, faça seu pedido pelo <strong>iFood</strong> ou <strong>99Food</strong>, ou retire no balcão!
+          </div>
+        </div>
+
+        <!-- SELETOR DE MODALIDADE: ENTREGA VS RETIRADA NO BALCÃO -->
+        <div style="margin-bottom: 16px;">
+          <label class="form-label" style="font-size: 13.5px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+            <span>📦</span> <span>Como deseja receber seu pedido?</span>
+          </label>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <button type="button" id="btnTipoEntrega" onclick="definirTipoPedido('entrega')" style="padding: 12px 8px; border-radius: 10px; border: 2px solid #ea1d2c; background: #fff1f2; color: #9f1239; font-weight: 900; font-size: 13px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: all 0.2s;">
+              <span style="font-size: 22px;">🛵</span>
+              <span>Entrega (Delivery)</span>
+              <small style="font-size: 10.5px; font-weight: 700; opacity: 0.85;">Raio até 2,5km (R$ 5,00)</small>
+            </button>
+            <button type="button" id="btnTipoRetirada" onclick="definirTipoPedido('retirada')" style="padding: 12px 8px; border-radius: 10px; border: 2px solid #cbd5e1; background: #ffffff; color: #475569; font-weight: 900; font-size: 13px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: all 0.2s;">
+              <span style="font-size: 22px;">🛍️</span>
+              <span>Retirada no Balcão</span>
+              <small style="font-size: 10.5px; font-weight: 800; color: #15803d;">Grátis (Sem Taxa)</small>
+            </button>
+          </div>
+        </div>
+
+        <!-- CARD EXPLICATIVO DE RETIRADA (QUANDO ATIVO) -->
+        <div id="secaoInfoRetirada" style="display: none; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; padding: 14px; margin-bottom: 16px;">
+          <div style="font-size: 14px; font-weight: 900; color: #166534; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+            <span>📍</span> <span>Retirada no Balcão — O Mordidaço</span>
+          </div>
+          <p style="font-size: 12.5px; color: #14532d; line-height: 1.45; margin: 0 0 6px 0;">
+            <strong>Localização:</strong> Jardim Tamoio, Campinas - SP.<br>
+            <strong>Tempo de preparo estimado:</strong> ~20 a 30 minutos após confirmação.<br>
+            <strong>Taxa:</strong> <span style="color: #15803d; font-weight: 900;">R$ 0,00 (Grátis)</span>
+          </p>
+          <small style="display: block; font-size: 11.5px; color: #15803d; font-weight: 800;">
+            📲 Assim que o pedido estiver pronto, avisaremos no seu WhatsApp com a rota e instruções exatas de retirada!
+          </small>
+        </div>
       </div>
 
       <!-- DADOS DO CLIENTE -->
@@ -1767,6 +1803,25 @@
           btnCheckout.innerText = '🌙 Loja Fechada no Momento';
         }
       }
+
+      // BANNER & BADGES DO MODO EVENTO (NOITE DE DEGUSTAÇÃO PRESENCIAL)
+      const bannerEvento = document.getElementById('bannerEventoDegustacao');
+      if (bannerEvento) {
+        bannerEvento.style.display = (cardapioGlobal && cardapioGlobal.modoEvento) ? 'block' : 'none';
+      }
+      if (cardapioGlobal && cardapioGlobal.modoEvento) {
+        if (pillSidebar) {
+          pillSidebar.innerText = '🎉 Noite de Degustação';
+          pillSidebar.style.background = 'rgba(234, 29, 44, 0.15)';
+          pillSidebar.style.color = '#ea1d2c';
+          pillSidebar.style.borderColor = 'rgba(234, 29, 44, 0.3)';
+        }
+        if (pillMobile) {
+          pillMobile.innerText = '🎉 Degustação';
+          pillMobile.style.background = 'rgba(234, 29, 44, 0.2)';
+          pillMobile.style.color = '#f87171';
+        }
+      }
     }
 
     function conectarStatusSSE() {
@@ -2035,7 +2090,21 @@
 
     function recalcularPrecoModal() {
       if (!itemSelecionadoTemp) return;
-      let total = itemSelecionadoTemp.preco || 0;
+
+      if (itemSelecionadoTemp.isComboDegustacao || itemSelecionadoTemp.id === 'combo-degustacao-familia') {
+        let totalDeg = 20.00;
+        const chkSob = document.getElementById('degustacaoSobremesaCheck');
+        if (chkSob && chkSob.checked) {
+          totalDeg += 5.00;
+        }
+        if (qtdMolhoExtraModal > 0) {
+          totalDeg += (qtdMolhoExtraModal * 3.50);
+        }
+        document.getElementById('modalItemPrice').innerText = 'R$ ' + totalDeg.toFixed(2).replace('.', ',');
+        return;
+      }
+
+      let total = itemSelecionadoTemp.preco;
 
       // Adicional embutido do formato No Prato e Adicionais por Dog (Combo vs Individual)
       if (itemSelecionadoTemp.lanchesCombo && Array.isArray(itemSelecionadoTemp.lanchesCombo) && itemSelecionadoTemp.lanchesCombo.length > 0) {
@@ -2133,8 +2202,71 @@
       const adicionaisGroup = document.getElementById('adicionaisGroup');
       const retirarGroup = document.getElementById('retirarGroup');
 
+      // 1. SE FOR COMBO DEGUSTAÇÃO DA FAMÍLIA (NOITE DE DEGUSTAÇÃO PRESENCIAL)
+      if (item.isComboDegustacao || item.id === 'combo-degustacao-familia') {
+        formatoGroup.style.display = 'block';
+        if (adicionaisGroup) { adicionaisGroup.style.display = 'none'; adicionaisGroup.innerHTML = ''; }
+        if (retirarGroup) { retirarGroup.style.display = 'none'; retirarGroup.innerHTML = ''; }
+        const comboBebidaGroup = document.getElementById('comboBebidaGroup');
+        if (comboBebidaGroup) { comboBebidaGroup.style.display = 'none'; comboBebidaGroup.innerHTML = ''; }
+
+        formatoGroup.innerHTML = `
+          <div style="background: #fdf2f8; border: 1.5px solid #fbcfe8; border-radius: 12px; padding: 14px; margin-bottom: 12px;">
+            <label class="form-label" style="font-size: 13.5px; font-weight: 900; color: #831843; margin-bottom: 6px;">
+              🌭 1. Escolha o Hot Dog do seu Combo:
+            </label>
+            <select id="degustacaoDogSelect" class="form-control" style="font-size: 13px; font-weight: 800; padding: 10px;" onchange="recalcularPrecoModal()">
+              <option value="Mordidaço em Dobro" selected>⭐ Mordidaço em Dobro (2 salsichas Sadia e dobro de queijo muçarela derretido)</option>
+              <option value="Mordidaço Clássico">🌭 Mordidaço Clássico (1 salsicha Sadia, purê artesanal, vinagrete, milho, ervilha e palha)</option>
+              <option value="Mordidaço Queijudo (VEG)">🌱 Mordidaço Queijudo VEG (2 palitos empanados crocantes puxa-puxa na Air Fryer)</option>
+              <option value="Mordidaço Bacon">🥓 Mordidaço Bacon (2 salsichas, bacon crocante em cubos, muçarela, purê e palha)</option>
+              <option value="Mordidaço Cremoso">🍗 Mordidaço Cremoso (1 salsicha, frango desfiado temperado, Catupiry® Original e purê)</option>
+              <option value="Mordidaço Tudão">👑 Mordidaço Tudão (O Gigante: Salsicha, Frango, Catupiry, Bacon, Calabresa, Queijo)</option>
+            </select>
+
+            <div style="margin-top: 10px;">
+              <label style="font-size: 11px; font-weight: 900; color: #831843; text-transform: uppercase; display: block; margin-bottom: 4px;">Formato de Servir:</label>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; border-radius: 8px; background: #ffffff; border: 1.5px solid #cbd5e1;">
+                  <input type="radio" name="degustacaoFormato" value="No Pão Bambini (18cm)" checked>
+                  <span style="font-size: 12px;"><strong>🥖 No Pão</strong><br><small style="color:#64748b;">Pão macio Bambini</small></span>
+                </label>
+                <label class="check-option" style="cursor: pointer; margin: 0; padding: 8px 10px; border-radius: 8px; background: #ffffff; border: 1.5px solid #cbd5e1;">
+                  <input type="radio" name="degustacaoFormato" value="No Prato (Marmita c/ talheres + purê extra)">
+                  <span style="font-size: 12px;"><strong>🍲 No Prato</strong><br><small style="color:#64748b;">Marmita + talheres</small></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 14px; margin-bottom: 12px;">
+            <label class="form-label" style="font-size: 13.5px; font-weight: 900; color: #1e40af; margin-bottom: 6px;">
+              🥤 2. Escolha sua Bebida em Lata Inclusa:
+            </label>
+            <select id="degustacaoBebidaSelect" class="form-control" style="font-size: 13px; font-weight: 800; padding: 10px;">
+              <option value="Coca-Cola Original 350ml (Lata)">🔴 Coca-Cola Original 350ml (Lata)</option>
+              <option value="Coca-Cola Zero 350ml (Lata)">⚫ Coca-Cola Zero 350ml (Lata)</option>
+              <option value="Suco Del Valle Goiaba 290ml (Lata)">🧃 Suco Del Valle Goiaba 290ml (Lata)</option>
+              <option value="Refresco Del Valle Limon Tropical 290ml">🍋 Refresco Del Valle Limon Tropical 290ml</option>
+              <option value="Cerveja Original 350ml (Lata)">🍺 Cerveja Original 350ml (Lata)</option>
+              <option value="Água Mineral Cristal Gold 510ml (sem gás)">💧 Água Mineral Cristal Gold 510ml (sem gás)</option>
+              <option value="Água Mineral Nestlé 510ml (com gás)">💧 Água Mineral Nestlé 510ml (com gás)</option>
+            </select>
+          </div>
+
+          <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 12px; padding: 14px; margin-bottom: 12px;">
+            <label class="check-option" style="cursor: pointer; margin: 0; display: flex; align-items: center; gap: 10px;">
+              <input type="checkbox" id="degustacaoSobremesaCheck" onchange="recalcularPrecoModal()" style="width: 20px; height: 20px;">
+              <span style="font-size: 13px;">
+                <strong style="color: #92400e;">🍰 Quer um docinho?</strong><br>
+                Garantir <strong>1 Tortinha de Limão no Pote (160ml)</strong> • <strong style="color: #15803d; font-size: 14px;">+ R$ 5,00</strong>
+              </span>
+            </label>
+          </div>
+        `;
+      }
       // SE FOR COMBO COM MÚLTIPLOS LANCHES (PERSONALIZAÇÃO COMPLETA POR DOG)
-      if (item.lanchesCombo && Array.isArray(item.lanchesCombo) && item.lanchesCombo.length > 0) {
+      else if (item.lanchesCombo && Array.isArray(item.lanchesCombo) && item.lanchesCombo.length > 0) {
         formatoGroup.style.display = 'block';
         if (adicionaisGroup) { adicionaisGroup.style.display = 'none'; adicionaisGroup.innerHTML = ''; }
         if (retirarGroup) { retirarGroup.style.display = 'none'; retirarGroup.innerHTML = ''; }
@@ -2487,6 +2619,51 @@
     }
 
     function confirmarAdicaoItem() {
+      // 1. SE FOR COMBO DEGUSTAÇÃO DA FAMÍLIA (EVENTO PRESENCIAL)
+      if (itemSelecionadoTemp.isComboDegustacao || itemSelecionadoTemp.id === 'combo-degustacao-familia') {
+        const dogSelect = document.getElementById('degustacaoDogSelect');
+        const dogEscolhido = dogSelect ? dogSelect.value : 'Mordidaço em Dobro';
+        const formatoRadio = document.querySelector('input[name="degustacaoFormato"]:checked');
+        const formatoEscolhido = formatoRadio ? formatoRadio.value : 'No Pão Bambini (18cm)';
+        const bebidaSelect = document.getElementById('degustacaoBebidaSelect');
+        const bebidaEscolhida = bebidaSelect ? bebidaSelect.value : 'Coca-Cola Original 350ml (Lata)';
+        const checkSobremesa = document.getElementById('degustacaoSobremesaCheck');
+        const temSobremesa = checkSobremesa && checkSobremesa.checked;
+
+        let precoFinal = 20.00 + (temSobremesa ? 5.00 : 0.00);
+
+        let obs = [];
+        obs.push(`🌭 Dog: ${dogEscolhido} (${formatoEscolhido})`);
+        obs.push(`🥤 Bebida: ${bebidaEscolhida}`);
+        if (temSobremesa) obs.push(`🍰 Sobremesa: 1x Tortinha de Limão no Pote (160ml)`);
+
+        const molhoRadio = document.querySelector('input[name="opcaoMolhoCortesia"]:checked');
+        if (molhoRadio) obs.push(`🌿 Molhos: ${molhoRadio.value}`);
+        if (qtdMolhoExtraModal > 0) {
+          obs.push(`🥫 Potes Extras de Molho: +${qtdMolhoExtraModal}`);
+          precoFinal += (qtdMolhoExtraModal * 3.50);
+        }
+
+        const obsTexto = document.getElementById('itemObs') ? document.getElementById('itemObs').value.trim() : '';
+        if (obsTexto) obs.push(`Obs: ${obsTexto}`);
+
+        carrinho.push({
+          id: 'combo-degustacao-familia',
+          nome: `Combo Degustação (${dogEscolhido})`,
+          formato: formatoEscolhido,
+          preco: precoFinal,
+          observacoes: obs.join(' | '),
+          isLanche: true,
+          isComboDegustacao: true,
+          catId: 'degustacao'
+        });
+
+        fecharModal('itemModal');
+        atualizarBarraCarrinho();
+        mostrarToast(`✓ Combo Degustação adicionado ao pedido!`);
+        return;
+      }
+
       let observacoes = [];
       let formato = '';
       let precoCalculado = itemSelecionadoTemp.preco;
@@ -2922,8 +3099,23 @@
         container.appendChild(row);
       });
 
+      const isModoEvento = Boolean(cardapioGlobal && cardapioGlobal.modoEvento);
+      const blocoEvento = document.getElementById('blocoEventoPresencial');
+      const blocoEntrega = document.getElementById('blocoEntregaNormal');
+      const secaoEnd = document.getElementById('secaoEnderecoEntrega');
+
+      if (isModoEvento) {
+        if (blocoEvento) blocoEvento.style.display = 'block';
+        if (blocoEntrega) blocoEntrega.style.display = 'none';
+        if (secaoEnd) secaoEnd.style.display = 'none';
+      } else {
+        if (blocoEvento) blocoEvento.style.display = 'none';
+        if (blocoEntrega) blocoEntrega.style.display = 'block';
+        if (secaoEnd && !isRetiradaBalcao) secaoEnd.style.display = 'block';
+      }
+
       const subtotal = carrinho.reduce((acc, item) => acc + item.preco, 0);
-      const taxa = cardapioGlobal ? cardapioGlobal.restaurante.taxaEntregaPadrao : 5.00;
+      const taxa = (isModoEvento || isRetiradaBalcao) ? 0.00 : (cardapioGlobal ? cardapioGlobal.restaurante.taxaEntregaPadrao : 5.00);
       const total = subtotal + taxa;
 
       document.getElementById('resumoSubtotal').innerText = 'R$ ' + subtotal.toFixed(2).replace('.', ',');
@@ -3368,7 +3560,14 @@
       const bairro = document.getElementById('clienteBairro').value.trim();
       const ref = document.getElementById('clienteRef').value.trim();
 
-      if (!isRetiradaBalcao) {
+      const isModoEvento = Boolean(cardapioGlobal && cardapioGlobal.modoEvento);
+
+      if (isModoEvento) {
+        if (!nome || !telefone) {
+          alert('Por favor, informe seu Nome e WhatsApp/Telefone para identificarmos seu pedido na degustação!');
+          return;
+        }
+      } else if (!isRetiradaBalcao) {
         if (!nome || !telefone || !rua || !numero || !bairro) {
           alert('Por favor, preencha todos os campos obrigatórios de entrega (Nome, Telefone, Rua, Número e Bairro).');
           return;
@@ -3384,9 +3583,11 @@
         }
       }
 
-      const enderecoCompleto = isRetiradaBalcao ? 'Retirada no Balcão (Jardim Tamoio)' : `${rua}, nº ${numero}`;
+      const enderecoCompleto = isModoEvento
+        ? 'Presencial: Rua Virgínio Vescovi, 400 - Casa A (Jd. Tamoio)'
+        : (isRetiradaBalcao ? 'Retirada no Balcão (Jardim Tamoio)' : `${rua}, nº ${numero}`);
       const subtotal = carrinho.reduce((acc, item) => acc + item.preco, 0);
-      const taxa = isRetiradaBalcao ? 0.00 : (cardapioGlobal ? cardapioGlobal.restaurante.taxaEntregaPadrao : 5.00);
+      const taxa = (isModoEvento || isRetiradaBalcao) ? 0.00 : (cardapioGlobal ? cardapioGlobal.restaurante.taxaEntregaPadrao : 5.00);
       const total = subtotal + taxa;
 
       let pagtoDetalhe = formaPagtoSelecionada;
@@ -3398,11 +3599,11 @@
       const pedidoPayload = {
         cliente: { nome, telefone },
         entrega: {
-          tipo: isRetiradaBalcao ? 'Retirada' : 'Entrega',
+          tipo: isModoEvento ? 'Presencial / Degustação' : (isRetiradaBalcao ? 'Retirada' : 'Entrega'),
           endereco: enderecoCompleto,
-          bairro: isRetiradaBalcao ? 'Jardim Tamoio' : bairro,
-          referencia: isRetiradaBalcao ? 'Retirada no Balcão' : ref,
-          cep: isRetiradaBalcao ? '13101-259' : cep,
+          bairro: isModoEvento ? 'Jardim Tamoio (Presencial)' : (isRetiradaBalcao ? 'Jardim Tamoio' : bairro),
+          referencia: isModoEvento ? 'Noite de Degustação da Família' : (isRetiradaBalcao ? 'Retirada no Balcão' : ref),
+          cep: isModoEvento ? '13101-259' : (isRetiradaBalcao ? '13101-259' : cep),
           taxa
         },
         itens: carrinho,

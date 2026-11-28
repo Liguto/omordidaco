@@ -491,7 +491,7 @@ try {
   console.error('[STATUS LOJA] Erro ao ler status_loja.json:', e.message);
 }
 
-function salvarStatusLoja(novoStatus, mensagem = '') {
+function salvarStatusLoja(novoStatus, mensagem = '', modoEvento = undefined, eventoConfig = undefined) {
   let msgPadrao = '';
   if (novoStatus === 'pausada') {
     msgPadrao = 'Cozinha em pausa temporária devido à alta demanda. Voltamos em instantes!';
@@ -499,9 +499,20 @@ function salvarStatusLoja(novoStatus, mensagem = '') {
     msgPadrao = 'Loja fechada no momento. Atendimento no site de Segunda a Segunda das 17h30 às 21h30.';
   }
 
+  const statusFinal = novoStatus || statusLojaCache.status || 'aberta';
+
   statusLojaCache = {
-    status: novoStatus,
-    mensagem: mensagem || msgPadrao,
+    ...statusLojaCache,
+    status: statusFinal,
+    mensagem: mensagem !== undefined && mensagem !== null && mensagem !== '' ? mensagem : (novoStatus ? msgPadrao : statusLojaCache.mensagem),
+    modoEvento: modoEvento !== undefined ? Boolean(modoEvento) : Boolean(statusLojaCache.modoEvento),
+    eventoConfig: eventoConfig || statusLojaCache.eventoConfig || {
+      titulo: '🌭 Noite de Degustação da Família ! 🥤',
+      subtitulo: 'Sábado 28/11 a partir das 19h • Local: Rua Virgínio Vescovi, 400 - Casa A',
+      precoFixoPessoa: 20.00,
+      precoSobremesaExtra: 5.00,
+      chavePix: 'omordidaco@gmail.com'
+    },
     atualizadoEm: new Date().toISOString()
   };
 
@@ -511,7 +522,7 @@ function salvarStatusLoja(novoStatus, mensagem = '') {
     console.error('[STATUS LOJA] Erro ao gravar status_loja.json:', e.message);
   }
 
-  console.log(`[STATUS LOJA] Loja alterada para: ${novoStatus.toUpperCase()} (${statusLojaCache.mensagem})`);
+  console.log(`[STATUS LOJA] Loja alterada para: ${statusLojaCache.status.toUpperCase()} (Modo Evento: ${statusLojaCache.modoEvento})`);
 
   // Notifica imediatamente via SSE a todos os clientes conectados (cozinha e clientes)
   sseClients.forEach(client => {
@@ -817,17 +828,55 @@ app.get(['/api/status-loja', '/status-loja'], (req, res) => {
 });
 
 app.post(['/api/status-loja', '/status-loja'], (req, res) => {
-  const { status, mensagem } = req.body || {};
-  if (!status || !['aberta', 'pausada', 'fechada'].includes(status)) {
+  const { status, mensagem, modoEvento, eventoConfig } = req.body || {};
+  if (status && !['aberta', 'pausada', 'fechada'].includes(status)) {
     return res.status(400).json({ error: 'Status inválido. Use "aberta", "pausada" ou "fechada".' });
   }
-  salvarStatusLoja(status, mensagem);
+  salvarStatusLoja(status, mensagem, modoEvento, eventoConfig);
   res.json({ success: true, ...statusLojaCache });
 });
 
-// Obter Cardápio (Injeta o status da loja e garante ordenação do mais barato ao mais caro em cada categoria)
+// Obter Cardápio (Injeta o status da loja, modo evento e garante ordenação do mais barato ao mais caro em cada categoria)
 app.get(['/api/cardapio', '/cardapio'], (req, res) => {
-  const categoriasOrdenadas = CARDAPIO.categorias.map(cat => ({
+  let categoriasBase = CARDAPIO.categorias;
+
+  if (statusLojaCache.modoEvento) {
+    const catDegustacao = {
+      id: "degustacao",
+      nome: "🎉 Noite de Degustação da Família (R$ 20,00)",
+      itens: [
+        {
+          id: "combo-degustacao-familia",
+          nome: "Combo Degustação da Família",
+          descricao: "1 Hot Dog artesanal à sua escolha (qualquer um do cardápio!) + 1 Bebida em lata à sua escolha. Adicione a Tortinha de Limão no Pote (160ml) por apenas + R$ 5,00!",
+          preco: 20.00,
+          destaque: true,
+          isComboDegustacao: true,
+          isLanche: true,
+          permiteFormato: true
+        }
+      ]
+    };
+
+    const categoriasAdaptadas = CARDAPIO.categorias.map(cat => {
+      if (cat.id === 'sobremesas') {
+        return {
+          ...cat,
+          nome: "🍰 Sobremesa Exclusiva de Hoje",
+          itens: cat.itens.filter(i => i.id.includes('limao')).map(i => ({
+            ...i,
+            preco: 5.00,
+            descricao: "Exclusiva de hoje: Farofinha amanteigada com creme aveludado de limão fresco e raspas verdes no pote de 160ml! (Apenas R$ 5,00!)"
+          }))
+        };
+      }
+      return cat;
+    });
+
+    categoriasBase = [catDegustacao, ...categoriasAdaptadas];
+  }
+
+  const categoriasOrdenadas = categoriasBase.map(cat => ({
     ...cat,
     itens: [...cat.itens].sort((a, b) => (Number(a.preco) || 0) - (Number(b.preco) || 0))
   }));
@@ -835,10 +884,14 @@ app.get(['/api/cardapio', '/cardapio'], (req, res) => {
   const resposta = {
     ...CARDAPIO,
     categorias: categoriasOrdenadas,
+    modoEvento: Boolean(statusLojaCache.modoEvento),
+    eventoConfig: statusLojaCache.eventoConfig,
     restaurante: {
       ...CARDAPIO.restaurante,
       statusLoja: statusLojaCache.status,
-      mensagemLoja: statusLojaCache.mensagem
+      mensagemLoja: statusLojaCache.mensagem,
+      modoEvento: Boolean(statusLojaCache.modoEvento),
+      eventoConfig: statusLojaCache.eventoConfig
     }
   };
   res.json(resposta);
